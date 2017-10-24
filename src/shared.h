@@ -10,29 +10,29 @@ extern "C" {
 #endif
 
 typedef enum {
-    SHARED_BUTTON_UP,
-    SHARED_BUTTON_DOWN,
-    SHARED_BUTTON_LEFT,
-    SHARED_BUTTON_RIGHT,
-    SHARED_BUTTON_NUM
-} SharedButtonType;
+    S_BUTTON_UP,
+    S_BUTTON_DOWN,
+    S_BUTTON_LEFT,
+    S_BUTTON_RIGHT,
+    S_BUTTON_NUM
+} SButtonType;
 
 #ifdef ARDUINO
-    typedef uint8_t SharedButton;
+    typedef uint8_t SButton;
 #else
-    typedef AInputButton* SharedButton;
+    typedef AInputButton* SButton;
 #endif
 
-extern SharedButton g_buttons[SHARED_BUTTON_NUM];
+extern SButton s_buttons[S_BUTTON_NUM];
 
-extern void shared_setup(void);
+extern void s_setup(void);
 
-extern bool shared_pressed(SharedButton Button);
+extern bool s_button_pressed(SButton Button);
 
-extern int shared_getWidth(void);
-extern int shared_getHeight(void);
-extern void shared_fill(bool White);
-extern void shared_rect(int X, int Y, int W, int H, bool White);
+extern int s_screen_getWidth(void);
+extern int s_screen_getHeight(void);
+extern void s_draw_fill(bool White);
+extern void s_draw_rectangle(int X, int Y, int W, int H, bool White);
 
 #ifdef __cplusplus
 }

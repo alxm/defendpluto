@@ -35,7 +35,7 @@ A_STATE(run)
 
 A_MAIN
 {
-    shared_setup();
+    s_setup();
 
     a_state_new("run", run, "", "");
     a_state_push("run");

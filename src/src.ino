@@ -12,7 +12,7 @@ void setup()
     g_arduboy.begin();
     g_arduboy.setFrameRate(30);
 
-    shared_setup();
+    s_setup();
     loop_setup();
 }
 
