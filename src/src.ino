@@ -1,18 +1,19 @@
+#include <Arduino.h>
 #include <Arduboy2.h>
+#include "shared.h"
+extern "C" {
+#include "loop.h"
+}
 
-static Arduboy2 g_arduboy;
-
-static struct {
-    int x, y;
-} context;
+Arduboy2 g_arduboy;
 
 void setup()
 {
     g_arduboy.begin();
     g_arduboy.setFrameRate(30);
 
-    context.x = g_arduboy.width() / 2;
-    context.y = g_arduboy.height() / 2;
+    shared_setup();
+    loop_setup();
 }
 
 void loop()
@@ -23,20 +24,8 @@ void loop()
 
     g_arduboy.pollButtons();
 
-    if(g_arduboy.pressed(UP_BUTTON)) {
-        context.y--;
-    } else if(g_arduboy.pressed(DOWN_BUTTON)) {
-        context.y++;
-    }
-
-    if(g_arduboy.pressed(LEFT_BUTTON)) {
-        context.x--;
-    } else if(g_arduboy.pressed(RIGHT_BUTTON)) {
-        context.x++;
-    }
-
-    g_arduboy.fillScreen(BLACK);
-    g_arduboy.fillRect(context.x - 16, context.y - 16, 32, 32, WHITE);
+    loop_tick();
+    loop_draw();
 
     g_arduboy.display();
 }
