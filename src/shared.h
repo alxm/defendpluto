@@ -10,11 +10,11 @@ extern "C" {
 #endif
 
 typedef enum {
-    SHARED_UP,
-    SHARED_DOWN,
-    SHARED_LEFT,
-    SHARED_RIGHT,
-    SHARED_NUM
+    SHARED_BUTTON_UP,
+    SHARED_BUTTON_DOWN,
+    SHARED_BUTTON_LEFT,
+    SHARED_BUTTON_RIGHT,
+    SHARED_BUTTON_NUM
 } SharedButtonType;
 
 #ifdef ARDUINO
@@ -23,7 +23,7 @@ typedef enum {
     typedef AInputButton* SharedButton;
 #endif
 
-extern SharedButton g_buttons[SHARED_NUM];
+extern SharedButton g_buttons[SHARED_BUTTON_NUM];
 
 extern void shared_setup(void);
 

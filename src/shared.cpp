@@ -3,14 +3,14 @@
 #include "shared.h"
 
 extern Arduboy2 g_arduboy;
-SharedButton g_buttons[SHARED_NUM];
+SharedButton g_buttons[SHARED_BUTTON_NUM];
 
 void shared_setup(void)
 {
-    g_buttons[SHARED_UP] = UP_BUTTON;
-    g_buttons[SHARED_DOWN] = DOWN_BUTTON;
-    g_buttons[SHARED_LEFT] = LEFT_BUTTON;
-    g_buttons[SHARED_RIGHT] = RIGHT_BUTTON;
+    g_buttons[SHARED_BUTTON_UP] = UP_BUTTON;
+    g_buttons[SHARED_BUTTON_DOWN] = DOWN_BUTTON;
+    g_buttons[SHARED_BUTTON_LEFT] = LEFT_BUTTON;
+    g_buttons[SHARED_BUTTON_RIGHT] = RIGHT_BUTTON;
 }
 
 bool shared_pressed(SharedButton Button)

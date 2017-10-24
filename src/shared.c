@@ -3,14 +3,14 @@
 #include <a2x.h>
 #include "shared.h"
 
-SharedButton g_buttons[SHARED_NUM];
+SharedButton g_buttons[SHARED_BUTTON_NUM];
 
 void shared_setup(void)
 {
-    g_buttons[SHARED_UP] = a_button_new("key.up");
-    g_buttons[SHARED_DOWN] = a_button_new("key.down");
-    g_buttons[SHARED_LEFT] = a_button_new("key.left");
-    g_buttons[SHARED_RIGHT] = a_button_new("key.right");
+    g_buttons[SHARED_BUTTON_UP] = a_button_new("key.up");
+    g_buttons[SHARED_BUTTON_DOWN] = a_button_new("key.down");
+    g_buttons[SHARED_BUTTON_LEFT] = a_button_new("key.left");
+    g_buttons[SHARED_BUTTON_RIGHT] = a_button_new("key.right");
 }
 
 bool shared_pressed(SharedButton Button)

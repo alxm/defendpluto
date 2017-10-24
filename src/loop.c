@@ -10,10 +10,10 @@ void loop_setup(void)
     context.x = shared_getWidth() / 2;
     context.y = shared_getHeight() / 2;
 
-    context.up = g_buttons[SHARED_UP];
-    context.down = g_buttons[SHARED_DOWN];
-    context.left = g_buttons[SHARED_LEFT];
-    context.right = g_buttons[SHARED_RIGHT];
+    context.up = g_buttons[SHARED_BUTTON_UP];
+    context.down = g_buttons[SHARED_BUTTON_DOWN];
+    context.left = g_buttons[SHARED_BUTTON_LEFT];
+    context.right = g_buttons[SHARED_BUTTON_RIGHT];
 }
 
 void loop_tick(void)
