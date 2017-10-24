@@ -14,6 +14,8 @@ typedef enum {
     S_BUTTON_DOWN,
     S_BUTTON_LEFT,
     S_BUTTON_RIGHT,
+    S_BUTTON_A,
+    S_BUTTON_B,
     S_BUTTON_NUM
 } SButtonType;
 

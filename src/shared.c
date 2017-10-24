@@ -11,6 +11,8 @@ void s_setup(void)
     s_buttons[S_BUTTON_DOWN] = a_button_new("key.down");
     s_buttons[S_BUTTON_LEFT] = a_button_new("key.left");
     s_buttons[S_BUTTON_RIGHT] = a_button_new("key.right");
+    s_buttons[S_BUTTON_A] = a_button_new("key.z gamepad.b.a");
+    s_buttons[S_BUTTON_B] = a_button_new("key.x gamepad.b.b");
 }
 
 bool s_button_pressed(SButton Button)

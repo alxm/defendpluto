@@ -11,6 +11,8 @@ void s_setup(void)
     s_buttons[S_BUTTON_DOWN] = DOWN_BUTTON;
     s_buttons[S_BUTTON_LEFT] = LEFT_BUTTON;
     s_buttons[S_BUTTON_RIGHT] = RIGHT_BUTTON;
+    s_buttons[S_BUTTON_A] = A_BUTTON;
+    s_buttons[S_BUTTON_B] = B_BUTTON;
 }
 
 bool s_button_pressed(SButton Button)
