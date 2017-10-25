@@ -3,7 +3,7 @@
 #include "shared.h"
 #include "loop.h"
 
-Arduboy2 g_arduboy;
+Arduboy2Base g_arduboy;
 
 void setup()
 {
@@ -16,7 +16,8 @@ void setup()
 
 void loop()
 {
-    if(!g_arduboy.nextFrame()) {
+    if(!g_arduboy.nextFrameDEV()) {
+        g_arduboy.idle();
         return;
     }
 
