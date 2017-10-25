@@ -18,6 +18,17 @@ static struct {
     } stars;
 } g_context;
 
+static void z_star_init(void)
+{
+    for(int i = 0; i < NUM_STARS - 1; i++) {
+        g_context.stars.pool[i].next = &g_context.stars.pool[i + 1];
+    }
+
+    g_context.stars.pool[NUM_STARS - 1].next = NULL;
+    g_context.stars.freeList = &g_context.stars.pool[0];
+    g_context.stars.activeList = NULL;
+}
+
 static void z_star_new(void)
 {
     if(g_context.stars.freeList == NULL) {
@@ -88,13 +99,7 @@ void loop_setup(void)
     g_context.left = s_buttons[S_BUTTON_LEFT];
     g_context.right = s_buttons[S_BUTTON_RIGHT];
 
-    for(int i = 0; i < NUM_STARS - 1; i++) {
-        g_context.stars.pool[i].next = &g_context.stars.pool[i + 1];
-    }
-
-    g_context.stars.pool[NUM_STARS - 1].next = NULL;
-    g_context.stars.freeList = &g_context.stars.pool[0];
-    g_context.stars.activeList = NULL;
+    z_star_init();
 }
 
 void loop_tick(void)
