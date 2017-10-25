@@ -10,6 +10,10 @@
 extern "C" {
 #endif
 
+#define S_WIDTH 128
+#define S_HEIGHT 64
+#define S_FPS 30
+
 typedef enum {
     S_BUTTON_UP,
     S_BUTTON_DOWN,
@@ -31,9 +35,6 @@ extern SButton s_buttons[S_BUTTON_NUM];
 extern void s_setup(void);
 
 extern bool s_button_pressed(SButton Button);
-
-extern int s_screen_getWidth(void);
-extern int s_screen_getHeight(void);
 
 extern void s_draw_fill(bool White);
 extern void s_draw_rectangle(int X, int Y, int W, int H, bool White);

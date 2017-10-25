@@ -47,7 +47,7 @@ static void z_star_new(void)
     star->next = g_context.stars.activeList;
     g_context.stars.activeList = star;
 
-    star->x = (fix)(rand() % s_screen_getWidth());
+    star->x = (fix)(rand() % S_WIDTH);
     star->y = 0;
     star->speed = (fix)(FIX_ONE / STAR_SPEED_DIV / 2
                             + (rand() % (FIX_ONE / STAR_SPEED_DIV)));
@@ -77,7 +77,7 @@ static void z_star_tick(void)
     while(star != NULL) {
         star->y = (fix)(star->y + star->speed);
 
-        if(star->y >> FIX_PRECISION_BITS >= s_screen_getHeight()) {
+        if(star->y >> FIX_PRECISION_BITS >= S_HEIGHT) {
             star = z_star_free(star, last);
         } else {
             last = star;
@@ -85,7 +85,7 @@ static void z_star_tick(void)
         }
     }
 
-    if(rand() % (s_screen_getHeight() * STAR_SPEED_DIV / NUM_STARS) == 0) {
+    if(rand() % (S_HEIGHT * STAR_SPEED_DIV / NUM_STARS) == 0) {
         z_star_new();
     }
 }
@@ -99,8 +99,8 @@ static void z_star_draw(void)
 
 void loop_setup(void)
 {
-    g_context.x = s_screen_getWidth() / 2;
-    g_context.y = s_screen_getHeight() / 2;
+    g_context.x = S_WIDTH / 2;
+    g_context.y = S_HEIGHT / 2;
 
     g_context.up = s_buttons[S_BUTTON_UP];
     g_context.down = s_buttons[S_BUTTON_DOWN];

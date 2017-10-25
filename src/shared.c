@@ -20,16 +20,6 @@ bool s_button_pressed(SButton Button)
     return a_button_getPressed(Button);
 }
 
-int s_screen_getWidth(void)
-{
-    return a_screen_getWidth();
-}
-
-int s_screen_getHeight(void)
-{
-    return a_screen_getHeight();
-}
-
 void s_draw_fill(bool White)
 {
     a_pixel_setHex(White ? 0xffffff : 0);
