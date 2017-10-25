@@ -44,15 +44,15 @@ void z_star_tick(void)
     ZStar* last = NULL;
 
     while(star != NULL) {
-        ZStar* next = star->next;
+        ZStar* nextStar = star->next;
 
         star->y++;
 
         if(star->y >= s_screen_getHeight()) {
             if(last == NULL) {
-                g_context.stars.activeList = star->next;
+                g_context.stars.activeList = nextStar;
             } else {
-                last->next = star->next;
+                last->next = nextStar;
             }
 
             star->next = g_context.stars.freeList;
@@ -61,7 +61,7 @@ void z_star_tick(void)
             last = star;
         }
 
-        star = next;
+        star = nextStar;
     }
 }
 
