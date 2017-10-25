@@ -18,7 +18,7 @@ static struct {
     } stars;
 } g_context;
 
-void z_star_new(void)
+static void z_star_new(void)
 {
     if(g_context.stars.freeList == NULL) {
         return;
@@ -34,7 +34,23 @@ void z_star_new(void)
     star->y = 0;
 }
 
-void z_star_tick(void)
+static ZStar* z_star_free(ZStar* Star, ZStar* LastStar)
+{
+    ZStar* nextStar = Star->next;
+
+    if(LastStar == NULL) {
+        g_context.stars.activeList = nextStar;
+    } else {
+        LastStar->next = nextStar;
+    }
+
+    Star->next = g_context.stars.freeList;
+    g_context.stars.freeList = Star;
+
+    return nextStar;
+}
+
+static void z_star_tick(void)
 {
     if(rand() % 3 == 0) {
         z_star_new();
@@ -44,28 +60,18 @@ void z_star_tick(void)
     ZStar* last = NULL;
 
     while(star != NULL) {
-        ZStar* nextStar = star->next;
-
         star->y++;
 
         if(star->y >= s_screen_getHeight()) {
-            if(last == NULL) {
-                g_context.stars.activeList = nextStar;
-            } else {
-                last->next = nextStar;
-            }
-
-            star->next = g_context.stars.freeList;
-            g_context.stars.freeList = star;
+            star = z_star_free(star, last);
         } else {
             last = star;
+            star = star->next;
         }
-
-        star = nextStar;
     }
 }
 
-void z_star_draw(void)
+static void z_star_draw(void)
 {
     for(ZStar* s = g_context.stars.activeList; s != NULL; s = s->next) {
         s_draw_rectangle(s->x, s->y, 1, 1, true);
