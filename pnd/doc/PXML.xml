@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PXML xmlns="http://openpandora.org/namespaces/PXML">
+<!-- please see http://pandorawiki.org/PXML_specification for more information before editing, and remember the order does matter -->
+	<package id="alxm.arduboy-shooter">
+		<author name="alxm" website="http://www.alxm.org"/>
+		<version major="1" minor="0" release="0" build="0"/>
+		<titles>
+			<title lang="en_US">arduboy-shooter</title>
+		</titles>
+		<descriptions>
+			<description lang="en_US">arduboy-shooter prototype</description>
+		</descriptions>
+	</package>
+	<application id="alxm.arduboy-shooter">
+		<exec command="arduboy-shooter.pnd.bin"/>
+		<author name="alxm" website="http://www.alxm.org"/>
+		<version major="1" minor="0" release="0" build="0" type="release"/>
+		<osversion major="1" minor="0" release="0" build="0"/>
+		<titles>
+			<title lang="en_US">arduboy-shooter</title>
+		</titles>
+		<descriptions>
+			<description lang="en_US">arduboy-shooter prototype</description>
+		</descriptions>
+		<licenses>
+			<license name="Freeware"/>
+		</licenses>
+		<categories>
+			<!-- http://standards.freedesktop.org/menu-spec/latest/apa.html -->
+			<category name="Game">
+				<subcategory name="ArcadeGame"/>
+			</category>
+		</categories>
+	</application>
+</PXML>
