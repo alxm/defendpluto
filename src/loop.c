@@ -1,10 +1,16 @@
 #include "shared.h"
 
-#define NUM_STARS 64
+#define NUM_STARS 24
+#define STAR_SPEED_DIV 4
+
+typedef int16_t fix;
+#define FIX_PRECISION_BITS 8
+#define FIX_ONE (fix)(1 << FIX_PRECISION_BITS)
 
 typedef struct ZStar {
     struct ZStar* next;
-    int x, y;
+    fix x, y;
+    fix speed;
 } ZStar;
 
 static struct {
@@ -41,8 +47,10 @@ static void z_star_new(void)
     star->next = g_context.stars.activeList;
     g_context.stars.activeList = star;
 
-    star->x = rand() % 128;
+    star->x = (fix)(rand() % s_screen_getWidth());
     star->y = 0;
+    star->speed = (fix)(FIX_ONE / STAR_SPEED_DIV / 2
+                            + (rand() % (FIX_ONE / STAR_SPEED_DIV)));
 }
 
 static ZStar* z_star_free(ZStar* Star, ZStar* LastStar)
@@ -63,29 +71,29 @@ static ZStar* z_star_free(ZStar* Star, ZStar* LastStar)
 
 static void z_star_tick(void)
 {
-    if(rand() % 3 == 0) {
-        z_star_new();
-    }
-
     ZStar* star = g_context.stars.activeList;
     ZStar* last = NULL;
 
     while(star != NULL) {
-        star->y++;
+        star->y = (fix)(star->y + star->speed);
 
-        if(star->y >= s_screen_getHeight()) {
+        if(star->y >> FIX_PRECISION_BITS >= s_screen_getHeight()) {
             star = z_star_free(star, last);
         } else {
             last = star;
             star = star->next;
         }
     }
+
+    if(rand() % (s_screen_getHeight() * STAR_SPEED_DIV / NUM_STARS) == 0) {
+        z_star_new();
+    }
 }
 
 static void z_star_draw(void)
 {
     for(ZStar* s = g_context.stars.activeList; s != NULL; s = s->next) {
-        s_draw_rectangle(s->x, s->y, 1, 1, true);
+        s_draw_rectangle(s->x, s->y >> FIX_PRECISION_BITS, 1, 1, true);
     }
 }
 
@@ -122,6 +130,6 @@ void loop_tick(void)
 void loop_draw(void)
 {
     s_draw_fill(false);
-    s_draw_rectangle(g_context.x - 16, g_context.y - 16, 32, 32, true);
+    s_draw_rectangle(g_context.x - 3, g_context.y - 4, 6, 8, true);
     z_star_draw();
 }
