@@ -39,3 +39,8 @@ void s_draw_rectangle(int X, int Y, int W, int H, bool White)
 {
     g_arduboy.fillRect(X, Y, W, H, White ? WHITE : BLACK);
 }
+
+void s_draw_pixel(int X, int Y, bool White)
+{
+    g_arduboy.drawPixel(X, Y, White ? WHITE : BLACK);
+}

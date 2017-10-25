@@ -93,7 +93,7 @@ static void z_star_tick(void)
 static void z_star_draw(void)
 {
     for(ZStar* s = g_context.stars.activeList; s != NULL; s = s->next) {
-        s_draw_rectangle(s->x, s->y >> FIX_PRECISION_BITS, 1, 1, true);
+        s_draw_pixel(s->x, s->y >> FIX_PRECISION_BITS, true);
     }
 }
 

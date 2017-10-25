@@ -42,4 +42,10 @@ void s_draw_rectangle(int X, int Y, int W, int H, bool White)
     a_draw_rectangle(X, Y, W, H);
 }
 
+void s_draw_pixel(int X, int Y, bool White)
+{
+    a_pixel_setHex(White ? 0xffffff : 0);
+    a_draw_pixel(X, Y);
+}
+
 #endif // ifndef ARDUINO

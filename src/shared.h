@@ -34,8 +34,10 @@ extern bool s_button_pressed(SButton Button);
 
 extern int s_screen_getWidth(void);
 extern int s_screen_getHeight(void);
+
 extern void s_draw_fill(bool White);
 extern void s_draw_rectangle(int X, int Y, int W, int H, bool White);
+extern void s_draw_pixel(int X, int Y, bool White);
 
 #ifdef __cplusplus
 }
