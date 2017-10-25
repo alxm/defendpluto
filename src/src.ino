@@ -1,9 +1,7 @@
 #include <Arduino.h>
 #include <Arduboy2.h>
 #include "shared.h"
-extern "C" {
 #include "loop.h"
-}
 
 Arduboy2 g_arduboy;
 
