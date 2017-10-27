@@ -78,24 +78,27 @@ void loop_tick(void)
         g_context.x++;
     }
 
-    if(s_button_pressed(g_context.a) && s_fps_isNthFrame(6)) {
+    if(s_button_pressed(g_context.a) && s_fps_isNthFrame(S_FPS / 4)) {
         ZBullet* b = z_pool_alloc(&g_context.bulletPool.generic);
 
         if(b) {
-            z_bullet_init(b, g_context.x, g_context.y, -1);
+            z_bullet_init(b, g_context.x, g_context.y, -2);
         }
     }
 
-    generic_tick(&g_context.starPool.generic, z_star_tick);
+    if(s_fps_isNthFrame(S_FPS / 5)) {
+        generic_tick(&g_context.starPool.generic, z_star_tick);
+
+        if(rand() % (S_HEIGHT / Z_STARS_NUM / Z_STAR_AVG_SPEED) == 0) {
+            ZStar* star = z_pool_alloc(&g_context.starPool.generic);
+
+            if(star != NULL) {
+                z_star_init(star);
+            }
+        }
+    }
+
     generic_tick(&g_context.bulletPool.generic, z_bullet_tick);
-
-    if(rand() % (S_HEIGHT / Z_STARS_NUM / Z_STAR_AVG_SPEED) == 0) {
-        ZStar* star = z_pool_alloc(&g_context.starPool.generic);
-
-        if(star != NULL) {
-            z_star_init(star);
-        }
-    }
 }
 
 void loop_draw(void)
