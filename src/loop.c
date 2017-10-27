@@ -16,6 +16,7 @@
 */
 
 #include "shared.h"
+#include "util_pool.h"
 
 #define NUM_STARS 24
 #define STAR_SPEED_DIV 4
@@ -24,8 +25,8 @@ typedef int16_t fix;
 #define FIX_PRECISION_BITS 8
 #define FIX_ONE (fix)(1 << FIX_PRECISION_BITS)
 
-typedef struct ZStar {
-    struct ZStar* next;
+typedef struct {
+    ZPoolObject poolObject;
     fix x, y;
     fix speed;
 } ZStar;
@@ -33,57 +34,21 @@ typedef struct ZStar {
 static struct {
     int x, y;
     SButton up, down, left, right;
-
-    struct {
-        ZStar* freeList;
-        ZStar* activeList;
-        ZStar pool[NUM_STARS];
-    } stars;
+    Z_POOL_DECLARE(ZStar, NUM_STARS, stars);
 } g_context;
-
-static void z_star_init(void)
-{
-    for(int i = 0; i < NUM_STARS - 1; i++) {
-        g_context.stars.pool[i].next = &g_context.stars.pool[i + 1];
-    }
-
-    g_context.stars.pool[NUM_STARS - 1].next = NULL;
-    g_context.stars.freeList = &g_context.stars.pool[0];
-    g_context.stars.activeList = NULL;
-}
 
 static void z_star_new(void)
 {
-    if(g_context.stars.freeList == NULL) {
+    ZStar* star = z_pool_alloc(&g_context.stars);
+
+    if(star == NULL) {
         return;
     }
-
-    ZStar* star = g_context.stars.freeList;
-    g_context.stars.freeList = g_context.stars.freeList->next;
-
-    star->next = g_context.stars.activeList;
-    g_context.stars.activeList = star;
 
     star->x = (fix)(rand() % S_WIDTH);
     star->y = 0;
     star->speed = (fix)(FIX_ONE / STAR_SPEED_DIV / 2
                             + (rand() % (FIX_ONE / STAR_SPEED_DIV)));
-}
-
-static ZStar* z_star_free(ZStar* Star, ZStar* LastStar)
-{
-    ZStar* nextStar = Star->next;
-
-    if(LastStar == NULL) {
-        g_context.stars.activeList = nextStar;
-    } else {
-        LastStar->next = nextStar;
-    }
-
-    Star->next = g_context.stars.freeList;
-    g_context.stars.freeList = Star;
-
-    return nextStar;
 }
 
 static void z_star_tick(void)
@@ -95,10 +60,10 @@ static void z_star_tick(void)
         star->y = (fix)(star->y + star->speed);
 
         if(star->y >> FIX_PRECISION_BITS >= S_HEIGHT) {
-            star = z_star_free(star, last);
+            star = z_pool_release(&g_context.stars, star, last);
         } else {
             last = star;
-            star = star->next;
+            star = star->poolObject.next;
         }
     }
 
@@ -109,7 +74,10 @@ static void z_star_tick(void)
 
 static void z_star_draw(void)
 {
-    for(ZStar* s = g_context.stars.activeList; s != NULL; s = s->next) {
+    for(ZStar* s = g_context.stars.activeList;
+        s != NULL;
+        s = s->poolObject.next) {
+
         s_draw_pixel(s->x, s->y >> FIX_PRECISION_BITS, true);
     }
 }
@@ -124,7 +92,7 @@ void loop_setup(void)
     g_context.left = s_buttons[S_BUTTON_LEFT];
     g_context.right = s_buttons[S_BUTTON_RIGHT];
 
-    z_star_init();
+    z_pool_init(&g_context.stars, sizeof(ZStar), NUM_STARS);
 }
 
 void loop_tick(void)

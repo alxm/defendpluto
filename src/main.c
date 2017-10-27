@@ -21,8 +21,8 @@
 #include "shared.h"
 #include "loop.h"
 
-#define STRINGIFY2(X) #X
-#define STRINGIFY(X) STRINGIFY2(X)
+#define STRINGIFY_EXPAND(X) #X
+#define STRINGIFY(X) STRINGIFY_EXPAND(X)
 
 A_SETUP
 {
