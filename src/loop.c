@@ -67,15 +67,15 @@ void loop_setup(void)
 
 void loop_tick(void)
 {
-    if(s_button_pressed(g_context.up)) {
+    if(s_button_pressed(g_context.up) && g_context.y > 0) {
         g_context.y--;
-    } else if(s_button_pressed(g_context.down)) {
+    } else if(s_button_pressed(g_context.down) && g_context.y < S_HEIGHT - 1) {
         g_context.y++;
     }
 
-    if(s_button_pressed(g_context.left)) {
+    if(s_button_pressed(g_context.left) && g_context.x > 0) {
         g_context.x--;
-    } else if(s_button_pressed(g_context.right)) {
+    } else if(s_button_pressed(g_context.right) && g_context.x < S_WIDTH - 1) {
         g_context.x++;
     }
 
