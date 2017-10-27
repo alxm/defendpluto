@@ -18,6 +18,7 @@
 #include "shared.h"
 #include "util_pool.h"
 #include "obj_bullet.h"
+#include "obj_enemy.h"
 #include "obj_star.h"
 
 static struct {
@@ -25,6 +26,7 @@ static struct {
     SButton up, down, left, right, a, b;
     Z_POOL_DECLARE(ZStar, Z_STARS_NUM, stars) starPool;
     Z_POOL_DECLARE(ZBullet, Z_BULLETS_NUM, bullets) bulletPool;
+    Z_POOL_DECLARE(ZEnemy, Z_ENEMIES_NUM, enemies) enemyPool;
 } g_context;
 
 static void generic_tick(ZPool* Pool, bool (*Callback)(ZPoolObject*))
@@ -62,6 +64,15 @@ void loop_setup(void)
 
     z_pool_init(&g_context.starPool.generic, sizeof(ZStar), Z_STARS_NUM);
     z_pool_init(&g_context.bulletPool.generic, sizeof(ZBullet), Z_BULLETS_NUM);
+    z_pool_init(&g_context.enemyPool.generic, sizeof(ZEnemy), Z_ENEMIES_NUM);
+
+    for(int i = 0; i < Z_ENEMIES_NUM; i++) {
+        ZEnemy* e = z_pool_alloc(&g_context.enemyPool.generic);
+
+        z_enemy_init(e,
+                     (int8_t)(rand() % S_WIDTH),
+                     (int8_t)(rand() % S_HEIGHT));
+    }
 }
 
 void loop_tick(void)
@@ -99,6 +110,7 @@ void loop_tick(void)
     }
 
     generic_tick(&g_context.bulletPool.generic, z_bullet_tick);
+    generic_tick(&g_context.enemyPool.generic, z_enemy_tick);
 }
 
 void loop_draw(void)
@@ -106,5 +118,6 @@ void loop_draw(void)
     s_draw_fill(false);
     generic_draw(&g_context.starPool.generic, z_star_draw);
     generic_draw(&g_context.bulletPool.generic, z_bullet_draw);
+    generic_draw(&g_context.enemyPool.generic, z_enemy_draw);
     s_draw_rectangle(g_context.x - 3, g_context.y - 4, 6, 8, true);
 }

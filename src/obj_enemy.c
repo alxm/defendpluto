@@ -15,14 +15,31 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-typedef struct {
-    ZPoolObject poolObject;
-    int8_t x, y;
-    int8_t dy;
-} ZBullet;
+#include "shared.h"
+#include "util_pool.h"
+#include "obj_enemy.h"
 
-#define Z_BULLETS_NUM 32
+void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y)
+{
+    Enemy->x = X;
+    Enemy->y = Y;
+}
 
-extern void z_bullet_init(ZBullet* Bullet, int8_t X, int8_t Y, int8_t Dy);
-extern bool z_bullet_tick(ZPoolObject* Bullet);
-extern void z_bullet_draw(ZPoolObject* Bullet);
+bool z_enemy_tick(ZPoolObject* Enemy)
+{
+    Enemy = Enemy;
+
+    return false;
+}
+
+void z_enemy_draw(ZPoolObject* Enemy)
+{
+    ZEnemy* enemy = (ZEnemy*)Enemy;
+
+    int8_t x = enemy->x;
+    int8_t y = enemy->y;
+
+    s_draw_rectangle(x - 2, y - 2, 4, 4, true);
+    s_draw_rectangle(x - 2 - 2, y - 2 - 1, 2, 8, true);
+    s_draw_rectangle(x + 2, y - 2 - 1, 2, 8, true);
+}

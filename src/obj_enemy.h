@@ -18,11 +18,10 @@
 typedef struct {
     ZPoolObject poolObject;
     int8_t x, y;
-    int8_t dy;
-} ZBullet;
+} ZEnemy;
 
-#define Z_BULLETS_NUM 32
+#define Z_ENEMIES_NUM 4
 
-extern void z_bullet_init(ZBullet* Bullet, int8_t X, int8_t Y, int8_t Dy);
-extern bool z_bullet_tick(ZPoolObject* Bullet);
-extern void z_bullet_draw(ZPoolObject* Bullet);
+extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y);
+extern bool z_enemy_tick(ZPoolObject* Enemy);
+extern void z_enemy_draw(ZPoolObject* Enemy);
