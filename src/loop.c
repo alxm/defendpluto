@@ -16,71 +16,18 @@
 */
 
 #include "shared.h"
+#include "util_fix.h"
 #include "util_pool.h"
-
-#define NUM_STARS 24
-#define STAR_SPEED_DIV 4
-
-typedef int16_t fix;
-#define FIX_PRECISION_BITS 8
-#define FIX_ONE (fix)(1 << FIX_PRECISION_BITS)
-
-typedef struct {
-    ZPoolObject poolObject;
-    fix x, y;
-    fix speed;
-} ZStar;
+#include "obj_star.h"
 
 static struct {
     int x, y;
     SButton up, down, left, right;
-    Z_POOL_DECLARE(ZStar, NUM_STARS, stars);
+    Z_POOL_DECLARE(ZStar, NUM_STARS, stars) starPool;
 } g_context;
 
-static void z_star_new(void)
-{
-    ZStar* star = z_pool_alloc(&g_context.stars);
-
-    if(star == NULL) {
-        return;
-    }
-
-    star->x = (fix)(rand() % S_WIDTH);
-    star->y = 0;
-    star->speed = (fix)(FIX_ONE / STAR_SPEED_DIV / 2
-                            + (rand() % (FIX_ONE / STAR_SPEED_DIV)));
-}
-
-static void z_star_tick(void)
-{
-    ZStar* star = g_context.stars.activeList;
-    ZStar* last = NULL;
-
-    while(star != NULL) {
-        star->y = (fix)(star->y + star->speed);
-
-        if(star->y >> FIX_PRECISION_BITS >= S_HEIGHT) {
-            star = z_pool_release(&g_context.stars, star, last);
-        } else {
-            last = star;
-            star = star->poolObject.next;
-        }
-    }
-
-    if(rand() % (S_HEIGHT * STAR_SPEED_DIV / NUM_STARS) == 0) {
-        z_star_new();
-    }
-}
-
-static void z_star_draw(void)
-{
-    for(ZStar* s = g_context.stars.activeList;
-        s != NULL;
-        s = s->poolObject.next) {
-
-        s_draw_pixel(s->x, s->y >> FIX_PRECISION_BITS, true);
-    }
-}
+static void loop_stars_tick(void);
+static void loop_stars_draw(void);
 
 void loop_setup(void)
 {
@@ -92,7 +39,7 @@ void loop_setup(void)
     g_context.left = s_buttons[S_BUTTON_LEFT];
     g_context.right = s_buttons[S_BUTTON_RIGHT];
 
-    z_pool_init(&g_context.stars, sizeof(ZStar), NUM_STARS);
+    z_pool_init(&g_context.starPool.generic, sizeof(ZStar), NUM_STARS);
 }
 
 void loop_tick(void)
@@ -109,12 +56,44 @@ void loop_tick(void)
         g_context.x++;
     }
 
-    z_star_tick();
+    loop_stars_tick();
 }
 
 void loop_draw(void)
 {
     s_draw_fill(false);
+    loop_stars_draw();
     s_draw_rectangle(g_context.x - 3, g_context.y - 4, 6, 8, true);
-    z_star_draw();
+}
+
+static void loop_stars_tick(void)
+{
+    ZStar* last = NULL;
+
+    for(ZStar* star = g_context.starPool.stars.activeList; star != NULL; ) {
+        if(z_star_tick(star)) {
+            star = z_pool_release(&g_context.starPool.generic, star, last);
+        } else {
+            last = star;
+            star = star->poolObject.next;
+        }
+    }
+
+    if(rand() % (S_HEIGHT * STAR_SPEED_DIV / NUM_STARS) == 0) {
+        ZStar* star = z_pool_alloc(&g_context.starPool.generic);
+
+        if(star != NULL) {
+            z_star_init(star);
+        }
+    }
+}
+
+static void loop_stars_draw(void)
+{
+    for(ZStar* star = g_context.starPool.stars.activeList;
+        star != NULL;
+        star = star->poolObject.next) {
+
+        z_star_draw(star);
+    }
 }

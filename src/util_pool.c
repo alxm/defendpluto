@@ -18,13 +18,7 @@
 #include "shared.h"
 #include "util_pool.h"
 
-typedef struct {
-    ZPoolObject* freeList;
-    ZPoolObject* activeList;
-    ZPoolObject pool[];
-} ZPool;
-
-void z_pool_init(void* Pool, size_t ObjectSize, size_t NumObjects)
+void z_pool_init(ZPool* Pool, size_t ObjectSize, size_t NumObjects)
 {
     ZPool* pool = Pool;
 
@@ -41,7 +35,7 @@ void z_pool_init(void* Pool, size_t ObjectSize, size_t NumObjects)
     pool->activeList = NULL;
 }
 
-void* z_pool_alloc(void* Pool)
+void* z_pool_alloc(ZPool* Pool)
 {
     ZPool* pool = Pool;
 
@@ -50,7 +44,7 @@ void* z_pool_alloc(void* Pool)
     }
 
     ZPoolObject* object = pool->freeList;
-    pool->freeList = pool->freeList->next;
+    pool->freeList = ((ZPoolObject*)pool->freeList)->next;
 
     object->next = pool->activeList;
     pool->activeList = object;
@@ -58,7 +52,7 @@ void* z_pool_alloc(void* Pool)
     return object;
 }
 
-void* z_pool_release(void* Pool, void* Object, void* LastObject)
+void* z_pool_release(ZPool* Pool, void* Object, void* LastObject)
 {
     ZPool* pool = Pool;
 

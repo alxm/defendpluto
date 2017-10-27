@@ -19,13 +19,22 @@ typedef struct {
     void* next;
 } ZPoolObject;
 
-#define Z_POOL_DECLARE(ObjectType, NumObjects, Name) \
-    struct {                                         \
-        ObjectType* freeList;                        \
-        ObjectType* activeList;                      \
-        ObjectType pool[NumObjects];                 \
-    } Name
+typedef struct {
+    void* freeList;
+    void* activeList;
+    ZPoolObject pool[1];
+} ZPool;
 
-extern void z_pool_init(void* Pool, size_t ObjectSize, size_t NumObjects);
-extern void* z_pool_alloc(void* Pool);
-extern void* z_pool_release(void* Pool, void* Object, void* LastObject);
+#define Z_POOL_DECLARE(ObjectType, NumObjects, Name) \
+    union {                                          \
+        struct {                                     \
+            ObjectType* freeList;                    \
+            ObjectType* activeList;                  \
+            ObjectType pool[NumObjects];             \
+        } Name;                                      \
+        ZPool generic;                               \
+    }
+
+extern void z_pool_init(ZPool* Pool, size_t ObjectSize, size_t NumObjects);
+extern void* z_pool_alloc(ZPool* Pool);
+extern void* z_pool_release(ZPool* Pool, void* Object, void* LastObject);
