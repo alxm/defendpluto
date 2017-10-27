@@ -16,15 +16,13 @@
 */
 
 #include "shared.h"
-#include "util_fix.h"
 #include "util_pool.h"
 #include "obj_bullet.h"
 
-void z_bullet_init(ZBullet* Bullet, fix X, fix Y, int Dy)
+void z_bullet_init(ZBullet* Bullet, int8_t X, int8_t Y, int8_t Dy)
 {
     Bullet->x = X;
     Bullet->y = Y;
-    Bullet->speed = 2 << FIX_PRECISION_BITS;
     Bullet->dy = Dy;
 }
 
@@ -32,19 +30,15 @@ bool z_bullet_tick(ZPoolObject* Bullet)
 {
     ZBullet* bullet = (ZBullet*)Bullet;
 
-    bullet->y = (fix)(bullet->y + bullet->dy * bullet->speed);
+    bullet->y = (int8_t)(bullet->y + bullet->dy);
 
     return (bullet->dy < 0 && bullet->y < 0)
-        || (bullet->dy > 0 && bullet->y >> FIX_PRECISION_BITS >= S_HEIGHT);
+        || (bullet->dy > 0 && bullet->y >= S_HEIGHT);
 }
 
 void z_bullet_draw(ZPoolObject* Bullet)
 {
     ZBullet* bullet = (ZBullet*)Bullet;
 
-    s_draw_rectangle(bullet->x - 1,
-                     (bullet->y >> FIX_PRECISION_BITS) - 2,
-                     2,
-                     4,
-                     true);
+    s_draw_rectangle(bullet->x - 1, bullet->y - 2, 2, 4, true);
 }

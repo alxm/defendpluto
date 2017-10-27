@@ -16,13 +16,12 @@
 */
 
 #include "shared.h"
-#include "util_fix.h"
 #include "util_pool.h"
 #include "obj_bullet.h"
 #include "obj_star.h"
 
 static struct {
-    int16_t x, y;
+    int8_t x, y;
     SButton up, down, left, right, a, b;
     Z_POOL_DECLARE(ZStar, Z_STARS_NUM, stars) starPool;
     Z_POOL_DECLARE(ZBullet, Z_BULLETS_NUM, bullets) bulletPool;
@@ -83,17 +82,14 @@ void loop_tick(void)
         ZBullet* b = z_pool_alloc(&g_context.bulletPool.generic);
 
         if(b) {
-            z_bullet_init(b,
-                          g_context.x,
-                          (int16_t)(g_context.y << FIX_PRECISION_BITS),
-                          -1);
+            z_bullet_init(b, g_context.x, g_context.y, -1);
         }
     }
 
     generic_tick(&g_context.starPool.generic, z_star_tick);
     generic_tick(&g_context.bulletPool.generic, z_bullet_tick);
 
-    if(rand() % (S_HEIGHT * Z_STAR_SPEED_DIV / Z_STARS_NUM) == 0) {
+    if(rand() % (S_HEIGHT / Z_STARS_NUM / Z_STAR_AVG_SPEED) == 0) {
         ZStar* star = z_pool_alloc(&g_context.starPool.generic);
 
         if(star != NULL) {
