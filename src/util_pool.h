@@ -20,8 +20,8 @@ typedef struct {
 } ZPoolObject;
 
 typedef struct {
-    void* freeList;
-    void* activeList;
+    ZPoolObject* freeList;
+    ZPoolObject* activeList;
     ZPoolObject pool[1];
 } ZPool;
 

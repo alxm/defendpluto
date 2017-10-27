@@ -44,7 +44,7 @@ void* z_pool_alloc(ZPool* Pool)
     }
 
     ZPoolObject* object = pool->freeList;
-    pool->freeList = ((ZPoolObject*)pool->freeList)->next;
+    pool->freeList = pool->freeList->next;
 
     object->next = pool->activeList;
     pool->activeList = object;
