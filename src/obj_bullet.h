@@ -15,27 +15,16 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "shared.h"
-#include "util_fix.h"
-#include "util_pool.h"
-#include "obj_star.h"
+typedef struct {
+    ZPoolObject poolObject;
+    fix x, y;
+    fix speed;
+    int dy;
+} ZBullet;
 
-void z_star_init(ZStar* Star)
-{
-    Star->x = (fix)(rand() % S_WIDTH);
-    Star->y = 0;
-    Star->speed = (fix)(FIX_ONE / Z_STAR_SPEED_DIV / 2
-                            + (rand() % (FIX_ONE / Z_STAR_SPEED_DIV)));
-}
+#define Z_BULLETS_NUM 32
 
-bool z_star_tick(ZStar* Star)
-{
-    Star->y = (fix)(Star->y + Star->speed);
+extern void z_bullet_init(ZBullet* Bullet, fix X, fix Y, int Dy);
+extern bool z_bullet_tick(ZBullet* Bullet);
+extern void z_bullet_draw(ZBullet* Bullet);
 
-    return Star->y >> FIX_PRECISION_BITS >= S_HEIGHT;
-}
-
-void z_star_draw(ZStar* Star)
-{
-    s_draw_pixel(Star->x, Star->y >> FIX_PRECISION_BITS, true);
-}

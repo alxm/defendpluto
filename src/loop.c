@@ -18,16 +18,21 @@
 #include "shared.h"
 #include "util_fix.h"
 #include "util_pool.h"
+#include "obj_bullet.h"
 #include "obj_star.h"
 
 static struct {
-    int x, y;
-    SButton up, down, left, right;
-    Z_POOL_DECLARE(ZStar, NUM_STARS, stars) starPool;
+    int16_t x, y;
+    SButton up, down, left, right, a, b;
+    Z_POOL_DECLARE(ZStar, Z_STARS_NUM, stars) starPool;
+    Z_POOL_DECLARE(ZBullet, Z_BULLETS_NUM, bullets) bulletPool;
 } g_context;
 
 static void loop_stars_tick(void);
 static void loop_stars_draw(void);
+
+static void loop_bullets_tick(void);
+static void loop_bullets_draw(void);
 
 void loop_setup(void)
 {
@@ -38,8 +43,11 @@ void loop_setup(void)
     g_context.down = s_buttons[S_BUTTON_DOWN];
     g_context.left = s_buttons[S_BUTTON_LEFT];
     g_context.right = s_buttons[S_BUTTON_RIGHT];
+    g_context.a = s_buttons[S_BUTTON_A];
+    g_context.b = s_buttons[S_BUTTON_B];
 
-    z_pool_init(&g_context.starPool.generic, sizeof(ZStar), NUM_STARS);
+    z_pool_init(&g_context.starPool.generic, sizeof(ZStar), Z_STARS_NUM);
+    z_pool_init(&g_context.bulletPool.generic, sizeof(ZBullet), Z_BULLETS_NUM);
 }
 
 void loop_tick(void)
@@ -56,7 +64,19 @@ void loop_tick(void)
         g_context.x++;
     }
 
+    if(s_button_pressed(g_context.a) && s_fps_isNthFrame(6)) {
+        ZBullet* b = z_pool_alloc(&g_context.bulletPool.generic);
+
+        if(b) {
+            z_bullet_init(b,
+                          g_context.x,
+                          (int16_t)(g_context.y << FIX_PRECISION_BITS),
+                          -1);
+        }
+    }
+
     loop_stars_tick();
+    loop_bullets_tick();
 }
 
 void loop_draw(void)
@@ -64,6 +84,7 @@ void loop_draw(void)
     s_draw_fill(false);
     loop_stars_draw();
     s_draw_rectangle(g_context.x - 3, g_context.y - 4, 6, 8, true);
+    loop_bullets_draw();
 }
 
 static void loop_stars_tick(void)
@@ -79,7 +100,7 @@ static void loop_stars_tick(void)
         }
     }
 
-    if(rand() % (S_HEIGHT * STAR_SPEED_DIV / NUM_STARS) == 0) {
+    if(rand() % (S_HEIGHT * Z_STAR_SPEED_DIV / Z_STARS_NUM) == 0) {
         ZStar* star = z_pool_alloc(&g_context.starPool.generic);
 
         if(star != NULL) {
@@ -95,5 +116,29 @@ static void loop_stars_draw(void)
         star = star->poolObject.next) {
 
         z_star_draw(star);
+    }
+}
+
+static void loop_bullets_tick(void)
+{
+    ZBullet* last = NULL;
+
+    for(ZBullet* bullet = g_context.bulletPool.bullets.activeList; bullet != NULL; ) {
+        if(z_bullet_tick(bullet)) {
+            bullet = z_pool_release(&g_context.bulletPool.generic, bullet, last);
+        } else {
+            last = bullet;
+            bullet = bullet->poolObject.next;
+        }
+    }
+}
+
+static void loop_bullets_draw(void)
+{
+    for(ZBullet* bullet = g_context.bulletPool.bullets.activeList;
+        bullet != NULL;
+        bullet = bullet->poolObject.next) {
+
+        z_bullet_draw(bullet);
     }
 }

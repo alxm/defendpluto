@@ -18,24 +18,29 @@
 #include "shared.h"
 #include "util_fix.h"
 #include "util_pool.h"
-#include "obj_star.h"
+#include "obj_bullet.h"
 
-void z_star_init(ZStar* Star)
+void z_bullet_init(ZBullet* Bullet, fix X, fix Y, int Dy)
 {
-    Star->x = (fix)(rand() % S_WIDTH);
-    Star->y = 0;
-    Star->speed = (fix)(FIX_ONE / Z_STAR_SPEED_DIV / 2
-                            + (rand() % (FIX_ONE / Z_STAR_SPEED_DIV)));
+    Bullet->x = X;
+    Bullet->y = Y;
+    Bullet->speed = 2 << FIX_PRECISION_BITS;
+    Bullet->dy = Dy;
 }
 
-bool z_star_tick(ZStar* Star)
+bool z_bullet_tick(ZBullet* Bullet)
 {
-    Star->y = (fix)(Star->y + Star->speed);
+    Bullet->y = (fix)(Bullet->y + Bullet->dy * Bullet->speed);
 
-    return Star->y >> FIX_PRECISION_BITS >= S_HEIGHT;
+    return (Bullet->dy < 0 && Bullet->y < 0)
+        || (Bullet->dy > 0 && Bullet->y >> FIX_PRECISION_BITS >= S_HEIGHT);
 }
 
-void z_star_draw(ZStar* Star)
+void z_bullet_draw(ZBullet* Bullet)
 {
-    s_draw_pixel(Star->x, Star->y >> FIX_PRECISION_BITS, true);
+    s_draw_rectangle(Bullet->x - 1,
+                     (Bullet->y >> FIX_PRECISION_BITS) - 2,
+                     2,
+                     4,
+                     true);
 }

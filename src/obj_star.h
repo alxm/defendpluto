@@ -21,8 +21,8 @@ typedef struct {
     fix speed;
 } ZStar;
 
-#define NUM_STARS 24
-#define STAR_SPEED_DIV 4
+#define Z_STARS_NUM 24
+#define Z_STAR_SPEED_DIV 4
 
 extern void z_star_init(ZStar* Star);
 extern bool z_star_tick(ZStar* Star);
