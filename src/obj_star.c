@@ -28,14 +28,18 @@ void z_star_init(ZStar* Star)
                             + (rand() % (FIX_ONE / Z_STAR_SPEED_DIV)));
 }
 
-bool z_star_tick(ZStar* Star)
+bool z_star_tick(ZPoolObject* Star)
 {
-    Star->y = (fix)(Star->y + Star->speed);
+    ZStar* star = (ZStar*)Star;
 
-    return Star->y >> FIX_PRECISION_BITS >= S_HEIGHT;
+    star->y = (fix)(star->y + star->speed);
+
+    return star->y >> FIX_PRECISION_BITS >= S_HEIGHT;
 }
 
-void z_star_draw(ZStar* Star)
+void z_star_draw(ZPoolObject* Star)
 {
-    s_draw_pixel(Star->x, Star->y >> FIX_PRECISION_BITS, true);
+    ZStar* star = (ZStar*)Star;
+
+    s_draw_pixel(star->x, star->y >> FIX_PRECISION_BITS, true);
 }

@@ -28,18 +28,22 @@ void z_bullet_init(ZBullet* Bullet, fix X, fix Y, int Dy)
     Bullet->dy = Dy;
 }
 
-bool z_bullet_tick(ZBullet* Bullet)
+bool z_bullet_tick(ZPoolObject* Bullet)
 {
-    Bullet->y = (fix)(Bullet->y + Bullet->dy * Bullet->speed);
+    ZBullet* bullet = (ZBullet*)Bullet;
 
-    return (Bullet->dy < 0 && Bullet->y < 0)
-        || (Bullet->dy > 0 && Bullet->y >> FIX_PRECISION_BITS >= S_HEIGHT);
+    bullet->y = (fix)(bullet->y + bullet->dy * bullet->speed);
+
+    return (bullet->dy < 0 && bullet->y < 0)
+        || (bullet->dy > 0 && bullet->y >> FIX_PRECISION_BITS >= S_HEIGHT);
 }
 
-void z_bullet_draw(ZBullet* Bullet)
+void z_bullet_draw(ZPoolObject* Bullet)
 {
-    s_draw_rectangle(Bullet->x - 1,
-                     (Bullet->y >> FIX_PRECISION_BITS) - 2,
+    ZBullet* bullet = (ZBullet*)Bullet;
+
+    s_draw_rectangle(bullet->x - 1,
+                     (bullet->y >> FIX_PRECISION_BITS) - 2,
                      2,
                      4,
                      true);

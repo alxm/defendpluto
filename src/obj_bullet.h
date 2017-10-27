@@ -25,6 +25,6 @@ typedef struct {
 #define Z_BULLETS_NUM 32
 
 extern void z_bullet_init(ZBullet* Bullet, fix X, fix Y, int Dy);
-extern bool z_bullet_tick(ZBullet* Bullet);
-extern void z_bullet_draw(ZBullet* Bullet);
+extern bool z_bullet_tick(ZPoolObject* Bullet);
+extern void z_bullet_draw(ZPoolObject* Bullet);
 

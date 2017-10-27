@@ -28,11 +28,26 @@ static struct {
     Z_POOL_DECLARE(ZBullet, Z_BULLETS_NUM, bullets) bulletPool;
 } g_context;
 
-static void loop_stars_tick(void);
-static void loop_stars_draw(void);
+static void generic_tick(ZPool* Pool, bool (*Callback)(ZPoolObject*))
+{
+    ZPoolObject* last = NULL;
 
-static void loop_bullets_tick(void);
-static void loop_bullets_draw(void);
+    for(ZPoolObject* o = Pool->activeList; o != NULL; ) {
+        if(Callback(o)) {
+            o = z_pool_release(Pool, o, last);
+        } else {
+            last = o;
+            o = o->next;
+        }
+    }
+}
+
+static void generic_draw(ZPool* Pool, void (*Callback)(ZPoolObject*))
+{
+    for(ZPoolObject* o = Pool->activeList; o != NULL; o = o->next) {
+        Callback(o);
+    }
+}
 
 void loop_setup(void)
 {
@@ -75,30 +90,8 @@ void loop_tick(void)
         }
     }
 
-    loop_stars_tick();
-    loop_bullets_tick();
-}
-
-void loop_draw(void)
-{
-    s_draw_fill(false);
-    loop_stars_draw();
-    s_draw_rectangle(g_context.x - 3, g_context.y - 4, 6, 8, true);
-    loop_bullets_draw();
-}
-
-static void loop_stars_tick(void)
-{
-    ZStar* last = NULL;
-
-    for(ZStar* star = g_context.starPool.stars.activeList; star != NULL; ) {
-        if(z_star_tick(star)) {
-            star = z_pool_release(&g_context.starPool.generic, star, last);
-        } else {
-            last = star;
-            star = star->poolObject.next;
-        }
-    }
+    generic_tick(&g_context.starPool.generic, z_star_tick);
+    generic_tick(&g_context.bulletPool.generic, z_bullet_tick);
 
     if(rand() % (S_HEIGHT * Z_STAR_SPEED_DIV / Z_STARS_NUM) == 0) {
         ZStar* star = z_pool_alloc(&g_context.starPool.generic);
@@ -109,36 +102,10 @@ static void loop_stars_tick(void)
     }
 }
 
-static void loop_stars_draw(void)
+void loop_draw(void)
 {
-    for(ZStar* star = g_context.starPool.stars.activeList;
-        star != NULL;
-        star = star->poolObject.next) {
-
-        z_star_draw(star);
-    }
-}
-
-static void loop_bullets_tick(void)
-{
-    ZBullet* last = NULL;
-
-    for(ZBullet* bullet = g_context.bulletPool.bullets.activeList; bullet != NULL; ) {
-        if(z_bullet_tick(bullet)) {
-            bullet = z_pool_release(&g_context.bulletPool.generic, bullet, last);
-        } else {
-            last = bullet;
-            bullet = bullet->poolObject.next;
-        }
-    }
-}
-
-static void loop_bullets_draw(void)
-{
-    for(ZBullet* bullet = g_context.bulletPool.bullets.activeList;
-        bullet != NULL;
-        bullet = bullet->poolObject.next) {
-
-        z_bullet_draw(bullet);
-    }
+    s_draw_fill(false);
+    generic_draw(&g_context.starPool.generic, z_star_draw);
+    generic_draw(&g_context.bulletPool.generic, z_bullet_draw);
+    s_draw_rectangle(g_context.x - 3, g_context.y - 4, 6, 8, true);
 }

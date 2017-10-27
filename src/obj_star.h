@@ -25,5 +25,5 @@ typedef struct {
 #define Z_STAR_SPEED_DIV 4
 
 extern void z_star_init(ZStar* Star);
-extern bool z_star_tick(ZStar* Star);
-extern void z_star_draw(ZStar* Star);
+extern bool z_star_tick(ZPoolObject* Star);
+extern void z_star_draw(ZPoolObject* Star);
