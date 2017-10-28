@@ -28,9 +28,12 @@ aiTypes = {
 }
 
 class Instruction:
-    def __init__(self, NumTokens, Opcode):
+    numInstructions = 0
+
+    def __init__(self, NumTokens = 1):
         self.numTokens = NumTokens
-        self.opcode = Opcode
+        self.opcode = Instruction.numInstructions
+        Instruction.numInstructions += 1
 
     def compile(self, Tokens):
         if len(Tokens) != self.numTokens:
@@ -44,8 +47,8 @@ class Instruction:
         return [self.opcode]
 
 class InstructionSpawn(Instruction):
-    def __init__(self, NumBytes, Opcode):
-        Instruction.__init__(self, NumBytes, Opcode)
+    def __init__(self):
+        Instruction.__init__(self, 8)
 
     def custom_compile(self, Tokens):
         bytecode = []
@@ -73,8 +76,8 @@ class InstructionSpawn(Instruction):
         return bytecode
 
 class InstructionWait(Instruction):
-    def __init__(self, NumBytes, Opcode):
-        Instruction.__init__(self, NumBytes, Opcode)
+    def __init__(self):
+        Instruction.__init__(self, 2)
 
     def custom_compile(self, Tokens):
         bytecode = []
@@ -93,10 +96,10 @@ class InstructionWait(Instruction):
 
 def main(LevelFile):
     instructions = {
-        'spawn': InstructionSpawn(8, 0x00),
-        'wait': InstructionWait(2, 0x01),
-        'waitclear': Instruction(1, 0x02),
-        'over': Instruction(1, 0xff),
+        'spawn': InstructionSpawn(),
+        'wait': InstructionWait(),
+        'waitclear': Instruction(),
+        'over': Instruction(),
     }
 
     bytecode = []

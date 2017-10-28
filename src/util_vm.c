@@ -92,20 +92,29 @@ static bool handle_waitclear(void)
     return z_pool_getNumActive(z_pool[Z_POOL_ENEMY]) == 0;
 }
 
+static bool handle_over(void)
+{
+    /*
+     * 8b
+     * over
+     * over
+    */
+    g_pc = 0;
+
+    return false;
+}
+
 static ZInstruction g_ops[] = {
     {handle_spawn, 6},
     {handle_wait, 2},
     {handle_waitclear, 1},
+    {handle_over, 1},
 };
 
 void z_vm_tick(void)
 {
     if(g_wait) {
         g_wait--;
-        return;
-    }
-
-    if(g_data[g_pc] == 0xff) {
         return;
     }
 
