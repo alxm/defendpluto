@@ -1,0 +1,8 @@
+;
+; Level 0
+;
+
+; 8b    8b      8b      4b          4b      4b      4b        8b
+; spawn x_coord y_coord object_type ai_type ai_data num_units wait_between
+  spawn 64      0       enemy1      nobrain 0       1         0 ; actual instruction
+; 0x00  0x40    0x00    0x0         0x0     0x0     0x1       0x00
