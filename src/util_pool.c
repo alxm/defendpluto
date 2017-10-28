@@ -82,7 +82,7 @@ void* z_pool_alloc(ZPool* Pool)
     return object;
 }
 
-void* z_pool_release(ZPool* Pool, void* Object, void* LastObject)
+static void* z_pool_release(ZPool* Pool, void* Object, void* LastObject)
 {
     ZPool* pool = Pool;
 
