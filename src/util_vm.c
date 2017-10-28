@@ -23,7 +23,7 @@
 #include "obj_star.h"
 
 typedef struct {
-    void (*callback)(void);
+    bool (*callback)(void);
     uint8_t bytes;
 } ZInstruction;
 
@@ -48,7 +48,7 @@ static const uint8_t g_data[] =
 }
 ;
 
-static void handle_spawn(void)
+static bool handle_spawn(void)
 {
     /*
      * 8b    8b      8b      4b          4b      4b      4b        8b
@@ -72,23 +72,27 @@ static void handle_spawn(void)
         case 0: {
             ZEnemy* e = z_pool_alloc(z_pool[Z_POOL_ENEMY]);
 
-            if(e) {
-                z_enemy_init(e, x, y);
+            if(e == NULL) {
+                return false;
             }
+
+            z_enemy_init(e, x, y);
         } break;
     }
+
+    return true;
 }
 
-static void handle_wait(void)
+static bool handle_wait(void)
 {
     /*
      * 8b   8b
      * wait frames
      * wait 30
     */
-    uint8_t frames = g_data[g_pc + 1];
+    g_wait = g_data[g_pc + 1];
 
-    g_wait = frames;
+    return true;
 }
 
 static ZInstruction g_ops[] = {
@@ -109,6 +113,7 @@ void z_vm_tick(void)
 
     uint8_t instruction = g_data[g_pc];
 
-    g_ops[instruction].callback();
-    g_pc += g_ops[instruction].bytes;
+    if(g_ops[instruction].callback()) {
+        g_pc += g_ops[instruction].bytes;
+    }
 }
