@@ -34,7 +34,7 @@ void s_setup(void)
 
 unsigned s_fps_getCounter(void)
 {
-    return g_arduboy.frameCount();
+    return g_arduboy.frameCount;
 }
 
 bool s_fps_isNthFrame(unsigned N)
