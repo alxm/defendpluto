@@ -32,7 +32,7 @@ static unsigned g_wait = 0;
 
 static const uint8_t g_data[] =
 {
-    #include "../levels/level0.h"
+    #include "levels/level0.h"
 };
 
 static bool handle_spawn(void)
