@@ -34,5 +34,7 @@ extern void z_pool_setup(void);
 
 extern void* z_pool_alloc(ZPool* Pool);
 
+extern uint8_t z_pool_getNumActive(ZPool* Pool);
+
 extern void z_pool_tick(ZPool* Pool, bool (*Callback)(ZPoolObject*));
 extern void z_pool_draw(ZPool* Pool, void (*Callback)(ZPoolObject*));

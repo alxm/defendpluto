@@ -4,26 +4,20 @@
 
 spawn 8 8 enemy1 nobrain 0 1 0
 wait 30
-
 spawn 24 8 enemy1 nobrain 0 1 0
-wait 30
+waitclear
 
 spawn 40 8 enemy1 nobrain 0 1 0
 wait 30
-
 spawn 56 8 enemy1 nobrain 0 1 0
-wait 30
-
+wait 20
 spawn 72 8 enemy1 nobrain 0 1 0
-wait 30
-
+wait 10
 spawn 88 8 enemy1 nobrain 0 1 0
-wait 30
+waitclear
 
 spawn 104 8 enemy1 nobrain 0 1 0
-wait 30
-
 spawn 120 8 enemy1 nobrain 0 1 0
-wait 30
+waitclear
 
 over

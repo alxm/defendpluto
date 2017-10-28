@@ -95,6 +95,7 @@ def main(LevelFile):
     instructions = {
         'spawn': InstructionSpawn(8, 0x00),
         'wait': InstructionWait(2, 0x01),
+        'waitclear': Instruction(1, 0x02),
         'over': Instruction(1, 0xff),
     }
 

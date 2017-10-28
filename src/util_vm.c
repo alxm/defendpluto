@@ -82,9 +82,20 @@ static bool handle_wait(void)
     return true;
 }
 
+static bool handle_waitclear(void)
+{
+    /*
+     * 8b
+     * waitclear
+     * waitclear
+    */
+    return z_pool_getNumActive(z_pool[Z_POOL_ENEMY]) == 0;
+}
+
 static ZInstruction g_ops[] = {
     {handle_spawn, 6},
     {handle_wait, 2},
+    {handle_waitclear, 1},
 };
 
 void z_vm_tick(void)
