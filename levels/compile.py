@@ -40,6 +40,9 @@ class Instruction:
 
         return self.custom_compile(Tokens)
 
+    def custom_compile(self, Tokens):
+        return [self.opcode]
+
 class InstructionSpawn(Instruction):
     def __init__(self, NumBytes, Opcode):
         Instruction.__init__(self, NumBytes, Opcode)
@@ -71,7 +74,8 @@ class InstructionSpawn(Instruction):
 
 def main(LevelFile):
     instructions = {
-        'spawn': InstructionSpawn(8, 0x00)
+        'spawn': InstructionSpawn(8, 0x00),
+        'over': Instruction(1, 0xff),
     }
 
     bytecode = []
@@ -91,9 +95,19 @@ def main(LevelFile):
                 continue
 
             instruction = instructions[tokens[0]]
-            bytecode += instruction.compile(tokens)
+            bytecode.append(instruction.compile(tokens))
 
-    print(bytecode)
+    print('{')
+
+    for line in bytecode:
+        print('    ', end = '')
+
+        for byte in line:
+            print('0x{:0>2x}, '.format(byte), end = '')
+
+        print()
+
+    print('}')
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
