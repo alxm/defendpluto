@@ -21,11 +21,16 @@
 #include "obj_enemy.h"
 #include "obj_star.h"
 
-#define DECLARE(ObjectType, NumObjects)                         \
-    union {                                                     \
-        ZPool generic;                                          \
-        uint8_t private[sizeof(ZPool) - sizeof(ZPoolObject)     \
-                            + NumObjects * sizeof(ObjectType)]; \
+struct ZPool {
+    ZPoolObject* freeList;
+    ZPoolObject* activeList;
+    ZPoolObject pool[];
+};
+
+#define DECLARE(ObjectType, NumObjects)                                   \
+    union {                                                               \
+        ZPool generic;                                                    \
+        uint8_t private[sizeof(ZPool) + NumObjects * sizeof(ObjectType)]; \
     }
 
 static DECLARE(ZStar, Z_STARS_NUM) g_starPool;
@@ -100,4 +105,25 @@ void* z_pool_release(ZPool* Pool, void* Object, void* LastObject)
     pool->freeList = object;
 
     return nextObject;
+}
+
+void z_pool_tick(ZPool* Pool, bool (*Callback)(ZPoolObject*))
+{
+    ZPoolObject* last = NULL;
+
+    for(ZPoolObject* o = Pool->activeList; o != NULL; ) {
+        if(Callback(o)) {
+            o = z_pool_release(Pool, o, last);
+        } else {
+            last = o;
+            o = o->next;
+        }
+    }
+}
+
+void z_pool_draw(ZPool* Pool, void (*Callback)(ZPoolObject*))
+{
+    for(ZPoolObject* o = Pool->activeList; o != NULL; o = o->next) {
+        Callback(o);
+    }
 }

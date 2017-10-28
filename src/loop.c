@@ -29,27 +29,6 @@ static struct {
     ZPool* enemyPool;
 } g_context;
 
-static void generic_tick(ZPool* Pool, bool (*Callback)(ZPoolObject*))
-{
-    ZPoolObject* last = NULL;
-
-    for(ZPoolObject* o = Pool->activeList; o != NULL; ) {
-        if(Callback(o)) {
-            o = z_pool_release(Pool, o, last);
-        } else {
-            last = o;
-            o = o->next;
-        }
-    }
-}
-
-static void generic_draw(ZPool* Pool, void (*Callback)(ZPoolObject*))
-{
-    for(ZPoolObject* o = Pool->activeList; o != NULL; o = o->next) {
-        Callback(o);
-    }
-}
-
 void loop_setup(void)
 {
     s_setup();
@@ -101,7 +80,7 @@ void loop_tick(void)
     }
 
     if(s_fps_isNthFrame(S_FPS / 5)) {
-        generic_tick(g_context.starPool, z_star_tick);
+        z_pool_tick(g_context.starPool, z_star_tick);
 
         if(rand() % (S_HEIGHT / Z_STARS_NUM / Z_STAR_AVG_SPEED) == 0) {
             ZStar* star = z_pool_alloc(g_context.starPool);
@@ -112,15 +91,15 @@ void loop_tick(void)
         }
     }
 
-    generic_tick(g_context.bulletPool, z_bullet_tick);
-    generic_tick(g_context.enemyPool, z_enemy_tick);
+    z_pool_tick(g_context.bulletPool, z_bullet_tick);
+    z_pool_tick(g_context.enemyPool, z_enemy_tick);
 }
 
 void loop_draw(void)
 {
     s_draw_fill(false);
-    generic_draw(g_context.starPool, z_star_draw);
-    generic_draw(g_context.bulletPool, z_bullet_draw);
-    generic_draw(g_context.enemyPool, z_enemy_draw);
+    z_pool_draw(g_context.starPool, z_star_draw);
+    z_pool_draw(g_context.bulletPool, z_bullet_draw);
+    z_pool_draw(g_context.enemyPool, z_enemy_draw);
     s_draw_rectangle(g_context.x - 3, g_context.y - 4, 6, 8, true);
 }

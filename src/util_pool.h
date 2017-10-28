@@ -22,18 +22,17 @@ typedef enum {
     Z_POOL_NUM
 } ZPoolType;
 
+typedef struct ZPool ZPool;
+
 typedef struct {
     void* next;
 } ZPoolObject;
-
-typedef struct {
-    ZPoolObject* freeList;
-    ZPoolObject* activeList;
-    ZPoolObject pool[1];
-} ZPool;
 
 extern void z_pool_setup(void);
 extern ZPool* z_pool_get(ZPoolType Type);
 
 extern void* z_pool_alloc(ZPool* Pool);
 extern void* z_pool_release(ZPool* Pool, void* Object, void* LastObject);
+
+extern void z_pool_tick(ZPool* Pool, bool (*Callback)(ZPoolObject*));
+extern void z_pool_draw(ZPool* Pool, void (*Callback)(ZPoolObject*));
