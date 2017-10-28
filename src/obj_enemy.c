@@ -19,17 +19,28 @@
 #include "util_pool.h"
 #include "obj_enemy.h"
 
-void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y)
+static bool nobrain(ZEnemy* Enemy)
+{
+    return ++Enemy->y >= S_HEIGHT;
+}
+
+static bool (*g_ai[])(ZEnemy*) = {
+    nobrain
+};
+
+void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Ai, uint8_t AiData)
 {
     Enemy->x = X;
     Enemy->y = Y;
+    Enemy->ai = Ai;
+    Enemy->aiData = AiData;
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
 {
-    A_UNUSED(Enemy);
+    ZEnemy* enemy = (ZEnemy*)Enemy;
 
-    return false;
+    return g_ai[enemy->ai](enemy);
 }
 
 void z_enemy_draw(ZPoolObject* Enemy)

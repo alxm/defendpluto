@@ -3,21 +3,21 @@
 ;
 
 spawn 8 8 enemy1 nobrain 0 1 0
-wait 30
-spawn 24 8 enemy1 nobrain 0 1 0
-waitclear
-
-spawn 40 8 enemy1 nobrain 0 1 0
-wait 30
-spawn 56 8 enemy1 nobrain 0 1 0
-wait 20
-spawn 72 8 enemy1 nobrain 0 1 0
 wait 10
-spawn 88 8 enemy1 nobrain 0 1 0
+spawn 24 8 enemy1 nobrain 1 1 0
 waitclear
 
-spawn 104 8 enemy1 nobrain 0 1 0
-spawn 120 8 enemy1 nobrain 0 1 0
+spawn 40 8 enemy1 nobrain 2 1 0
+wait 10
+spawn 56 8 enemy1 nobrain 3 1 0
+wait 7
+spawn 72 8 enemy1 nobrain 4 1 0
+wait 3
+spawn 88 8 enemy1 nobrain 5 1 0
+waitclear
+
+spawn 104 8 enemy1 nobrain 6 1 0
+spawn 120 8 enemy1 nobrain 7 1 0
 waitclear
 
 over

@@ -18,9 +18,7 @@
 #include "shared.h"
 #include "util_pool.h"
 #include "util_vm.h"
-#include "obj_bullet.h"
 #include "obj_enemy.h"
-#include "obj_star.h"
 
 typedef struct {
     bool (*callback)(void);
@@ -50,8 +48,6 @@ static bool handle_spawn(void)
     uint8_t num_units = g_data[g_pc + 4] & 0xf;
     uint8_t wait_between = g_data[g_pc + 5];
 
-    A_UNUSED(ai_type);
-    A_UNUSED(ai_data);
     A_UNUSED(num_units);
     A_UNUSED(wait_between);
 
@@ -63,7 +59,7 @@ static bool handle_spawn(void)
                 return false;
             }
 
-            z_enemy_init(e, x, y);
+            z_enemy_init(e, x, y, ai_type, ai_data);
         } break;
     }
 
