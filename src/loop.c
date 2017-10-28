@@ -24,9 +24,6 @@
 static struct {
     int8_t x, y;
     SButton up, down, left, right, a, b;
-    ZPool* starPool;
-    ZPool* bulletPool;
-    ZPool* enemyPool;
 } g_context;
 
 void loop_setup(void)
@@ -44,12 +41,8 @@ void loop_setup(void)
     g_context.a = s_buttons[S_BUTTON_A];
     g_context.b = s_buttons[S_BUTTON_B];
 
-    g_context.starPool = z_pool_get(Z_POOL_STAR);
-    g_context.bulletPool = z_pool_get(Z_POOL_BULLET);
-    g_context.enemyPool = z_pool_get(Z_POOL_ENEMY);
-
     for(int i = 0; i < Z_ENEMIES_NUM; i++) {
-        ZEnemy* e = z_pool_alloc(g_context.enemyPool);
+        ZEnemy* e = z_pool_alloc(z_pool[Z_POOL_ENEMY]);
 
         z_enemy_init(e,
                      (int8_t)(rand() % S_WIDTH),
@@ -72,7 +65,7 @@ void loop_tick(void)
     }
 
     if(s_button_pressed(g_context.a) && s_fps_isNthFrame(S_FPS / 4)) {
-        ZBullet* b = z_pool_alloc(g_context.bulletPool);
+        ZBullet* b = z_pool_alloc(z_pool[Z_POOL_BULLET]);
 
         if(b) {
             z_bullet_init(b, g_context.x, g_context.y, -2);
@@ -80,10 +73,10 @@ void loop_tick(void)
     }
 
     if(s_fps_isNthFrame(S_FPS / 5)) {
-        z_pool_tick(g_context.starPool, z_star_tick);
+        z_pool_tick(z_pool[Z_POOL_STAR], z_star_tick);
 
         if(rand() % (S_HEIGHT / Z_STARS_NUM / Z_STAR_AVG_SPEED) == 0) {
-            ZStar* star = z_pool_alloc(g_context.starPool);
+            ZStar* star = z_pool_alloc(z_pool[Z_POOL_STAR]);
 
             if(star != NULL) {
                 z_star_init(star);
@@ -91,15 +84,15 @@ void loop_tick(void)
         }
     }
 
-    z_pool_tick(g_context.bulletPool, z_bullet_tick);
-    z_pool_tick(g_context.enemyPool, z_enemy_tick);
+    z_pool_tick(z_pool[Z_POOL_BULLET], z_bullet_tick);
+    z_pool_tick(z_pool[Z_POOL_ENEMY], z_enemy_tick);
 }
 
 void loop_draw(void)
 {
     s_draw_fill(false);
-    z_pool_draw(g_context.starPool, z_star_draw);
-    z_pool_draw(g_context.bulletPool, z_bullet_draw);
-    z_pool_draw(g_context.enemyPool, z_enemy_draw);
+    z_pool_draw(z_pool[Z_POOL_STAR], z_star_draw);
+    z_pool_draw(z_pool[Z_POOL_BULLET], z_bullet_draw);
+    z_pool_draw(z_pool[Z_POOL_ENEMY], z_enemy_draw);
     s_draw_rectangle(g_context.x - 3, g_context.y - 4, 6, 8, true);
 }

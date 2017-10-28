@@ -37,7 +37,7 @@ static DECLARE(ZStar, Z_STARS_NUM) g_starPool;
 static DECLARE(ZBullet, Z_BULLETS_NUM) g_bulletPool;
 static DECLARE(ZEnemy, Z_ENEMIES_NUM) g_enemyPool;
 
-static ZPool* g_pools[Z_POOL_NUM] = {
+ZPool* z_pool[Z_POOL_NUM] = {
     &g_starPool.generic,
     &g_bulletPool.generic,
     &g_enemyPool.generic,
@@ -60,14 +60,9 @@ static void init(ZPool* Pool, size_t ObjectSize, size_t NumObjects)
 
 void z_pool_setup(void)
 {
-    init(g_pools[Z_POOL_STAR], sizeof(ZStar), Z_STARS_NUM);
-    init(g_pools[Z_POOL_BULLET], sizeof(ZBullet), Z_BULLETS_NUM);
-    init(g_pools[Z_POOL_ENEMY], sizeof(ZEnemy), Z_ENEMIES_NUM);
-}
-
-ZPool* z_pool_get(ZPoolType Type)
-{
-    return g_pools[Type];
+    init(z_pool[Z_POOL_STAR], sizeof(ZStar), Z_STARS_NUM);
+    init(z_pool[Z_POOL_BULLET], sizeof(ZBullet), Z_BULLETS_NUM);
+    init(z_pool[Z_POOL_ENEMY], sizeof(ZEnemy), Z_ENEMIES_NUM);
 }
 
 void* z_pool_alloc(ZPool* Pool)

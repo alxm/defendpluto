@@ -28,8 +28,9 @@ typedef struct {
     void* next;
 } ZPoolObject;
 
+extern ZPool* z_pool[Z_POOL_NUM];
+
 extern void z_pool_setup(void);
-extern ZPool* z_pool_get(ZPoolType Type);
 
 extern void* z_pool_alloc(ZPool* Pool);
 extern void* z_pool_release(ZPool* Pool, void* Object, void* LastObject);
