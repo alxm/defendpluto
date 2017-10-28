@@ -28,11 +28,22 @@ typedef struct {
 } ZInstruction;
 
 static unsigned g_pc = 0;
+static unsigned g_wait = 0;
+
 static const uint8_t g_data[] =
 {
     0x00, 0x08, 0x08, 0x00, 0x01, 0x00,
+    0x01, 0x1e,
     0x00, 0x20, 0x10, 0x00, 0x01, 0x00,
+    0x01, 0x1e,
     0x00, 0x40, 0x04, 0x00, 0x01, 0x00,
+    0x01, 0x1e,
+    0x00, 0x08, 0x18, 0x00, 0x01, 0x00,
+    0x01, 0x1e,
+    0x00, 0x20, 0x14, 0x00, 0x01, 0x00,
+    0x01, 0x1e,
+    0x00, 0x40, 0x14, 0x00, 0x01, 0x00,
+    0x01, 0x1e,
     0xff,
 }
 ;
@@ -61,17 +72,37 @@ static void handle_spawn(void)
         case 0: {
             ZEnemy* e = z_pool_alloc(z_pool[Z_POOL_ENEMY]);
 
-            z_enemy_init(e, x, y);
+            if(e) {
+                z_enemy_init(e, x, y);
+            }
         } break;
     }
 }
 
+static void handle_wait(void)
+{
+    /*
+     * 8b   8b
+     * wait frames
+     * wait 30
+    */
+    uint8_t frames = g_data[g_pc + 1];
+
+    g_wait = frames;
+}
+
 static ZInstruction g_ops[] = {
     {handle_spawn, 6},
+    {handle_wait, 2},
 };
 
 void z_vm_tick(void)
 {
+    if(g_wait) {
+        g_wait--;
+        return;
+    }
+
     if(g_data[g_pc] == 0xff) {
         return;
     }

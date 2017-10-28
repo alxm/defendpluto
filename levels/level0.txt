@@ -5,7 +5,15 @@
 ; 8b    8b      8b      4b          4b      4b      4b        8b
 ; spawn x_coord y_coord object_type ai_type ai_data num_units wait_between
   spawn 8       8       enemy1      nobrain 0       1         0 ; actual instruction
-  spawn 32      16      enemy1      nobrain 0       1         0 ; actual instruction
-  spawn 64      4       enemy1      nobrain 0       1         0 ; actual instruction
-; 0x00  0x40    0x00    0x0         0x0     0x0     0x1       0x00
+
+; 8b   8b
+; wait frames
+  wait 30
+
+  spawn 32      16      enemy1      nobrain 0       1         0
+  wait 15
+
+  spawn 64      4       enemy1      nobrain 0       1         0
+  wait 30
+
 over

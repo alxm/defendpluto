@@ -72,9 +72,29 @@ class InstructionSpawn(Instruction):
 
         return bytecode
 
+class InstructionWait(Instruction):
+    def __init__(self, NumBytes, Opcode):
+        Instruction.__init__(self, NumBytes, Opcode)
+
+    def custom_compile(self, Tokens):
+        bytecode = []
+
+        #
+        # 8b   8b
+        # wait frames
+        # wait 30
+        #
+        frames = int(Tokens[1])
+
+        bytecode.append(self.opcode)
+        bytecode.append(frames)
+
+        return bytecode
+
 def main(LevelFile):
     instructions = {
         'spawn': InstructionSpawn(8, 0x00),
+        'wait': InstructionWait(2, 0x01),
         'over': Instruction(1, 0xff),
     }
 
