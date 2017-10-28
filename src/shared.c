@@ -32,6 +32,11 @@ void s_setup(void)
     s_buttons[S_BUTTON_B] = a_button_new("key.x gamepad.b.b");
 }
 
+unsigned s_fps_getCounter(void)
+{
+    return a_fps_getCounter();
+}
+
 bool s_fps_isNthFrame(unsigned N)
 {
     return a_fps_isNthFrame(N);

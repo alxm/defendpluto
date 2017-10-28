@@ -21,7 +21,7 @@ typedef struct {
     int8_t dy;
 } ZBullet;
 
-#define Z_BULLETS_NUM 16
+#define Z_BULLETS_NUM 3
 
 extern void z_bullet_init(ZBullet* Bullet, int8_t X, int8_t Y, int8_t Dy);
 extern bool z_bullet_tick(ZPoolObject* Bullet);

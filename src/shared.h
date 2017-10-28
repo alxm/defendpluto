@@ -55,6 +55,7 @@ extern SButton s_buttons[S_BUTTON_NUM];
 
 extern void s_setup(void);
 
+extern unsigned s_fps_getCounter(void);
 extern bool s_fps_isNthFrame(unsigned N);
 
 extern bool s_button_pressed(SButton Button);

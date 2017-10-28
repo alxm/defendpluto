@@ -21,9 +21,12 @@
 #include "obj_enemy.h"
 #include "obj_star.h"
 
+#define SHOOT_EVERY_N_FRAMES (S_FPS / 4)
+
 static struct {
-    int8_t x, y;
     SButton up, down, left, right, a, b;
+    int8_t x, y;
+    unsigned lastShot;
 } g_context;
 
 void loop_setup(void)
@@ -31,8 +34,6 @@ void loop_setup(void)
     s_setup();
     z_pool_setup();
 
-    g_context.x = S_WIDTH / 2;
-    g_context.y = S_HEIGHT / 2;
 
     g_context.up = s_buttons[S_BUTTON_UP];
     g_context.down = s_buttons[S_BUTTON_DOWN];
@@ -40,6 +41,11 @@ void loop_setup(void)
     g_context.right = s_buttons[S_BUTTON_RIGHT];
     g_context.a = s_buttons[S_BUTTON_A];
     g_context.b = s_buttons[S_BUTTON_B];
+
+    g_context.x = S_WIDTH / 2;
+    g_context.y = S_HEIGHT / 2;
+
+    g_context.lastShot = s_fps_getCounter();
 
     for(int i = 0; i < Z_ENEMIES_NUM; i++) {
         ZEnemy* e = z_pool_alloc(z_pool[Z_POOL_ENEMY]);
@@ -64,12 +70,18 @@ void loop_tick(void)
         g_context.x++;
     }
 
-    if(s_button_pressed(g_context.a) && s_fps_isNthFrame(S_FPS / 4)) {
-        ZBullet* b = z_pool_alloc(z_pool[Z_POOL_BULLET]);
+    if(s_button_pressed(g_context.a)) {
+        if(s_fps_getCounter() - g_context.lastShot >= SHOOT_EVERY_N_FRAMES) {
+            ZBullet* b = z_pool_alloc(z_pool[Z_POOL_BULLET]);
 
-        if(b) {
-            z_bullet_init(b, g_context.x, g_context.y, -2);
+            if(b) {
+                z_bullet_init(b, g_context.x, g_context.y, -2);
+            }
+
+            g_context.lastShot = s_fps_getCounter();
         }
+    } else {
+        g_context.lastShot = s_fps_getCounter() - SHOOT_EVERY_N_FRAMES;
     }
 
     if(s_fps_isNthFrame(S_FPS / 5)) {

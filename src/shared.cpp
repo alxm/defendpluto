@@ -32,6 +32,11 @@ void s_setup(void)
     s_buttons[S_BUTTON_B] = B_BUTTON;
 }
 
+unsigned s_fps_getCounter(void)
+{
+    return g_arduboy.frameCount();
+}
+
 bool s_fps_isNthFrame(unsigned N)
 {
     return g_arduboy.everyXFrames(N);
