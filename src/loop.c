@@ -17,6 +17,7 @@
 
 #include "shared.h"
 #include "util_pool.h"
+#include "util_vm.h"
 #include "obj_bullet.h"
 #include "obj_enemy.h"
 #include "obj_star.h"
@@ -28,64 +29,6 @@ static struct {
     int8_t x, y;
     unsigned lastShot;
 } g_context;
-
-static unsigned g_pc = 0;
-static const uint8_t g_data[] =
-{
-    0x00, 0x08, 0x08, 0x00, 0x01, 0x00,
-    0x00, 0x20, 0x10, 0x00, 0x01, 0x00,
-    0x00, 0x40, 0x04, 0x00, 0x01, 0x00,
-    0xff,
-}
-;
-
-void handle_spawn(void)
-{
-    /*
-     * 8b    8b      8b      4b          4b      4b      4b        8b
-     * spawn x_coord y_coord object_type ai_type ai_data num_units wait_between
-     * spawn 64      0       enemy1      nobrain 0       1         0
-    */
-    int8_t x = (int8_t)g_data[g_pc + 1];
-    int8_t y = (int8_t)g_data[g_pc + 2];
-    uint8_t object_type = g_data[g_pc + 3] >> 4;
-    uint8_t ai_type = g_data[g_pc + 3] & 0xf;
-    uint8_t ai_data = g_data[g_pc + 4] >> 4;
-    uint8_t num_units = g_data[g_pc + 4] & 0xf;
-    uint8_t wait_between = g_data[g_pc + 5];
-
-    A_UNUSED(ai_type);
-    A_UNUSED(ai_data);
-    A_UNUSED(num_units);
-    A_UNUSED(wait_between);
-
-    switch(object_type) {
-        case 0: {
-            ZEnemy* e = z_pool_alloc(z_pool[Z_POOL_ENEMY]);
-
-            z_enemy_init(e, x, y);
-        } break;
-    }
-}
-
-typedef struct {
-    void (*callback)(void);
-    uint8_t bytes;
-} ZInstruction;
-
-ZInstruction g_ops[] = {
-    {handle_spawn, 6},
-};
-
-void eval(void)
-{
-    while(g_data[g_pc] != 0xff) {
-        uint8_t instruction = g_data[g_pc];
-
-        g_ops[instruction].callback();
-        g_pc += g_ops[instruction].bytes;
-    }
-}
 
 void loop_setup(void)
 {
@@ -103,12 +46,12 @@ void loop_setup(void)
     g_context.y = S_HEIGHT / 2;
 
     g_context.lastShot = s_fps_getCounter();
-
-    eval();
 }
 
 void loop_tick(void)
 {
+    z_vm_tick();
+
     if(s_button_pressed(g_context.up) && g_context.y > 0) {
         g_context.y--;
     } else if(s_button_pressed(g_context.down) && g_context.y < S_HEIGHT - 1) {
