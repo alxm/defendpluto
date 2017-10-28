@@ -117,17 +117,11 @@ def main(LevelFile):
             instruction = instructions[tokens[0]]
             bytecode.append(instruction.compile(tokens))
 
-    print('{')
-
     for line in bytecode:
-        print('    ', end = '')
-
         for byte in line:
             print('0x{:0>2x}, '.format(byte), end = '')
 
         print()
-
-    print('}')
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
