@@ -27,7 +27,7 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y)
 
 bool z_enemy_tick(ZPoolObject* Enemy)
 {
-    Enemy = Enemy;
+    A_UNUSED(Enemy);
 
     return false;
 }

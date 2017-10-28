@@ -24,9 +24,9 @@
 static struct {
     int8_t x, y;
     SButton up, down, left, right, a, b;
-    Z_POOL_DECLARE(ZStar, Z_STARS_NUM, stars) starPool;
-    Z_POOL_DECLARE(ZBullet, Z_BULLETS_NUM, bullets) bulletPool;
-    Z_POOL_DECLARE(ZEnemy, Z_ENEMIES_NUM, enemies) enemyPool;
+    ZPool* starPool;
+    ZPool* bulletPool;
+    ZPool* enemyPool;
 } g_context;
 
 static void generic_tick(ZPool* Pool, bool (*Callback)(ZPoolObject*))
@@ -52,6 +52,9 @@ static void generic_draw(ZPool* Pool, void (*Callback)(ZPoolObject*))
 
 void loop_setup(void)
 {
+    s_setup();
+    z_pool_setup();
+
     g_context.x = S_WIDTH / 2;
     g_context.y = S_HEIGHT / 2;
 
@@ -62,12 +65,12 @@ void loop_setup(void)
     g_context.a = s_buttons[S_BUTTON_A];
     g_context.b = s_buttons[S_BUTTON_B];
 
-    z_pool_init(&g_context.starPool.generic, sizeof(ZStar), Z_STARS_NUM);
-    z_pool_init(&g_context.bulletPool.generic, sizeof(ZBullet), Z_BULLETS_NUM);
-    z_pool_init(&g_context.enemyPool.generic, sizeof(ZEnemy), Z_ENEMIES_NUM);
+    g_context.starPool = z_pool_get(Z_POOL_STAR);
+    g_context.bulletPool = z_pool_get(Z_POOL_BULLET);
+    g_context.enemyPool = z_pool_get(Z_POOL_ENEMY);
 
     for(int i = 0; i < Z_ENEMIES_NUM; i++) {
-        ZEnemy* e = z_pool_alloc(&g_context.enemyPool.generic);
+        ZEnemy* e = z_pool_alloc(g_context.enemyPool);
 
         z_enemy_init(e,
                      (int8_t)(rand() % S_WIDTH),
@@ -90,7 +93,7 @@ void loop_tick(void)
     }
 
     if(s_button_pressed(g_context.a) && s_fps_isNthFrame(S_FPS / 4)) {
-        ZBullet* b = z_pool_alloc(&g_context.bulletPool.generic);
+        ZBullet* b = z_pool_alloc(g_context.bulletPool);
 
         if(b) {
             z_bullet_init(b, g_context.x, g_context.y, -2);
@@ -98,10 +101,10 @@ void loop_tick(void)
     }
 
     if(s_fps_isNthFrame(S_FPS / 5)) {
-        generic_tick(&g_context.starPool.generic, z_star_tick);
+        generic_tick(g_context.starPool, z_star_tick);
 
         if(rand() % (S_HEIGHT / Z_STARS_NUM / Z_STAR_AVG_SPEED) == 0) {
-            ZStar* star = z_pool_alloc(&g_context.starPool.generic);
+            ZStar* star = z_pool_alloc(g_context.starPool);
 
             if(star != NULL) {
                 z_star_init(star);
@@ -109,15 +112,15 @@ void loop_tick(void)
         }
     }
 
-    generic_tick(&g_context.bulletPool.generic, z_bullet_tick);
-    generic_tick(&g_context.enemyPool.generic, z_enemy_tick);
+    generic_tick(g_context.bulletPool, z_bullet_tick);
+    generic_tick(g_context.enemyPool, z_enemy_tick);
 }
 
 void loop_draw(void)
 {
     s_draw_fill(false);
-    generic_draw(&g_context.starPool.generic, z_star_draw);
-    generic_draw(&g_context.bulletPool.generic, z_bullet_draw);
-    generic_draw(&g_context.enemyPool.generic, z_enemy_draw);
+    generic_draw(g_context.starPool, z_star_draw);
+    generic_draw(g_context.bulletPool, z_bullet_draw);
+    generic_draw(g_context.enemyPool, z_enemy_draw);
     s_draw_rectangle(g_context.x - 3, g_context.y - 4, 6, 8, true);
 }

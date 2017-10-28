@@ -15,6 +15,13 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+typedef enum {
+    Z_POOL_STAR,
+    Z_POOL_BULLET,
+    Z_POOL_ENEMY,
+    Z_POOL_NUM
+} ZPoolType;
+
 typedef struct {
     void* next;
 } ZPoolObject;
@@ -25,16 +32,8 @@ typedef struct {
     ZPoolObject pool[1];
 } ZPool;
 
-#define Z_POOL_DECLARE(ObjectType, NumObjects, Name) \
-    union {                                          \
-        struct {                                     \
-            ObjectType* freeList;                    \
-            ObjectType* activeList;                  \
-            ObjectType pool[NumObjects];             \
-        } Name;                                      \
-        ZPool generic;                               \
-    }
+extern void z_pool_setup(void);
+extern ZPool* z_pool_get(ZPoolType Type);
 
-extern void z_pool_init(ZPool* Pool, size_t ObjectSize, size_t NumObjects);
 extern void* z_pool_alloc(ZPool* Pool);
 extern void* z_pool_release(ZPool* Pool, void* Object, void* LastObject);

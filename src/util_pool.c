@@ -17,12 +17,30 @@
 
 #include "shared.h"
 #include "util_pool.h"
+#include "obj_bullet.h"
+#include "obj_enemy.h"
+#include "obj_star.h"
 
-void z_pool_init(ZPool* Pool, size_t ObjectSize, size_t NumObjects)
+#define DECLARE(ObjectType, NumObjects)                         \
+    union {                                                     \
+        ZPool generic;                                          \
+        uint8_t private[sizeof(ZPool) - sizeof(ZPoolObject)     \
+                            + NumObjects * sizeof(ObjectType)]; \
+    }
+
+static DECLARE(ZStar, Z_STARS_NUM) g_starPool;
+static DECLARE(ZBullet, Z_BULLETS_NUM) g_bulletPool;
+static DECLARE(ZEnemy, Z_ENEMIES_NUM) g_enemyPool;
+
+static ZPool* g_pools[Z_POOL_NUM] = {
+    &g_starPool.generic,
+    &g_bulletPool.generic,
+    &g_enemyPool.generic,
+};
+
+static void init(ZPool* Pool, size_t ObjectSize, size_t NumObjects)
 {
-    ZPool* pool = Pool;
-
-    ZPoolObject* current = &pool->pool[0];
+    ZPoolObject* current = &Pool->pool[0];
 
     while(NumObjects-- > 1) {
         ZPoolObject* next = (void*)((uint8_t*)current + ObjectSize);
@@ -31,8 +49,20 @@ void z_pool_init(ZPool* Pool, size_t ObjectSize, size_t NumObjects)
     }
 
     current->next = NULL;
-    pool->freeList = &pool->pool[0];
-    pool->activeList = NULL;
+    Pool->freeList = &Pool->pool[0];
+    Pool->activeList = NULL;
+}
+
+void z_pool_setup(void)
+{
+    init(g_pools[Z_POOL_STAR], sizeof(ZStar), Z_STARS_NUM);
+    init(g_pools[Z_POOL_BULLET], sizeof(ZBullet), Z_BULLETS_NUM);
+    init(g_pools[Z_POOL_ENEMY], sizeof(ZEnemy), Z_ENEMIES_NUM);
+}
+
+ZPool* z_pool_get(ZPoolType Type)
+{
+    return g_pools[Type];
 }
 
 void* z_pool_alloc(ZPool* Pool)

@@ -27,6 +27,10 @@
 extern "C" {
 #endif
 
+#ifndef A_UNUSED
+#define A_UNUSED(X) (X = X)
+#endif
+
 #define S_WIDTH 128
 #define S_HEIGHT 64
 #define S_FPS 30
