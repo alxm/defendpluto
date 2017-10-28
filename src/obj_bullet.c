@@ -18,6 +18,33 @@
 #include "shared.h"
 #include "util_pool.h"
 #include "obj_bullet.h"
+#include "obj_enemy.h"
+
+static bool g_hit;
+static ZBullet* g_bullet;
+
+static bool pointInBox(int X, int Y, int BoxX, int BoxY, int BoxW, int BoxH)
+{
+    return X >= BoxX && X < BoxX + BoxW && Y >= BoxY && Y < BoxY + BoxH;
+}
+
+static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
+{
+    if(g_hit) {
+        return false;
+    }
+
+    ZEnemy* enemy = (ZEnemy*)Enemy;
+
+    g_hit = pointInBox(g_bullet->x,
+                       g_bullet->y,
+                       enemy->x - 4,
+                       enemy->y - 4,
+                       8,
+                       8);
+
+    return g_hit;
+}
 
 void z_bullet_init(ZBullet* Bullet, int8_t X, int8_t Y, int8_t Dy)
 {
@@ -32,8 +59,17 @@ bool z_bullet_tick(ZPoolObject* Bullet)
 
     bullet->y = (int8_t)(bullet->y + bullet->dy);
 
-    return (bullet->dy < 0 && bullet->y < 0)
-        || (bullet->dy > 0 && bullet->y >= S_HEIGHT);
+    if((bullet->dy < 0 && bullet->y < 0)
+        || (bullet->dy > 0 && bullet->y >= S_HEIGHT)) {
+
+        return true;
+    }
+
+    g_hit = false;
+    g_bullet = bullet;
+    z_pool_tick(z_pool[Z_POOL_ENEMY], checkBulletEnemyCollision);
+
+    return g_hit;
 }
 
 void z_bullet_draw(ZPoolObject* Bullet)
