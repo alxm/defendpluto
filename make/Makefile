@@ -6,3 +6,10 @@ A_APP_NAME = arduboy-shooter
 #
 A2X_PATH := $(shell a2x_path)
 include $(A2X_PATH)/make/project/Makefile
+
+Z_LEVELS_COMPILER = ../src/levels/compile.py
+Z_LEVELS_TXT = ../src/levels/data.txt
+Z_LEVELS_C = ../src/levels_data.c
+
+$(Z_LEVELS_C): $(Z_LEVELS_TXT)
+	$(Z_LEVELS_COMPILER) $< > $@
