@@ -127,7 +127,7 @@ def main(LevelFile):
         formatted_bytecode += '    '
 
         for byte in line:
-            formatted_bytecode += '0x{:0>2x}, '.format(byte)
+            formatted_bytecode += '0x{:0>2x}, '.format((byte + 2**8) % (2**8))
 
         formatted_bytecode += '\n'
 

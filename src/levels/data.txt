@@ -2,9 +2,9 @@
 ; Level 0
 ;
 
-spawn 8 8 enemy1 nobrain 0 1 0
+spawn 8 -8 enemy1 nobrain 0 1 0
 wait 10
-spawn 24 8 enemy1 nobrain 1 1 0
+spawn 24 -8 enemy1 nobrain 1 1 0
 waitclear
 
 spawn 40 8 enemy1 nobrain 2 1 0
