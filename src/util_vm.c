@@ -27,11 +27,8 @@ typedef struct {
 
 static unsigned g_pc = 0;
 static unsigned g_wait = 0;
-
-static const uint8_t g_data[] =
-{
-    #include "levels/level0.h"
-};
+extern const uint8_t z_levels_data[];
+static const uint8_t* g_data = z_levels_data;
 
 static bool handle_spawn(void)
 {
