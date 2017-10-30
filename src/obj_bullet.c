@@ -43,7 +43,7 @@ static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
                        8,
                        8);
 
-    return g_hit;
+    return !g_hit;
 }
 
 void z_bullet_init(ZBullet* Bullet, int8_t X, int8_t Y, int8_t Dy)
@@ -62,14 +62,14 @@ bool z_bullet_tick(ZPoolObject* Bullet)
     if((bullet->dy < 0 && bullet->y < 0)
         || (bullet->dy > 0 && bullet->y >= S_HEIGHT)) {
 
-        return true;
+        return false;
     }
 
     g_hit = false;
     g_bullet = bullet;
     z_pool_tick(z_pool[Z_POOL_ENEMY], checkBulletEnemyCollision);
 
-    return g_hit;
+    return !g_hit;
 }
 
 void z_bullet_draw(ZPoolObject* Bullet)

@@ -21,7 +21,7 @@
 
 static bool nobrain(ZEnemy* Enemy)
 {
-    return ++Enemy->y >= S_HEIGHT;
+    return ++Enemy->y < S_HEIGHT;
 }
 
 static bool (*g_ai[])(ZEnemy*) = {

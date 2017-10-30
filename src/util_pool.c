@@ -115,10 +115,10 @@ void z_pool_tick(ZPool* Pool, bool (*Callback)(ZPoolObject*))
 
     for(ZPoolObject* o = Pool->activeList; o != NULL; ) {
         if(Callback(o)) {
-            o = z_pool_release(Pool, o, last);
-        } else {
             last = o;
             o = o->next;
+        } else {
+            o = z_pool_release(Pool, o, last);
         }
     }
 }

@@ -32,7 +32,7 @@ bool z_star_tick(ZPoolObject* Star)
 
     star->y = (int8_t)(star->y + star->speed);
 
-    return star->y >= S_HEIGHT;
+    return star->y < S_HEIGHT;
 }
 
 void z_star_draw(ZPoolObject* Star)
