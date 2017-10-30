@@ -16,28 +16,29 @@
 */
 
 #include "shared.h"
+#include "util_fix.h"
 #include "util_pool.h"
 #include "obj_star.h"
 
 void z_star_init(ZStar* Star)
 {
-    Star->x = (int8_t)(rand() % S_WIDTH);
+    Star->x = z_fix_itofix((int8_t)(rand() % S_WIDTH));
     Star->y = 0;
-    Star->speed = (int8_t)(1 + (rand() % (Z_STAR_AVG_SPEED * 2 - 1)));
+    Star->speed = (ZFix)(32 + (rand() % 192));
 }
 
 bool z_star_tick(ZPoolObject* Star)
 {
     ZStar* star = (ZStar*)Star;
 
-    star->y = (int8_t)(star->y + star->speed);
+    star->y = (ZFix)(star->y + star->speed);
 
-    return star->y < S_HEIGHT;
+    return z_fix_fixtoi(star->y) < S_HEIGHT;
 }
 
 void z_star_draw(ZPoolObject* Star)
 {
     ZStar* star = (ZStar*)Star;
 
-    s_draw_pixel(star->x, star->y, true);
+    s_draw_pixel(z_fix_fixtoi(star->x), z_fix_fixtoi(star->y), true);
 }

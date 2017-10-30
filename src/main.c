@@ -17,7 +17,6 @@
 
 #ifndef ARDUINO
 
-#include <a2x.h>
 #include "shared.h"
 #include "loop.h"
 

@@ -17,12 +17,11 @@
 
 typedef struct {
     ZPoolObject poolObject;
-    int8_t x, y;
-    int8_t speed;
+    ZFix x, y;
+    ZFix speed;
 } ZStar;
 
 #define Z_STARS_NUM 16
-#define Z_STAR_AVG_SPEED 2
 
 extern void z_star_init(ZStar* Star);
 extern bool z_star_tick(ZPoolObject* Star);

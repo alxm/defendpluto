@@ -16,6 +16,7 @@
 */
 
 #include "shared.h"
+#include "util_fix.h"
 #include "util_pool.h"
 #include "util_vm.h"
 #include "obj_bullet.h"
@@ -78,20 +79,17 @@ void loop_tick(void)
         g_context.lastShot = s_fps_getCounter() - SHOOT_EVERY_N_FRAMES;
     }
 
-    if(s_fps_isNthFrame(S_FPS / 5)) {
-        z_pool_tick(z_pool[Z_POOL_STAR], z_star_tick);
-
-        if(rand() % (S_HEIGHT / Z_STARS_NUM / Z_STAR_AVG_SPEED) == 0) {
-            ZStar* star = z_pool_alloc(z_pool[Z_POOL_STAR]);
-
-            if(star != NULL) {
-                z_star_init(star);
-            }
-        }
-    }
-
+    z_pool_tick(z_pool[Z_POOL_STAR], z_star_tick);
     z_pool_tick(z_pool[Z_POOL_BULLET], z_bullet_tick);
     z_pool_tick(z_pool[Z_POOL_ENEMY], z_enemy_tick);
+
+    if(rand() % (2 * S_HEIGHT / Z_STARS_NUM) == 0) {
+        ZStar* star = z_pool_alloc(z_pool[Z_POOL_STAR]);
+
+        if(star != NULL) {
+            z_star_init(star);
+        }
+    }
 }
 
 void loop_draw(void)
