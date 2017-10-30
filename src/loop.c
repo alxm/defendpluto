@@ -28,7 +28,7 @@ void loop_setup(void)
 {
     z_shared_setup();
     z_pool_setup();
-    z_player_init(S_WIDTH / 2, S_HEIGHT / 2);
+    z_player_init(Z_WIDTH / 2, Z_HEIGHT / 2);
 }
 
 void loop_tick(void)
@@ -39,7 +39,7 @@ void loop_tick(void)
     z_pool_tick(z_pool[Z_POOL_BULLET], z_bullet_tick);
     z_pool_tick(z_pool[Z_POOL_ENEMY], z_enemy_tick);
 
-    if(rand() % (2 * S_HEIGHT / Z_STARS_NUM) == 0) {
+    if(rand() % (2 * Z_HEIGHT / Z_STARS_NUM) == 0) {
         ZStar* star = z_pool_alloc(z_pool[Z_POOL_STAR]);
 
         if(star != NULL) {
@@ -50,7 +50,7 @@ void loop_tick(void)
 
 void loop_draw(void)
 {
-    s_draw_fill(false);
+    z_draw_fill(false);
     z_pool_draw(z_pool[Z_POOL_STAR], z_star_draw);
     z_pool_draw(z_pool[Z_POOL_BULLET], z_bullet_draw);
     z_pool_draw(z_pool[Z_POOL_ENEMY], z_enemy_draw);

@@ -22,7 +22,7 @@
 
 void z_star_init(ZStar* Star)
 {
-    Star->x = z_fix_itofix((int8_t)(rand() % S_WIDTH));
+    Star->x = z_fix_itofix((int8_t)(rand() % Z_WIDTH));
     Star->y = 0;
     Star->speed = (ZFix)(32 + (rand() % 192));
 }
@@ -33,12 +33,12 @@ bool z_star_tick(ZPoolObject* Star)
 
     star->y = (ZFix)(star->y + star->speed);
 
-    return z_fix_fixtoi(star->y) < S_HEIGHT;
+    return z_fix_fixtoi(star->y) < Z_HEIGHT;
 }
 
 void z_star_draw(ZPoolObject* Star)
 {
     ZStar* star = (ZStar*)Star;
 
-    s_draw_pixel(z_fix_fixtoi(star->x), z_fix_fixtoi(star->y), true);
+    z_draw_pixel(z_fix_fixtoi(star->x), z_fix_fixtoi(star->y), true);
 }

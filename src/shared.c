@@ -31,34 +31,34 @@ void z_shared_setup(void)
     z_controls.b = a_button_new("key.x gamepad.b.b");
 }
 
-unsigned s_fps_getCounter(void)
+unsigned z_fps_getCounter(void)
 {
     return a_fps_getCounter();
 }
 
-bool s_fps_isNthFrame(unsigned N)
+bool z_fps_isNthFrame(unsigned N)
 {
     return a_fps_isNthFrame(N);
 }
 
-bool s_button_pressed(SButton Button)
+bool z_button_pressed(ZButton Button)
 {
     return a_button_getPressed(Button);
 }
 
-void s_draw_fill(bool White)
+void z_draw_fill(bool White)
 {
     a_pixel_setHex(White ? 0xffffff : 0);
     a_draw_fill();
 }
 
-void s_draw_rectangle(int X, int Y, int W, int H, bool White)
+void z_draw_rectangle(int X, int Y, int W, int H, bool White)
 {
     a_pixel_setHex(White ? 0xffffff : 0);
     a_draw_rectangle(X, Y, W, H);
 }
 
-void s_draw_pixel(int X, int Y, bool White)
+void z_draw_pixel(int X, int Y, bool White)
 {
     a_pixel_setHex(White ? 0xffffff : 0);
     a_draw_pixel(X, Y);

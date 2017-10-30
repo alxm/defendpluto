@@ -24,7 +24,7 @@ static bool nobrain(ZEnemy* Enemy)
 {
     Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE);
 
-    return z_fix_fixtoi(Enemy->y) < S_HEIGHT;
+    return z_fix_fixtoi(Enemy->y) < Z_HEIGHT;
 }
 
 static bool (*g_ai[])(ZEnemy*) = {
@@ -53,7 +53,7 @@ void z_enemy_draw(ZPoolObject* Enemy)
     int8_t x = z_fix_fixtoi(enemy->x);
     int8_t y = z_fix_fixtoi(enemy->y);
 
-    s_draw_rectangle(x - 2, y - 2, 4, 4, true);
-    s_draw_rectangle(x - 2 - 2, y - 2 - 1, 2, 8, true);
-    s_draw_rectangle(x + 2, y - 2 - 1, 2, 8, true);
+    z_draw_rectangle(x - 2, y - 2, 4, 4, true);
+    z_draw_rectangle(x - 2 - 2, y - 2 - 1, 2, 8, true);
+    z_draw_rectangle(x + 2, y - 2 - 1, 2, 8, true);
 }

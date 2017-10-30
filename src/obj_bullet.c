@@ -61,7 +61,7 @@ bool z_bullet_tick(ZPoolObject* Bullet)
     bullet->y = (ZFix)(bullet->y + bullet->dy);
 
     if((bullet->dy < 0 && bullet->y < 0)
-        || (bullet->dy > 0 && z_fix_fixtoi(bullet->y) >= S_HEIGHT)) {
+        || (bullet->dy > 0 && z_fix_fixtoi(bullet->y) >= Z_HEIGHT)) {
 
         return false;
     }
@@ -80,5 +80,5 @@ void z_bullet_draw(ZPoolObject* Bullet)
     int8_t x = z_fix_fixtoi(bullet->x);
     int8_t y = z_fix_fixtoi(bullet->y);
 
-    s_draw_rectangle(x - 1, y - 2, 2, 4, true);
+    z_draw_rectangle(x - 1, y - 2, 2, 4, true);
 }

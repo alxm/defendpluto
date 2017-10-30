@@ -25,7 +25,7 @@ Arduboy2Base g_arduboy;
 void setup()
 {
     g_arduboy.begin();
-    g_arduboy.setFrameRate(S_FPS);
+    g_arduboy.setFrameRate(Z_FPS);
 
     loop_setup();
 }

@@ -46,8 +46,8 @@ static bool handle_spawn(void)
     uint8_t num_units = g_data[g_pc + 4] & 0xf;
     uint8_t wait_between = g_data[g_pc + 5];
 
-    A_UNUSED(num_units);
-    A_UNUSED(wait_between);
+    Z_UNUSED(num_units);
+    Z_UNUSED(wait_between);
 
     switch(object_type) {
         case 0: {

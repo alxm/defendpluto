@@ -27,51 +27,39 @@
 extern "C" {
 #endif
 
-#ifndef A_UNUSED
-#define A_UNUSED(X) (X = X)
-#endif
+#define Z_UNUSED(X) (X = X)
 
-#define S_WIDTH 128
-#define S_HEIGHT 64
-#define S_FPS 30
-
-typedef enum {
-    S_BUTTON_UP,
-    S_BUTTON_DOWN,
-    S_BUTTON_LEFT,
-    S_BUTTON_RIGHT,
-    S_BUTTON_A,
-    S_BUTTON_B,
-    S_BUTTON_NUM
-} SButtonType;
+#define Z_WIDTH 128
+#define Z_HEIGHT 64
+#define Z_FPS 30
 
 #ifdef ARDUINO
-    typedef uint8_t SButton;
+    typedef uint8_t ZButton;
 #else
-    typedef AInputButton* SButton;
+    typedef AInputButton* ZButton;
 #endif
 
 typedef struct {
-    SButton up;
-    SButton down;
-    SButton left;
-    SButton right;
-    SButton a;
-    SButton b;
+    ZButton up;
+    ZButton down;
+    ZButton left;
+    ZButton right;
+    ZButton a;
+    ZButton b;
 } ZControls;
 
 extern ZControls z_controls;
 
 extern void z_shared_setup(void);
 
-extern unsigned s_fps_getCounter(void);
-extern bool s_fps_isNthFrame(unsigned N);
+extern unsigned z_fps_getCounter(void);
+extern bool z_fps_isNthFrame(unsigned N);
 
-extern bool s_button_pressed(SButton Button);
+extern bool z_button_pressed(ZButton Button);
 
-extern void s_draw_fill(bool White);
-extern void s_draw_rectangle(int X, int Y, int W, int H, bool White);
-extern void s_draw_pixel(int X, int Y, bool White);
+extern void z_draw_fill(bool White);
+extern void z_draw_rectangle(int X, int Y, int W, int H, bool White);
+extern void z_draw_pixel(int X, int Y, bool White);
 
 #ifdef __cplusplus
 }

@@ -29,9 +29,9 @@ A_SETUP
     a_settings_set("app.version", "1.0");
     a_settings_set("app.author", "alxm");
     a_settings_set("app.output.on", "yes");
-    a_settings_set("video.width", STRINGIFY(S_WIDTH));
-    a_settings_set("video.height", STRINGIFY(S_HEIGHT));
-    a_settings_set("video.fps", STRINGIFY(S_FPS));
+    a_settings_set("video.width", STRINGIFY(Z_WIDTH));
+    a_settings_set("video.height", STRINGIFY(Z_HEIGHT));
+    a_settings_set("video.fps", STRINGIFY(Z_FPS));
 }
 
 A_STATE(run)
