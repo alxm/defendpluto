@@ -16,6 +16,7 @@
 */
 
 #include "shared.h"
+#include "util_fix.h"
 #include "util_pool.h"
 #include "obj_bullet.h"
 #include "obj_enemy.h"
@@ -36,17 +37,17 @@ static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
 
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
-    g_hit = pointInBox(g_bullet->x,
-                       g_bullet->y,
-                       enemy->x - 4,
-                       enemy->y - 4,
+    g_hit = pointInBox(z_fix_fixtoi(g_bullet->x),
+                       z_fix_fixtoi(g_bullet->y),
+                       z_fix_fixtoi(enemy->x) - 4,
+                       z_fix_fixtoi(enemy->y) - 4,
                        8,
                        8);
 
     return !g_hit;
 }
 
-void z_bullet_init(ZBullet* Bullet, int8_t X, int8_t Y, int8_t Dy)
+void z_bullet_init(ZBullet* Bullet, ZFix X, ZFix Y, ZFix Dy)
 {
     Bullet->x = X;
     Bullet->y = Y;
@@ -57,10 +58,10 @@ bool z_bullet_tick(ZPoolObject* Bullet)
 {
     ZBullet* bullet = (ZBullet*)Bullet;
 
-    bullet->y = (int8_t)(bullet->y + bullet->dy);
+    bullet->y = (ZFix)(bullet->y + bullet->dy);
 
     if((bullet->dy < 0 && bullet->y < 0)
-        || (bullet->dy > 0 && bullet->y >= S_HEIGHT)) {
+        || (bullet->dy > 0 && z_fix_fixtoi(bullet->y) >= S_HEIGHT)) {
 
         return false;
     }
@@ -76,5 +77,8 @@ void z_bullet_draw(ZPoolObject* Bullet)
 {
     ZBullet* bullet = (ZBullet*)Bullet;
 
-    s_draw_rectangle(bullet->x - 1, bullet->y - 2, 2, 4, true);
+    int8_t x = z_fix_fixtoi(bullet->x);
+    int8_t y = z_fix_fixtoi(bullet->y);
+
+    s_draw_rectangle(x - 1, y - 2, 2, 4, true);
 }

@@ -17,12 +17,12 @@
 
 typedef struct {
     ZPoolObject poolObject;
-    int8_t x, y;
-    int8_t dy;
+    ZFix x, y;
+    ZFix dy;
 } ZBullet;
 
 #define Z_BULLETS_NUM 3
 
-extern void z_bullet_init(ZBullet* Bullet, int8_t X, int8_t Y, int8_t Dy);
+extern void z_bullet_init(ZBullet* Bullet, ZFix X, ZFix Y, ZFix Dy);
 extern bool z_bullet_tick(ZPoolObject* Bullet);
 extern void z_bullet_draw(ZPoolObject* Bullet);

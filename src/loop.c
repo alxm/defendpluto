@@ -27,7 +27,7 @@
 
 static struct {
     SButton up, down, left, right, a, b;
-    int8_t x, y;
+    ZFix x, y;
     unsigned lastShot;
 } g_context;
 
@@ -43,8 +43,8 @@ void loop_setup(void)
     g_context.a = s_buttons[S_BUTTON_A];
     g_context.b = s_buttons[S_BUTTON_B];
 
-    g_context.x = S_WIDTH / 2;
-    g_context.y = S_HEIGHT / 2;
+    g_context.x = z_fix_itofix(S_WIDTH / 2);
+    g_context.y = z_fix_itofix(S_HEIGHT / 2);
 
     g_context.lastShot = s_fps_getCounter();
 }
@@ -54,15 +54,15 @@ void loop_tick(void)
     z_vm_tick();
 
     if(s_button_pressed(g_context.up) && g_context.y > 0) {
-        g_context.y--;
-    } else if(s_button_pressed(g_context.down) && g_context.y < S_HEIGHT - 1) {
-        g_context.y++;
+        g_context.y = (ZFix)(g_context.y - Z_FIX_ONE);
+    } else if(s_button_pressed(g_context.down) && z_fix_fixtoi(g_context.y) < S_HEIGHT - 1) {
+        g_context.y = (ZFix)(g_context.y + Z_FIX_ONE);
     }
 
     if(s_button_pressed(g_context.left) && g_context.x > 0) {
-        g_context.x--;
-    } else if(s_button_pressed(g_context.right) && g_context.x < S_WIDTH - 1) {
-        g_context.x++;
+        g_context.x = (ZFix)(g_context.x - Z_FIX_ONE);
+    } else if(s_button_pressed(g_context.right) && z_fix_fixtoi(g_context.x) < S_WIDTH - 1) {
+        g_context.x = (ZFix)(g_context.x + Z_FIX_ONE);
     }
 
     if(s_button_pressed(g_context.a)) {
@@ -70,7 +70,7 @@ void loop_tick(void)
             ZBullet* b = z_pool_alloc(z_pool[Z_POOL_BULLET]);
 
             if(b) {
-                z_bullet_init(b, g_context.x, g_context.y, -2);
+                z_bullet_init(b, g_context.x, g_context.y, z_fix_itofix(-2));
             }
 
             g_context.lastShot = s_fps_getCounter();
@@ -98,5 +98,9 @@ void loop_draw(void)
     z_pool_draw(z_pool[Z_POOL_STAR], z_star_draw);
     z_pool_draw(z_pool[Z_POOL_BULLET], z_bullet_draw);
     z_pool_draw(z_pool[Z_POOL_ENEMY], z_enemy_draw);
-    s_draw_rectangle(g_context.x - 3, g_context.y - 4, 6, 8, true);
+
+    int8_t x = z_fix_fixtoi(g_context.x);
+    int8_t y = z_fix_fixtoi(g_context.y);
+
+    s_draw_rectangle(x - 3, y - 4, 6, 8, true);
 }

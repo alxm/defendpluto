@@ -16,12 +16,15 @@
 */
 
 #include "shared.h"
+#include "util_fix.h"
 #include "util_pool.h"
 #include "obj_enemy.h"
 
 static bool nobrain(ZEnemy* Enemy)
 {
-    return ++Enemy->y < S_HEIGHT;
+    Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE);
+
+    return z_fix_fixtoi(Enemy->y) < S_HEIGHT;
 }
 
 static bool (*g_ai[])(ZEnemy*) = {
@@ -30,8 +33,8 @@ static bool (*g_ai[])(ZEnemy*) = {
 
 void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Ai, uint8_t AiData)
 {
-    Enemy->x = X;
-    Enemy->y = Y;
+    Enemy->x = z_fix_itofix(X);
+    Enemy->y = z_fix_itofix(Y);
     Enemy->ai = Ai;
     Enemy->aiData = AiData;
 }
@@ -47,8 +50,8 @@ void z_enemy_draw(ZPoolObject* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
-    int8_t x = enemy->x;
-    int8_t y = enemy->y;
+    int8_t x = z_fix_fixtoi(enemy->x);
+    int8_t y = z_fix_fixtoi(enemy->y);
 
     s_draw_rectangle(x - 2, y - 2, 4, 4, true);
     s_draw_rectangle(x - 2 - 2, y - 2 - 1, 2, 8, true);

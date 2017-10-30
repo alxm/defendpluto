@@ -16,6 +16,7 @@
 */
 
 #include "shared.h"
+#include "util_fix.h"
 #include "util_pool.h"
 #include "util_vm.h"
 #include "obj_enemy.h"

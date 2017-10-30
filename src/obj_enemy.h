@@ -17,7 +17,7 @@
 
 typedef struct {
     ZPoolObject poolObject;
-    int8_t x, y;
+    ZFix x, y;
     uint8_t ai, aiData;
 } ZEnemy;
 
