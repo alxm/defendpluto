@@ -51,9 +51,18 @@ typedef enum {
     typedef AInputButton* SButton;
 #endif
 
-extern SButton s_buttons[S_BUTTON_NUM];
+typedef struct {
+    SButton up;
+    SButton down;
+    SButton left;
+    SButton right;
+    SButton a;
+    SButton b;
+} ZControls;
 
-extern void s_setup(void);
+extern ZControls z_controls;
+
+extern void z_shared_setup(void);
 
 extern unsigned s_fps_getCounter(void);
 extern bool s_fps_isNthFrame(unsigned N);

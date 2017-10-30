@@ -20,16 +20,16 @@
 #include "shared.h"
 
 extern Arduboy2Base g_arduboy;
-SButton s_buttons[S_BUTTON_NUM];
+ZControls z_controls;
 
-void s_setup(void)
+void z_shared_setup(void)
 {
-    s_buttons[S_BUTTON_UP] = UP_BUTTON;
-    s_buttons[S_BUTTON_DOWN] = DOWN_BUTTON;
-    s_buttons[S_BUTTON_LEFT] = LEFT_BUTTON;
-    s_buttons[S_BUTTON_RIGHT] = RIGHT_BUTTON;
-    s_buttons[S_BUTTON_A] = A_BUTTON;
-    s_buttons[S_BUTTON_B] = B_BUTTON;
+    z_controls.up = UP_BUTTON;
+    z_controls.down = DOWN_BUTTON;
+    z_controls.left = LEFT_BUTTON;
+    z_controls.right = RIGHT_BUTTON;
+    z_controls.a = A_BUTTON;
+    z_controls.b = B_BUTTON;
 }
 
 unsigned s_fps_getCounter(void)
