@@ -32,7 +32,7 @@ static bool pointInBox(int X, int Y, int BoxX, int BoxY, int BoxW, int BoxH)
 static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
 {
     if(g_hit) {
-        return false;
+        return true;
     }
 
     ZEnemy* enemy = (ZEnemy*)Enemy;
