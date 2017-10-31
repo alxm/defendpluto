@@ -24,17 +24,20 @@ static bool nobrain(ZEnemy* Enemy)
 {
     Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE);
 
-    return z_fix_fixtoi(Enemy->y) < Z_HEIGHT;
+    ZSprite sprite = z_gfx.enemy[Enemy->sprite];
+
+    return z_fix_fixtoi(Enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
 }
 
 static bool (*g_ai[])(ZEnemy*) = {
     nobrain
 };
 
-void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Ai, uint8_t AiData)
+void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint8_t Ai, uint8_t AiData)
 {
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
+    Enemy->sprite = Sprite;
     Enemy->ai = Ai;
     Enemy->aiData = AiData;
 }
@@ -49,11 +52,11 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 void z_enemy_draw(ZPoolObject* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
-
     int8_t x = z_fix_fixtoi(enemy->x);
     int8_t y = z_fix_fixtoi(enemy->y);
+    ZSprite sprite = z_gfx.enemy[enemy->sprite];
 
-    z_draw_rectangle((int8_t)(x - 2), (int8_t)(y - 2), 4, 4, true);
-    z_draw_rectangle((int8_t)(x - 2 - 2), (int8_t)(y - 2 - 1), 2, 8, true);
-    z_draw_rectangle((int8_t)(x + 2), (int8_t)(y - 2 - 1), 2, 8, true);
+    z_sprite_blit(sprite,
+                  (int8_t)(x - z_sprite_getWidth(sprite) / 2),
+                  (int8_t)(y - z_sprite_getHeight(sprite) / 2));
 }

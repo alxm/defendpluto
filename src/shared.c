@@ -20,6 +20,7 @@
 #include "shared.h"
 
 ZControls z_controls;
+ZGfx z_gfx;
 
 void z_shared_setup(void)
 {
@@ -29,6 +30,11 @@ void z_shared_setup(void)
     z_controls.right = a_button_new("key.right gamepad.b.right");
     z_controls.a = a_button_new("key.z gamepad.b.a");
     z_controls.b = a_button_new("key.x gamepad.b.b");
+
+    z_gfx.playerShip = a_sprite_newFromFile("gfx/player.png");
+    z_gfx.enemy[0] = a_sprite_newFromFile("gfx/enemy00.png");
+    z_gfx.enemy[1] = a_sprite_newFromFile("gfx/enemy01.png");
+    z_gfx.enemy[2] = a_sprite_newFromFile("gfx/enemy02.png");
 }
 
 uint16_t z_fps_getCounter(void)
@@ -62,6 +68,21 @@ void z_draw_pixel(int8_t X, int8_t Y, bool White)
 {
     a_pixel_setHex(White ? 0xffffff : 0);
     a_draw_pixel(X, Y);
+}
+
+void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
+{
+    a_sprite_blit(Sprite, X, Y);
+}
+
+int8_t z_sprite_getWidth(ZSprite Sprite)
+{
+    return (int8_t)a_sprite_getWidth(Sprite);
+}
+
+int8_t z_sprite_getHeight(ZSprite Sprite)
+{
+    return (int8_t)a_sprite_getHeight(Sprite);
 }
 
 #endif // ifndef ARDUINO

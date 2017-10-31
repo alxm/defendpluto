@@ -35,8 +35,10 @@ extern "C" {
 
 #ifdef ARDUINO
     typedef uint8_t ZButton;
+    typedef uint8_t* ZSprite;
 #else
     typedef AInputButton* ZButton;
+    typedef ASprite* ZSprite;
 #endif
 
 typedef struct {
@@ -48,7 +50,13 @@ typedef struct {
     ZButton b;
 } ZControls;
 
+typedef struct {
+    ZSprite playerShip;
+    ZSprite enemy[3];
+} ZGfx;
+
 extern ZControls z_controls;
+extern ZGfx z_gfx;
 
 extern void z_shared_setup(void);
 
@@ -60,6 +68,10 @@ extern bool z_button_pressed(ZButton Button);
 extern void z_draw_fill(bool White);
 extern void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, bool White);
 extern void z_draw_pixel(int8_t X, int8_t Y, bool White);
+
+extern void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y);
+extern int8_t z_sprite_getWidth(ZSprite Sprite);
+extern int8_t z_sprite_getHeight(ZSprite Sprite);
 
 #ifdef __cplusplus
 }

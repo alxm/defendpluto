@@ -66,6 +66,9 @@ void z_player_draw(void)
 {
     int8_t x = z_fix_fixtoi(z_player.x);
     int8_t y = z_fix_fixtoi(z_player.y);
+    ZSprite sprite = z_gfx.playerShip;
 
-    z_draw_rectangle((int8_t)(x - 3), (int8_t)(y - 4), 6, 8, true);
+    z_sprite_blit(sprite,
+                  (int8_t)(x - z_sprite_getWidth(sprite) / 2),
+                  (int8_t)(y - z_sprite_getHeight(sprite) / 2));
 }

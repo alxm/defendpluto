@@ -34,17 +34,18 @@ static const uint8_t* g_data = z_levels_data;
 static bool handle_spawn(void)
 {
     /*
-     * 8b    8b      8b      4b          4b      4b      4b        8b
-     * spawn x_coord y_coord object_type ai_type ai_data num_units wait_between
-     * spawn 64      0       enemy1      nobrain 0       1         0
+     * 8b    8b      8b      4b          4b        4b      4b      4b        4b
+     * spawn x_coord y_coord object_type sprite_id ai_type ai_data num_units wait_between
+     * spawn 64      -8      enemy       0         nobrain 0       1         0
     */
     int8_t x = (int8_t)g_data[g_pc + 1];
     int8_t y = (int8_t)g_data[g_pc + 2];
     uint8_t object_type = g_data[g_pc + 3] >> 4;
-    uint8_t ai_type = g_data[g_pc + 3] & 0xf;
-    uint8_t ai_data = g_data[g_pc + 4] >> 4;
-    uint8_t num_units = g_data[g_pc + 4] & 0xf;
-    uint8_t wait_between = g_data[g_pc + 5];
+    uint8_t sprite_id = g_data[g_pc + 3] & 0xf;
+    uint8_t ai_type = g_data[g_pc + 4] >> 4;
+    uint8_t ai_data = g_data[g_pc + 4] & 0xf;
+    uint8_t num_units = g_data[g_pc + 5] >> 4;
+    uint8_t wait_between = g_data[g_pc + 5] & 0xf;
 
     Z_UNUSED(num_units);
     Z_UNUSED(wait_between);
@@ -57,7 +58,7 @@ static bool handle_spawn(void)
                 return false;
             }
 
-            z_enemy_init(e, x, y, ai_type, ai_data);
+            z_enemy_init(e, x, y, sprite_id, ai_type, ai_data);
         } break;
     }
 
