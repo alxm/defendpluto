@@ -26,8 +26,8 @@ typedef struct {
     uint8_t bytes;
 } ZInstruction;
 
-static unsigned g_pc = 0;
-static unsigned g_wait = 0;
+static uint16_t g_pc = 0;
+static uint8_t g_wait = 0;
 extern const uint8_t z_levels_data[];
 static const uint8_t* g_data = z_levels_data;
 
@@ -115,6 +115,6 @@ void z_vm_tick(void)
     uint8_t instruction = g_data[g_pc];
 
     if(g_ops[instruction].callback()) {
-        g_pc += g_ops[instruction].bytes;
+        g_pc = (uint16_t)(g_pc + g_ops[instruction].bytes);
     }
 }

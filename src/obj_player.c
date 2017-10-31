@@ -57,7 +57,8 @@ void z_player_tick(void)
             z_player.lastShot = z_fps_getCounter();
         }
     } else {
-        z_player.lastShot = z_fps_getCounter() - SHOOT_EVERY_N_FRAMES;
+        z_player.lastShot = (uint16_t)(z_fps_getCounter()
+                                        - SHOOT_EVERY_N_FRAMES);
     }
 }
 
@@ -66,5 +67,5 @@ void z_player_draw(void)
     int8_t x = z_fix_fixtoi(z_player.x);
     int8_t y = z_fix_fixtoi(z_player.y);
 
-    z_draw_rectangle(x - 3, y - 4, 6, 8, true);
+    z_draw_rectangle((int8_t)(x - 3), (int8_t)(y - 4), 6, 8, true);
 }

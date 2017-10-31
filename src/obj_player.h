@@ -17,7 +17,7 @@
 
 typedef struct {
     ZFix x, y;
-    unsigned lastShot;
+    uint16_t lastShot;
 } ZPlayer;
 
 extern ZPlayer z_player;

@@ -24,7 +24,7 @@
 static bool g_hit;
 static ZBullet* g_bullet;
 
-static bool pointInBox(int X, int Y, int BoxX, int BoxY, int BoxW, int BoxH)
+static bool pointInBox(int8_t X, int8_t Y, int8_t BoxX, int8_t BoxY, int8_t BoxW, int8_t BoxH)
 {
     return X >= BoxX && X < BoxX + BoxW && Y >= BoxY && Y < BoxY + BoxH;
 }
@@ -39,8 +39,8 @@ static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
 
     g_hit = pointInBox(z_fix_fixtoi(g_bullet->x),
                        z_fix_fixtoi(g_bullet->y),
-                       z_fix_fixtoi(enemy->x) - 4,
-                       z_fix_fixtoi(enemy->y) - 4,
+                       (int8_t)(z_fix_fixtoi(enemy->x) - 4),
+                       (int8_t)(z_fix_fixtoi(enemy->y) - 4),
                        8,
                        8);
 
@@ -80,5 +80,5 @@ void z_bullet_draw(ZPoolObject* Bullet)
     int8_t x = z_fix_fixtoi(bullet->x);
     int8_t y = z_fix_fixtoi(bullet->y);
 
-    z_draw_rectangle(x - 1, y - 2, 2, 4, true);
+    z_draw_rectangle((int8_t)(x - 1), (int8_t)(y - 2), 2, 4, true);
 }

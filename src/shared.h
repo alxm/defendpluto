@@ -52,14 +52,14 @@ extern ZControls z_controls;
 
 extern void z_shared_setup(void);
 
-extern unsigned z_fps_getCounter(void);
-extern bool z_fps_isNthFrame(unsigned N);
+extern uint16_t z_fps_getCounter(void);
+extern bool z_fps_isNthFrame(uint8_t N);
 
 extern bool z_button_pressed(ZButton Button);
 
 extern void z_draw_fill(bool White);
-extern void z_draw_rectangle(int X, int Y, int W, int H, bool White);
-extern void z_draw_pixel(int X, int Y, bool White);
+extern void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, bool White);
+extern void z_draw_pixel(int8_t X, int8_t Y, bool White);
 
 #ifdef __cplusplus
 }

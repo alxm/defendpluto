@@ -31,12 +31,12 @@ void z_shared_setup(void)
     z_controls.b = a_button_new("key.x gamepad.b.b");
 }
 
-unsigned z_fps_getCounter(void)
+uint16_t z_fps_getCounter(void)
 {
-    return a_fps_getCounter();
+    return (uint16_t)a_fps_getCounter();
 }
 
-bool z_fps_isNthFrame(unsigned N)
+bool z_fps_isNthFrame(uint8_t N)
 {
     return a_fps_isNthFrame(N);
 }
@@ -52,13 +52,13 @@ void z_draw_fill(bool White)
     a_draw_fill();
 }
 
-void z_draw_rectangle(int X, int Y, int W, int H, bool White)
+void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, bool White)
 {
     a_pixel_setHex(White ? 0xffffff : 0);
     a_draw_rectangle(X, Y, W, H);
 }
 
-void z_draw_pixel(int X, int Y, bool White)
+void z_draw_pixel(int8_t X, int8_t Y, bool White)
 {
     a_pixel_setHex(White ? 0xffffff : 0);
     a_draw_pixel(X, Y);

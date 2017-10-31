@@ -53,7 +53,7 @@ void z_enemy_draw(ZPoolObject* Enemy)
     int8_t x = z_fix_fixtoi(enemy->x);
     int8_t y = z_fix_fixtoi(enemy->y);
 
-    z_draw_rectangle(x - 2, y - 2, 4, 4, true);
-    z_draw_rectangle(x - 2 - 2, y - 2 - 1, 2, 8, true);
-    z_draw_rectangle(x + 2, y - 2 - 1, 2, 8, true);
+    z_draw_rectangle((int8_t)(x - 2), (int8_t)(y - 2), 4, 4, true);
+    z_draw_rectangle((int8_t)(x - 2 - 2), (int8_t)(y - 2 - 1), 2, 8, true);
+    z_draw_rectangle((int8_t)(x + 2), (int8_t)(y - 2 - 1), 2, 8, true);
 }

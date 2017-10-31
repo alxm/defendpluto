@@ -32,12 +32,12 @@ void z_shared_setup(void)
     z_controls.b = B_BUTTON;
 }
 
-unsigned z_fps_getCounter(void)
+uint16_t z_fps_getCounter(void)
 {
     return g_arduboy.frameCount;
 }
 
-bool z_fps_isNthFrame(unsigned N)
+bool z_fps_isNthFrame(uint8_t N)
 {
     return g_arduboy.everyXFrames(N);
 }
@@ -52,12 +52,12 @@ void z_draw_fill(bool White)
     g_arduboy.fillScreen(White ? WHITE : BLACK);
 }
 
-void z_draw_rectangle(int X, int Y, int W, int H, bool White)
+void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, bool White)
 {
     g_arduboy.fillRect(X, Y, W, H, White ? WHITE : BLACK);
 }
 
-void z_draw_pixel(int X, int Y, bool White)
+void z_draw_pixel(int8_t X, int8_t Y, bool White)
 {
     g_arduboy.drawPixel(X, Y, White ? WHITE : BLACK);
 }
