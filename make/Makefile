@@ -9,7 +9,7 @@ include $(A2X_PATH)/make/project/Makefile
 
 Z_LEVELS_COMPILER = ../src/levels/compile.py
 Z_LEVELS_TXT = ../src/levels/data.txt
-Z_LEVELS_C = ../src/levels_data.c
+Z_LEVELS_C = ../src/data_levels.c
 
 $(Z_LEVELS_C): $(Z_LEVELS_TXT)
 	$(Z_LEVELS_COMPILER) $< > $@

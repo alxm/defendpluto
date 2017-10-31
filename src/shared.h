@@ -35,7 +35,6 @@ extern "C" {
 
 #ifdef ARDUINO
     typedef uint8_t ZButton;
-    typedef uint8_t* ZSprite;
 #else
     typedef AInputButton* ZButton;
     typedef ASprite* ZSprite;

@@ -137,7 +137,7 @@ def main(LevelFile):
 
 #include <stdint.h>
 
-const uint8_t z_levels_data[] = {{
+const uint8_t z_data_levels[] = {{
 {}}};""".format(formatted_bytecode)
 
     print(contents)
