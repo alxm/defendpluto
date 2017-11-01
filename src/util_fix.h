@@ -53,3 +53,18 @@ static inline ZFix z_fix_cos(uint8_t Angle)
 {
     return z_fix__sin[(uint8_t)(Angle + 64)];
 }
+
+static inline ZFix z_fix_min(ZFix X, ZFix Y)
+{
+    return X < Y ? X : Y;
+}
+
+static inline ZFix z_fix_max(ZFix X, ZFix Y)
+{
+    return X > Y ? X : Y;
+}
+
+static inline ZFix z_fix_clamp(ZFix X, ZFix Min, ZFix Max)
+{
+    return X < Min ? Min : (X > Max ? Max : X);
+}

@@ -17,6 +17,7 @@
 
 typedef struct {
     ZFix x, y;
+    ZFix dx, dy;
     uint16_t lastShot;
     uint8_t frame;
     bool blink;

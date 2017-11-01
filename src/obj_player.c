@@ -21,7 +21,10 @@
 #include "obj_bullet.h"
 #include "obj_player.h"
 
-#define SHOOT_EVERY_N_FRAMES (Z_FPS / 4)
+#define Z_SHOOT_EVERY_N_FRAMES (Z_FPS / 4)
+#define Z_SPEED_MAX (Z_FIX_ONE)
+#define Z_SPEED_ACCEL (Z_FIX_ONE / 8)
+#define Z_SPEED_DECEL (Z_FIX_ONE / 16)
 
 ZPlayer z_player;
 
@@ -29,36 +32,52 @@ void z_player_init(int8_t X, int8_t Y)
 {
     z_player.x = z_fix_itofix(X);
     z_player.y = z_fix_itofix(Y);
+    z_player.dx = 0;
+    z_player.dy = 0;
     z_player.lastShot = z_fps_getCounter();
     z_player.frame = 0;
 }
 
 void z_player_tick(void)
 {
-    if(z_button_pressed(z_controls.up) && z_player.y > 0) {
-        z_player.y = (ZFix)(z_player.y - Z_FIX_ONE);
-    } else if(z_button_pressed(z_controls.down) && z_fix_fixtoi(z_player.y) < Z_HEIGHT - 1) {
-        z_player.y = (ZFix)(z_player.y + Z_FIX_ONE);
+    if(z_button_pressed(z_controls.up)) {
+        z_player.dy = (ZFix)(z_player.dy - Z_SPEED_ACCEL);
+    } else if(z_button_pressed(z_controls.down)) {
+        z_player.dy = (ZFix)(z_player.dy + Z_SPEED_ACCEL);
+    } else {
+        if(z_player.dy < 0) {
+            z_player.dy = z_fix_min((ZFix)(z_player.dy + Z_SPEED_DECEL), 0);
+        } else if(z_player.dy > 0) {
+            z_player.dy = z_fix_max((ZFix)(z_player.dy - Z_SPEED_DECEL), 0);
+        }
     }
 
     if(z_button_pressed(z_controls.left)) {
         z_player.frame = 1;
-
-        if(z_player.x > 0) {
-            z_player.x = (ZFix)(z_player.x - Z_FIX_ONE);
-        }
+        z_player.dx = (ZFix)(z_player.dx - Z_SPEED_ACCEL);
     } else if(z_button_pressed(z_controls.right)) {
         z_player.frame = 2;
-
-        if(z_fix_fixtoi(z_player.x) < Z_WIDTH - 1) {
-            z_player.x = (ZFix)(z_player.x + Z_FIX_ONE);
-        }
+        z_player.dx = (ZFix)(z_player.dx + Z_SPEED_ACCEL);
     } else {
         z_player.frame = 0;
+
+        if(z_player.dx < 0) {
+            z_player.dx = z_fix_min((ZFix)(z_player.dx + Z_SPEED_DECEL), 0);
+        } else if(z_player.dx > 0) {
+            z_player.dx = z_fix_max((ZFix)(z_player.dx - Z_SPEED_DECEL), 0);
+        }
     }
 
+    z_player.dx = z_fix_clamp(z_player.dx, -Z_SPEED_MAX, Z_SPEED_MAX);
+    z_player.dy = z_fix_clamp(z_player.dy, -Z_SPEED_MAX, Z_SPEED_MAX);
+
+    z_player.x = (ZFix)(z_player.x + z_player.dx);
+    z_player.y = (ZFix)(z_player.y + z_player.dy);
+    z_player.x = z_fix_clamp(z_player.x, 0, z_fix_itofix(Z_WIDTH - 1));
+    z_player.y = z_fix_clamp(z_player.y, 0, z_fix_itofix(Z_HEIGHT - 1));
+
     if(z_button_pressed(z_controls.a)) {
-        if(z_fps_getCounter() - z_player.lastShot >= SHOOT_EVERY_N_FRAMES) {
+        if(z_fps_getCounter() - z_player.lastShot >= Z_SHOOT_EVERY_N_FRAMES) {
             ZBullet* b = z_pool_alloc(z_pool[Z_POOL_BULLET]);
 
             if(b) {
@@ -69,7 +88,7 @@ void z_player_tick(void)
         }
     } else {
         z_player.lastShot = (uint16_t)(z_fps_getCounter()
-                                        - SHOOT_EVERY_N_FRAMES);
+                                        - Z_SHOOT_EVERY_N_FRAMES);
     }
 
     z_player.blink = !z_player.blink;
