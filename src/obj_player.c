@@ -60,6 +60,8 @@ void z_player_tick(void)
         z_player.lastShot = (uint16_t)(z_fps_getCounter()
                                         - SHOOT_EVERY_N_FRAMES);
     }
+
+    z_player.blink = !z_player.blink;
 }
 
 void z_player_draw(void)
@@ -67,6 +69,11 @@ void z_player_draw(void)
     int8_t x = z_fix_fixtoi(z_player.x);
     int8_t y = z_fix_fixtoi(z_player.y);
     ZSprite sprite = z_gfx.playerShip;
+
+    if(z_player.blink) {
+        z_draw_rectangle((int8_t)(x - 3), (int8_t)(y + 4), 2, 1, 2);
+        z_draw_rectangle((int8_t)(x + 1), (int8_t)(y + 4), 2, 1, 2);
+    }
 
     z_sprite_blit(sprite,
                   (int8_t)(x - z_sprite_getWidth(sprite) / 2),
