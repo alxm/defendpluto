@@ -15,11 +15,8 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <Arduino.h>
-#include <Arduboy2.h>
-#include <Sprites.h>
 #include "shared.h"
-
+#include <Sprites.h>
 #include "data_gfx_enemy00.h"
 #include "data_gfx_enemy01.h"
 #include "data_gfx_enemy02.h"

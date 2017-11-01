@@ -48,7 +48,7 @@ ZPool* z_pool[Z_POOL_NUM] = {
     &g_particlePool.generic,
 };
 
-static void init(ZPool* Pool, size_t ObjectSize, size_t NumObjects)
+static void initPool(ZPool* Pool, size_t ObjectSize, size_t NumObjects)
 {
     ZPoolObject* current = &Pool->pool[0];
 
@@ -66,10 +66,10 @@ static void init(ZPool* Pool, size_t ObjectSize, size_t NumObjects)
 
 void z_pool_setup(void)
 {
-    init(z_pool[Z_POOL_STAR], sizeof(ZStar), Z_STARS_NUM);
-    init(z_pool[Z_POOL_BULLET], sizeof(ZBullet), Z_BULLETS_NUM);
-    init(z_pool[Z_POOL_ENEMY], sizeof(ZEnemy), Z_ENEMIES_NUM);
-    init(z_pool[Z_POOL_PARTICLE], sizeof(ZParticle), Z_PARTICLES_NUM);
+    initPool(z_pool[Z_POOL_STAR], sizeof(ZStar), Z_STARS_NUM);
+    initPool(z_pool[Z_POOL_BULLET], sizeof(ZBullet), Z_BULLETS_NUM);
+    initPool(z_pool[Z_POOL_ENEMY], sizeof(ZEnemy), Z_ENEMIES_NUM);
+    initPool(z_pool[Z_POOL_PARTICLE], sizeof(ZParticle), Z_PARTICLES_NUM);
 }
 
 void* z_pool_alloc(ZPool* Pool)

@@ -22,7 +22,7 @@ typedef int32_t ZFixBig;
 #define Z_FIX_ONE           (1 << Z_FIX_BIT_PRECISION)
 #define Z_FIX_NUM_ANGLES    (256)
 
-extern ZFix z_fix__sin[Z_FIX_NUM_ANGLES];
+extern const ZFix z_fix__sin[Z_FIX_NUM_ANGLES];
 
 static inline ZFix z_fix_itofix(int8_t X)
 {
@@ -46,12 +46,12 @@ static inline ZFix z_fix_div(ZFix X, ZFix Y)
 
 static inline ZFix z_fix_sin(uint8_t Angle)
 {
-    return z_fix__sin[Angle];
+    return Z_PGM_READ_UINT16(z_fix__sin[Angle]);
 }
 
 static inline ZFix z_fix_cos(uint8_t Angle)
 {
-    return z_fix__sin[(uint8_t)(Angle + 64)];
+    return Z_PGM_READ_UINT16(z_fix__sin[(uint8_t)(Angle + 64)]);
 }
 
 static inline ZFix z_fix_min(ZFix X, ZFix Y)
