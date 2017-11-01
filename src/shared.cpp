@@ -17,10 +17,17 @@
 
 #include <Arduino.h>
 #include <Arduboy2.h>
+#include <Sprites.h>
 #include "shared.h"
+
+#include "data_gfx_enemy00.h"
+#include "data_gfx_enemy01.h"
+#include "data_gfx_enemy02.h"
+#include "data_gfx_player.h"
 
 extern Arduboy2Base g_arduboy;
 ZControls z_controls;
+ZGfx z_gfx;
 
 void z_shared_setup(void)
 {
@@ -30,6 +37,11 @@ void z_shared_setup(void)
     z_controls.right = RIGHT_BUTTON;
     z_controls.a = A_BUTTON;
     z_controls.b = B_BUTTON;
+
+    z_gfx.enemy[0] = z_data_gfx_enemy00_buffer;
+    z_gfx.enemy[1] = z_data_gfx_enemy01_buffer;
+    z_gfx.enemy[2] = z_data_gfx_enemy02_buffer;
+    z_gfx.playerShip = z_data_gfx_player_buffer;
 }
 
 uint16_t z_fps_getCounter(void)
@@ -60,4 +72,19 @@ void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, bool White)
 void z_draw_pixel(int8_t X, int8_t Y, bool White)
 {
     g_arduboy.drawPixel(X, Y, White ? WHITE : BLACK);
+}
+
+void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
+{
+    Sprites::drawSelfMasked(X, Y, Sprite, 0);
+}
+
+int8_t z_sprite_getWidth(ZSprite Sprite)
+{
+    return (int8_t)pgm_read_byte(Sprite);
+}
+
+int8_t z_sprite_getHeight(ZSprite Sprite)
+{
+    return (int8_t)pgm_read_byte(Sprite + 1);
 }

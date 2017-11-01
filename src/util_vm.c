@@ -20,6 +20,7 @@
 #include "util_pool.h"
 #include "util_vm.h"
 #include "obj_enemy.h"
+#include "data_levels.h"
 
 typedef struct {
     bool (*callback)(void);
@@ -28,7 +29,6 @@ typedef struct {
 
 static uint16_t g_pc = 0;
 static uint8_t g_wait = 0;
-extern const uint8_t z_data_levels[];
 static const uint8_t* g_data = z_data_levels;
 
 static bool handle_spawn(void)

@@ -35,6 +35,7 @@ extern "C" {
 
 #ifdef ARDUINO
     typedef uint8_t ZButton;
+    typedef const uint8_t* ZSprite;
 #else
     typedef AInputButton* ZButton;
     typedef ASprite* ZSprite;
@@ -50,8 +51,8 @@ typedef struct {
 } ZControls;
 
 typedef struct {
-    ZSprite playerShip;
     ZSprite enemy[3];
+    ZSprite playerShip;
 } ZGfx;
 
 extern ZControls z_controls;
