@@ -42,6 +42,27 @@ void z_player_init(int8_t X, int8_t Y)
 
 void z_player_tick(void)
 {
+    ZFix maxSpeed = Z_SPEED_MAX;
+
+    if(z_button_pressed(z_controls.a)) {
+        z_player.jitter = true;
+        maxSpeed = Z_SPEED_MAX * 2 / 3;
+
+        if(z_fps_getCounter() - z_player.lastShot >= Z_SHOOT_EVERY_N_FRAMES) {
+            ZBullet* b = z_pool_alloc(z_pool[Z_POOL_BULLET]);
+
+            if(b) {
+                z_bullet_init(b, z_player.x, z_player.y, z_fix_itofix(-2));
+            }
+
+            z_player.lastShot = z_fps_getCounter();
+        }
+    } else {
+        z_player.jitter = false;
+        z_player.lastShot = (uint16_t)(z_fps_getCounter()
+                                        - Z_SHOOT_EVERY_N_FRAMES);
+    }
+
     if(z_button_pressed(z_controls.up)) {
         z_player.dy = (ZFix)(z_player.dy - Z_SPEED_ACCEL);
     } else if(z_button_pressed(z_controls.down)) {
@@ -70,8 +91,8 @@ void z_player_tick(void)
         }
     }
 
-    z_player.dx = z_fix_clamp(z_player.dx, -Z_SPEED_MAX, Z_SPEED_MAX);
-    z_player.dy = z_fix_clamp(z_player.dy, -Z_SPEED_MAX, Z_SPEED_MAX);
+    z_player.dx = z_fix_clamp(z_player.dx, (ZFix)-maxSpeed, maxSpeed);
+    z_player.dy = z_fix_clamp(z_player.dy, (ZFix)-maxSpeed, maxSpeed);
 
     z_player.x = z_fix_clamp(z_fix_inc(z_player.x, z_player.dx),
                              0,
@@ -80,24 +101,6 @@ void z_player_tick(void)
     z_player.y = z_fix_clamp(z_fix_inc(z_player.y, z_player.dy),
                              0,
                              z_fix_itofix(Z_HEIGHT - 1));
-
-    if(z_button_pressed(z_controls.a)) {
-        z_player.jitter = true;
-
-        if(z_fps_getCounter() - z_player.lastShot >= Z_SHOOT_EVERY_N_FRAMES) {
-            ZBullet* b = z_pool_alloc(z_pool[Z_POOL_BULLET]);
-
-            if(b) {
-                z_bullet_init(b, z_player.x, z_player.y, z_fix_itofix(-2));
-            }
-
-            z_player.lastShot = z_fps_getCounter();
-        }
-    } else {
-        z_player.jitter = false;
-        z_player.lastShot = (uint16_t)(z_fps_getCounter()
-                                        - Z_SHOOT_EVERY_N_FRAMES);
-    }
 
     z_player.blink = !z_player.blink;
 }
