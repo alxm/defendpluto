@@ -58,5 +58,6 @@ void z_enemy_draw(ZPoolObject* Enemy)
 
     z_sprite_blit(sprite,
                   (int8_t)(x - z_sprite_getWidth(sprite) / 2),
-                  (int8_t)(y - z_sprite_getHeight(sprite) / 2));
+                  (int8_t)(y - z_sprite_getHeight(sprite) / 2),
+                  Z_COLOR_YELLOW);
 }

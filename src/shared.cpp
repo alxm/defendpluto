@@ -74,8 +74,9 @@ void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
     g_arduboy.drawPixel(X, Y, Color ? WHITE : BLACK);
 }
 
-void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
+void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y, uint8_t Color)
 {
+    Z_UNUSED(Color);
     Sprites::drawSelfMasked(X, Y, Sprite, 0);
 }
 

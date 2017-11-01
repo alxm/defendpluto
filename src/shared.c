@@ -19,10 +19,21 @@
 
 #include "shared.h"
 
+#define Z_COLOR 1
+
 ZControls z_controls;
 ZGfx z_gfx;
 
 static APixel g_pal[4];
+
+static inline void setColor(uint8_t Color)
+{
+    #if Z_COLOR
+        a_pixel_setPixel(g_pal[Color]);
+    #else
+        a_pixel_setPixel(Color ? a_pixel_hex(0xffffff) : 0);
+    #endif
+}
 
 void z_shared_setup(void)
 {
@@ -61,25 +72,25 @@ bool z_button_pressed(ZButton Button)
 
 void z_draw_fill(uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[Color]);
+    setColor(Color);
     a_draw_fill();
 }
 
 void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[Color]);
+    setColor(Color);
     a_draw_rectangle(X, Y, W, H);
 }
 
 void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[Color]);
+    setColor(Color);
     a_draw_pixel(X, Y);
 }
 
-void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
+void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y, uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[Z_COLOR_YELLOW]);
+    setColor(Color);
     a_pixel_setBlitFillFlat(true);
     a_sprite_blit(Sprite, X, Y);
 }
