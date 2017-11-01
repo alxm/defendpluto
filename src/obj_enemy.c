@@ -22,7 +22,7 @@
 
 static bool nobrain(ZEnemy* Enemy)
 {
-    Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE);
+    Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE / 4);
 
     ZSprite sprite = z_gfx.enemy[Enemy->sprite];
 
