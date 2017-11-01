@@ -21,6 +21,7 @@ typedef struct {
     uint16_t lastShot;
     uint8_t frame;
     bool blink;
+    bool jitter;
 } ZPlayer;
 
 extern ZPlayer z_player;

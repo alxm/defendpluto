@@ -36,6 +36,8 @@ void z_player_init(int8_t X, int8_t Y)
     z_player.dy = 0;
     z_player.lastShot = z_fps_getCounter();
     z_player.frame = 0;
+    z_player.blink = false;
+    z_player.jitter = false;
 }
 
 void z_player_tick(void)
@@ -80,6 +82,8 @@ void z_player_tick(void)
                              z_fix_itofix(Z_HEIGHT - 1));
 
     if(z_button_pressed(z_controls.a)) {
+        z_player.jitter = true;
+
         if(z_fps_getCounter() - z_player.lastShot >= Z_SHOOT_EVERY_N_FRAMES) {
             ZBullet* b = z_pool_alloc(z_pool[Z_POOL_BULLET]);
 
@@ -90,6 +94,7 @@ void z_player_tick(void)
             z_player.lastShot = z_fps_getCounter();
         }
     } else {
+        z_player.jitter = false;
         z_player.lastShot = (uint16_t)(z_fps_getCounter()
                                         - Z_SHOOT_EVERY_N_FRAMES);
     }
@@ -102,6 +107,10 @@ void z_player_draw(void)
     int8_t x = z_fix_fixtoi(z_player.x);
     int8_t y = z_fix_fixtoi(z_player.y);
     ZSprite sprite = z_gfx.player[z_player.frame];
+
+    if(z_player.jitter) {
+        y = (int8_t)(y + (rand() % 2));
+    }
 
     if(z_player.blink) {
         z_draw_rectangle((int8_t)(x - 3), (int8_t)(y + 4), 2, 1, Z_COLOR_RED);
