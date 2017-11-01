@@ -44,10 +44,12 @@ void z_shared_setup(void)
     z_controls.a = a_button_new("key.z gamepad.b.a");
     z_controls.b = a_button_new("key.x gamepad.b.b");
 
-    z_gfx.playerShip = a_sprite_newFromFile("gfx/player.png");
     z_gfx.enemy[0] = a_sprite_newFromFile("gfx/enemy00.png");
     z_gfx.enemy[1] = a_sprite_newFromFile("gfx/enemy01.png");
     z_gfx.enemy[2] = a_sprite_newFromFile("gfx/enemy02.png");
+    z_gfx.player[0] = a_sprite_newFromFile("gfx/player.png");
+    z_gfx.player[1] = a_sprite_newFromFile("gfx/player_left.png");
+    z_gfx.player[2] = a_sprite_newFromFile("gfx/player_right.png");
 
     g_pal[Z_COLOR_BLUE] = a_pixel_hex(0x23293f);
     g_pal[Z_COLOR_YELLOW] = a_pixel_hex(0xb2d26d);

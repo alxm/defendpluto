@@ -60,7 +60,7 @@ typedef struct {
 
 typedef struct {
     ZSprite enemy[3];
-    ZSprite playerShip;
+    ZSprite player[3];
 } ZGfx;
 
 extern ZControls z_controls;

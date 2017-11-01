@@ -24,6 +24,8 @@
 #include "data_gfx_enemy01.h"
 #include "data_gfx_enemy02.h"
 #include "data_gfx_player.h"
+#include "data_gfx_player_left.h"
+#include "data_gfx_player_right.h"
 
 extern Arduboy2Base g_arduboy;
 ZControls z_controls;
@@ -41,7 +43,9 @@ void z_shared_setup(void)
     z_gfx.enemy[0] = z_data_gfx_enemy00_buffer;
     z_gfx.enemy[1] = z_data_gfx_enemy01_buffer;
     z_gfx.enemy[2] = z_data_gfx_enemy02_buffer;
-    z_gfx.playerShip = z_data_gfx_player_buffer;
+    z_gfx.player[0] = z_data_gfx_player_buffer;
+    z_gfx.player[1] = z_data_gfx_player_left_buffer;
+    z_gfx.player[2] = z_data_gfx_player_right_buffer;
 }
 
 uint16_t z_fps_getCounter(void)

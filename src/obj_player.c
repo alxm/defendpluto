@@ -30,6 +30,7 @@ void z_player_init(int8_t X, int8_t Y)
     z_player.x = z_fix_itofix(X);
     z_player.y = z_fix_itofix(Y);
     z_player.lastShot = z_fps_getCounter();
+    z_player.frame = 0;
 }
 
 void z_player_tick(void)
@@ -40,10 +41,20 @@ void z_player_tick(void)
         z_player.y = (ZFix)(z_player.y + Z_FIX_ONE);
     }
 
-    if(z_button_pressed(z_controls.left) && z_player.x > 0) {
-        z_player.x = (ZFix)(z_player.x - Z_FIX_ONE);
-    } else if(z_button_pressed(z_controls.right) && z_fix_fixtoi(z_player.x) < Z_WIDTH - 1) {
-        z_player.x = (ZFix)(z_player.x + Z_FIX_ONE);
+    if(z_button_pressed(z_controls.left)) {
+        z_player.frame = 1;
+
+        if(z_player.x > 0) {
+            z_player.x = (ZFix)(z_player.x - Z_FIX_ONE);
+        }
+    } else if(z_button_pressed(z_controls.right)) {
+        z_player.frame = 2;
+
+        if(z_fix_fixtoi(z_player.x) < Z_WIDTH - 1) {
+            z_player.x = (ZFix)(z_player.x + Z_FIX_ONE);
+        }
+    } else {
+        z_player.frame = 0;
     }
 
     if(z_button_pressed(z_controls.a)) {
@@ -68,7 +79,7 @@ void z_player_draw(void)
 {
     int8_t x = z_fix_fixtoi(z_player.x);
     int8_t y = z_fix_fixtoi(z_player.y);
-    ZSprite sprite = z_gfx.playerShip;
+    ZSprite sprite = z_gfx.player[z_player.frame];
 
     if(z_player.blink) {
         z_draw_rectangle((int8_t)(x - 3), (int8_t)(y + 4), 2, 1, Z_COLOR_RED);
