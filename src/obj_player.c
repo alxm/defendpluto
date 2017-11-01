@@ -71,10 +71,13 @@ void z_player_tick(void)
     z_player.dx = z_fix_clamp(z_player.dx, -Z_SPEED_MAX, Z_SPEED_MAX);
     z_player.dy = z_fix_clamp(z_player.dy, -Z_SPEED_MAX, Z_SPEED_MAX);
 
-    z_player.x = (ZFix)(z_player.x + z_player.dx);
-    z_player.y = (ZFix)(z_player.y + z_player.dy);
-    z_player.x = z_fix_clamp(z_player.x, 0, z_fix_itofix(Z_WIDTH - 1));
-    z_player.y = z_fix_clamp(z_player.y, 0, z_fix_itofix(Z_HEIGHT - 1));
+    z_player.x = z_fix_clamp(z_fix_inc(z_player.x, z_player.dx),
+                             0,
+                             z_fix_itofix(Z_WIDTH - 1));
+
+    z_player.y = z_fix_clamp(z_fix_inc(z_player.y, z_player.dy),
+                             0,
+                             z_fix_itofix(Z_HEIGHT - 1));
 
     if(z_button_pressed(z_controls.a)) {
         if(z_fps_getCounter() - z_player.lastShot >= Z_SHOOT_EVERY_N_FRAMES) {

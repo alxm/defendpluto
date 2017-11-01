@@ -68,3 +68,14 @@ static inline ZFix z_fix_clamp(ZFix X, ZFix Min, ZFix Max)
 {
     return X < Min ? Min : (X > Max ? Max : X);
 }
+
+static inline ZFix z_fix_inc(ZFix X, ZFix Inc)
+{
+    if(Inc > 0 && z_fix_itofix(INT8_MAX) - Inc < X) {
+        return z_fix_itofix(INT8_MAX);
+    } else if(Inc < 0 && X < z_fix_itofix(INT8_MIN) - Inc) {
+        return z_fix_itofix(INT8_MIN);
+    } else {
+        return (ZFix)(X + Inc);
+    }
+}
