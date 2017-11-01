@@ -39,7 +39,7 @@ void loop_tick(void)
     z_pool_tick(z_pool[Z_POOL_BULLET], z_bullet_tick);
     z_pool_tick(z_pool[Z_POOL_ENEMY], z_enemy_tick);
 
-    if(rand() % (2 * Z_HEIGHT / Z_STARS_NUM) == 0) {
+    if(z_random_int8(2 * Z_HEIGHT / Z_STARS_NUM) == 0) {
         ZStar* star = z_pool_alloc(z_pool[Z_POOL_STAR]);
 
         if(star != NULL) {

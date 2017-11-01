@@ -109,7 +109,7 @@ void z_player_draw(void)
     ZSprite sprite = z_gfx.player[z_player.frame];
 
     if(z_player.jitter) {
-        y = (int8_t)(y + (rand() % 2));
+        y = (int8_t)(y + z_random_int8(2));
     }
 
     if(z_player.blink) {

@@ -22,9 +22,9 @@
 
 void z_star_init(ZStar* Star)
 {
-    Star->x = z_fix_itofix((int8_t)(rand() % Z_WIDTH));
+    Star->x = z_fix_itofix((int8_t)z_random_int16(Z_WIDTH));
     Star->y = 0;
-    Star->speed = (ZFix)(32 + (rand() % 192));
+    Star->speed = (ZFix)(32 + z_random_int16(192));
 }
 
 bool z_star_tick(ZPoolObject* Star)
