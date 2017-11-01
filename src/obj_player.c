@@ -71,8 +71,8 @@ void z_player_draw(void)
     ZSprite sprite = z_gfx.playerShip;
 
     if(z_player.blink) {
-        z_draw_rectangle((int8_t)(x - 3), (int8_t)(y + 4), 2, 1, 2);
-        z_draw_rectangle((int8_t)(x + 1), (int8_t)(y + 4), 2, 1, 2);
+        z_draw_rectangle((int8_t)(x - 3), (int8_t)(y + 4), 2, 1, Z_COLOR_RED);
+        z_draw_rectangle((int8_t)(x + 1), (int8_t)(y + 4), 2, 1, Z_COLOR_RED);
     }
 
     z_sprite_blit(sprite,

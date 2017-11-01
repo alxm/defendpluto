@@ -50,7 +50,7 @@ void loop_tick(void)
 
 void loop_draw(void)
 {
-    z_draw_fill(0);
+    z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(z_pool[Z_POOL_STAR], z_star_draw);
     z_pool_draw(z_pool[Z_POOL_BULLET], z_bullet_draw);
     z_pool_draw(z_pool[Z_POOL_ENEMY], z_enemy_draw);

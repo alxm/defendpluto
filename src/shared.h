@@ -33,6 +33,14 @@ extern "C" {
 #define Z_HEIGHT 64
 #define Z_FPS 30
 
+typedef enum {
+    Z_COLOR_BLUE,
+    Z_COLOR_YELLOW,
+    Z_COLOR_RED,
+    Z_COLOR_LIGHTBLUE,
+    Z_COLOR_NUM
+} ZColors;
+
 #ifdef ARDUINO
     typedef uint8_t ZButton;
     typedef const uint8_t* ZSprite;

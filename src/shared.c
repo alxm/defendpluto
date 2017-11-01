@@ -38,10 +38,10 @@ void z_shared_setup(void)
     z_gfx.enemy[1] = a_sprite_newFromFile("gfx/enemy01.png");
     z_gfx.enemy[2] = a_sprite_newFromFile("gfx/enemy02.png");
 
-    g_pal[0] = a_pixel_hex(0x23293f);
-    g_pal[1] = a_pixel_hex(0xb2d26d);
-    g_pal[2] = a_pixel_hex(0xd7531f);
-    g_pal[3] = a_pixel_hex(0x5f6c79);
+    g_pal[Z_COLOR_BLUE] = a_pixel_hex(0x23293f);
+    g_pal[Z_COLOR_YELLOW] = a_pixel_hex(0xb2d26d);
+    g_pal[Z_COLOR_RED] = a_pixel_hex(0xd7531f);
+    g_pal[Z_COLOR_LIGHTBLUE] = a_pixel_hex(0x5f6c79);
 }
 
 uint16_t z_fps_getCounter(void)
@@ -79,7 +79,7 @@ void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
 
 void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
 {
-    a_pixel_setPixel(g_pal[1]);
+    a_pixel_setPixel(g_pal[Z_COLOR_YELLOW]);
     a_pixel_setBlitFillFlat(true);
     a_sprite_blit(Sprite, X, Y);
 }
