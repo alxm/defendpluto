@@ -1,7 +1,7 @@
 A_APP_NAME = arduboy-shooter
 
-Z_LEVELS_COMPILER = ../src/levels/compile.py
-Z_LEVELS_TXT = ../src/levels/data.txt
+Z_LEVELS_COMPILER = ../levels/compile.py
+Z_LEVELS_TXT = ../levels/data.txt
 Z_LEVELS_H = ../src/data_levels.h
 
 Z_GFX_COMPILER = ../gfx/ArduboyImage.py
