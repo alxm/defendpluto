@@ -40,5 +40,5 @@ void z_star_draw(ZPoolObject* Star)
 {
     ZStar* star = (ZStar*)Star;
 
-    z_draw_pixel(z_fix_fixtoi(star->x), z_fix_fixtoi(star->y), true);
+    z_draw_pixel(z_fix_fixtoi(star->x), z_fix_fixtoi(star->y), 3);
 }

@@ -80,5 +80,5 @@ void z_bullet_draw(ZPoolObject* Bullet)
     int8_t x = z_fix_fixtoi(bullet->x);
     int8_t y = z_fix_fixtoi(bullet->y);
 
-    z_draw_rectangle((int8_t)(x - 1), (int8_t)(y - 2), 2, 4, true);
+    z_draw_rectangle((int8_t)(x - 1), (int8_t)(y - 2), 2, 4, 2);
 }

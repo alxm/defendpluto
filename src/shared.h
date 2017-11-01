@@ -65,9 +65,9 @@ extern bool z_fps_isNthFrame(uint8_t N);
 
 extern bool z_button_pressed(ZButton Button);
 
-extern void z_draw_fill(bool White);
-extern void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, bool White);
-extern void z_draw_pixel(int8_t X, int8_t Y, bool White);
+extern void z_draw_fill(uint8_t Color);
+extern void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color);
+extern void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color);
 
 extern void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y);
 extern int8_t z_sprite_getWidth(ZSprite Sprite);

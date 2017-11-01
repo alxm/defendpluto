@@ -22,7 +22,7 @@
 ZControls z_controls;
 ZGfx z_gfx;
 
-static APixel g_pal[2];
+static APixel g_pal[4];
 
 void z_shared_setup(void)
 {
@@ -40,6 +40,8 @@ void z_shared_setup(void)
 
     g_pal[0] = a_pixel_hex(0x23293f);
     g_pal[1] = a_pixel_hex(0xb2d26d);
+    g_pal[2] = a_pixel_hex(0xd7531f);
+    g_pal[3] = a_pixel_hex(0x5f6c79);
 }
 
 uint16_t z_fps_getCounter(void)
@@ -57,21 +59,21 @@ bool z_button_pressed(ZButton Button)
     return a_button_getPressed(Button);
 }
 
-void z_draw_fill(bool White)
+void z_draw_fill(uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[White]);
+    a_pixel_setPixel(g_pal[Color]);
     a_draw_fill();
 }
 
-void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, bool White)
+void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[White]);
+    a_pixel_setPixel(g_pal[Color]);
     a_draw_rectangle(X, Y, W, H);
 }
 
-void z_draw_pixel(int8_t X, int8_t Y, bool White)
+void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[White]);
+    a_pixel_setPixel(g_pal[Color]);
     a_draw_pixel(X, Y);
 }
 

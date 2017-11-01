@@ -59,19 +59,19 @@ bool z_button_pressed(ZButton Button)
     return g_arduboy.pressed(Button);
 }
 
-void z_draw_fill(bool White)
+void z_draw_fill(uint8_t Color)
 {
-    g_arduboy.fillScreen(White ? WHITE : BLACK);
+    g_arduboy.fillScreen(Color ? WHITE : BLACK);
 }
 
-void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, bool White)
+void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color)
 {
-    g_arduboy.fillRect(X, Y, W, H, White ? WHITE : BLACK);
+    g_arduboy.fillRect(X, Y, W, H, Color ? WHITE : BLACK);
 }
 
-void z_draw_pixel(int8_t X, int8_t Y, bool White)
+void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
 {
-    g_arduboy.drawPixel(X, Y, White ? WHITE : BLACK);
+    g_arduboy.drawPixel(X, Y, Color ? WHITE : BLACK);
 }
 
 void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
