@@ -20,6 +20,7 @@
 #include "util_pool.h"
 #include "obj_bullet.h"
 #include "obj_enemy.h"
+#include "obj_particle.h"
 
 static bool g_hit;
 static ZBullet* g_bullet;
@@ -43,6 +44,22 @@ static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
                        (int8_t)(z_fix_fixtoi(enemy->y) - 4),
                        8,
                        8);
+
+    if(g_hit) {
+        for(int8_t i = Z_PARTICLES_NUM; i--; ) {
+            ZParticle* p = z_pool_alloc(z_pool[Z_POOL_PARTICLE]);
+
+            if(p == NULL) {
+                break;
+            }
+
+            z_particle_init(p,
+                            enemy->x,
+                            enemy->y,
+                            (uint8_t)(Z_FPS / 8
+                                        + z_random_uint8(Z_FPS / 4)));
+        }
+    }
 
     return !g_hit;
 }

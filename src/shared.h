@@ -86,9 +86,19 @@ static inline int8_t z_random_int8(int8_t Max)
     return (int8_t)(rand() % Max);
 }
 
+static inline uint8_t z_random_uint8(uint8_t Max)
+{
+    return (uint8_t)(rand() % Max);
+}
+
 static inline int16_t z_random_int16(int16_t Max)
 {
     return (int16_t)(rand() % Max);
+}
+
+static inline uint16_t z_random_uint16(uint16_t Max)
+{
+    return (uint16_t)(rand() % Max);
 }
 
 #ifdef __cplusplus
