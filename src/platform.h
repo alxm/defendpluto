@@ -23,10 +23,12 @@
     #ifdef __cplusplus
         #include <Arduboy2.h>
     #endif
+    #define Z_PGM_READ_UINT8(Value) pgm_read_byte(&Value)
     #define Z_PGM_READ_UINT16(Value) pgm_read_word(&Value)
 #else
     #include <a2x.h>
     #define PROGMEM
+    #define Z_PGM_READ_UINT8(Value) (Value)
     #define Z_PGM_READ_UINT16(Value) (Value)
 #endif
 

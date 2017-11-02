@@ -29,7 +29,8 @@ typedef struct {
 
 static uint16_t g_pc = 0;
 static uint8_t g_wait = 0;
-static const uint8_t* g_data = z_data_levels;
+
+#define Z_READ(Offset) Z_PGM_READ_UINT8(z_data_levels[g_pc + Offset])
 
 static bool handle_spawn(void)
 {
@@ -38,14 +39,14 @@ static bool handle_spawn(void)
      * spawn x_coord y_coord object_type sprite_id ai_type ai_data num_units wait_between
      * spawn 64      -8      enemy       0         nobrain 0       1         0
     */
-    int8_t x = (int8_t)g_data[g_pc + 1];
-    int8_t y = (int8_t)g_data[g_pc + 2];
-    uint8_t object_type = g_data[g_pc + 3] >> 4;
-    uint8_t sprite_id = g_data[g_pc + 3] & 0xf;
-    uint8_t ai_type = g_data[g_pc + 4] >> 4;
-    uint8_t ai_data = g_data[g_pc + 4] & 0xf;
-    uint8_t num_units = g_data[g_pc + 5] >> 4;
-    uint8_t wait_between = g_data[g_pc + 5] & 0xf;
+    int8_t x = (int8_t)Z_READ(1);
+    int8_t y = (int8_t)Z_READ(2);
+    uint8_t object_type = Z_READ(3) >> 4;
+    uint8_t sprite_id = Z_READ(3) & 0xf;
+    uint8_t ai_type = Z_READ(4) >> 4;
+    uint8_t ai_data = Z_READ(4) & 0xf;
+    uint8_t num_units = Z_READ(5) >> 4;
+    uint8_t wait_between = Z_READ(5) & 0xf;
 
     Z_UNUSED(num_units);
     Z_UNUSED(wait_between);
@@ -72,7 +73,7 @@ static bool handle_wait(void)
      * wait frames
      * wait 30
     */
-    g_wait = g_data[g_pc + 1];
+    g_wait = Z_READ(1);
 
     return true;
 }
@@ -113,7 +114,7 @@ void z_vm_tick(void)
         return;
     }
 
-    uint8_t instruction = g_data[g_pc];
+    uint8_t instruction = Z_READ(0);
 
     if(g_ops[instruction].callback()) {
         g_pc = (uint16_t)(g_pc + g_ops[instruction].bytes);
