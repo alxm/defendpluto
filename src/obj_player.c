@@ -56,7 +56,10 @@ void z_player_tick(void)
             ZBullet* b = z_pool_alloc(Z_POOL_BULLET);
 
             if(b) {
-                z_bullet_init(b, z_player.x, z_player.y, z_fix_itofix(-2));
+                z_bullet_init(b,
+                              (ZFix)(z_player.x + z_fix_itofix(z_screen_xShake)),
+                              z_player.y,
+                              z_fix_itofix(-2));
             }
 
             z_player.lastShot = z_fps_getCounter();
@@ -116,8 +119,16 @@ void z_player_draw(void)
     ZSprite sprite = z_gfx.player[z_player.frame];
 
     if(z_player.jetFlicker) {
-        z_draw_rectangle((int8_t)(x - 3), (int8_t)(y + 4), 2, 1, Z_COLOR_RED);
-        z_draw_rectangle((int8_t)(x + 1), (int8_t)(y + 4), 2, 1, Z_COLOR_RED);
+        z_draw_rectangle((int8_t)(x - 3),
+                         (int8_t)(y + 4 + z_screen_yShake),
+                         2,
+                         1,
+                         Z_COLOR_RED);
+        z_draw_rectangle((int8_t)(x + 1),
+                         (int8_t)(y + 4 + z_screen_yShake),
+                         2,
+                         1,
+                         Z_COLOR_RED);
     }
 
     z_sprite_blit(
