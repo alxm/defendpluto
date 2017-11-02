@@ -20,6 +20,7 @@
 #include "util_pool.h"
 #include "util_vm.h"
 #include "obj_bullet.h"
+#include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
 #include "obj_player.h"
@@ -39,6 +40,7 @@ void loop_tick(void)
     z_pool_tick(z_pool[Z_POOL_STAR], z_star_tick);
     z_pool_tick(z_pool[Z_POOL_BULLET], z_bullet_tick);
     z_pool_tick(z_pool[Z_POOL_ENEMY], z_enemy_tick);
+    z_pool_tick(z_pool[Z_POOL_CIRCLE], z_circle_tick);
     z_pool_tick(z_pool[Z_POOL_PARTICLE], z_particle_tick);
 
     if(z_random_int8(2 * Z_HEIGHT / Z_STARS_NUM) == 0) {
@@ -56,6 +58,7 @@ void loop_draw(void)
     z_pool_draw(z_pool[Z_POOL_STAR], z_star_draw);
     z_pool_draw(z_pool[Z_POOL_BULLET], z_bullet_draw);
     z_pool_draw(z_pool[Z_POOL_ENEMY], z_enemy_draw);
+    z_pool_draw(z_pool[Z_POOL_CIRCLE], z_circle_draw);
     z_pool_draw(z_pool[Z_POOL_PARTICLE], z_particle_draw);
     z_player_draw();
 }

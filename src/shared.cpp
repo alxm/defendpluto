@@ -75,6 +75,11 @@ void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
     g_arduboy.drawPixel(X, Y, Color ? WHITE : BLACK);
 }
 
+void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
+{
+    g_arduboy.drawCircle(X, Y, Radius, Color ? WHITE : BLACK);
+}
+
 void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y, uint8_t Color)
 {
     Z_UNUSED(Color);

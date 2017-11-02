@@ -83,6 +83,7 @@ extern bool z_button_pressed(ZButton Button);
 extern void z_draw_fill(uint8_t Color);
 extern void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color);
 extern void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color);
+extern void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color);
 
 extern void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y, uint8_t Color);
 extern int8_t z_sprite_getWidth(ZSprite Sprite);

@@ -90,6 +90,12 @@ void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
     a_draw_pixel(X, Y);
 }
 
+void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
+{
+    setColor(Color);
+    a_draw_circle(X, Y, Radius);
+}
+
 void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y, uint8_t Color)
 {
     setColor(Color);

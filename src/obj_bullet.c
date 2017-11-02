@@ -19,6 +19,7 @@
 #include "util_fix.h"
 #include "util_pool.h"
 #include "obj_bullet.h"
+#include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
 
@@ -58,6 +59,26 @@ static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
                             enemy->y,
                             (uint8_t)(Z_FPS / 8
                                         + z_random_uint8(Z_FPS / 4)));
+        }
+
+        ZCircle* c = z_pool_alloc(z_pool[Z_POOL_CIRCLE]);
+
+        if(c) {
+            z_circle_init(c,
+                          z_fix_fixtoi(enemy->x),
+                          z_fix_fixtoi(enemy->y),
+                          5,
+                          Z_FIX_ONE);
+        }
+
+        c = z_pool_alloc(z_pool[Z_POOL_CIRCLE]);
+
+        if(c) {
+            z_circle_init(c,
+                          z_fix_fixtoi(enemy->x),
+                          z_fix_fixtoi(enemy->y),
+                          2,
+                          Z_FIX_ONE / 2);
         }
     }
 

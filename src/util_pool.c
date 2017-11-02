@@ -19,6 +19,7 @@
 #include "util_fix.h"
 #include "util_pool.h"
 #include "obj_bullet.h"
+#include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
 #include "obj_star.h"
@@ -40,12 +41,14 @@ static DECLARE(ZStar, Z_STARS_NUM) g_starPool;
 static DECLARE(ZBullet, Z_BULLETS_NUM) g_bulletPool;
 static DECLARE(ZEnemy, Z_ENEMIES_NUM) g_enemyPool;
 static DECLARE(ZParticle, Z_PARTICLES_NUM) g_particlePool;
+static DECLARE(ZCircle, Z_CIRCLES_NUM) g_circlePool;
 
 ZPool* z_pool[Z_POOL_NUM] = {
     &g_starPool.generic,
     &g_bulletPool.generic,
     &g_enemyPool.generic,
     &g_particlePool.generic,
+    &g_circlePool.generic,
 };
 
 static void initPool(ZPool* Pool, size_t ObjectSize, size_t NumObjects)
@@ -70,6 +73,7 @@ void z_pool_setup(void)
     initPool(z_pool[Z_POOL_BULLET], sizeof(ZBullet), Z_BULLETS_NUM);
     initPool(z_pool[Z_POOL_ENEMY], sizeof(ZEnemy), Z_ENEMIES_NUM);
     initPool(z_pool[Z_POOL_PARTICLE], sizeof(ZParticle), Z_PARTICLES_NUM);
+    initPool(z_pool[Z_POOL_CIRCLE], sizeof(ZCircle), Z_CIRCLES_NUM);
 }
 
 void* z_pool_alloc(ZPool* Pool)
