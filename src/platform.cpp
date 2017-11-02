@@ -80,10 +80,9 @@ void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
     g_arduboy.drawCircle(X, Y, Radius, Color ? WHITE : BLACK);
 }
 
-void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y, uint8_t Color)
+void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
 {
-    Z_UNUSED(Color);
-    Sprites::drawSelfMasked(X, Y, Sprite, 0);
+    Sprites::drawPlusMask(X, Y, Sprite, 0);
 }
 
 int8_t z_sprite_getWidth(ZSprite Sprite)

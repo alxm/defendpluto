@@ -21,4 +21,4 @@ $(Z_LEVELS_H): $(Z_LEVELS_TXT)
 	python3 $(Z_LEVELS_COMPILER) $< > $@
 
 ../src/data_gfx_%.h: ../gfx/%.png
-	python3 $(Z_GFX_COMPILER) $< $(patsubst %.png, %, $(notdir $<)) > $@
+	python3 $(Z_GFX_COMPILER) ../gfx/palette.png $< $(patsubst %.png, %, $(notdir $<)) > $@

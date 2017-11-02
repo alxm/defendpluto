@@ -24,7 +24,7 @@
 ZControls z_controls;
 ZGfx z_gfx;
 
-static APixel g_pal[4];
+static APixel g_pal[Z_COLOR_NUM];
 
 static inline void setColor(uint8_t Color)
 {
@@ -51,10 +51,13 @@ void z_platform_setup(void)
     z_gfx.player[1] = a_sprite_newFromFile("gfx/player_left.png");
     z_gfx.player[2] = a_sprite_newFromFile("gfx/player_right.png");
 
-    g_pal[Z_COLOR_BLUE] = a_pixel_hex(0x23293f);
-    g_pal[Z_COLOR_YELLOW] = a_pixel_hex(0xb2d26d);
-    g_pal[Z_COLOR_RED] = a_pixel_hex(0xdb3242);
-    g_pal[Z_COLOR_LIGHTBLUE] = a_pixel_hex(0x5f6c79);
+    ASprite* pal = a_sprite_newFromFile("gfx/palette.png");
+
+    for(int c = 0; c < Z_COLOR_NUM; c++) {
+        g_pal[c] = a_sprite_getPixel(pal, 1 + c, 0);
+    }
+
+    a_sprite_free(pal);
 }
 
 uint16_t z_fps_getCounter(void)
@@ -96,10 +99,8 @@ void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
     a_draw_circle(X, Y, Radius);
 }
 
-void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y, uint8_t Color)
+void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
 {
-    setColor(Color);
-    a_pixel_setBlitFillFlat(true);
     a_sprite_blit(Sprite, X, Y);
 }
 

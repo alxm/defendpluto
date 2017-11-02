@@ -20,7 +20,18 @@
 import sys
 from PIL import Image
 
-def main(ImageName, UniqueName):
+def main(PaletteName, ImageName, UniqueName):
+    image = Image.open(PaletteName)
+    width, height = image.size
+
+    if width != 5 or height != 1:
+        print('Invalid palette {}'.format(PaletteName))
+        sys.exit(1)
+
+    pixels = image.load()
+    transparent = pixels[0, 0]
+    white = [pixels[2, 0], pixels[3, 0], pixels[4, 0]]
+
     image = Image.open(ImageName)
     width, height = image.size
     pixels = image.load()
@@ -28,15 +39,20 @@ def main(ImageName, UniqueName):
 
     for y_start in range(0, height, 8):
         for x in range(0, width):
-            byte = 0
+            sprite_byte = 0
+            mask_byte = 0
 
             for y in range(0, min(height - y_start, 8)):
-                r, g, b = pixels[x, y_start + y]
+                pixel = pixels[x, y_start + y]
 
-                if r == 255 and g == 255 and b == 255:
-                    byte |= 1 << y
+                if pixel != transparent:
+                    mask_byte |= 1 << y
 
-            encoded_bytes.append(byte)
+                if pixel in white:
+                    sprite_byte |= 1 << y
+
+            encoded_bytes.append(sprite_byte)
+            encoded_bytes.append(mask_byte)
 
     formatted_bytes = ''
 
@@ -55,7 +71,8 @@ PROGMEM static const uint8_t z_data_gfx_{0}_buffer[] = {{{3}
     print(contents)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print('Usage: {} Image.png UniqueName'.format(sys.argv[0]))
+    if len(sys.argv) != 4:
+        print('Usage: {} Palette.png Image.png UniqueName'.format(sys.argv[0]))
+        sys.exit(1)
     else:
-        main(sys.argv[1], sys.argv[2])
+        main(sys.argv[1], sys.argv[2], sys.argv[3])
