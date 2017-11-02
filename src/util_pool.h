@@ -19,8 +19,8 @@ typedef enum {
     Z_POOL_STAR,
     Z_POOL_BULLET,
     Z_POOL_ENEMY,
-    Z_POOL_PARTICLE,
     Z_POOL_CIRCLE,
+    Z_POOL_PARTICLE,
     Z_POOL_NUM
 } ZPoolType;
 
@@ -30,13 +30,10 @@ typedef struct {
     void* next;
 } ZPoolObject;
 
-extern ZPool* z_pool[Z_POOL_NUM];
-
 extern void z_pool_setup(void);
 
-extern void* z_pool_alloc(ZPool* Pool);
+extern void* z_pool_alloc(ZPoolType Pool);
+extern uint8_t z_pool_getNumActive(ZPoolType Pool);
 
-extern uint8_t z_pool_getNumActive(ZPool* Pool);
-
-extern void z_pool_tick(ZPool* Pool, bool (*Callback)(ZPoolObject*));
-extern void z_pool_draw(ZPool* Pool, void (*Callback)(ZPoolObject*));
+extern void z_pool_tick(ZPoolType Pool, bool (*Callback)(ZPoolObject*));
+extern void z_pool_draw(ZPoolType Pool, void (*Callback)(ZPoolObject*));

@@ -52,7 +52,7 @@ static bool handle_spawn(void)
 
     switch(object_type) {
         case 0: {
-            ZEnemy* e = z_pool_alloc(z_pool[Z_POOL_ENEMY]);
+            ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
 
             if(e == NULL) {
                 return false;
@@ -84,7 +84,7 @@ static bool handle_waitclear(void)
      * waitclear
      * waitclear
     */
-    return z_pool_getNumActive(z_pool[Z_POOL_ENEMY]) == 0;
+    return z_pool_getNumActive(Z_POOL_ENEMY) == 0;
 }
 
 static bool handle_over(void)

@@ -49,7 +49,7 @@ static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
 
     if(g_hit) {
         for(int8_t i = Z_PARTICLES_NUM; i--; ) {
-            ZParticle* p = z_pool_alloc(z_pool[Z_POOL_PARTICLE]);
+            ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
 
             if(p == NULL) {
                 break;
@@ -62,7 +62,7 @@ static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
                                         + z_random_uint8(Z_FPS / 4)));
         }
 
-        ZCircle* c = z_pool_alloc(z_pool[Z_POOL_CIRCLE]);
+        ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
 
         if(c) {
             z_circle_init(c,
@@ -72,7 +72,7 @@ static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
                           Z_FIX_ONE);
         }
 
-        c = z_pool_alloc(z_pool[Z_POOL_CIRCLE]);
+        c = z_pool_alloc(Z_POOL_CIRCLE);
 
         if(c) {
             z_circle_init(c,
@@ -109,7 +109,7 @@ bool z_bullet_tick(ZPoolObject* Bullet)
 
     g_hit = false;
     g_bullet = bullet;
-    z_pool_tick(z_pool[Z_POOL_ENEMY], checkBulletEnemyCollision);
+    z_pool_tick(Z_POOL_ENEMY, checkBulletEnemyCollision);
 
     return !g_hit;
 }

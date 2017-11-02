@@ -53,7 +53,7 @@ void z_player_tick(void)
         }
 
         if(z_fps_getCounter() - z_player.lastShot >= Z_SHOOT_EVERY_N_FRAMES) {
-            ZBullet* b = z_pool_alloc(z_pool[Z_POOL_BULLET]);
+            ZBullet* b = z_pool_alloc(Z_POOL_BULLET);
 
             if(b) {
                 z_bullet_init(b, z_player.x, z_player.y, z_fix_itofix(-2));
