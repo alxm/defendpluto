@@ -20,8 +20,8 @@ typedef struct {
     ZFix dx, dy;
     uint16_t lastShot;
     uint8_t frame;
-    bool blink;
-    bool jitter;
+    int8_t shootShift;
+    bool jetFlicker;
 } ZPlayer;
 
 extern ZPlayer z_player;

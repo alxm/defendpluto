@@ -36,8 +36,8 @@ void z_player_init(int8_t X, int8_t Y)
     z_player.dy = 0;
     z_player.lastShot = z_fps_getCounter();
     z_player.frame = 0;
-    z_player.blink = false;
-    z_player.jitter = false;
+    z_player.shootShift = 0;
+    z_player.jetFlicker = false;
 }
 
 void z_player_tick(void)
@@ -45,8 +45,11 @@ void z_player_tick(void)
     ZFix maxSpeed = Z_SPEED_MAX;
 
     if(z_button_pressed(z_controls.a)) {
-        z_player.jitter = true;
         maxSpeed = Z_SPEED_MAX * 2 / 3;
+
+        if(z_fps_isNthFrame(Z_FPS / 10)) {
+            z_player.shootShift ^= 1;
+        }
 
         if(z_fps_getCounter() - z_player.lastShot >= Z_SHOOT_EVERY_N_FRAMES) {
             ZBullet* b = z_pool_alloc(z_pool[Z_POOL_BULLET]);
@@ -58,7 +61,7 @@ void z_player_tick(void)
             z_player.lastShot = z_fps_getCounter();
         }
     } else {
-        z_player.jitter = false;
+        z_player.shootShift = 0;
         z_player.lastShot = (uint16_t)(z_fps_getCounter()
                                         - Z_SHOOT_EVERY_N_FRAMES);
     }
@@ -102,20 +105,16 @@ void z_player_tick(void)
                              0,
                              z_fix_itofix(Z_HEIGHT - 1));
 
-    z_player.blink = !z_player.blink;
+    z_player.jetFlicker = !z_player.jetFlicker;
 }
 
 void z_player_draw(void)
 {
     int8_t x = z_fix_fixtoi(z_player.x);
-    int8_t y = z_fix_fixtoi(z_player.y);
+    int8_t y = (int8_t)(z_fix_fixtoi(z_player.y) + z_player.shootShift);
     ZSprite sprite = z_gfx.player[z_player.frame];
 
-    if(z_player.jitter) {
-        y = (int8_t)(y + z_random_int8(2));
-    }
-
-    if(z_player.blink) {
+    if(z_player.jetFlicker) {
         z_draw_rectangle((int8_t)(x - 3), (int8_t)(y + 4), 2, 1, Z_COLOR_RED);
         z_draw_rectangle((int8_t)(x + 1), (int8_t)(y + 4), 2, 1, Z_COLOR_RED);
     }
