@@ -18,6 +18,7 @@
 #include "shared.h"
 #include "util_fix.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "util_vm.h"
 #include "obj_bullet.h"
 #include "obj_circle.h"
@@ -50,6 +51,8 @@ void loop_tick(void)
             z_star_init(star);
         }
     }
+
+    z_screen_tick();
 }
 
 void loop_draw(void)

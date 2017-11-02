@@ -15,33 +15,7 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "shared.h"
-#include "util_fix.h"
-#include "util_pool.h"
-#include "util_screen.h"
-#include "obj_star.h"
+extern int8_t z_screen_xShake, z_screen_yShake;
 
-void z_star_init(ZStar* Star)
-{
-    Star->x = z_fix_itofix((int8_t)z_random_int16(Z_WIDTH));
-    Star->y = 0;
-    Star->speed = (ZFix)(32 + z_random_int16(192));
-}
-
-bool z_star_tick(ZPoolObject* Star)
-{
-    ZStar* star = (ZStar*)Star;
-
-    star->y = (ZFix)(star->y + star->speed);
-
-    return z_fix_fixtoi(star->y) < Z_HEIGHT;
-}
-
-void z_star_draw(ZPoolObject* Star)
-{
-    ZStar* star = (ZStar*)Star;
-
-    z_draw_pixel((int8_t)(z_fix_fixtoi(star->x) + z_screen_xShake),
-                 (int8_t)(z_fix_fixtoi(star->y) + z_screen_yShake),
-                 Z_COLOR_LIGHTBLUE);
-}
+extern void z_screen_tick(void);
+extern void z_screen_shake(uint8_t Frames);

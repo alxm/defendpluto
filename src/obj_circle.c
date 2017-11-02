@@ -18,6 +18,7 @@
 #include "shared.h"
 #include "util_fix.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "obj_circle.h"
 
 void z_circle_init(ZCircle* Circle, int8_t X, int8_t Y, uint8_t MaxRadius, ZFix GrowSpeed)
@@ -42,8 +43,8 @@ void z_circle_draw(ZPoolObject* Circle)
 {
     ZCircle* circle = (ZCircle*)Circle;
 
-    z_draw_circle(circle->x,
-                  circle->y,
+    z_draw_circle((int8_t)(circle->x + z_screen_xShake),
+                  (int8_t)(circle->y + z_screen_yShake),
                   (uint8_t)z_fix_fixtoi(circle->radius),
                   Z_COLOR_RED);
 }

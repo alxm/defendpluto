@@ -18,6 +18,7 @@
 #include "shared.h"
 #include "util_fix.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "obj_bullet.h"
 #include "obj_player.h"
 
@@ -120,7 +121,7 @@ void z_player_draw(void)
     }
 
     z_sprite_blit(sprite,
-                  (int8_t)(x - z_sprite_getWidth(sprite) / 2),
-                  (int8_t)(y - z_sprite_getHeight(sprite) / 2),
+                  (int8_t)(x - z_sprite_getWidth(sprite) / 2 + z_screen_xShake),
+                  (int8_t)(y - z_sprite_getHeight(sprite) / 2 + z_screen_yShake),
                   Z_COLOR_YELLOW);
 }

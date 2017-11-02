@@ -16,32 +16,23 @@
 */
 
 #include "shared.h"
-#include "util_fix.h"
-#include "util_pool.h"
-#include "util_screen.h"
-#include "obj_star.h"
 
-void z_star_init(ZStar* Star)
+static uint8_t g_shakeFrames;
+int8_t z_screen_xShake, z_screen_yShake;
+
+void z_screen_tick(void)
 {
-    Star->x = z_fix_itofix((int8_t)z_random_int16(Z_WIDTH));
-    Star->y = 0;
-    Star->speed = (ZFix)(32 + z_random_int16(192));
+    if(g_shakeFrames) {
+        g_shakeFrames--;
+        z_screen_xShake = (int8_t)((-1 + z_random_int8(3)) * 2);
+        z_screen_yShake = (int8_t)((-1 + z_random_int8(3)) * 2);
+    } else {
+        z_screen_xShake = 0;
+        z_screen_yShake = 0;
+    }
 }
 
-bool z_star_tick(ZPoolObject* Star)
+void z_screen_shake(uint8_t Frames)
 {
-    ZStar* star = (ZStar*)Star;
-
-    star->y = (ZFix)(star->y + star->speed);
-
-    return z_fix_fixtoi(star->y) < Z_HEIGHT;
-}
-
-void z_star_draw(ZPoolObject* Star)
-{
-    ZStar* star = (ZStar*)Star;
-
-    z_draw_pixel((int8_t)(z_fix_fixtoi(star->x) + z_screen_xShake),
-                 (int8_t)(z_fix_fixtoi(star->y) + z_screen_yShake),
-                 Z_COLOR_LIGHTBLUE);
+    g_shakeFrames = Frames;
 }

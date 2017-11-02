@@ -18,6 +18,7 @@
 #include "shared.h"
 #include "util_fix.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "obj_particle.h"
 
 void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y, uint8_t FramesTtl)
@@ -42,8 +43,8 @@ void z_particle_draw(ZPoolObject* Particle)
 {
     ZParticle* particle = (ZParticle*)Particle;
 
-    int8_t x = z_fix_fixtoi(particle->x);
-    int8_t y = z_fix_fixtoi(particle->y);
+    int8_t x = (int8_t)(z_fix_fixtoi(particle->x) + z_screen_xShake);
+    int8_t y = (int8_t)(z_fix_fixtoi(particle->y) + z_screen_yShake);
 
     z_draw_pixel(x, y, Z_COLOR_YELLOW);
 }

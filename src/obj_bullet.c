@@ -18,6 +18,7 @@
 #include "shared.h"
 #include "util_fix.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "obj_bullet.h"
 #include "obj_circle.h"
 #include "obj_enemy.h"
@@ -80,6 +81,8 @@ static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
                           2,
                           Z_FIX_ONE / 2);
         }
+
+        z_screen_shake(Z_FPS / 3);
     }
 
     return !g_hit;
@@ -118,5 +121,9 @@ void z_bullet_draw(ZPoolObject* Bullet)
     int8_t x = z_fix_fixtoi(bullet->x);
     int8_t y = z_fix_fixtoi(bullet->y);
 
-    z_draw_rectangle((int8_t)(x - 1), (int8_t)(y - 2), 2, 4, Z_COLOR_RED);
+    z_draw_rectangle((int8_t)(x - 1 + z_screen_xShake),
+                     (int8_t)(y - 2 + z_screen_yShake),
+                     2,
+                     4,
+                     Z_COLOR_RED);
 }

@@ -18,6 +18,7 @@
 #include "shared.h"
 #include "util_fix.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "obj_enemy.h"
 
 static bool nobrain(ZEnemy* Enemy)
@@ -57,7 +58,7 @@ void z_enemy_draw(ZPoolObject* Enemy)
     ZSprite sprite = z_gfx.enemy[enemy->sprite];
 
     z_sprite_blit(sprite,
-                  (int8_t)(x - z_sprite_getWidth(sprite) / 2),
-                  (int8_t)(y - z_sprite_getHeight(sprite) / 2),
+                  (int8_t)(x - z_sprite_getWidth(sprite) / 2 + z_screen_xShake),
+                  (int8_t)(y - z_sprite_getHeight(sprite) / 2 + z_screen_yShake),
                   Z_COLOR_YELLOW);
 }
