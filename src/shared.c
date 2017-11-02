@@ -53,7 +53,7 @@ void z_shared_setup(void)
 
     g_pal[Z_COLOR_BLUE] = a_pixel_hex(0x23293f);
     g_pal[Z_COLOR_YELLOW] = a_pixel_hex(0xb2d26d);
-    g_pal[Z_COLOR_RED] = a_pixel_hex(0xd7531f);
+    g_pal[Z_COLOR_RED] = a_pixel_hex(0xdb3242);
     g_pal[Z_COLOR_LIGHTBLUE] = a_pixel_hex(0x5f6c79);
 }
 
