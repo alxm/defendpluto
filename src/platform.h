@@ -48,14 +48,14 @@ typedef enum {
     Z_COLOR_RED,
     Z_COLOR_LIGHTBLUE,
     Z_COLOR_NUM
-} ZColors;
+} ZColor;
 
 #ifdef ARDUINO
     typedef uint8_t ZButton;
     typedef const uint8_t* ZSprite;
 #else
     typedef AInputButton* ZButton;
-    typedef ASprite* ZSprite;
+    typedef ASpriteFrames* ZSprite;
 #endif
 
 typedef struct {
@@ -76,6 +76,7 @@ extern ZControls z_controls;
 extern ZGfx z_gfx;
 
 extern void z_platform_setup(void);
+extern void z_platform_tick(void);
 
 extern uint16_t z_fps_getCounter(void);
 extern bool z_fps_isNthFrame(uint8_t N);

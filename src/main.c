@@ -43,6 +43,7 @@ A_STATE(run)
 
     A_STATE_TICK
     {
+        z_platform_tick();
         loop_tick();
     }
 

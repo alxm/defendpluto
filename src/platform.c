@@ -19,20 +19,40 @@
 
 #include "platform.h"
 
-#define Z_COLOR 1
-
 ZControls z_controls;
 ZGfx z_gfx;
 
+static bool g_color = true;
 static APixel g_pal[Z_COLOR_NUM];
+static APixel g_white;
+static AInputButton* g_colorSwitch;
 
 static inline void setColor(uint8_t Color)
 {
-    #if Z_COLOR
+    if(g_color) {
         a_pixel_setPixel(g_pal[Color]);
-    #else
-        a_pixel_setPixel(Color ? a_pixel_hex(0xffffff) : 0);
-    #endif
+    } else {
+        a_pixel_setPixel(Color ? g_white : 0);
+    }
+}
+
+static ASpriteFrames* loadSprite(const char* Path)
+{
+    ASprite* color = a_sprite_newFromFile(Path);
+    ASprite* bw = a_sprite_dup(color);
+
+    a_sprite_replaceColor(bw, g_pal[Z_COLOR_BLUE], 0);
+
+    for(ZColor c = Z_COLOR_YELLOW; c < Z_COLOR_NUM; c++) {
+        a_sprite_replaceColor(bw, g_pal[c], g_white);
+    }
+
+    ASpriteFrames* frames = a_spriteframes_newBlank(0);
+
+    a_spriteframes_push(frames, color);
+    a_spriteframes_push(frames, bw);
+
+    return frames;
 }
 
 void z_platform_setup(void)
@@ -44,20 +64,30 @@ void z_platform_setup(void)
     z_controls.a = a_button_new("key.z gamepad.b.a");
     z_controls.b = a_button_new("key.x gamepad.b.b");
 
-    z_gfx.enemy[0] = a_sprite_newFromFile("gfx/enemy00.png");
-    z_gfx.enemy[1] = a_sprite_newFromFile("gfx/enemy01.png");
-    z_gfx.enemy[2] = a_sprite_newFromFile("gfx/enemy02.png");
-    z_gfx.player[0] = a_sprite_newFromFile("gfx/player.png");
-    z_gfx.player[1] = a_sprite_newFromFile("gfx/player_left.png");
-    z_gfx.player[2] = a_sprite_newFromFile("gfx/player_right.png");
-
     ASprite* pal = a_sprite_newFromFile("gfx/palette.png");
 
-    for(int c = 0; c < Z_COLOR_NUM; c++) {
+    for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
         g_pal[c] = a_sprite_getPixel(pal, 1 + c, 0);
     }
 
     a_sprite_free(pal);
+
+    g_white = a_pixel_hex(0xffffff);
+    g_colorSwitch = a_button_new("key.c gamepad.b.select");
+
+    z_gfx.enemy[0] = loadSprite("gfx/enemy00.png");
+    z_gfx.enemy[1] = loadSprite("gfx/enemy01.png");
+    z_gfx.enemy[2] = loadSprite("gfx/enemy02.png");
+    z_gfx.player[0] = loadSprite("gfx/player.png");
+    z_gfx.player[1] = loadSprite("gfx/player_left.png");
+    z_gfx.player[2] = loadSprite("gfx/player_right.png");
+}
+
+void z_platform_tick(void)
+{
+    if(a_button_getPressedOnce(g_colorSwitch)) {
+        g_color = !g_color;
+    }
 }
 
 uint16_t z_fps_getCounter(void)
@@ -101,17 +131,17 @@ void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
 
 void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
 {
-    a_sprite_blit(Sprite, X, Y);
+    a_sprite_blit(a_spriteframes_getIndex(Sprite, g_color), X, Y);
 }
 
 int8_t z_sprite_getWidth(ZSprite Sprite)
 {
-    return (int8_t)a_sprite_getWidth(Sprite);
+    return (int8_t)a_sprite_getWidth(a_spriteframes_getCurrent(Sprite));
 }
 
 int8_t z_sprite_getHeight(ZSprite Sprite)
 {
-    return (int8_t)a_sprite_getHeight(Sprite);
+    return (int8_t)a_sprite_getHeight(a_spriteframes_getCurrent(Sprite));
 }
 
 #endif // ifndef ARDUINO
