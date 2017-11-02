@@ -15,7 +15,7 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "shared.h"
+#include "platform.h"
 #include "util_fix.h"
 
 PROGMEM const ZFix z_fix__sin[Z_FIX_NUM_ANGLES] = {

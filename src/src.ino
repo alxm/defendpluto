@@ -15,7 +15,7 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "shared.h"
+#include "platform.h"
 #include "loop.h"
 
 Arduboy2Base g_arduboy;

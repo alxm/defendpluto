@@ -15,7 +15,7 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "shared.h"
+#include "platform.h"
 #include <Sprites.h>
 #include "data_gfx_enemy00.h"
 #include "data_gfx_enemy01.h"
@@ -28,7 +28,7 @@ extern Arduboy2Base g_arduboy;
 ZControls z_controls;
 ZGfx z_gfx;
 
-void z_shared_setup(void)
+void z_platform_setup(void)
 {
     z_controls.up = UP_BUTTON;
     z_controls.down = DOWN_BUTTON;

@@ -17,7 +17,7 @@
 
 #ifndef ARDUINO
 
-#include "shared.h"
+#include "platform.h"
 
 #define Z_COLOR 1
 
@@ -35,7 +35,7 @@ static inline void setColor(uint8_t Color)
     #endif
 }
 
-void z_shared_setup(void)
+void z_platform_setup(void)
 {
     z_controls.up = a_button_new("key.up gamepad.b.up");
     z_controls.down = a_button_new("key.down gamepad.b.down");

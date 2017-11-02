@@ -15,7 +15,7 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "shared.h"
+#include "platform.h"
 #include "util_fix.h"
 #include "util_pool.h"
 #include "obj_bullet.h"

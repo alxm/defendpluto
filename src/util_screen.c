@@ -15,7 +15,7 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "shared.h"
+#include "platform.h"
 
 static uint8_t g_shakeFrames;
 int8_t z_screen_xShake, z_screen_yShake;

@@ -15,7 +15,7 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "shared.h"
+#include "platform.h"
 #include "util_fix.h"
 #include "util_pool.h"
 #include "util_screen.h"
@@ -29,7 +29,7 @@
 
 void loop_setup(void)
 {
-    z_shared_setup();
+    z_platform_setup();
     z_pool_setup();
     z_player_init(Z_WIDTH / 2, Z_HEIGHT / 2);
 }

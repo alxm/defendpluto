@@ -73,7 +73,7 @@ typedef struct {
 extern ZControls z_controls;
 extern ZGfx z_gfx;
 
-extern void z_shared_setup(void);
+extern void z_platform_setup(void);
 
 extern uint16_t z_fps_getCounter(void);
 extern bool z_fps_isNthFrame(uint8_t N);

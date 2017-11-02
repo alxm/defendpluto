@@ -17,7 +17,7 @@
 
 #ifndef ARDUINO
 
-#include "shared.h"
+#include "platform.h"
 #include "loop.h"
 
 #define STRINGIFY_EXPAND(X) #X
