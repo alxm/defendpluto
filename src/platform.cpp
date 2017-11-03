@@ -23,6 +23,12 @@
 #include "data_gfx_player.h"
 #include "data_gfx_player_left.h"
 #include "data_gfx_player_right.h"
+#include "data_gfx_player_forward.h"
+#include "data_gfx_player_forward_left.h"
+#include "data_gfx_player_forward_right.h"
+#include "data_gfx_player_back.h"
+#include "data_gfx_player_back_left.h"
+#include "data_gfx_player_back_right.h"
 
 extern Arduboy2Base g_arduboy;
 ZControls z_controls;
@@ -37,12 +43,21 @@ void z_platform_setup(void)
     z_controls.a = A_BUTTON;
     z_controls.b = B_BUTTON;
 
-    z_gfx.enemy[0] = z_data_gfx_enemy00_buffer;
-    z_gfx.enemy[1] = z_data_gfx_enemy01_buffer;
-    z_gfx.enemy[2] = z_data_gfx_enemy02_buffer;
-    z_gfx.player[0] = z_data_gfx_player_buffer;
-    z_gfx.player[1] = z_data_gfx_player_left_buffer;
-    z_gfx.player[2] = z_data_gfx_player_right_buffer;
+    #define makeStruct(s) \
+        (ZSprite){z_data_gfx_##s##_buffer, z_data_gfx_##s##_mask}
+
+    z_gfx.enemy[0] = makeStruct(enemy00);
+    z_gfx.enemy[1] = makeStruct(enemy01);
+    z_gfx.enemy[2] = makeStruct(enemy02);
+    z_gfx.player[0] = makeStruct(player);
+    z_gfx.player[1] = makeStruct(player_left);
+    z_gfx.player[2] = makeStruct(player_right);
+    z_gfx.player[3] = makeStruct(player_forward);
+    z_gfx.player[4] = makeStruct(player_forward_left);
+    z_gfx.player[5] = makeStruct(player_forward_right);
+    z_gfx.player[6] = makeStruct(player_back);
+    z_gfx.player[7] = makeStruct(player_back_left);
+    z_gfx.player[8] = makeStruct(player_back_right);
 }
 
 uint16_t z_fps_getCounter(void)
@@ -82,15 +97,15 @@ void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
 
 void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
 {
-    Sprites::drawPlusMask(X, Y, Sprite, 0);
+    Sprites::drawExternalMask(X, Y, Sprite.sprite, Sprite.mask, 0, 0);
 }
 
 int8_t z_sprite_getWidth(ZSprite Sprite)
 {
-    return (int8_t)pgm_read_byte(Sprite);
+    return (int8_t)pgm_read_byte(Sprite.sprite);
 }
 
 int8_t z_sprite_getHeight(ZSprite Sprite)
 {
-    return (int8_t)pgm_read_byte(Sprite + 1);
+    return (int8_t)pgm_read_byte(Sprite.sprite + 1);
 }

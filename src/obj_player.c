@@ -22,6 +22,13 @@
 #include "obj_bullet.h"
 #include "obj_player.h"
 
+typedef enum {
+    Z_BIT_FORWARD = (1 << 0),
+    Z_BIT_BACK    = (1 << 1),
+    Z_BIT_LEFT    = (1 << 2),
+    Z_BIT_RIGHT   = (1 << 3)
+} ZFrameBits;
+
 #define Z_SHOOT_EVERY_N_FRAMES (Z_FPS / 4)
 #define Z_SPEED_MAX (Z_FIX_ONE)
 #define Z_SPEED_ACCEL (Z_FIX_ONE / 8)
@@ -70,9 +77,13 @@ void z_player_tick(void)
                                         - Z_SHOOT_EVERY_N_FRAMES);
     }
 
+    z_player.frame = 0;
+
     if(z_button_pressed(z_controls.up)) {
+        z_player.frame |= Z_BIT_FORWARD;
         z_player.dy = (ZFix)(z_player.dy - Z_SPEED_ACCEL);
     } else if(z_button_pressed(z_controls.down)) {
+        z_player.frame |= Z_BIT_BACK;
         z_player.dy = (ZFix)(z_player.dy + Z_SPEED_ACCEL);
     } else {
         if(z_player.dy < 0) {
@@ -83,14 +94,12 @@ void z_player_tick(void)
     }
 
     if(z_button_pressed(z_controls.left)) {
-        z_player.frame = 1;
+        z_player.frame |= Z_BIT_LEFT;
         z_player.dx = (ZFix)(z_player.dx - Z_SPEED_ACCEL);
     } else if(z_button_pressed(z_controls.right)) {
-        z_player.frame = 2;
+        z_player.frame |= Z_BIT_RIGHT;
         z_player.dx = (ZFix)(z_player.dx + Z_SPEED_ACCEL);
     } else {
-        z_player.frame = 0;
-
         if(z_player.dx < 0) {
             z_player.dx = z_fix_min((ZFix)(z_player.dx + Z_SPEED_DECEL), 0);
         } else if(z_player.dx > 0) {
@@ -116,19 +125,54 @@ void z_player_draw(void)
 {
     int8_t x = z_fix_fixtoi(z_player.x);
     int8_t y = (int8_t)(z_fix_fixtoi(z_player.y) + z_player.shootShift);
-    ZSprite sprite = z_gfx.player[z_player.frame];
+
+    uint8_t frame = 0;
+
+    switch(z_player.frame) {
+        case Z_BIT_FORWARD | Z_BIT_LEFT:
+            frame = 4;
+            break;
+
+        case Z_BIT_FORWARD | Z_BIT_RIGHT:
+            frame = 5;
+            break;
+
+        case Z_BIT_BACK | Z_BIT_LEFT:
+            frame = 7;
+            break;
+
+        case Z_BIT_BACK | Z_BIT_RIGHT:
+            frame = 8;
+            break;
+
+        case Z_BIT_FORWARD:
+            frame = 3;
+            break;
+
+        case Z_BIT_BACK:
+            frame = 6;
+            break;
+
+        case Z_BIT_LEFT:
+            frame = 1;
+            break;
+
+        case Z_BIT_RIGHT:
+            frame = 2;
+            break;
+    }
+
+    ZSprite sprite = z_gfx.player[frame];
 
     if(z_player.jetFlicker) {
-        z_draw_rectangle((int8_t)(x - 3),
-                         (int8_t)(y + 4 + z_screen_yShake),
-                         2,
-                         1,
-                         Z_COLOR_RED);
-        z_draw_rectangle((int8_t)(x + 1),
-                         (int8_t)(y + 4 + z_screen_yShake),
-                         2,
-                         1,
-                         Z_COLOR_RED);
+        int8_t jy = (int8_t)(y + 2 + z_screen_yShake);
+
+        if(z_player.frame & Z_BIT_BACK) {
+            jy = (int8_t)(y - 1 + z_screen_yShake);
+        }
+
+        z_draw_rectangle((int8_t)(x - 3), jy, 2, 3, Z_COLOR_RED);
+        z_draw_rectangle((int8_t)(x + 1), jy, 2, 3, Z_COLOR_RED);
     }
 
     z_sprite_blit(

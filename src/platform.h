@@ -43,6 +43,7 @@ extern "C" {
 #define Z_FPS 30
 
 typedef enum {
+    Z_COLOR_INVALID = -1,
     Z_COLOR_BLUE,
     Z_COLOR_YELLOW,
     Z_COLOR_RED,
@@ -52,7 +53,10 @@ typedef enum {
 
 #ifdef ARDUINO
     typedef uint8_t ZButton;
-    typedef const uint8_t* ZSprite;
+    typedef struct ZSprite {
+        uint8_t* sprite;
+        uint8_t* mask;
+    } ZSprite;
 #else
     typedef AInputButton* ZButton;
     typedef ASpriteFrames* ZSprite;
@@ -69,7 +73,7 @@ typedef struct {
 
 typedef struct {
     ZSprite enemy[3];
-    ZSprite player[3];
+    ZSprite player[9];
 } ZGfx;
 
 extern ZControls z_controls;
