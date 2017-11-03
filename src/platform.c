@@ -68,15 +68,16 @@ void z_platform_setup(void)
     z_gfx.enemy[0] = loadSprite("gfx/enemy00.png");
     z_gfx.enemy[1] = loadSprite("gfx/enemy01.png");
     z_gfx.enemy[2] = loadSprite("gfx/enemy02.png");
-    z_gfx.player[0] = loadSprite("gfx/player.png");
-    z_gfx.player[1] = loadSprite("gfx/player_left.png");
-    z_gfx.player[2] = loadSprite("gfx/player_right.png");
-    z_gfx.player[3] = loadSprite("gfx/player_forward.png");
-    z_gfx.player[4] = loadSprite("gfx/player_forward_left.png");
-    z_gfx.player[5] = loadSprite("gfx/player_forward_right.png");
-    z_gfx.player[6] = loadSprite("gfx/player_back.png");
-    z_gfx.player[7] = loadSprite("gfx/player_back_left.png");
-    z_gfx.player[8] = loadSprite("gfx/player_back_right.png");
+
+    z_gfx.player[Z_BIT_RESTING] = loadSprite("gfx/player.png");
+    z_gfx.player[Z_BIT_LEFT] = loadSprite("gfx/player_left.png");
+    z_gfx.player[Z_BIT_RIGHT] = loadSprite("gfx/player_right.png");
+    z_gfx.player[Z_BIT_FORWARD] = loadSprite("gfx/player_forward.png");
+    z_gfx.player[Z_BIT_FORWARD | Z_BIT_LEFT] = loadSprite("gfx/player_forward_left.png");
+    z_gfx.player[Z_BIT_FORWARD | Z_BIT_RIGHT] = loadSprite("gfx/player_forward_right.png");
+    z_gfx.player[Z_BIT_BACK] = loadSprite("gfx/player_back.png");
+    z_gfx.player[Z_BIT_BACK | Z_BIT_LEFT] = loadSprite("gfx/player_back_left.png");
+    z_gfx.player[Z_BIT_BACK | Z_BIT_RIGHT] = loadSprite("gfx/player_back_right.png");
 }
 
 void z_platform_tick(void)

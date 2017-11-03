@@ -49,15 +49,16 @@ void z_platform_setup(void)
     z_gfx.enemy[0] = makeStruct(enemy00);
     z_gfx.enemy[1] = makeStruct(enemy01);
     z_gfx.enemy[2] = makeStruct(enemy02);
-    z_gfx.player[0] = makeStruct(player);
-    z_gfx.player[1] = makeStruct(player_left);
-    z_gfx.player[2] = makeStruct(player_right);
-    z_gfx.player[3] = makeStruct(player_forward);
-    z_gfx.player[4] = makeStruct(player_forward_left);
-    z_gfx.player[5] = makeStruct(player_forward_right);
-    z_gfx.player[6] = makeStruct(player_back);
-    z_gfx.player[7] = makeStruct(player_back_left);
-    z_gfx.player[8] = makeStruct(player_back_right);
+
+    z_gfx.player[Z_BIT_RESTING] = makeStruct(player);
+    z_gfx.player[Z_BIT_LEFT] = makeStruct(player_left);
+    z_gfx.player[Z_BIT_RIGHT] = makeStruct(player_right);
+    z_gfx.player[Z_BIT_FORWARD] = makeStruct(player_forward);
+    z_gfx.player[Z_BIT_FORWARD | Z_BIT_LEFT] = makeStruct(player_forward_left);
+    z_gfx.player[Z_BIT_FORWARD | Z_BIT_RIGHT] = makeStruct(player_forward_right);
+    z_gfx.player[Z_BIT_BACK] = makeStruct(player_back);
+    z_gfx.player[Z_BIT_BACK | Z_BIT_LEFT] = makeStruct(player_back_left);
+    z_gfx.player[Z_BIT_BACK | Z_BIT_RIGHT] = makeStruct(player_back_right);
 }
 
 uint16_t z_fps_getCounter(void)

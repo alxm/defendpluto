@@ -51,6 +51,15 @@ typedef enum {
     Z_COLOR_NUM
 } ZColor;
 
+typedef enum {
+    Z_BIT_RESTING = 0,
+    Z_BIT_FORWARD = (1 << 0),
+    Z_BIT_BACK    = (1 << 1),
+    Z_BIT_LEFT    = (1 << 2),
+    Z_BIT_RIGHT   = (1 << 3),
+    Z_BIT_MAX_VAL = (Z_BIT_BACK | Z_BIT_RIGHT)
+} ZFrameBits;
+
 #ifdef ARDUINO
     typedef uint8_t ZButton;
     typedef struct ZSprite {
@@ -73,7 +82,7 @@ typedef struct {
 
 typedef struct {
     ZSprite enemy[3];
-    ZSprite player[9];
+    ZSprite player[Z_BIT_MAX_VAL + 1];
 } ZGfx;
 
 extern ZControls z_controls;

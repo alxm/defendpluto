@@ -22,13 +22,6 @@
 #include "obj_bullet.h"
 #include "obj_player.h"
 
-typedef enum {
-    Z_BIT_FORWARD = (1 << 0),
-    Z_BIT_BACK    = (1 << 1),
-    Z_BIT_LEFT    = (1 << 2),
-    Z_BIT_RIGHT   = (1 << 3)
-} ZFrameBits;
-
 #define Z_SHOOT_EVERY_N_FRAMES (Z_FPS / 4)
 #define Z_SPEED_MAX (Z_FIX_ONE)
 #define Z_SPEED_ACCEL (Z_FIX_ONE / 8)
@@ -78,7 +71,7 @@ void z_player_tick(void)
                                         - Z_SHOOT_EVERY_N_FRAMES);
     }
 
-    z_player.frame = 0;
+    z_player.frame = Z_BIT_RESTING;
 
     if(z_button_pressed(z_controls.up)) {
         z_player.frame |= Z_BIT_FORWARD;
@@ -127,43 +120,7 @@ void z_player_draw(void)
     int8_t x = z_fix_fixtoi(z_player.x);
     int8_t y = (int8_t)(z_fix_fixtoi(z_player.y) + z_player.shootShift);
 
-    uint8_t frame = 0;
-
-    switch(z_player.frame) {
-        case Z_BIT_FORWARD | Z_BIT_LEFT:
-            frame = 4;
-            break;
-
-        case Z_BIT_FORWARD | Z_BIT_RIGHT:
-            frame = 5;
-            break;
-
-        case Z_BIT_BACK | Z_BIT_LEFT:
-            frame = 7;
-            break;
-
-        case Z_BIT_BACK | Z_BIT_RIGHT:
-            frame = 8;
-            break;
-
-        case Z_BIT_FORWARD:
-            frame = 3;
-            break;
-
-        case Z_BIT_BACK:
-            frame = 6;
-            break;
-
-        case Z_BIT_LEFT:
-            frame = 1;
-            break;
-
-        case Z_BIT_RIGHT:
-            frame = 2;
-            break;
-    }
-
-    ZSprite sprite = z_gfx.player[frame];
+    ZSprite sprite = z_gfx.player[z_player.frame];
 
     if(z_player.jetFlicker) {
         int8_t jy = (int8_t)(y + 2 + z_screen_yShake);
