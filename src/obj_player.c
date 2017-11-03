@@ -64,7 +64,8 @@ void z_player_tick(void)
 
             if(b) {
                 z_bullet_init(b,
-                              (ZFix)(z_player.x + z_fix_itofix(z_screen_xShake)),
+                              (ZFix)(z_player.x
+                                        + z_fix_itofix(z_screen_xShake)),
                               z_player.y,
                               z_fix_itofix(-2));
             }
