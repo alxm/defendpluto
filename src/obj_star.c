@@ -19,11 +19,15 @@
 #include "util_fix.h"
 #include "util_pool.h"
 #include "util_screen.h"
+#include "obj_player.h"
 #include "obj_star.h"
+
+#define Z_STARS_BORDER 16
 
 void z_star_init(ZStar* Star)
 {
-    Star->x = z_fix_itofix((int8_t)z_random_int16(Z_WIDTH));
+    Star->x = z_fix_itofix(
+        (int8_t)(Z_STARS_BORDER + z_random_int8(Z_WIDTH - 2 * Z_STARS_BORDER)));
     Star->y = 0;
     Star->speed = (ZFix)(32 + z_random_int16(192));
 }
@@ -41,7 +45,11 @@ void z_star_draw(ZPoolObject* Star)
 {
     ZStar* star = (ZStar*)Star;
 
-    z_draw_pixel((int8_t)(z_fix_fixtoi(star->x) + z_screen_xShake),
-                 (int8_t)(z_fix_fixtoi(star->y) + z_screen_yShake),
-                 Z_COLOR_LIGHTBLUE);
+    int8_t x = (int8_t)(z_fix_fixtoi(star->x) + z_screen_xShake);
+    int8_t y = (int8_t)(z_fix_fixtoi(star->y) + z_screen_yShake);
+
+    int8_t centerOffset = (int8_t)(z_fix_fixtoi(z_player.x) - Z_WIDTH / 2);
+    x = (int8_t)(x - Z_STARS_BORDER * centerOffset / (Z_WIDTH / 2));
+
+    z_draw_pixel(x, y, Z_COLOR_LIGHTBLUE);
 }
