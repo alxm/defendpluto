@@ -24,13 +24,19 @@ def main(PaletteName, ImageName, UniqueName):
     image = Image.open(PaletteName)
     width, height = image.size
 
-    if width != 5 or height != 1:
+    if width < 3 or height < 2:
         print('Invalid palette {}'.format(PaletteName))
         sys.exit(1)
 
     pixels = image.load()
     transparent = pixels[0, 0]
-    white = [pixels[2, 0], pixels[3, 0], pixels[4, 0]]
+    white = []
+
+    for x in range(0, width):
+        r, g, b = pixels[x, 0]
+
+        if r == 255 and g == 255 and b == 255:
+            white.append(pixels[x, 1])
 
     image = Image.open(ImageName)
     width, height = image.size

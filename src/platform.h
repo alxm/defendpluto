@@ -54,8 +54,8 @@ typedef enum {
 #ifdef ARDUINO
     typedef uint8_t ZButton;
     typedef struct ZSprite {
-        uint8_t* sprite;
-        uint8_t* mask;
+        const uint8_t* sprite;
+        const uint8_t* mask;
     } ZSprite;
 #else
     typedef AInputButton* ZButton;

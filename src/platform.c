@@ -23,28 +23,17 @@ ZControls z_controls;
 ZGfx z_gfx;
 
 static bool g_color = true;
-static APixel g_pal[Z_COLOR_NUM];
+static APixel g_pal[Z_COLOR_NUM][2];
 static APixel g_white;
 static AInputButton* g_colorSwitch;
-
-static inline void setColor(uint8_t Color)
-{
-    if(g_color) {
-        a_pixel_setPixel(g_pal[Color]);
-    } else {
-        a_pixel_setPixel(Color ? g_white : 0);
-    }
-}
 
 static ASpriteFrames* loadSprite(const char* Path)
 {
     ASprite* color = a_sprite_newFromFile(Path);
     ASprite* bw = a_sprite_dup(color);
 
-    a_sprite_replaceColor(bw, g_pal[Z_COLOR_BLUE], 0);
-
-    for(ZColor c = Z_COLOR_YELLOW; c < Z_COLOR_NUM; c++) {
-        a_sprite_replaceColor(bw, g_pal[c], g_white);
+    for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
+        a_sprite_replaceColor(bw, g_pal[c][1], g_pal[c][0]);
     }
 
     ASpriteFrames* frames = a_spriteframes_newBlank(0);
@@ -67,7 +56,8 @@ void z_platform_setup(void)
     ASprite* pal = a_sprite_newFromFile("gfx/palette.png");
 
     for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
-        g_pal[c] = a_sprite_getPixel(pal, 1 + c, 0);
+        g_pal[c][0] = a_sprite_getPixel(pal, 1 + c, 0);
+        g_pal[c][1] = a_sprite_getPixel(pal, 1 + c, 1);
     }
 
     a_sprite_free(pal);
@@ -113,25 +103,25 @@ bool z_button_pressed(ZButton Button)
 
 void z_draw_fill(uint8_t Color)
 {
-    setColor(Color);
+    a_pixel_setPixel(g_pal[Color][g_color]);
     a_draw_fill();
 }
 
 void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color)
 {
-    setColor(Color);
+    a_pixel_setPixel(g_pal[Color][g_color]);
     a_draw_rectangle(X, Y, W, H);
 }
 
 void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
 {
-    setColor(Color);
+    a_pixel_setPixel(g_pal[Color][g_color]);
     a_draw_pixel(X, Y);
 }
 
 void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
 {
-    setColor(Color);
+    a_pixel_setPixel(g_pal[Color][g_color]);
     a_draw_circle(X, Y, Radius);
 }
 
