@@ -43,12 +43,19 @@ extern "C" {
 #define Z_FPS 30
 
 typedef enum {
+    Z_PALETTE_INVALID = -1,
+    Z_PALETTE_ARDUBOY,
+    Z_PALETTE_DEFAULT,
+    Z_PALETTE_NUM
+} ZPalette;
+
+typedef enum {
     Z_COLOR_INVALID = -1,
     Z_COLOR_BLUE,
-    Z_COLOR_YELLOW,
-    Z_COLOR_RED,
     Z_COLOR_LIGHTBLUE,
     Z_COLOR_LIGHTBLUE2,
+    Z_COLOR_RED,
+    Z_COLOR_YELLOW,
     Z_COLOR_NUM
 } ZColor;
 
@@ -64,12 +71,14 @@ typedef enum {
 #ifdef ARDUINO
     typedef uint8_t ZButton;
     typedef struct ZSprite {
-        const uint8_t* sprite;
+        const uint8_t* image;
         const uint8_t* mask;
     } ZSprite;
 #else
     typedef AInputButton* ZButton;
-    typedef ASpriteFrames* ZSprite;
+    typedef struct {
+        ASpriteFrames* frames[Z_PALETTE_NUM];
+    } ZSprite;
 #endif
 
 typedef struct {
@@ -102,9 +111,9 @@ extern void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Col
 extern void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color);
 extern void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color);
 
-extern void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y);
-extern int8_t z_sprite_getWidth(ZSprite Sprite);
-extern int8_t z_sprite_getHeight(ZSprite Sprite);
+extern void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y);
+extern int8_t z_sprite_getWidth(ZSprite* Sprite);
+extern int8_t z_sprite_getHeight(ZSprite* Sprite);
 
 static inline int8_t z_random_int8(int8_t Max)
 {

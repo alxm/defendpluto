@@ -25,7 +25,7 @@ static bool nobrain(ZEnemy* Enemy)
 {
     Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE / 4);
 
-    ZSprite sprite = z_gfx.enemy[Enemy->sprite];
+    ZSprite* sprite = &z_gfx.enemy[Enemy->sprite];
 
     return z_fix_fixtoi(Enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
 }
@@ -55,7 +55,7 @@ void z_enemy_draw(ZPoolObject* Enemy)
     ZEnemy* enemy = (ZEnemy*)Enemy;
     int8_t x = z_fix_fixtoi(enemy->x);
     int8_t y = z_fix_fixtoi(enemy->y);
-    ZSprite sprite = z_gfx.enemy[enemy->sprite];
+    ZSprite* sprite = &z_gfx.enemy[enemy->sprite];
 
     z_sprite_blit(
         sprite,

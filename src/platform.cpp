@@ -43,22 +43,23 @@ void z_platform_setup(void)
     z_controls.a = A_BUTTON;
     z_controls.b = B_BUTTON;
 
-    #define makeStruct(s) \
-        (ZSprite){z_data_gfx_##s##_buffer, z_data_gfx_##s##_mask}
+    #define loadSprite(Sprite, Id)               \
+        Sprite.image = z_data_gfx_##Id##_buffer; \
+        Sprite.mask = z_data_gfx_##Id##_mask;
 
-    z_gfx.enemy[0] = makeStruct(enemy00);
-    z_gfx.enemy[1] = makeStruct(enemy01);
-    z_gfx.enemy[2] = makeStruct(enemy02);
+    loadSprite(z_gfx.enemy[0], enemy00);
+    loadSprite(z_gfx.enemy[1], enemy01);
+    loadSprite(z_gfx.enemy[2], enemy02);
 
-    z_gfx.player[Z_BIT_RESTING] = makeStruct(player);
-    z_gfx.player[Z_BIT_LEFT] = makeStruct(player_left);
-    z_gfx.player[Z_BIT_RIGHT] = makeStruct(player_right);
-    z_gfx.player[Z_BIT_FORWARD] = makeStruct(player_forward);
-    z_gfx.player[Z_BIT_FORWARD | Z_BIT_LEFT] = makeStruct(player_forward_left);
-    z_gfx.player[Z_BIT_FORWARD | Z_BIT_RIGHT] = makeStruct(player_forward_right);
-    z_gfx.player[Z_BIT_BACK] = makeStruct(player_back);
-    z_gfx.player[Z_BIT_BACK | Z_BIT_LEFT] = makeStruct(player_back_left);
-    z_gfx.player[Z_BIT_BACK | Z_BIT_RIGHT] = makeStruct(player_back_right);
+    loadSprite(z_gfx.player[Z_BIT_RESTING], player);
+    loadSprite(z_gfx.player[Z_BIT_LEFT], player_left);
+    loadSprite(z_gfx.player[Z_BIT_RIGHT], player_right);
+    loadSprite(z_gfx.player[Z_BIT_FORWARD], player_forward);
+    loadSprite(z_gfx.player[Z_BIT_FORWARD | Z_BIT_LEFT], player_forward_left);
+    loadSprite(z_gfx.player[Z_BIT_FORWARD | Z_BIT_RIGHT], player_forward_right);
+    loadSprite(z_gfx.player[Z_BIT_BACK], player_back);
+    loadSprite(z_gfx.player[Z_BIT_BACK | Z_BIT_LEFT], player_back_left);
+    loadSprite(z_gfx.player[Z_BIT_BACK | Z_BIT_RIGHT], player_back_right);
 }
 
 uint16_t z_fps_getCounter(void)
@@ -96,17 +97,17 @@ void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
     g_arduboy.drawCircle(X, Y, Radius, Color ? WHITE : BLACK);
 }
 
-void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
+void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y)
 {
-    Sprites::drawExternalMask(X, Y, Sprite.sprite, Sprite.mask, 0, 0);
+    Sprites::drawExternalMask(X, Y, Sprite->image, Sprite->mask, 0, 0);
 }
 
-int8_t z_sprite_getWidth(ZSprite Sprite)
+int8_t z_sprite_getWidth(ZSprite* Sprite)
 {
-    return (int8_t)pgm_read_byte(Sprite.sprite);
+    return (int8_t)pgm_read_byte(Sprite->image);
 }
 
-int8_t z_sprite_getHeight(ZSprite Sprite)
+int8_t z_sprite_getHeight(ZSprite* Sprite)
 {
-    return (int8_t)pgm_read_byte(Sprite.sprite + 1);
+    return (int8_t)pgm_read_byte(Sprite->image + 1);
 }

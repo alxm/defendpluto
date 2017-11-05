@@ -22,26 +22,34 @@
 ZControls z_controls;
 ZGfx z_gfx;
 
-static bool g_color = true;
-static APixel g_pal[Z_COLOR_NUM][2];
-static APixel g_white;
-static AInputButton* g_colorSwitch;
+static ZPalette g_paletteIndex;
+static AInputButton* g_paletteSwitch;
+static APixel g_palettes[Z_PALETTE_NUM][Z_COLOR_NUM];
 
-static ASpriteFrames* loadSprite(const char* Path)
+static void loadSprite(ZSprite* Sprite, const char* Path)
 {
-    ASprite* color = a_sprite_newFromFile(Path);
-    ASprite* bw = a_sprite_dup(color);
+    ASprite* sheet = a_sprite_newFromFile(Path);
+    ASpriteFrames* frames = a_spriteframes_new(sheet, 0, 0, 0);
 
-    for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
-        a_sprite_replaceColor(bw, g_pal[c][1], g_pal[c][0]);
+    for(ZPalette p = 0; p < Z_PALETTE_NUM; p++) {
+        if(p == Z_PALETTE_DEFAULT) {
+            Sprite->frames[p] = frames;
+            continue;
+        }
+
+        Sprite->frames[p] = a_spriteframes_dup(frames, true);
+        AList* sprites = a_spriteframes_getSprites(Sprite->frames[p]);
+
+        A_LIST_ITERATE(sprites, ASprite*, s) {
+            for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
+                a_sprite_replaceColor(s,
+                                      g_palettes[Z_PALETTE_DEFAULT][c],
+                                      g_palettes[p][c]);
+            }
+        }
     }
 
-    ASpriteFrames* frames = a_spriteframes_newBlank(0);
-
-    a_spriteframes_push(frames, color);
-    a_spriteframes_push(frames, bw);
-
-    return frames;
+    a_sprite_free(sheet);
 }
 
 void z_platform_setup(void)
@@ -53,37 +61,38 @@ void z_platform_setup(void)
     z_controls.a = a_button_new("key.z gamepad.b.a");
     z_controls.b = a_button_new("key.x gamepad.b.b");
 
+    g_paletteIndex = 0;
+    g_paletteSwitch = a_button_new("key.c gamepad.b.select");
+
     ASprite* pal = a_sprite_newFromFile("gfx/palette.png");
 
-    for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
-        g_pal[c][0] = a_sprite_getPixel(pal, 1 + c, 0);
-        g_pal[c][1] = a_sprite_getPixel(pal, 1 + c, 1);
+    for(ZPalette p = 0; p < Z_PALETTE_NUM; p++) {
+        for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
+            g_palettes[p][c] = a_sprite_getPixel(pal, 1 + c, p);
+        }
     }
 
     a_sprite_free(pal);
 
-    g_white = a_pixel_hex(0xffffff);
-    g_colorSwitch = a_button_new("key.c gamepad.b.select");
+    loadSprite(&z_gfx.enemy[0], "gfx/enemy00.png");
+    loadSprite(&z_gfx.enemy[1], "gfx/enemy01.png");
+    loadSprite(&z_gfx.enemy[2], "gfx/enemy02.png");
 
-    z_gfx.enemy[0] = loadSprite("gfx/enemy00.png");
-    z_gfx.enemy[1] = loadSprite("gfx/enemy01.png");
-    z_gfx.enemy[2] = loadSprite("gfx/enemy02.png");
-
-    z_gfx.player[Z_BIT_RESTING] = loadSprite("gfx/player.png");
-    z_gfx.player[Z_BIT_LEFT] = loadSprite("gfx/player_left.png");
-    z_gfx.player[Z_BIT_RIGHT] = loadSprite("gfx/player_right.png");
-    z_gfx.player[Z_BIT_FORWARD] = loadSprite("gfx/player_forward.png");
-    z_gfx.player[Z_BIT_FORWARD | Z_BIT_LEFT] = loadSprite("gfx/player_forward_left.png");
-    z_gfx.player[Z_BIT_FORWARD | Z_BIT_RIGHT] = loadSprite("gfx/player_forward_right.png");
-    z_gfx.player[Z_BIT_BACK] = loadSprite("gfx/player_back.png");
-    z_gfx.player[Z_BIT_BACK | Z_BIT_LEFT] = loadSprite("gfx/player_back_left.png");
-    z_gfx.player[Z_BIT_BACK | Z_BIT_RIGHT] = loadSprite("gfx/player_back_right.png");
+    loadSprite(&z_gfx.player[Z_BIT_RESTING], "gfx/player.png");
+    loadSprite(&z_gfx.player[Z_BIT_LEFT], "gfx/player_left.png");
+    loadSprite(&z_gfx.player[Z_BIT_RIGHT], "gfx/player_right.png");
+    loadSprite(&z_gfx.player[Z_BIT_FORWARD], "gfx/player_forward.png");
+    loadSprite(&z_gfx.player[Z_BIT_FORWARD | Z_BIT_LEFT], "gfx/player_forward_left.png");
+    loadSprite(&z_gfx.player[Z_BIT_FORWARD | Z_BIT_RIGHT], "gfx/player_forward_right.png");
+    loadSprite(&z_gfx.player[Z_BIT_BACK], "gfx/player_back.png");
+    loadSprite(&z_gfx.player[Z_BIT_BACK | Z_BIT_LEFT], "gfx/player_back_left.png");
+    loadSprite(&z_gfx.player[Z_BIT_BACK | Z_BIT_RIGHT], "gfx/player_back_right.png");
 }
 
 void z_platform_tick(void)
 {
-    if(a_button_getPressedOnce(g_colorSwitch)) {
-        g_color = !g_color;
+    if(a_button_getPressedOnce(g_paletteSwitch)) {
+        g_paletteIndex = (g_paletteIndex + 1) % Z_PALETTE_NUM;
     }
 }
 
@@ -104,41 +113,46 @@ bool z_button_pressed(ZButton Button)
 
 void z_draw_fill(uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[Color][g_color]);
+    a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
     a_draw_fill();
 }
 
 void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[Color][g_color]);
+    a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
     a_draw_rectangle(X, Y, W, H);
 }
 
 void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[Color][g_color]);
+    a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
     a_draw_pixel(X, Y);
 }
 
 void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
 {
-    a_pixel_setPixel(g_pal[Color][g_color]);
+    a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
     a_draw_circle(X, Y, Radius);
 }
 
-void z_sprite_blit(ZSprite Sprite, int8_t X, int8_t Y)
+static ASprite* getCurrentSprite(ZSprite* Sprite)
 {
-    a_sprite_blit(a_spriteframes_getIndex(Sprite, g_color), X, Y);
+    return a_spriteframes_getCurrent(Sprite->frames[g_paletteIndex]);
 }
 
-int8_t z_sprite_getWidth(ZSprite Sprite)
+void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y)
 {
-    return (int8_t)a_sprite_getWidth(a_spriteframes_getCurrent(Sprite));
+    a_sprite_blit(getCurrentSprite(Sprite), X, Y);
 }
 
-int8_t z_sprite_getHeight(ZSprite Sprite)
+int8_t z_sprite_getWidth(ZSprite* Sprite)
 {
-    return (int8_t)a_sprite_getHeight(a_spriteframes_getCurrent(Sprite));
+    return (int8_t)a_sprite_getWidth(getCurrentSprite(Sprite));
+}
+
+int8_t z_sprite_getHeight(ZSprite* Sprite)
+{
+    return (int8_t)a_sprite_getHeight(getCurrentSprite(Sprite));
 }
 
 #endif // ifndef ARDUINO

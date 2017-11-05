@@ -120,7 +120,7 @@ void z_player_draw(void)
     int8_t x = z_fix_fixtoi(z_player.x);
     int8_t y = (int8_t)(z_fix_fixtoi(z_player.y) + z_player.shootShift);
 
-    ZSprite sprite = z_gfx.player[z_player.frame];
+    ZSprite* sprite = &z_gfx.player[z_player.frame];
 
     if(z_player.jetFlicker) {
         int8_t jy = (int8_t)(y + 2 + z_screen_yShake);
