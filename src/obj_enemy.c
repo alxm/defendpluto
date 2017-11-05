@@ -59,5 +59,6 @@ void z_enemy_draw(ZPoolObject* Enemy)
 
     z_sprite_blitCentered(sprite,
                           (int8_t)(x + z_screen_xShake),
-                          (int8_t)(y + z_screen_yShake));
+                          (int8_t)(y + z_screen_yShake),
+                          0);
 }

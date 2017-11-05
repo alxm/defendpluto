@@ -135,5 +135,6 @@ void z_player_draw(void)
 
     z_sprite_blitCentered(sprite,
                           (int8_t)(x + z_screen_xShake),
-                          (int8_t)(y + z_screen_yShake));
+                          (int8_t)(y + z_screen_yShake),
+                          0);
 }

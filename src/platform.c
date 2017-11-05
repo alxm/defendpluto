@@ -87,6 +87,8 @@ void z_platform_setup(void)
     loadSprite(&z_gfx.player[Z_BIT_BACK], "gfx/player_back.png");
     loadSprite(&z_gfx.player[Z_BIT_BACK | Z_BIT_LEFT], "gfx/player_back_left.png");
     loadSprite(&z_gfx.player[Z_BIT_BACK | Z_BIT_RIGHT], "gfx/player_back_right.png");
+
+    loadSprite(&z_gfx.hearts, "gfx/hearts.png");
 }
 
 void z_platform_tick(void)
@@ -135,19 +137,19 @@ void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
     a_draw_circle(X, Y, Radius);
 }
 
-static ASprite* getCurrentSprite(ZSprite* Sprite)
+static ASprite* getCurrentSprite(ZSprite* Sprite, uint8_t Frame)
 {
-    return a_spriteframes_getCurrent(Sprite->frames[g_paletteIndex]);
+    return a_spriteframes_getIndex(Sprite->frames[g_paletteIndex], Frame);
 }
 
-void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y)
+void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
 {
-    a_sprite_blit(getCurrentSprite(Sprite), X, Y);
+    a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
 }
 
-void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y)
+void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
 {
-    ASprite* s = getCurrentSprite(Sprite);
+    ASprite* s = getCurrentSprite(Sprite, Frame);
 
     a_sprite_blit(s,
                   X - a_sprite_getWidth(s) / 2,
@@ -156,12 +158,12 @@ void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y)
 
 int8_t z_sprite_getWidth(ZSprite* Sprite)
 {
-    return (int8_t)a_sprite_getWidth(getCurrentSprite(Sprite));
+    return (int8_t)a_sprite_getWidth(getCurrentSprite(Sprite, 0));
 }
 
 int8_t z_sprite_getHeight(ZSprite* Sprite)
 {
-    return (int8_t)a_sprite_getHeight(getCurrentSprite(Sprite));
+    return (int8_t)a_sprite_getHeight(getCurrentSprite(Sprite, 0));
 }
 
 #endif // ifndef ARDUINO

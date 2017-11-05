@@ -29,6 +29,7 @@
 #include "data_gfx_player_back.h"
 #include "data_gfx_player_back_left.h"
 #include "data_gfx_player_back_right.h"
+#include "data_gfx_hearts.h"
 
 extern Arduboy2Base g_arduboy;
 ZControls z_controls;
@@ -60,6 +61,7 @@ void z_platform_setup(void)
     loadSprite(z_gfx.player[Z_BIT_BACK], player_back);
     loadSprite(z_gfx.player[Z_BIT_BACK | Z_BIT_LEFT], player_back_left);
     loadSprite(z_gfx.player[Z_BIT_BACK | Z_BIT_RIGHT], player_back_right);
+    loadSprite(z_gfx.hearts, hearts);
 }
 
 uint16_t z_fps_getCounter(void)
@@ -97,19 +99,19 @@ void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
     g_arduboy.drawCircle(X, Y, Radius, Color ? WHITE : BLACK);
 }
 
-void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y)
+void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
 {
-    Sprites::drawExternalMask(X, Y, Sprite->image, Sprite->mask, 0, 0);
+    Sprites::drawExternalMask(X, Y, Sprite->image, Sprite->mask, Frame, Frame);
 }
 
-void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y)
+void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
 {
     Sprites::drawExternalMask(X - pgm_read_byte(Sprite->image) / 2,
                               Y - pgm_read_byte(Sprite->image + 1) / 2,
                               Sprite->image,
                               Sprite->mask,
-                              0,
-                              0);
+                              Frame,
+                              Frame);
 }
 
 int8_t z_sprite_getWidth(ZSprite* Sprite)
