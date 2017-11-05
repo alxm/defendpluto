@@ -104,16 +104,6 @@ void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
     Sprites::drawExternalMask(X, Y, Sprite->image, Sprite->mask, Frame, Frame);
 }
 
-void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
-{
-    Sprites::drawExternalMask(X - pgm_read_byte(Sprite->image) / 2,
-                              Y - pgm_read_byte(Sprite->image + 1) / 2,
-                              Sprite->image,
-                              Sprite->mask,
-                              Frame,
-                              Frame);
-}
-
 int8_t z_sprite_getWidth(ZSprite* Sprite)
 {
     return (int8_t)pgm_read_byte(Sprite->image);
