@@ -112,6 +112,7 @@ extern void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color);
 extern void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color);
 
 extern void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y);
+extern void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y);
 extern int8_t z_sprite_getWidth(ZSprite* Sprite);
 extern int8_t z_sprite_getHeight(ZSprite* Sprite);
 

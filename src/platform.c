@@ -145,6 +145,15 @@ void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y)
     a_sprite_blit(getCurrentSprite(Sprite), X, Y);
 }
 
+void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y)
+{
+    ASprite* s = getCurrentSprite(Sprite);
+
+    a_sprite_blit(s,
+                  X - a_sprite_getWidth(s) / 2,
+                  Y - a_sprite_getHeight(s) / 2);
+}
+
 int8_t z_sprite_getWidth(ZSprite* Sprite)
 {
     return (int8_t)a_sprite_getWidth(getCurrentSprite(Sprite));
