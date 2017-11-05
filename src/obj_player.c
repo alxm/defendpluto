@@ -22,6 +22,8 @@
 #include "obj_bullet.h"
 #include "obj_player.h"
 
+#define Z_MAX_HEALTH 3
+#define Z_MAX_SHIELD 128
 #define Z_SHOOT_EVERY_N_FRAMES (Z_FPS / 4)
 #define Z_SPEED_MAX (Z_FIX_ONE)
 #define Z_SPEED_ACCEL (Z_FIX_ONE / 8)
@@ -39,6 +41,8 @@ void z_player_init(int8_t X, int8_t Y)
     z_player.frame = 0;
     z_player.shootShift = 0;
     z_player.jetFlicker = false;
+    z_player.health = 2;
+    z_player.shield = Z_MAX_SHIELD * 3 / 4;
 }
 
 void z_player_tick(void)
@@ -137,4 +141,21 @@ void z_player_draw(void)
                           (int8_t)(x + z_screen_xShake),
                           (int8_t)(y + z_screen_yShake),
                           0);
+
+    for(int8_t i = 0; i < Z_MAX_HEALTH; i++) {
+        z_sprite_blit(&z_gfx.hearts,
+                      (int8_t)(2 + i * 8),
+                      2,
+                      z_player.health > i);
+    }
+
+    int8_t maxWidth = 21;
+    int8_t width = (int8_t)(maxWidth * z_player.shield / Z_MAX_SHIELD);
+
+    z_draw_rectangle(2, 10, 23, 4, Z_COLOR_RED);
+    z_draw_rectangle((int8_t)(3 + width),
+                     11,
+                     (int8_t)(maxWidth - width),
+                     2,
+                     Z_COLOR_BLUE);
 }

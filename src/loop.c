@@ -64,7 +64,4 @@ void loop_draw(void)
     z_pool_draw(Z_POOL_CIRCLE, z_circle_draw);
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
     z_player_draw();
-    z_sprite_blit(&z_gfx.hearts, 2, 2, 1);
-    z_sprite_blit(&z_gfx.hearts, 10, 2, 1);
-    z_sprite_blit(&z_gfx.hearts, 18, 2, 0);
 }
