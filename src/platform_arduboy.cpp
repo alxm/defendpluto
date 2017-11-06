@@ -31,6 +31,11 @@ void z_platform_setup(void)
     z_controls.b = B_BUTTON;
 }
 
+void z_platform_tick(void)
+{
+    //
+}
+
 uint16_t z_fps_getCounter(void)
 {
     return g_arduboy.frameCount;
