@@ -19,6 +19,7 @@
 #include "util_fix.h"
 #include "util_font.h"
 #include "util_pool.h"
+#include "util_random.h"
 #include "util_screen.h"
 #include "util_vm.h"
 #include "obj_bullet.h"

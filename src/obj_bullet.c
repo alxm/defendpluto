@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_fix.h"
 #include "util_pool.h"
+#include "util_random.h"
 #include "util_screen.h"
 #include "obj_bullet.h"
 #include "obj_circle.h"

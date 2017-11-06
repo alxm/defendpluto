@@ -15,25 +15,22 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
-#include "util_random.h"
-
-static uint8_t g_shakeFrames;
-int8_t z_screen_xShake, z_screen_yShake;
-
-void z_screen_tick(void)
+static inline int8_t z_random_int8(int8_t Max)
 {
-    if(g_shakeFrames) {
-        g_shakeFrames--;
-        z_screen_xShake = (int8_t)((-1 + z_random_int8(3)) * 2);
-        z_screen_yShake = (int8_t)((-1 + z_random_int8(3)) * 2);
-    } else {
-        z_screen_xShake = 0;
-        z_screen_yShake = 0;
-    }
+    return (int8_t)(rand() % Max);
 }
 
-void z_screen_shake(uint8_t Frames)
+static inline uint8_t z_random_uint8(uint8_t Max)
 {
-    g_shakeFrames = Frames;
+    return (uint8_t)(rand() % Max);
+}
+
+static inline int16_t z_random_int16(int16_t Max)
+{
+    return (int16_t)(rand() % Max);
+}
+
+static inline uint16_t z_random_uint16(uint16_t Max)
+{
+    return (uint16_t)(rand() % Max);
 }
