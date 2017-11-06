@@ -1,4 +1,5 @@
 A_APP_NAME = arduboy-shooter.html
+A_EMBED_MEDIA = true
 
 #
 # You can set A2X_PATH to a hard-coded value
