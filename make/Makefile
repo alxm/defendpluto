@@ -16,7 +16,7 @@ A2X_PATH := $(shell a2x_path)
 include $(A2X_PATH)/make/project/Makefile
 
 $(O_DIR)/util_vm.o : $(Z_LEVELS_H)
-$(O_DIR)/platform.o : $(Z_GFX_H_FILES)
+$(O_DIR)/util_graphics.o : $(Z_GFX_H_FILES)
 
 $(Z_LEVELS_H): $(Z_LEVELS_TXT) $(Z_LEVELS_COMPILER)
 	python3 $(Z_LEVELS_COMPILER) $< > $@

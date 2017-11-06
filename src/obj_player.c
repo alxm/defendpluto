@@ -153,9 +153,14 @@ void z_player_draw(void)
     int8_t maxWidth = 21;
     int8_t width = (int8_t)(maxWidth * z_player.shield / Z_MAX_SHIELD);
 
-    z_draw_rectangle(2, 10, 23, 4, Z_COLOR_RED);
-    z_draw_rectangle((int8_t)(3 + width),
-                     11,
+    z_sprite_blit(&z_graphics.shield, 49, 2, 0);
+
+    int8_t rX = 55;
+    int8_t rY = 3;
+
+    z_draw_rectangle(rX, rY, 23, 4, Z_COLOR_RED);
+    z_draw_rectangle((int8_t)(rX + 1 + width),
+                     (int8_t)(rY + 1),
                      (int8_t)(maxWidth - width),
                      2,
                      Z_COLOR_BLUE);
