@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_fix.h"
 #include "util_font.h"
+#include "util_graphics.h"
 #include "util_pool.h"
 #include "util_random.h"
 #include "util_screen.h"
@@ -32,6 +33,7 @@
 void loop_setup(void)
 {
     z_platform_setup();
+    z_graphics_setup();
     z_font_setup();
     z_pool_setup();
     z_player_init(Z_WIDTH / 2, Z_HEIGHT / 2);

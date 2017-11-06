@@ -17,6 +17,7 @@
 
 #include "platform.h"
 #include "util_fix.h"
+#include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "obj_bullet.h"
@@ -124,7 +125,7 @@ void z_player_draw(void)
     int8_t x = z_fix_fixtoi(z_player.x);
     int8_t y = (int8_t)(z_fix_fixtoi(z_player.y) + z_player.shootShift);
 
-    ZSprite* sprite = &z_gfx.player[z_player.frame];
+    ZSprite* sprite = &z_graphics.player[z_player.frame];
 
     if(z_player.jetFlicker) {
         int8_t jy = (int8_t)(y + 2 + z_screen_yShake);
@@ -143,7 +144,7 @@ void z_player_draw(void)
                           0);
 
     for(int8_t i = 0; i < Z_MAX_HEALTH; i++) {
-        z_sprite_blit(&z_gfx.hearts,
+        z_sprite_blit(&z_graphics.hearts,
                       (int8_t)(2 + i * 8),
                       2,
                       z_player.health > i);

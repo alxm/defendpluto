@@ -20,37 +20,10 @@
 #include "platform.h"
 
 ZControls z_controls;
-ZGfx z_gfx;
 
 static ZPalette g_paletteIndex;
 static AInputButton* g_paletteSwitch;
 static APixel g_palettes[Z_PALETTE_NUM][Z_COLOR_NUM];
-
-static void loadSprite(ZSprite* Sprite, const char* Path)
-{
-    ASprite* sheet = a_sprite_newFromFile(Path);
-    ASpriteFrames* frames = a_spriteframes_new(sheet, 0, 0, 0);
-
-    for(ZPalette p = 0; p < Z_PALETTE_NUM; p++) {
-        if(p == Z_PALETTE_DEFAULT) {
-            Sprite->frames[p] = frames;
-            continue;
-        }
-
-        Sprite->frames[p] = a_spriteframes_dup(frames, true);
-        AList* sprites = a_spriteframes_getSprites(Sprite->frames[p]);
-
-        A_LIST_ITERATE(sprites, ASprite*, s) {
-            for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
-                a_sprite_replaceColor(s,
-                                      g_palettes[Z_PALETTE_DEFAULT][c],
-                                      g_palettes[p][c]);
-            }
-        }
-    }
-
-    a_sprite_free(sheet);
-}
 
 void z_platform_setup(void)
 {
@@ -73,22 +46,6 @@ void z_platform_setup(void)
     }
 
     a_sprite_free(pal);
-
-    loadSprite(&z_gfx.enemy[0], "gfx/enemy00.png");
-    loadSprite(&z_gfx.enemy[1], "gfx/enemy01.png");
-    loadSprite(&z_gfx.enemy[2], "gfx/enemy02.png");
-
-    loadSprite(&z_gfx.player[Z_BIT_RESTING], "gfx/player.png");
-    loadSprite(&z_gfx.player[Z_BIT_LEFT], "gfx/player_left.png");
-    loadSprite(&z_gfx.player[Z_BIT_RIGHT], "gfx/player_right.png");
-    loadSprite(&z_gfx.player[Z_BIT_FORWARD], "gfx/player_forward.png");
-    loadSprite(&z_gfx.player[Z_BIT_FORWARD | Z_BIT_LEFT], "gfx/player_forward_left.png");
-    loadSprite(&z_gfx.player[Z_BIT_FORWARD | Z_BIT_RIGHT], "gfx/player_forward_right.png");
-    loadSprite(&z_gfx.player[Z_BIT_BACK], "gfx/player_back.png");
-    loadSprite(&z_gfx.player[Z_BIT_BACK | Z_BIT_LEFT], "gfx/player_back_left.png");
-    loadSprite(&z_gfx.player[Z_BIT_BACK | Z_BIT_RIGHT], "gfx/player_back_right.png");
-
-    loadSprite(&z_gfx.hearts, "gfx/hearts.png");
 }
 
 void z_platform_tick(void)
