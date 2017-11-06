@@ -74,9 +74,6 @@ void z_platform_setup(void)
 
     a_sprite_free(pal);
 
-    loadSprite(&z_gfx.fonts[0], "gfx/font_num.png");
-    loadSprite(&z_gfx.fonts[1], "gfx/font_alphanum.png");
-
     loadSprite(&z_gfx.enemy[0], "gfx/enemy00.png");
     loadSprite(&z_gfx.enemy[1], "gfx/enemy01.png");
     loadSprite(&z_gfx.enemy[2], "gfx/enemy02.png");
@@ -138,6 +135,32 @@ void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
 {
     a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
     a_draw_circle(X, Y, Radius);
+}
+
+void z_platform__loadSprite(ZSprite* Sprite, const char* Path)
+{
+    ASprite* sheet = a_sprite_newFromFile(Path);
+    ASpriteFrames* frames = a_spriteframes_new(sheet, 0, 0, 0);
+
+    for(ZPalette p = 0; p < Z_PALETTE_NUM; p++) {
+        if(p == Z_PALETTE_DEFAULT) {
+            Sprite->frames[p] = frames;
+            continue;
+        }
+
+        Sprite->frames[p] = a_spriteframes_dup(frames, true);
+        AList* sprites = a_spriteframes_getSprites(Sprite->frames[p]);
+
+        A_LIST_ITERATE(sprites, ASprite*, s) {
+            for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
+                a_sprite_replaceColor(s,
+                                      g_palettes[Z_PALETTE_DEFAULT][c],
+                                      g_palettes[p][c]);
+            }
+        }
+    }
+
+    a_sprite_free(sheet);
 }
 
 static ASprite* getCurrentSprite(ZSprite* Sprite, uint8_t Frame)

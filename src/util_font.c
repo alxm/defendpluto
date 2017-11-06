@@ -17,21 +17,29 @@
 
 #include "platform.h"
 #include "util_font.h"
+#include "data_gfx_font_num.h"
+#include "data_gfx_font_alphanum.h"
 
 ZFont z_fonts[Z_FONT_FACE_NUM];
 
 void z_font_setup(void)
 {
-    z_fonts[Z_FONT_FACE_NUMBERS].flags = Z_FONT_FLAG_NUMERIC;
-    z_fonts[Z_FONT_FACE_ALPHANUM].flags = Z_FONT_FLAG_NUMERIC
-                                        | Z_FONT_FLAG_ALPHA_U
-                                        | Z_FONT_FLAG_ALPHA_L;
+    #define loadFont(Index, Id, Flags)              \
+        z_sprite_load(&z_fonts[Index].sprites, Id); \
+        z_fonts[Index].flags = Flags;
+
+    loadFont(Z_FONT_FACE_NUMBERS, font_num, Z_FONT_FLAG_NUMERIC);
+    loadFont(Z_FONT_FACE_ALPHANUM,
+             font_alphanum,
+             Z_FONT_FLAG_NUMERIC
+           | Z_FONT_FLAG_ALPHA_U
+           | Z_FONT_FLAG_ALPHA_L);
 }
 
 void z_font_text(const char* Text, int8_t X, int8_t Y, ZFontFace Font)
 {
     uint8_t flags = z_fonts[Font].flags;
-    ZSprite* sprite = &z_gfx.fonts[Font];
+    ZSprite* sprite = &z_fonts[Font].sprites;
 
     while(*Text != '\0') {
         char c = *Text;

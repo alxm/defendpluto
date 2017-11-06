@@ -29,6 +29,7 @@ typedef enum {
 } ZFontFlag;
 
 typedef struct {
+    ZSprite sprites;
     uint8_t flags;
 } ZFont;
 

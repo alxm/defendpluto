@@ -74,11 +74,23 @@ typedef enum {
         const uint8_t* image;
         const uint8_t* mask;
     } ZSprite;
+
+    #define z_sprite_load(Sprite, Id)                    \
+        z_platform__loadSprite(Sprite,                   \
+                               z_data_gfx_##Id##_buffer, \
+                               z_data_gfx_##Id##_mask);
+
+    extern void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Image, const uint8_t* Mask);
 #else
     typedef AInputButton* ZButton;
     typedef struct {
         ASpriteFrames* frames[Z_PALETTE_NUM];
     } ZSprite;
+
+    #define z_sprite_load(Sprite, Id)                      \
+        z_platform__loadSprite(Sprite, "gfx/" #Id ".png");
+
+    extern void z_platform__loadSprite(ZSprite* Sprite, const char* Path);
 #endif
 
 typedef struct {
@@ -91,7 +103,6 @@ typedef struct {
 } ZControls;
 
 typedef struct {
-    ZSprite fonts[2];
     ZSprite enemy[3];
     ZSprite player[Z_BIT_MAX_VAL + 1];
     ZSprite hearts;

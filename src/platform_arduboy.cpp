@@ -17,8 +17,6 @@
 
 #include "platform.h"
 #include <Sprites.h>
-#include "data_gfx_font_num.h"
-#include "data_gfx_font_alphanum.h"
 #include "data_gfx_enemy00.h"
 #include "data_gfx_enemy01.h"
 #include "data_gfx_enemy02.h"
@@ -49,9 +47,6 @@ void z_platform_setup(void)
     #define loadSprite(Sprite, Id)               \
         Sprite.image = z_data_gfx_##Id##_buffer; \
         Sprite.mask = z_data_gfx_##Id##_mask;
-
-    loadSprite(z_gfx.fonts[0], font_num);
-    loadSprite(z_gfx.fonts[1], font_alphanum);
 
     loadSprite(z_gfx.enemy[0], enemy00);
     loadSprite(z_gfx.enemy[1], enemy01);
@@ -102,6 +97,12 @@ void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
 void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
 {
     g_arduboy.drawCircle(X, Y, Radius, Color ? WHITE : BLACK);
+}
+
+void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Image, const uint8_t* Mask)
+{
+    Sprite->image = Image;
+    Sprite->mask = Mask;
 }
 
 void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
