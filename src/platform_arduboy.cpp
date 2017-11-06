@@ -17,6 +17,8 @@
 
 #include "platform.h"
 #include <Sprites.h>
+#include "data_gfx_font_num.h"
+#include "data_gfx_font_alphanum.h"
 #include "data_gfx_enemy00.h"
 #include "data_gfx_enemy01.h"
 #include "data_gfx_enemy02.h"
@@ -47,6 +49,9 @@ void z_platform_setup(void)
     #define loadSprite(Sprite, Id)               \
         Sprite.image = z_data_gfx_##Id##_buffer; \
         Sprite.mask = z_data_gfx_##Id##_mask;
+
+    loadSprite(z_gfx.fonts[0], font_num);
+    loadSprite(z_gfx.fonts[1], font_alphanum);
 
     loadSprite(z_gfx.enemy[0], enemy00);
     loadSprite(z_gfx.enemy[1], enemy01);

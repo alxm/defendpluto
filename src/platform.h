@@ -70,7 +70,7 @@ typedef enum {
 
 #ifdef ARDUINO
     typedef uint8_t ZButton;
-    typedef struct ZSprite {
+    typedef struct {
         const uint8_t* image;
         const uint8_t* mask;
     } ZSprite;
@@ -91,6 +91,7 @@ typedef struct {
 } ZControls;
 
 typedef struct {
+    ZSprite fonts[2];
     ZSprite enemy[3];
     ZSprite player[Z_BIT_MAX_VAL + 1];
     ZSprite hearts;

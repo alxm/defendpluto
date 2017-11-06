@@ -74,6 +74,9 @@ void z_platform_setup(void)
 
     a_sprite_free(pal);
 
+    loadSprite(&z_gfx.fonts[0], "gfx/font_num.png");
+    loadSprite(&z_gfx.fonts[1], "gfx/font_alphanum.png");
+
     loadSprite(&z_gfx.enemy[0], "gfx/enemy00.png");
     loadSprite(&z_gfx.enemy[1], "gfx/enemy01.png");
     loadSprite(&z_gfx.enemy[2], "gfx/enemy02.png");
