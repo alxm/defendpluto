@@ -64,18 +64,21 @@ typedef enum {
     typedef struct {
         const uint8_t* image;
         const uint8_t* mask;
+        uint8_t numFrames;
     } ZSprite;
 
     #define z_sprite_load(Sprite, Id)                    \
         z_platform__loadSprite(Sprite,                   \
                                z_data_gfx_##Id##_buffer, \
-                               z_data_gfx_##Id##_mask);
+                               z_data_gfx_##Id##_mask,   \
+                               z_data_gfx_##Id##_frames);
 
-    extern void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Image, const uint8_t* Mask);
+    extern void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Image, const uint8_t* Mask, uint8_t NumFrames);
 #else
     typedef AInputButton* ZButton;
     typedef struct {
         ASpriteFrames* frames[Z_PALETTE_NUM];
+        uint8_t numFrames;
     } ZSprite;
 
     #define z_sprite_load(Sprite, Id)                      \

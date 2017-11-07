@@ -2,6 +2,8 @@
 
 #ifdef ARDUINO
 
+static const uint8_t z_data_gfx_shield_frames = 1;
+
 PROGMEM static const uint8_t z_data_gfx_shield_buffer[] = {
     0x05,0x08,0x0f,0x1f,0x3f,0x11,0x0f,
 };

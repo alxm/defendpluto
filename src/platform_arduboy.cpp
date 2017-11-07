@@ -71,10 +71,11 @@ void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
     g_arduboy.drawCircle(X, Y, Radius, Color ? WHITE : BLACK);
 }
 
-void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Image, const uint8_t* Mask)
+void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Image, const uint8_t* Mask, uint8_t NumFrames)
 {
     Sprite->image = Image;
     Sprite->mask = Mask;
+    Sprite->numFrames = NumFrames;
 }
 
 void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)

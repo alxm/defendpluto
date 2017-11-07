@@ -117,6 +117,8 @@ void z_platform__loadSprite(ZSprite* Sprite, const char* Path)
         }
     }
 
+    Sprite->numFrames = (uint8_t)a_spriteframes_getNum(frames);
+
     a_sprite_free(sheet);
 }
 
