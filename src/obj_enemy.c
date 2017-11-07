@@ -24,9 +24,13 @@
 
 static bool nobrain(ZEnemy* Enemy)
 {
+    ZSprite* sprite = &z_graphics.enemy[Enemy->sprite];
+
     Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE / 4);
 
-    ZSprite* sprite = &z_graphics.enemy[Enemy->sprite];
+    if(z_fps_isNthFrame(6)) {
+        Enemy->frame = (uint8_t)((Enemy->frame + 1) % sprite->numFrames);
+    }
 
     return z_fix_fixtoi(Enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
 }
@@ -40,6 +44,7 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint8_t Ai,
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
     Enemy->sprite = Sprite;
+    Enemy->frame = 0;
     Enemy->ai = Ai;
     Enemy->aiData = AiData;
 }
@@ -61,5 +66,5 @@ void z_enemy_draw(ZPoolObject* Enemy)
     z_sprite_blitCentered(sprite,
                           (int8_t)(x + z_screen_xShake),
                           (int8_t)(y + z_screen_yShake),
-                          0);
+                          enemy->frame);
 }

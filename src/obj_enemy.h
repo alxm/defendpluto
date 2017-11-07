@@ -18,11 +18,11 @@
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
-    uint8_t sprite;
+    uint8_t sprite, frame;
     uint8_t ai, aiData;
 } ZEnemy;
 
-#define Z_ENEMIES_NUM 4
+#define Z_ENEMIES_NUM 16
 
 extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint8_t Ai, uint8_t AiData);
 extern bool z_enemy_tick(ZPoolObject* Enemy);
