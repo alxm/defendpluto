@@ -27,7 +27,8 @@
 #define Z_HEALTH_MAX 3
 #define Z_SHIELD_MAX (64 * Z_FIX_ONE)
 #define Z_SHIELD_INC (Z_FIX_ONE / 8)
-#define Z_SHIELD_DEC (Z_SHIELD_MAX / 4)
+#define Z_SHIELD_DAMAGE_ENEMY (Z_SHIELD_MAX / 4)
+#define Z_SHIELD_DAMAGE_SHOOTING (Z_SHIELD_MAX / 16)
 #define Z_SHOOT_EVERY_N_FRAMES (Z_FPS / 4)
 #define Z_SPEED_MAX (Z_FIX_ONE)
 #define Z_SPEED_ACCEL (Z_FIX_ONE / 8)
@@ -35,6 +36,15 @@
 
 ZPlayer z_player;
 static uint8_t g_heartsBlink = 0;
+
+static bool useShield(ZFix Damage)
+{
+    bool protected = z_player.shield >= Damage;
+
+    z_player.shield = z_fix_max((ZFix)(z_player.shield - Damage), 0);
+
+    return protected;
+}
 
 void z_player_init(int8_t X, int8_t Y)
 {
@@ -73,6 +83,7 @@ void z_player_tick(void)
             }
 
             z_player.lastShot = z_fps_getCounter();
+            useShield(Z_SHIELD_DAMAGE_SHOOTING);
         }
     } else {
         z_player.shootShift = 0;
@@ -128,9 +139,7 @@ void z_player_tick(void)
                                        true);
 
     if(hit) {
-        if(z_player.shield > 0) {
-            z_player.shield = (ZFix)(z_player.shield - Z_SHIELD_DEC);
-        } else {
+        if(!useShield(Z_SHIELD_DAMAGE_ENEMY)) {
             z_player.health--;
         }
     } else {
@@ -174,14 +183,12 @@ void z_player_draw(void)
         z_sprite_blit(&z_graphics.hearts, (int8_t)(2 + i * 8), 2, heartFrame);
     }
 
-    int8_t maxWidth = 21;
-    int8_t width = (int8_t)(maxWidth * z_fix_max(z_player.shield, 0)
-                                / Z_SHIELD_MAX);
-
     z_sprite_blit(&z_graphics.shield, 48, 2, 0);
 
     int8_t rX = 55;
     int8_t rY = 3;
+    int8_t maxWidth = 21;
+    int8_t width = (int8_t)(maxWidth * z_player.shield / Z_SHIELD_MAX);
 
     z_draw_rectangle(rX, rY, 23, 4, Z_COLOR_RED);
     z_draw_rectangle((int8_t)(rX + 1 + width),
