@@ -35,7 +35,7 @@ static bool nobrain(ZEnemy* Enemy)
     return z_fix_fixtoi(Enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
 }
 
-static bool (*g_ai[])(ZEnemy*) = {
+static bool (*g_ai[Z_AI_ID_NUM])(ZEnemy*) = {
     nobrain
 };
 

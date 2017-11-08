@@ -35,33 +35,28 @@ static uint8_t g_wait = 0;
 static bool handle_spawn(void)
 {
     /*
-     * 8b    8b      8b      4b          4b        4b      4b      4b        4b
-     * spawn x_coord y_coord object_type sprite_id ai_type ai_data num_units wait_between
-     * spawn 64      -8      enemy       0         nobrain 0       1         0
+     * 8b    8b      8b      4b        4b      8b      4b        4b
+     * spawn x_coord y_coord sprite_id ai_id   ai_data num_units wait_between
+     * spawn 64      -8      enemy0    nobrain 0       1         0
     */
     int8_t x = (int8_t)Z_READ(1);
     int8_t y = (int8_t)Z_READ(2);
-    uint8_t object_type = Z_READ(3) >> 4;
-    uint8_t sprite_id = Z_READ(3) & 0xf;
-    uint8_t ai_type = Z_READ(4) >> 4;
-    uint8_t ai_data = Z_READ(4) & 0xf;
+    uint8_t sprite_id = Z_READ(3) >> 4;
+    uint8_t ai_id = Z_READ(3) & 0xf;
+    uint8_t ai_data = Z_READ(4);
     uint8_t num_units = Z_READ(5) >> 4;
     uint8_t wait_between = Z_READ(5) & 0xf;
 
     Z_UNUSED(num_units);
     Z_UNUSED(wait_between);
 
-    switch(object_type) {
-        case 0: {
-            ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
+    ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
 
-            if(e == NULL) {
-                return false;
-            }
-
-            z_enemy_init(e, x, y, sprite_id, ai_type, ai_data);
-        } break;
+    if(e == NULL) {
+        return false;
     }
+
+    z_enemy_init(e, x, y, sprite_id, ai_id, ai_data);
 
     return true;
 }

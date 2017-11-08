@@ -16,6 +16,14 @@
 */
 
 typedef enum {
+    Z_SPRITE_ID_ASTEROID,
+    Z_SPRITE_ID_ENEMY0,
+    Z_SPRITE_ID_ENEMY1,
+    Z_SPRITE_ID_ENEMY2,
+    Z_SPRITE_ID_NUM,
+} ZSpriteId;
+
+typedef enum {
     Z_BIT_RESTING = 0,
     Z_BIT_FORWARD = (1 << 0),
     Z_BIT_BACK    = (1 << 1),
@@ -25,7 +33,7 @@ typedef enum {
 } ZFrameBits;
 
 typedef struct {
-    ZSprite enemy[4];
+    ZSprite enemy[Z_SPRITE_ID_NUM];
     ZSprite player[Z_BIT_MAX_VAL + 1];
     ZSprite hearts;
     ZSprite shield;

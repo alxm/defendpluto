@@ -19,12 +19,15 @@
 
 import sys
 
-objectTypes = {
-    'enemy': 0
+spriteIds = {
+    'asteroid': 0,
+    'enemy0': 1,
+    'enemy1': 2,
+    'enemy2': 3,
 }
 
-aiTypes = {
-    'nobrain': 0
+aiIds = {
+    'nobrain': 0,
 }
 
 class Instruction:
@@ -48,30 +51,29 @@ class Instruction:
 
 class InstructionSpawn(Instruction):
     def __init__(self):
-        Instruction.__init__(self, 9)
+        Instruction.__init__(self, 8)
 
     def custom_compile(self, Tokens):
         bytecode = []
 
         #
-        # 8b    8b      8b      4b          4b        4b      4b      4b        4b
-        # spawn x_coord y_coord object_type sprite_id ai_type ai_data num_units wait_between
-        # spawn 64      -8      enemy       0         nobrain 0       1         0
+        # 8b    8b      8b      4b        4b      8b      4b        4b
+        # spawn x_coord y_coord sprite_id ai_id   ai_data num_units wait_between
+        # spawn 64      -8      enemy0    nobrain 0       1         0
         #
         x_coord = int(Tokens[1])
         y_coord = int(Tokens[2])
-        object_type = objectTypes[Tokens[3]]
-        sprite_id = int(Tokens[4])
-        ai_type = aiTypes[Tokens[5]]
-        ai_data = int(Tokens[6])
-        num_units = int(Tokens[7])
-        wait_between = int(Tokens[8])
+        sprite_id = spriteIds[Tokens[3]]
+        ai_type = aiIds[Tokens[4]]
+        ai_data = int(Tokens[5])
+        num_units = int(Tokens[6])
+        wait_between = int(Tokens[7])
 
         bytecode.append(self.opcode)
         bytecode.append(x_coord)
         bytecode.append(y_coord)
-        bytecode.append((object_type << 4) | sprite_id)
-        bytecode.append((ai_type << 4) | ai_data)
+        bytecode.append((sprite_id << 4) | ai_type)
+        bytecode.append(ai_data)
         bytecode.append((num_units << 4) | wait_between)
 
         return bytecode
