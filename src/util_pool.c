@@ -68,6 +68,11 @@ static void initPool(uint8_t Pool, size_t ObjectSize, size_t NumObjects)
 
 void z_pool_setup(void)
 {
+    z_pool_reset();
+}
+
+void z_pool_reset(void)
+{
     initPool(Z_POOL_STAR, sizeof(ZStar), Z_STARS_NUM);
     initPool(Z_POOL_BULLET, sizeof(ZBullet), Z_BULLETS_NUM);
     initPool(Z_POOL_ENEMY, sizeof(ZEnemy), Z_ENEMIES_NUM);

@@ -125,7 +125,7 @@ void z_player_tick(void)
                                        true);
 
     if(hit) {
-        //
+        z_player.health--;
     }
 }
 

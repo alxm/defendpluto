@@ -17,5 +17,7 @@
 
 extern int8_t z_screen_xShake, z_screen_yShake;
 
+extern void z_screen_reset(void);
+
 extern void z_screen_tick(void);
 extern void z_screen_shake(uint8_t Frames);

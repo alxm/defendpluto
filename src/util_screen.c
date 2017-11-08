@@ -21,6 +21,13 @@
 static uint8_t g_shakeFrames;
 int8_t z_screen_xShake, z_screen_yShake;
 
+void z_screen_reset(void)
+{
+    g_shakeFrames = 0;
+    z_screen_xShake = 0;
+    z_screen_yShake = 0;
+}
+
 void z_screen_tick(void)
 {
     if(g_shakeFrames) {

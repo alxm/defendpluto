@@ -40,6 +40,14 @@ void loop_setup(void)
     z_player_init(Z_WIDTH / 2, Z_HEIGHT * 2 / 3);
 }
 
+static void loop_reset(void)
+{
+    z_pool_reset();
+    z_vm_reset();
+    z_screen_reset();
+    z_player_init(Z_WIDTH / 2, Z_HEIGHT * 2 / 3);
+}
+
 void loop_tick(void)
 {
     z_platform_tick();
@@ -50,6 +58,7 @@ void loop_tick(void)
     z_pool_tick(Z_POOL_ENEMY, z_enemy_tick);
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick);
+    z_screen_tick();
 
     if(z_random_int8(2 * Z_HEIGHT / Z_STARS_NUM) == 0) {
         ZStar* star = z_pool_alloc(Z_POOL_STAR);
@@ -59,7 +68,9 @@ void loop_tick(void)
         }
     }
 
-    z_screen_tick();
+    if(z_player.health < 0) {
+        loop_reset();
+    }
 }
 
 void loop_draw(void)

@@ -42,7 +42,7 @@ static uint16_t g_pc;
 static uint16_t g_loopStart;
 static uint8_t g_loopCounter;
 static uint8_t g_wait;
-static bool g_reset = true;
+static bool g_reset;
 static ZOp g_ops[Z_OP_NUM];
 
 #define Z_READ(Offset) Z_PGM_READ_UINT8(z_data_levels[g_pc + Offset])
@@ -149,14 +149,21 @@ void z_vm_setup(void)
     g_ops[Z_OP_LOOP] = (ZOp){handle_loop, 2};
     g_ops[Z_OP_END] = (ZOp){handle_end, 1};
     g_ops[Z_OP_OVER] = (ZOp){handle_over, 1};
+
+    z_vm_reset();
+}
+
+void z_vm_reset(void)
+{
+    g_pc = 0;
+    g_wait = 0;
+    g_reset = false;
 }
 
 void z_vm_tick(void)
 {
     if(g_reset) {
-        g_pc = 0;
-        g_wait = 0;
-        g_reset = false;
+        z_vm_reset();
     }
 
     if(g_wait) {

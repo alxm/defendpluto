@@ -16,4 +16,6 @@
 */
 
 extern void z_vm_setup(void);
+extern void z_vm_reset(void);
+
 extern void z_vm_tick(void);

@@ -32,6 +32,7 @@ typedef struct {
 } ZPoolObject;
 
 extern void z_pool_setup(void);
+extern void z_pool_reset(void);
 
 extern void* z_pool_alloc(uint8_t Pool);
 extern bool z_pool_noActive(uint8_t Pool);
