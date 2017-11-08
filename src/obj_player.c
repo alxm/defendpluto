@@ -153,7 +153,7 @@ void z_player_draw(void)
     int8_t maxWidth = 21;
     int8_t width = (int8_t)(maxWidth * z_player.shield / Z_MAX_SHIELD);
 
-    z_sprite_blit(&z_graphics.shield, 49, 2, 0);
+    z_sprite_blit(&z_graphics.shield, 48, 2, 0);
 
     int8_t rX = 55;
     int8_t rY = 3;
