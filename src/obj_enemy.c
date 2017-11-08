@@ -16,11 +16,21 @@
 */
 
 #include "platform.h"
+#include "util_collision.h"
 #include "util_fix.h"
 #include "util_graphics.h"
 #include "util_pool.h"
+#include "util_random.h"
 #include "util_screen.h"
+#include "obj_circle.h"
 #include "obj_enemy.h"
+#include "obj_particle.h"
+
+static struct {
+    bool hit;
+    bool allowMultiple;
+    int8_t callerX, callerY;
+} g_coll;
 
 static bool nobrain(ZEnemy* Enemy)
 {
@@ -67,4 +77,74 @@ void z_enemy_draw(ZPoolObject* Enemy)
                           (int8_t)(x + z_screen_xShake),
                           (int8_t)(y + z_screen_yShake),
                           enemy->frame);
+}
+
+static bool checkCollision(ZPoolObject* Enemy)
+{
+    if(!g_coll.allowMultiple && g_coll.hit) {
+        return true;
+    }
+
+    ZEnemy* enemy = (ZEnemy*)Enemy;
+
+    bool hit = z_collision_pointInBox(g_coll.callerX,
+                                      g_coll.callerY,
+                                      (int8_t)(z_fix_fixtoi(enemy->x) - 4),
+                                      (int8_t)(z_fix_fixtoi(enemy->y) - 4),
+                                      8,
+                                      8);
+
+    if(hit) {
+        for(int8_t i = Z_PARTICLES_NUM; i--; ) {
+            ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
+
+            if(p == NULL) {
+                break;
+            }
+
+            z_particle_init(p,
+                            enemy->x,
+                            enemy->y,
+                            (uint8_t)(Z_FPS / 8
+                                        + z_random_uint8(Z_FPS / 4)));
+        }
+
+        ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
+
+        if(c) {
+            z_circle_init(c,
+                          z_fix_fixtoi(enemy->x),
+                          z_fix_fixtoi(enemy->y),
+                          5,
+                          Z_FIX_ONE);
+        }
+
+        c = z_pool_alloc(Z_POOL_CIRCLE);
+
+        if(c) {
+            z_circle_init(c,
+                          z_fix_fixtoi(enemy->x),
+                          z_fix_fixtoi(enemy->y),
+                          2,
+                          Z_FIX_ONE / 2);
+        }
+
+        z_screen_shake(Z_FPS / 3);
+    }
+
+    g_coll.hit |= hit;
+
+    return !hit;
+}
+
+bool z_enemy_checkCollisions(int8_t X, int8_t Y, bool AllowMultipleCollisions)
+{
+    g_coll.callerX = X;
+    g_coll.callerY = Y;
+    g_coll.hit = false;
+    g_coll.allowMultiple = AllowMultipleCollisions;
+
+    z_pool_tick(Z_POOL_ENEMY, checkCollision);
+
+    return g_coll.hit;
 }

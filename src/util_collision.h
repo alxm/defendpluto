@@ -15,23 +15,7 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-typedef enum {
-    Z_AI_ID_INVALID = -1,
-    Z_AI_ID_NOBRAIN,
-    Z_AI_ID_NUM
-} ZAiId;
-
-typedef struct {
-    ZPoolObject poolObject;
-    ZFix x, y;
-    uint8_t sprite, frame;
-    uint8_t aiId, aiArgs;
-} ZEnemy;
-
-#define Z_ENEMIES_NUM 16
-
-extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint8_t AiId, uint8_t AiArgs);
-extern bool z_enemy_tick(ZPoolObject* Enemy);
-extern void z_enemy_draw(ZPoolObject* Enemy);
-
-extern bool z_enemy_checkCollisions(int8_t X, int8_t Y, bool AllowMultipleCollisions);
+static inline bool z_collision_pointInBox(int8_t X, int8_t Y, int8_t BoxX, int8_t BoxY, int8_t BoxW, int8_t BoxH)
+{
+    return X >= BoxX && X < BoxX + BoxW && Y >= BoxY && Y < BoxY + BoxH;
+}

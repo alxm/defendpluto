@@ -18,76 +18,9 @@
 #include "platform.h"
 #include "util_fix.h"
 #include "util_pool.h"
-#include "util_random.h"
 #include "util_screen.h"
 #include "obj_bullet.h"
-#include "obj_circle.h"
 #include "obj_enemy.h"
-#include "obj_particle.h"
-
-static bool g_hit;
-static ZBullet* g_bullet;
-
-static bool pointInBox(int8_t X, int8_t Y, int8_t BoxX, int8_t BoxY, int8_t BoxW, int8_t BoxH)
-{
-    return X >= BoxX && X < BoxX + BoxW && Y >= BoxY && Y < BoxY + BoxH;
-}
-
-static bool checkBulletEnemyCollision(ZPoolObject* Enemy)
-{
-    if(g_hit) {
-        return true;
-    }
-
-    ZEnemy* enemy = (ZEnemy*)Enemy;
-
-    g_hit = pointInBox(z_fix_fixtoi(g_bullet->x),
-                       z_fix_fixtoi(g_bullet->y),
-                       (int8_t)(z_fix_fixtoi(enemy->x) - 4),
-                       (int8_t)(z_fix_fixtoi(enemy->y) - 4),
-                       8,
-                       8);
-
-    if(g_hit) {
-        for(int8_t i = Z_PARTICLES_NUM; i--; ) {
-            ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
-
-            if(p == NULL) {
-                break;
-            }
-
-            z_particle_init(p,
-                            enemy->x,
-                            enemy->y,
-                            (uint8_t)(Z_FPS / 8
-                                        + z_random_uint8(Z_FPS / 4)));
-        }
-
-        ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
-
-        if(c) {
-            z_circle_init(c,
-                          z_fix_fixtoi(enemy->x),
-                          z_fix_fixtoi(enemy->y),
-                          5,
-                          Z_FIX_ONE);
-        }
-
-        c = z_pool_alloc(Z_POOL_CIRCLE);
-
-        if(c) {
-            z_circle_init(c,
-                          z_fix_fixtoi(enemy->x),
-                          z_fix_fixtoi(enemy->y),
-                          2,
-                          Z_FIX_ONE / 2);
-        }
-
-        z_screen_shake(Z_FPS / 3);
-    }
-
-    return !g_hit;
-}
 
 void z_bullet_init(ZBullet* Bullet, ZFix X, ZFix Y, ZFix Dy)
 {
@@ -108,11 +41,9 @@ bool z_bullet_tick(ZPoolObject* Bullet)
         return false;
     }
 
-    g_hit = false;
-    g_bullet = bullet;
-    z_pool_tick(Z_POOL_ENEMY, checkBulletEnemyCollision);
-
-    return !g_hit;
+    return !z_enemy_checkCollisions(z_fix_fixtoi(bullet->x),
+                                    z_fix_fixtoi(bullet->y),
+                                    false);
 }
 
 void z_bullet_draw(ZPoolObject* Bullet)

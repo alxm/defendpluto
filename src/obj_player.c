@@ -21,6 +21,7 @@
 #include "util_pool.h"
 #include "util_screen.h"
 #include "obj_bullet.h"
+#include "obj_enemy.h"
 #include "obj_player.h"
 
 #define Z_MAX_HEALTH 3
@@ -118,6 +119,14 @@ void z_player_tick(void)
                              z_fix_itofix(Z_HEIGHT - 1));
 
     z_player.jetFlicker = !z_player.jetFlicker;
+
+    bool hit = z_enemy_checkCollisions(z_fix_fixtoi(z_player.x),
+                                       z_fix_fixtoi(z_player.y),
+                                       true);
+
+    if(hit) {
+        //
+    }
 }
 
 void z_player_draw(void)
