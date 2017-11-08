@@ -32,6 +32,7 @@
 #define Z_SPEED_DECEL (Z_FIX_ONE / 16)
 
 ZPlayer z_player;
+static uint8_t g_heartsBlink = 0;
 
 void z_player_init(int8_t X, int8_t Y)
 {
@@ -127,6 +128,10 @@ void z_player_tick(void)
     if(hit) {
         z_player.health--;
     }
+
+    if(z_player.health <= 0 && z_fps_isNthFrame(10)) {
+        g_heartsBlink ^= 1;
+    }
 }
 
 void z_player_draw(void)
@@ -153,10 +158,11 @@ void z_player_draw(void)
                           0);
 
     for(int8_t i = 0; i < Z_MAX_HEALTH; i++) {
-        z_sprite_blit(&z_graphics.hearts,
-                      (int8_t)(2 + i * 8),
-                      2,
-                      z_player.health > i);
+        uint8_t heartFrame = z_player.health > 0
+                             ? z_player.health > i
+                             : g_heartsBlink;
+
+        z_sprite_blit(&z_graphics.hearts, (int8_t)(2 + i * 8), 2, heartFrame);
     }
 
     int8_t maxWidth = 21;
