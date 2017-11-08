@@ -39,21 +39,21 @@ static bool (*g_ai[Z_AI_ID_NUM])(ZEnemy*) = {
     nobrain
 };
 
-void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint8_t Ai, uint8_t AiData)
+void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint8_t AiId, uint8_t AiArgs)
 {
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
     Enemy->sprite = Sprite;
     Enemy->frame = 0;
-    Enemy->ai = Ai;
-    Enemy->aiData = AiData;
+    Enemy->aiId = AiId;
+    Enemy->aiArgs = AiArgs;
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
-    return g_ai[enemy->ai](enemy);
+    return g_ai[enemy->aiId](enemy);
 }
 
 void z_enemy_draw(ZPoolObject* Enemy)

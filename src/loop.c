@@ -36,6 +36,7 @@ void loop_setup(void)
     z_graphics_setup();
     z_font_setup();
     z_pool_setup();
+    z_vm_setup();
     z_player_init(Z_WIDTH / 2, Z_HEIGHT * 2 / 3);
 }
 

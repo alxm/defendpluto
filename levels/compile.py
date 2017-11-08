@@ -51,30 +51,27 @@ class Instruction:
 
 class InstructionSpawn(Instruction):
     def __init__(self):
-        Instruction.__init__(self, 8)
+        Instruction.__init__(self, 6)
 
     def custom_compile(self, Tokens):
         bytecode = []
 
         #
-        # 8b    8b      8b      4b        4b      4b      4b        8b
-        # spawn x_coord y_coord sprite_id ai_id   ai_data num_units wait_between
-        # spawn 64      -8      enemy0    nobrain 0       1         0
+        # 8b    8b      8b      4b        4b      8b
+        # spawn x_coord y_coord sprite_id ai_id   ai_args
+        # spawn 64      -8      enemy0    nobrain 0
         #
         x_coord = int(Tokens[1])
         y_coord = int(Tokens[2])
         sprite_id = spriteIds[Tokens[3]]
         ai_id = aiIds[Tokens[4]]
-        ai_data = int(Tokens[5])
-        num_units = int(Tokens[6])
-        wait_between = int(Tokens[7])
+        ai_args = int(Tokens[5])
 
         bytecode.append(self.opcode)
         bytecode.append(x_coord)
         bytecode.append(y_coord)
         bytecode.append((sprite_id << 4) | ai_id)
-        bytecode.append((ai_data << 4) | num_units)
-        bytecode.append(wait_between)
+        bytecode.append(ai_args)
 
         return bytecode
 
@@ -97,11 +94,32 @@ class InstructionWait(Instruction):
 
         return bytecode
 
+class InstructionLoop(Instruction):
+    def __init__(self):
+        Instruction.__init__(self, 2)
+
+    def custom_compile(self, Tokens):
+        bytecode = []
+
+        #
+        # 8b   8b
+        # loop num_times
+        # loop 10
+        #
+        num_times = int(Tokens[1])
+
+        bytecode.append(self.opcode)
+        bytecode.append(num_times)
+
+        return bytecode
+
 def main(LevelFile):
     instructions = {
         'spawn': InstructionSpawn(),
         'wait': InstructionWait(),
         'waitclear': Instruction(),
+        'loop': InstructionLoop(),
+        'end': Instruction(),
         'over': Instruction(),
     }
 

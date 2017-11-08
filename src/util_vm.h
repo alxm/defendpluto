@@ -15,4 +15,5 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+extern void z_vm_setup(void);
 extern void z_vm_tick(void);

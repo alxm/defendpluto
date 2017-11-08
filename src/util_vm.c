@@ -22,58 +22,52 @@
 #include "obj_enemy.h"
 #include "data_levels.h"
 
+typedef enum {
+    Z_OP_SPAWN,
+    Z_OP_WAIT,
+    Z_OP_WAITCLEAR,
+    Z_OP_LOOP,
+    Z_OP_END,
+    Z_OP_OVER,
+    Z_OP_NUM
+} ZOpType;
+
 typedef struct {
     bool (*callback)(void);
     uint8_t bytes;
-} ZInstruction;
+} ZOp;
 
-static uint16_t g_pc = 0;
-static uint8_t g_wait = 0;
-static uint8_t g_counter = 0;
-static bool g_freshOp = true;
-static bool g_reset = false;
+static uint16_t g_pc;
+static uint16_t g_loopStart;
+static uint8_t g_loopCounter;
+static uint8_t g_wait;
+static bool g_reset = true;
+static ZOp g_ops[Z_OP_NUM];
 
 #define Z_READ(Offset) Z_PGM_READ_UINT8(z_data_levels[g_pc + Offset])
 
 static bool handle_spawn(void)
 {
     /*
-     * 8b    8b      8b      4b        4b      4b      4b        8b
-     * spawn x_coord y_coord sprite_id ai_id   ai_data num_units wait_between
-     * spawn 64      -8      enemy0    nobrain 0       1         0
-    */
+     * 8b    8b      8b      4b        4b      8b
+     * spawn x_coord y_coord sprite_id ai_id   ai_args
+     * spawn 64      -8      enemy0    nobrain 0
+     */
     int8_t x = (int8_t)Z_READ(1);
     int8_t y = (int8_t)Z_READ(2);
     uint8_t sprite_id = Z_READ(3) >> 4;
     uint8_t ai_id = Z_READ(3) & 0xf;
-    uint8_t ai_data = Z_READ(4) >> 4;
-    uint8_t num_units = Z_READ(4) & 0xf;
-    uint8_t wait_between = Z_READ(5);
+    uint8_t ai_args = Z_READ(4);
 
-    if(!g_freshOp) {
-        num_units = g_counter;
-    }
+    ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
 
-    if(num_units > 0) {
-        ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
-
-        if(e == NULL) {
-            return false;
-        }
-
-        z_enemy_init(e, x, y, sprite_id, ai_id, ai_data);
-
-        num_units--;
-    }
-
-    if(num_units == 0) {
-        return true;
-    } else {
-        g_wait = wait_between;
-        g_counter = num_units;
-
+    if(e == NULL) {
         return false;
     }
+
+    z_enemy_init(e, x, y, sprite_id, ai_id, ai_args);
+
+    return true;
 }
 
 static bool handle_wait(void)
@@ -82,7 +76,7 @@ static bool handle_wait(void)
      * 8b   8b
      * wait frames
      * wait 30
-    */
+     */
     g_wait = Z_READ(1);
 
     return true;
@@ -94,8 +88,44 @@ static bool handle_waitclear(void)
      * 8b
      * waitclear
      * waitclear
-    */
+     */
     return z_pool_getNumActive(Z_POOL_ENEMY) == 0;
+}
+
+static bool handle_loop(void)
+{
+    /*
+     * 8b   8b
+     * loop num_times
+     * loop 10
+     */
+    uint8_t num_times = Z_READ(1);
+
+    if(num_times == 0) {
+        do {
+            g_pc = (uint16_t)(g_pc + g_ops[Z_READ(0)].bytes);
+        } while(Z_READ(0) != Z_OP_END);
+    } else {
+        g_loopStart = (uint16_t)(g_pc + g_ops[Z_OP_LOOP].bytes);
+        g_loopCounter = num_times;
+    }
+
+    return true;
+}
+
+static bool handle_end(void)
+{
+    /*
+     * 8b
+     * end
+     * end
+     */
+    if(--g_loopCounter) {
+        g_pc = g_loopStart;
+        return false;
+    }
+
+    return true;
 }
 
 static bool handle_over(void)
@@ -104,38 +134,38 @@ static bool handle_over(void)
      * 8b
      * over
      * over
-    */
+     */
     g_reset = true;
 
     return false;
 }
 
-static ZInstruction g_ops[] = {
-    {handle_spawn, 6},
-    {handle_wait, 2},
-    {handle_waitclear, 1},
-    {handle_over, 1},
-};
+void z_vm_setup(void)
+{
+    g_ops[Z_OP_SPAWN] = (ZOp){handle_spawn, 5};
+    g_ops[Z_OP_WAIT] = (ZOp){handle_wait, 2};
+    g_ops[Z_OP_WAITCLEAR] = (ZOp){handle_waitclear, 1};
+    g_ops[Z_OP_LOOP] = (ZOp){handle_loop, 2};
+    g_ops[Z_OP_END] = (ZOp){handle_end, 1};
+    g_ops[Z_OP_OVER] = (ZOp){handle_over, 1};
+}
 
 void z_vm_tick(void)
 {
+    if(g_reset) {
+        g_pc = 0;
+        g_wait = 0;
+        g_reset = false;
+    }
+
     if(g_wait) {
         g_wait--;
         return;
-    }
-
-    if(g_reset) {
-        g_pc = 0;
-        g_freshOp = true;
-        g_reset = false;
     }
 
     uint8_t instruction = Z_READ(0);
 
     if(g_ops[instruction].callback()) {
         g_pc = (uint16_t)(g_pc + g_ops[instruction].bytes);
-        g_freshOp = true;
-    } else {
-        g_freshOp = false;
     }
 }
