@@ -36,7 +36,7 @@ void z_font_setup(void)
            | Z_FONT_FLAG_ALPHA_L);
 }
 
-void z_font_text(const char* Text, int8_t X, int8_t Y, ZFontFace Font)
+void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font)
 {
     uint8_t flags = z_fonts[Font].flags;
     ZSprite* sprite = &z_fonts[Font].sprites;
@@ -72,7 +72,7 @@ void z_font_text(const char* Text, int8_t X, int8_t Y, ZFontFace Font)
     }
 }
 
-void z_font_int(int16_t Number, int8_t X, int8_t Y, ZFontFace Font)
+void z_font_int(int16_t Number, int8_t X, int8_t Y, uint8_t Font)
 {
     #define Z_BUFFER_SIZE 6
     char buffer[Z_BUFFER_SIZE];

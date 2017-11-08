@@ -23,6 +23,7 @@
 #include "data_levels.h"
 
 typedef enum {
+    Z_OP_INVALID = -1,
     Z_OP_SPAWN,
     Z_OP_WAIT,
     Z_OP_WAITCLEAR,
@@ -89,7 +90,7 @@ static bool handle_waitclear(void)
      * waitclear
      * waitclear
      */
-    return z_pool_getNumActive(Z_POOL_ENEMY) == 0;
+    return z_pool_noActive(Z_POOL_ENEMY);
 }
 
 static bool handle_loop(void)

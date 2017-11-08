@@ -37,5 +37,5 @@ extern ZFont z_fonts[Z_FONT_FACE_NUM];
 
 extern void z_font_setup(void);
 
-extern void z_font_text(const char* Text, int8_t X, int8_t Y, ZFontFace Font);
-extern void z_font_int(int16_t Number, int8_t X, int8_t Y, ZFontFace Font);
+extern void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font);
+extern void z_font_int(int16_t Number, int8_t X, int8_t Y, uint8_t Font);

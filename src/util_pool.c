@@ -27,7 +27,6 @@
 struct ZPool {
     ZPoolObject* freeList;
     ZPoolObject* activeList;
-    uint8_t numActive;
     ZPoolObject pool[];
 };
 
@@ -51,7 +50,7 @@ static ZPool* g_pools[Z_POOL_NUM] = {
     &g_particlePool.generic,
 };
 
-static void initPool(ZPoolType Pool, size_t ObjectSize, size_t NumObjects)
+static void initPool(uint8_t Pool, size_t ObjectSize, size_t NumObjects)
 {
     ZPool* pool = g_pools[Pool];
     ZPoolObject* current = &pool->pool[0];
@@ -65,7 +64,6 @@ static void initPool(ZPoolType Pool, size_t ObjectSize, size_t NumObjects)
     current->next = NULL;
     pool->freeList = &pool->pool[0];
     pool->activeList = NULL;
-    pool->numActive = 0;
 }
 
 void z_pool_setup(void)
@@ -77,7 +75,7 @@ void z_pool_setup(void)
     initPool(Z_POOL_PARTICLE, sizeof(ZParticle), Z_PARTICLES_NUM);
 }
 
-void* z_pool_alloc(ZPoolType Pool)
+void* z_pool_alloc(uint8_t Pool)
 {
     ZPool* pool = g_pools[Pool];
 
@@ -90,8 +88,6 @@ void* z_pool_alloc(ZPoolType Pool)
 
     object->next = pool->activeList;
     pool->activeList = object;
-
-    pool->numActive++;
 
     return object;
 }
@@ -111,17 +107,15 @@ static void* z_pool_release(ZPool* Pool, void* Object, void* LastObject)
     object->next = Pool->freeList;
     Pool->freeList = object;
 
-    Pool->numActive--;
-
     return nextObject;
 }
 
-uint8_t z_pool_getNumActive(ZPoolType Pool)
+bool z_pool_noActive(uint8_t Pool)
 {
-    return g_pools[Pool]->numActive;
+    return g_pools[Pool]->activeList == NULL;
 }
 
-void z_pool_tick(ZPoolType Pool, bool (*Callback)(ZPoolObject*))
+void z_pool_tick(uint8_t Pool, bool (*Callback)(ZPoolObject*))
 {
     ZPool* pool = g_pools[Pool];
     ZPoolObject* last = NULL;
@@ -136,7 +130,7 @@ void z_pool_tick(ZPoolType Pool, bool (*Callback)(ZPoolObject*))
     }
 }
 
-void z_pool_draw(ZPoolType Pool, void (*Callback)(ZPoolObject*))
+void z_pool_draw(uint8_t Pool, void (*Callback)(ZPoolObject*))
 {
     ZPool* pool = g_pools[Pool];
 

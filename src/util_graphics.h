@@ -16,6 +16,7 @@
 */
 
 typedef enum {
+    Z_SPRITE_ID_INVALID = -1,
     Z_SPRITE_ID_ASTEROID,
     Z_SPRITE_ID_ENEMY0,
     Z_SPRITE_ID_ENEMY1,
