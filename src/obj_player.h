@@ -22,8 +22,8 @@ typedef struct {
     uint8_t frame;
     int8_t shootShift;
     bool jetFlicker;
+    ZFix shield;
     int8_t health;
-    int8_t shield;
 } ZPlayer;
 
 extern ZPlayer z_player;
