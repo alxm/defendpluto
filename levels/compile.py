@@ -57,14 +57,14 @@ class InstructionSpawn(Instruction):
         bytecode = []
 
         #
-        # 8b    8b      8b      4b        4b      8b      4b        4b
+        # 8b    8b      8b      4b        4b      4b      4b        8b
         # spawn x_coord y_coord sprite_id ai_id   ai_data num_units wait_between
         # spawn 64      -8      enemy0    nobrain 0       1         0
         #
         x_coord = int(Tokens[1])
         y_coord = int(Tokens[2])
         sprite_id = spriteIds[Tokens[3]]
-        ai_type = aiIds[Tokens[4]]
+        ai_id = aiIds[Tokens[4]]
         ai_data = int(Tokens[5])
         num_units = int(Tokens[6])
         wait_between = int(Tokens[7])
@@ -72,9 +72,9 @@ class InstructionSpawn(Instruction):
         bytecode.append(self.opcode)
         bytecode.append(x_coord)
         bytecode.append(y_coord)
-        bytecode.append((sprite_id << 4) | ai_type)
-        bytecode.append(ai_data)
-        bytecode.append((num_units << 4) | wait_between)
+        bytecode.append((sprite_id << 4) | ai_id)
+        bytecode.append((ai_data << 4) | num_units)
+        bytecode.append(wait_between)
 
         return bytecode
 

@@ -2,14 +2,7 @@
 ; Level 0
 ;
 
-spawn 8 -8 asteroid nobrain 0 1 0
-spawn 24 -8 asteroid nobrain 0 1 0
-spawn 40 -8 asteroid nobrain 0 1 0
-spawn 56 -8 asteroid nobrain 0 1 0
-spawn 72 -8 asteroid nobrain 0 1 0
-spawn 88 -8 asteroid nobrain 0 1 0
-spawn 104 -8 asteroid nobrain 0 1 0
-spawn 120 -8 asteroid nobrain 0 1 0
+spawn 64 -8 asteroid nobrain 0 3 48
 waitclear
 
 spawn 8 -8 enemy0 nobrain 0 1 0
@@ -21,7 +14,7 @@ spawn 40 -8 enemy0 nobrain 2 1 0
 wait 10
 spawn 56 -8 enemy1 nobrain 3 1 0
 wait 7
-spawn 72 -8 enemy2 nobrain 4 1 0
+spawn 72 -8 enemy2 nobrain 4 2 20
 wait 3
 spawn 88 -8 enemy1 nobrain 5 1 0
 waitclear

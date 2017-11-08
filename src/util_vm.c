@@ -29,13 +29,16 @@ typedef struct {
 
 static uint16_t g_pc = 0;
 static uint8_t g_wait = 0;
+static uint8_t g_counter = 0;
+static bool g_freshOp = true;
+static bool g_reset = false;
 
 #define Z_READ(Offset) Z_PGM_READ_UINT8(z_data_levels[g_pc + Offset])
 
 static bool handle_spawn(void)
 {
     /*
-     * 8b    8b      8b      4b        4b      8b      4b        4b
+     * 8b    8b      8b      4b        4b      4b      4b        8b
      * spawn x_coord y_coord sprite_id ai_id   ai_data num_units wait_between
      * spawn 64      -8      enemy0    nobrain 0       1         0
     */
@@ -43,22 +46,34 @@ static bool handle_spawn(void)
     int8_t y = (int8_t)Z_READ(2);
     uint8_t sprite_id = Z_READ(3) >> 4;
     uint8_t ai_id = Z_READ(3) & 0xf;
-    uint8_t ai_data = Z_READ(4);
-    uint8_t num_units = Z_READ(5) >> 4;
-    uint8_t wait_between = Z_READ(5) & 0xf;
+    uint8_t ai_data = Z_READ(4) >> 4;
+    uint8_t num_units = Z_READ(4) & 0xf;
+    uint8_t wait_between = Z_READ(5);
 
-    Z_UNUSED(num_units);
-    Z_UNUSED(wait_between);
-
-    ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
-
-    if(e == NULL) {
-        return false;
+    if(!g_freshOp) {
+        num_units = g_counter;
     }
 
-    z_enemy_init(e, x, y, sprite_id, ai_id, ai_data);
+    if(num_units > 0) {
+        ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
 
-    return true;
+        if(e == NULL) {
+            return false;
+        }
+
+        z_enemy_init(e, x, y, sprite_id, ai_id, ai_data);
+
+        num_units--;
+    }
+
+    if(num_units == 0) {
+        return true;
+    } else {
+        g_wait = wait_between;
+        g_counter = num_units;
+
+        return false;
+    }
 }
 
 static bool handle_wait(void)
@@ -90,7 +105,7 @@ static bool handle_over(void)
      * over
      * over
     */
-    g_pc = 0;
+    g_reset = true;
 
     return false;
 }
@@ -109,9 +124,18 @@ void z_vm_tick(void)
         return;
     }
 
+    if(g_reset) {
+        g_pc = 0;
+        g_freshOp = true;
+        g_reset = false;
+    }
+
     uint8_t instruction = Z_READ(0);
 
     if(g_ops[instruction].callback()) {
         g_pc = (uint16_t)(g_pc + g_ops[instruction].bytes);
+        g_freshOp = true;
+    } else {
+        g_freshOp = false;
     }
 }
