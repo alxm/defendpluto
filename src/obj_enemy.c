@@ -57,11 +57,14 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint8_t AiI
     Enemy->frame = 0;
     Enemy->aiId = AiId;
     Enemy->aiArgs = AiArgs;
+    Enemy->jetFlicker = false;
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
+
+    enemy->jetFlicker = !enemy->jetFlicker;
 
     return g_ai[enemy->aiId](enemy);
 }
@@ -72,6 +75,10 @@ void z_enemy_draw(ZPoolObject* Enemy)
     int8_t x = z_fix_fixtoi(enemy->x);
     int8_t y = z_fix_fixtoi(enemy->y);
     ZSprite* sprite = &z_graphics.enemy[enemy->sprite];
+
+    if(enemy->jetFlicker) {
+        z_graphics_drawJets(enemy->sprite, x, y);
+    }
 
     z_sprite_blitCentered(sprite,
                           (int8_t)(x + z_screen_xShake),

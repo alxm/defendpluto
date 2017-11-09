@@ -26,6 +26,7 @@ typedef struct {
     ZFix x, y;
     uint8_t sprite, frame;
     uint8_t aiId, aiArgs;
+    bool jetFlicker;
 } ZEnemy;
 
 #define Z_ENEMIES_NUM 16

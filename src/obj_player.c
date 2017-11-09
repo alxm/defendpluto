@@ -56,7 +56,7 @@ void z_player_init(int8_t X, int8_t Y)
     z_player.frame = 0;
     z_player.shootShift = 0;
     z_player.jetFlicker = false;
-    z_player.shield = Z_SHIELD_MAX * 3 / 4;
+    z_player.shield = Z_SHIELD_MAX;
     z_player.health = 2;
 }
 

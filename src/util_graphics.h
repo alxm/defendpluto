@@ -43,3 +43,5 @@ typedef struct {
 extern ZGraphics z_graphics;
 
 extern void z_graphics_setup(void);
+
+extern void z_graphics_drawJets(uint8_t Sprite, int8_t X, int8_t Y);
