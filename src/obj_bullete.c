@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_collision.h"
 #include "util_fix.h"
+#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
@@ -51,6 +52,7 @@ bool z_bullete_tick(ZPoolObject* Bullet)
 
     if(hit) {
         z_player_takeDamage(256);
+        z_screen_shake(Z_FPS / 15);
     }
 
     return !hit;
