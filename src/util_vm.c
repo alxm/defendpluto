@@ -102,9 +102,14 @@ static bool handle_loop(void)
     uint8_t num_times = Z_READ(1);
 
     if(num_times == 0) {
+        uint8_t op;
+
         do {
-            g_pc = (uint16_t)(g_pc + g_ops[Z_READ(0)].bytes);
-        } while(Z_READ(0) != Z_OP_END);
+            op = Z_READ(0);
+            g_pc = (uint16_t)(g_pc + g_ops[op].bytes);
+        } while(op != Z_OP_END);
+
+        return false;
     } else {
         g_loopStart = (uint16_t)(g_pc + g_ops[Z_OP_LOOP].bytes);
         g_loopCounter = num_times;
