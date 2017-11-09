@@ -146,6 +146,8 @@ void z_player_tick(void)
 
     bool hit = z_enemy_checkCollisions(z_fix_fixtoi(z_player.x),
                                        z_fix_fixtoi(z_player.y),
+                                       8,
+                                       8,
                                        true);
 
     if(hit) {

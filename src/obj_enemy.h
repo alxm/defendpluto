@@ -35,4 +35,4 @@ extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint
 extern bool z_enemy_tick(ZPoolObject* Enemy);
 extern void z_enemy_draw(ZPoolObject* Enemy);
 
-extern bool z_enemy_checkCollisions(int8_t X, int8_t Y, bool AllowMultipleCollisions);
+extern bool z_enemy_checkCollisions(int8_t X, int8_t Y, int8_t W, int8_t H, bool AllowMultipleCollisions);

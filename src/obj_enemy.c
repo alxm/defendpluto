@@ -29,7 +29,7 @@
 static struct {
     bool hit;
     bool allowMultiple;
-    int8_t callerX, callerY;
+    int8_t x, y, w, h;
 } g_coll;
 
 static bool nobrain(ZEnemy* Enemy)
@@ -94,12 +94,14 @@ static bool checkCollision(ZPoolObject* Enemy)
 
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
-    bool hit = z_collision_pointInBox(g_coll.callerX,
-                                      g_coll.callerY,
-                                      (int8_t)(z_fix_fixtoi(enemy->x) - 4),
-                                      (int8_t)(z_fix_fixtoi(enemy->y) - 4),
-                                      8,
-                                      8);
+    bool hit = z_collision_boxAndBox(g_coll.x,
+                                     g_coll.y,
+                                     g_coll.w,
+                                     g_coll.h,
+                                     (int8_t)(z_fix_fixtoi(enemy->x) - 3),
+                                     (int8_t)(z_fix_fixtoi(enemy->y) - 3),
+                                     6,
+                                     6);
 
     if(hit) {
         for(int8_t i = Z_PARTICLES_NUM; i--; ) {
@@ -144,10 +146,12 @@ static bool checkCollision(ZPoolObject* Enemy)
     return !hit;
 }
 
-bool z_enemy_checkCollisions(int8_t X, int8_t Y, bool AllowMultipleCollisions)
+bool z_enemy_checkCollisions(int8_t X, int8_t Y, int8_t W, int8_t H, bool AllowMultipleCollisions)
 {
-    g_coll.callerX = X;
-    g_coll.callerY = Y;
+    g_coll.x = (int8_t)(X - W / 2);
+    g_coll.y = (int8_t)(Y - H / 2);
+    g_coll.w = W;
+    g_coll.h = H;
     g_coll.hit = false;
     g_coll.allowMultiple = AllowMultipleCollisions;
 

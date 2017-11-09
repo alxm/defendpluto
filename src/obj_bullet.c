@@ -43,6 +43,8 @@ bool z_bullet_tick(ZPoolObject* Bullet)
 
     return !z_enemy_checkCollisions(z_fix_fixtoi(bullet->x),
                                     z_fix_fixtoi(bullet->y),
+                                    2,
+                                    4,
                                     false);
 }
 
