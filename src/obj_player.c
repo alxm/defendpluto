@@ -70,7 +70,7 @@ void z_player_init(int8_t X, int8_t Y)
     z_player.shootShift = 0;
     z_player.jetFlicker = false;
     z_player.shield = Z_SHIELD_MAX;
-    z_player.health = 2;
+    z_player.health = Z_HEALTH_MAX;
 }
 
 void z_player_tick(void)
@@ -163,6 +163,34 @@ void z_player_tick(void)
     }
 }
 
+static void drawHearts(int8_t X, int8_t Y)
+{
+    for(int8_t i = 0; i < Z_HEALTH_MAX; i++) {
+        uint8_t heartFrame = z_player.health > 0
+                             ? z_player.health > i
+                             : g_heartsBlink;
+
+        z_sprite_blit(&z_graphics.hearts, (int8_t)(X + i * 8), Y, heartFrame);
+    }
+}
+
+static void drawShield(int8_t X, int8_t Y)
+{
+    z_sprite_blit(&z_graphics.shield, X, Y, 0);
+
+    int8_t rX = (int8_t)(X + 7);
+    int8_t rY = (int8_t)(Y + 1);
+    int8_t maxWidth = 21;
+    int8_t width = (int8_t)(maxWidth * z_player.shield / Z_SHIELD_MAX);
+
+    z_draw_rectangle(rX, rY, (int8_t)(maxWidth + 2), 4, Z_COLOR_RED);
+    z_draw_rectangle((int8_t)(rX + 1 + width),
+                     (int8_t)(rY + 1),
+                     (int8_t)(maxWidth - width),
+                     2,
+                     Z_COLOR_BLUE);
+}
+
 void z_player_draw(void)
 {
     int8_t x = z_fix_fixtoi(z_player.x);
@@ -186,27 +214,8 @@ void z_player_draw(void)
                           (int8_t)(y + z_screen_yShake),
                           0);
 
-    for(int8_t i = 0; i < Z_HEALTH_MAX; i++) {
-        uint8_t heartFrame = z_player.health > 0
-                             ? z_player.health > i
-                             : g_heartsBlink;
-
-        z_sprite_blit(&z_graphics.hearts, (int8_t)(2 + i * 8), 2, heartFrame);
-    }
-
-    z_sprite_blit(&z_graphics.shield, 48, 2, 0);
-
-    int8_t rX = 55;
-    int8_t rY = 3;
-    int8_t maxWidth = 21;
-    int8_t width = (int8_t)(maxWidth * z_player.shield / Z_SHIELD_MAX);
-
-    z_draw_rectangle(rX, rY, 23, 4, Z_COLOR_RED);
-    z_draw_rectangle((int8_t)(rX + 1 + width),
-                     (int8_t)(rY + 1),
-                     (int8_t)(maxWidth - width),
-                     2,
-                     Z_COLOR_BLUE);
+    drawHearts(2, 2);
+    drawShield(29, 2);
 }
 
 void z_player_takeDamage(int16_t Damage)
