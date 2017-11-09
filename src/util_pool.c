@@ -18,7 +18,8 @@
 #include "platform.h"
 #include "util_fix.h"
 #include "util_pool.h"
-#include "obj_bullet.h"
+#include "obj_bullete.h"
+#include "obj_bulletp.h"
 #include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
@@ -36,15 +37,17 @@ struct ZPool {
         uint8_t private[sizeof(ZPool) + NumObjects * sizeof(ObjectType)]; \
     }
 
-static DECLARE_POOL(ZStar, Z_STARS_NUM) g_starPool;
-static DECLARE_POOL(ZBullet, Z_BULLETS_NUM) g_bulletPool;
-static DECLARE_POOL(ZEnemy, Z_ENEMIES_NUM) g_enemyPool;
-static DECLARE_POOL(ZCircle, Z_CIRCLES_NUM) g_circlePool;
-static DECLARE_POOL(ZParticle, Z_PARTICLES_NUM) g_particlePool;
+static DECLARE_POOL(ZStar, Z_STAR_POOL_NUM) g_starPool;
+static DECLARE_POOL(ZBulletE, Z_BULLETE_POOL_NUM) g_bulletEPool;
+static DECLARE_POOL(ZBulletP, Z_BULLETP_POOL_NUM) g_bulletPPool;
+static DECLARE_POOL(ZEnemy, Z_ENEMY_POOL_NUM) g_enemyPool;
+static DECLARE_POOL(ZCircle, Z_CIRCLE_POOL_NUM) g_circlePool;
+static DECLARE_POOL(ZParticle, Z_PARTICLE_POOL_NUM) g_particlePool;
 
 static ZPool* g_pools[Z_POOL_NUM] = {
     &g_starPool.generic,
-    &g_bulletPool.generic,
+    &g_bulletEPool.generic,
+    &g_bulletPPool.generic,
     &g_enemyPool.generic,
     &g_circlePool.generic,
     &g_particlePool.generic,
@@ -73,11 +76,12 @@ void z_pool_setup(void)
 
 void z_pool_reset(void)
 {
-    initPool(Z_POOL_STAR, sizeof(ZStar), Z_STARS_NUM);
-    initPool(Z_POOL_BULLET, sizeof(ZBullet), Z_BULLETS_NUM);
-    initPool(Z_POOL_ENEMY, sizeof(ZEnemy), Z_ENEMIES_NUM);
-    initPool(Z_POOL_CIRCLE, sizeof(ZCircle), Z_CIRCLES_NUM);
-    initPool(Z_POOL_PARTICLE, sizeof(ZParticle), Z_PARTICLES_NUM);
+    initPool(Z_POOL_STAR, sizeof(ZStar), Z_STAR_POOL_NUM);
+    initPool(Z_POOL_BULLETE, sizeof(ZBulletE), Z_BULLETE_POOL_NUM);
+    initPool(Z_POOL_BULLETP, sizeof(ZBulletP), Z_BULLETP_POOL_NUM);
+    initPool(Z_POOL_ENEMY, sizeof(ZEnemy), Z_ENEMY_POOL_NUM);
+    initPool(Z_POOL_CIRCLE, sizeof(ZCircle), Z_CIRCLE_POOL_NUM);
+    initPool(Z_POOL_PARTICLE, sizeof(ZParticle), Z_PARTICLE_POOL_NUM);
 }
 
 void* z_pool_alloc(uint8_t Pool)

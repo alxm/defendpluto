@@ -23,7 +23,7 @@
 #include "util_pool.h"
 #include "util_random.h"
 #include "util_screen.h"
-#include "obj_bullet.h"
+#include "obj_bullete.h"
 #include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
@@ -69,14 +69,12 @@ static bool ai_shoot(ZEnemy* Enemy)
     glideDown(Enemy);
 
     if(z_fps_isNthFrame(Z_FPS)) {
-        ZBullet* b = z_pool_alloc(Z_POOL_BULLET);
+        ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
 
         if(b) {
-            z_bullet_init(b,
-                          (ZFix)(Enemy->x + z_fix_itofix(z_screen_xShake)),
-                          Enemy->y,
-                          z_fix_itofix(2),
-                          false);
+            z_bullete_init(b,
+                           (ZFix)(Enemy->x + z_fix_itofix(z_screen_xShake)),
+                           Enemy->y);
         }
     }
 
@@ -143,7 +141,7 @@ static bool checkCollision(ZPoolObject* Enemy)
                                      6);
 
     if(hit) {
-        for(int8_t i = Z_PARTICLES_NUM; i--; ) {
+        for(int8_t i = Z_PARTICLE_POOL_NUM; i--; ) {
             ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
 
             if(p == NULL) {

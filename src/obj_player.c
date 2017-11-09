@@ -22,7 +22,7 @@
 #include "util_input.h"
 #include "util_pool.h"
 #include "util_screen.h"
-#include "obj_bullet.h"
+#include "obj_bulletp.h"
 #include "obj_enemy.h"
 #include "obj_player.h"
 
@@ -85,15 +85,13 @@ void z_player_tick(void)
         }
 
         if(z_fps_getCounter() - z_player.lastShot >= Z_SHOOT_EVERY_N_FRAMES) {
-            ZBullet* b = z_pool_alloc(Z_POOL_BULLET);
+            ZBulletP* b = z_pool_alloc(Z_POOL_BULLETP);
 
             if(b) {
-                z_bullet_init(b,
-                              (ZFix)(z_player.x
+                z_bulletp_init(b,
+                               (ZFix)(z_player.x
                                         + z_fix_itofix(z_screen_xShake)),
-                              z_player.y,
-                              z_fix_itofix(-2),
-                              true);
+                               z_player.y);
             }
 
             z_player.lastShot = z_fps_getCounter();

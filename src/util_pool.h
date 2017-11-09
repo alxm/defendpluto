@@ -18,7 +18,8 @@
 typedef enum {
     Z_POOL_INVALID = -1,
     Z_POOL_STAR,
-    Z_POOL_BULLET,
+    Z_POOL_BULLETE,
+    Z_POOL_BULLETP,
     Z_POOL_ENEMY,
     Z_POOL_CIRCLE,
     Z_POOL_PARTICLE,

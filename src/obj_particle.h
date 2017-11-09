@@ -22,7 +22,7 @@ typedef struct {
     uint8_t ttl;
 } ZParticle;
 
-#define Z_PARTICLES_NUM 8
+#define Z_PARTICLE_POOL_NUM 8
 
 extern void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y, uint8_t FramesTtl);
 extern bool z_particle_tick(ZPoolObject* Particle);

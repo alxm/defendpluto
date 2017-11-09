@@ -30,7 +30,7 @@ typedef struct {
     bool jetFlicker;
 } ZEnemy;
 
-#define Z_ENEMIES_NUM 16
+#define Z_ENEMY_POOL_NUM 16
 
 extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint8_t AiId, uint8_t AiArgs);
 extern bool z_enemy_tick(ZPoolObject* Enemy);

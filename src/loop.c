@@ -23,7 +23,8 @@
 #include "util_random.h"
 #include "util_screen.h"
 #include "util_vm.h"
-#include "obj_bullet.h"
+#include "obj_bullete.h"
+#include "obj_bulletp.h"
 #include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
@@ -54,13 +55,14 @@ void loop_tick(void)
     z_vm_tick();
     z_player_tick();
     z_pool_tick(Z_POOL_STAR, z_star_tick);
-    z_pool_tick(Z_POOL_BULLET, z_bullet_tick);
+    z_pool_tick(Z_POOL_BULLETE, z_bullete_tick);
+    z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick);
     z_pool_tick(Z_POOL_ENEMY, z_enemy_tick);
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick);
     z_screen_tick();
 
-    if(z_random_int8(2 * Z_HEIGHT / Z_STARS_NUM) == 0) {
+    if(z_random_int8(2 * Z_HEIGHT / Z_STAR_POOL_NUM) == 0) {
         ZStar* star = z_pool_alloc(Z_POOL_STAR);
 
         if(star != NULL) {
@@ -77,7 +79,8 @@ void loop_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
-    z_pool_draw(Z_POOL_BULLET, z_bullet_draw);
+    z_pool_draw(Z_POOL_BULLETE, z_bullete_draw);
+    z_pool_draw(Z_POOL_BULLETP, z_bulletp_draw);
     z_pool_draw(Z_POOL_ENEMY, z_enemy_draw);
     z_pool_draw(Z_POOL_CIRCLE, z_circle_draw);
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
