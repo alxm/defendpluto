@@ -17,10 +17,19 @@
 
 static inline bool z_collision_pointInBox(int8_t X, int8_t Y, int8_t BoxX, int8_t BoxY, int8_t BoxW, int8_t BoxH)
 {
+    BoxX = (int8_t)(BoxX - BoxW / 2);
+    BoxY = (int8_t)(BoxY - BoxH / 2);
+
     return X >= BoxX && X < BoxX + BoxW && Y >= BoxY && Y < BoxY + BoxH;
 }
 
 static inline bool z_collision_boxAndBox(int8_t X1, int8_t Y1, int8_t W1, int8_t H1, int8_t X2, int8_t Y2, int8_t W2, int8_t H2)
 {
+    X1 = (int8_t)(X1 - W1 / 2);
+    Y1 = (int8_t)(Y1 - H1 / 2);
+
+    X2 = (int8_t)(X2 - W2 / 2);
+    Y2 = (int8_t)(Y2 - H2 / 2);
+
     return !(Y1 >= Y2 + H2 || Y2 >= Y1 + H1 || X1 >= X2 + W2 || X2 >= X1 + W1);
 }

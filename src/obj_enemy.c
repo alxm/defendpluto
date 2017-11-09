@@ -135,8 +135,8 @@ static bool checkCollision(ZPoolObject* Enemy)
                                      g_coll.y,
                                      g_coll.w,
                                      g_coll.h,
-                                     (int8_t)(z_fix_fixtoi(enemy->x) - 3),
-                                     (int8_t)(z_fix_fixtoi(enemy->y) - 3),
+                                     z_fix_fixtoi(enemy->x),
+                                     z_fix_fixtoi(enemy->y),
                                      6,
                                      6);
 
@@ -185,8 +185,8 @@ static bool checkCollision(ZPoolObject* Enemy)
 
 bool z_enemy_checkCollisions(int8_t X, int8_t Y, int8_t W, int8_t H, bool AllowMultipleCollisions)
 {
-    g_coll.x = (int8_t)(X - W / 2);
-    g_coll.y = (int8_t)(Y - H / 2);
+    g_coll.x = X;
+    g_coll.y = Y;
     g_coll.w = W;
     g_coll.h = H;
     g_coll.hit = false;
