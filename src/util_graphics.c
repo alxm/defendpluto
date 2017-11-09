@@ -96,6 +96,12 @@ void z_graphics_drawJets(uint8_t Sprite, int8_t X, int8_t Y)
 
         default: return;
     }
+}
 
-
+void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
+{
+    z_sprite_blit(Sprite,
+                  (int8_t)(X - z_sprite_getWidth(Sprite) / 2),
+                  (int8_t)(Y - z_sprite_getHeight(Sprite) / 2),
+                  Frame);
 }

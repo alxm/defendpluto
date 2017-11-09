@@ -17,6 +17,7 @@
 
 #include "platform.h"
 #include "util_font.h"
+#include "util_graphics.h"
 #include "data_gfx_font_num.h"
 #include "data_gfx_font_alphanum.h"
 

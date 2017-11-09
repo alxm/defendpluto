@@ -15,6 +15,14 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifdef __cplusplus
+#define Z_EXTERN_C_START extern "C" {
+#define Z_EXTERN_C_END }
+#else
+#define Z_EXTERN_C_START
+#define Z_EXTERN_C_END
+#endif
+
 #ifdef ARDUINO
     #include <stdlib.h>
     #include <stdbool.h>
@@ -32,15 +40,7 @@
     #define Z_PGM_READ_UINT16(Value) (Value)
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#define Z_UNUSED(X) (X = X)
-
-#define Z_WIDTH 128
-#define Z_HEIGHT 64
-#define Z_FPS 30
+Z_EXTERN_C_START
 
 typedef enum {
     Z_PALETTE_INVALID = -1,
@@ -49,15 +49,7 @@ typedef enum {
     Z_PALETTE_NUM
 } ZPalette;
 
-typedef enum {
-    Z_COLOR_INVALID = -1,
-    Z_COLOR_BLUE,
-    Z_COLOR_LIGHTBLUE,
-    Z_COLOR_LIGHTBLUE2,
-    Z_COLOR_RED,
-    Z_COLOR_YELLOW,
-    Z_COLOR_NUM
-} ZColor;
+#define Z_UNUSED(X) (X = X)
 
 #ifdef ARDUINO
     typedef uint8_t ZButton;
@@ -87,35 +79,7 @@ typedef enum {
     extern void z_platform__loadSprite(ZSprite* Sprite, const char* Path);
 #endif
 
-typedef struct {
-    ZButton up;
-    ZButton down;
-    ZButton left;
-    ZButton right;
-    ZButton a;
-    ZButton b;
-} ZControls;
-
-extern ZControls z_controls;
-
 extern void z_platform_setup(void);
 extern void z_platform_tick(void);
 
-extern uint16_t z_fps_getCounter(void);
-extern bool z_fps_isNthFrame(uint8_t N);
-
-extern bool z_button_pressed(ZButton Button);
-
-extern void z_draw_fill(uint8_t Color);
-extern void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color);
-extern void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color);
-extern void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color);
-
-extern void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame);
-extern void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame);
-extern int8_t z_sprite_getWidth(ZSprite* Sprite);
-extern int8_t z_sprite_getHeight(ZSprite* Sprite);
-
-#ifdef __cplusplus
-}
-#endif
+Z_EXTERN_C_END

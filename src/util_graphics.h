@@ -15,6 +15,18 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+Z_EXTERN_C_START
+
+typedef enum {
+    Z_COLOR_INVALID = -1,
+    Z_COLOR_BLUE,
+    Z_COLOR_LIGHTBLUE,
+    Z_COLOR_LIGHTBLUE2,
+    Z_COLOR_RED,
+    Z_COLOR_YELLOW,
+    Z_COLOR_NUM
+} ZColor;
+
 typedef enum {
     Z_SPRITE_ID_INVALID = -1,
     Z_SPRITE_ID_ASTEROID,
@@ -45,3 +57,15 @@ extern ZGraphics z_graphics;
 extern void z_graphics_setup(void);
 
 extern void z_graphics_drawJets(uint8_t Sprite, int8_t X, int8_t Y);
+
+extern void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame);
+extern void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame);
+extern int8_t z_sprite_getWidth(ZSprite* Sprite);
+extern int8_t z_sprite_getHeight(ZSprite* Sprite);
+
+extern void z_draw_fill(uint8_t Color);
+extern void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color);
+extern void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color);
+extern void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color);
+
+Z_EXTERN_C_END

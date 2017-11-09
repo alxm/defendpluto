@@ -17,6 +17,9 @@
 
 #include "platform.h"
 #include <Sprites.h>
+#include "util_fps.h"
+#include "util_graphics.h"
+#include "util_input.h"
 
 extern Arduboy2Base g_arduboy;
 ZControls z_controls;

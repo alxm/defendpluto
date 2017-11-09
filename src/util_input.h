@@ -15,12 +15,19 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
+Z_EXTERN_C_START
 
-void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
-{
-    z_sprite_blit(Sprite,
-                  (int8_t)(X - z_sprite_getWidth(Sprite) / 2),
-                  (int8_t)(Y - z_sprite_getHeight(Sprite) / 2),
-                  Frame);
-}
+typedef struct {
+    ZButton up;
+    ZButton down;
+    ZButton left;
+    ZButton right;
+    ZButton a;
+    ZButton b;
+} ZControls;
+
+extern ZControls z_controls;
+
+extern bool z_button_pressed(ZButton Button);
+
+Z_EXTERN_C_END

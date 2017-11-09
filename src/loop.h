@@ -15,14 +15,10 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+Z_EXTERN_C_START
 
 extern void loop_setup(void);
 extern void loop_tick(void);
 extern void loop_draw(void);
 
-#ifdef __cplusplus
-}
-#endif
+Z_EXTERN_C_END

@@ -18,6 +18,8 @@
 #ifndef ARDUINO
 
 #include "platform.h"
+#include "util_graphics.h"
+#include "util_input.h"
 
 ZControls z_controls;
 

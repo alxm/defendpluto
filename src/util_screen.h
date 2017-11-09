@@ -15,9 +15,12 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#define Z_WIDTH 128
+#define Z_HEIGHT 64
+
 extern int8_t z_screen_xShake, z_screen_yShake;
 
 extern void z_screen_reset(void);
-
 extern void z_screen_tick(void);
+
 extern void z_screen_shake(uint8_t Frames);

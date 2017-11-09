@@ -15,31 +15,11 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
-#include "util_fps.h"
-#include "loop.h"
+Z_EXTERN_C_START
 
-Arduboy2Base g_arduboy;
+#define Z_FPS 30
 
-void setup()
-{
-    g_arduboy.begin();
-    g_arduboy.setFrameRate(Z_FPS);
+extern uint16_t z_fps_getCounter(void);
+extern bool z_fps_isNthFrame(uint8_t N);
 
-    loop_setup();
-}
-
-void loop()
-{
-    if(!g_arduboy.nextFrameDEV()) {
-        g_arduboy.idle();
-        return;
-    }
-
-    g_arduboy.pollButtons();
-
-    loop_tick();
-    loop_draw();
-
-    g_arduboy.display();
-}
+Z_EXTERN_C_END

@@ -18,6 +18,8 @@
 #ifndef ARDUINO
 
 #include "platform.h"
+#include "util_fps.h"
+#include "util_screen.h"
 #include "loop.h"
 
 #define STRINGIFY_EXPAND(X) #X
