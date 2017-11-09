@@ -3,6 +3,16 @@
 ;
 
 loop 3
+    spawn 20 0 enemy0 nobrain 0
+    spawn 50 0 enemy1 nobrain 0
+    spawn 80 0 enemy2 nobrain 0
+
+    wait 45
+end
+
+waitclear
+
+loop 3
     spawn 20 -8 asteroid nobrain 0
     wait 20
     spawn 50 -8 asteroid nobrain 0
