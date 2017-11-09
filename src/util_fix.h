@@ -54,20 +54,24 @@ static inline ZFix z_fix_cos(uint8_t Angle)
     return Z_PGM_READ_UINT16(z_fix__sin[(uint8_t)(Angle + 64)]);
 }
 
-static inline ZFix z_fix_min(ZFix X, ZFix Y)
-{
-    return X < Y ? X : Y;
-}
+#define Z_GEN_MINMAX(Type, Name)                                    \
+    static inline Type z_##Name##_min(Type X, Type Y)               \
+    {                                                               \
+        return X < Y ? X : Y;                                       \
+    }                                                               \
+                                                                    \
+    static inline Type z_##Name##_max(Type X, Type Y)               \
+    {                                                               \
+        return X > Y ? X : Y;                                       \
+    }                                                               \
+                                                                    \
+    static inline Type z_##Name##_clamp(Type X, Type Min, Type Max) \
+    {                                                               \
+        return X < Min ? Min : (X > Max ? Max : X);                 \
+    }
 
-static inline ZFix z_fix_max(ZFix X, ZFix Y)
-{
-    return X > Y ? X : Y;
-}
-
-static inline ZFix z_fix_clamp(ZFix X, ZFix Min, ZFix Max)
-{
-    return X < Min ? Min : (X > Max ? Max : X);
-}
+Z_GEN_MINMAX(int16_t, int16)
+Z_GEN_MINMAX(ZFix, fix)
 
 static inline ZFix z_fix_inc(ZFix X, ZFix Inc)
 {

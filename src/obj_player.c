@@ -25,9 +25,9 @@
 #include "obj_player.h"
 
 #define Z_HEALTH_MAX 3
-#define Z_SHIELD_MAX (64 * Z_FIX_ONE)
-#define Z_SHIELD_INC (Z_FIX_ONE / 8)
-#define Z_SHIELD_DAMAGE_ENEMY (Z_SHIELD_MAX / 4)
+#define Z_SHIELD_MAX 1024
+#define Z_SHIELD_RESTORE (Z_SHIELD_MAX / (10 * Z_FPS))
+#define Z_SHIELD_DAMAGE_COLLISION (Z_SHIELD_MAX / 2)
 #define Z_SHIELD_DAMAGE_SHOOTING (Z_SHIELD_MAX / 16)
 #define Z_SHOOT_EVERY_N_FRAMES (Z_FPS / 4)
 #define Z_SPEED_MAX (Z_FIX_ONE)
@@ -37,11 +37,11 @@
 ZPlayer z_player;
 static uint8_t g_heartsBlink = 0;
 
-static bool useShield(ZFix Damage)
+static bool useShield(int16_t Damage)
 {
     bool protected = z_player.shield >= Damage;
 
-    z_player.shield = z_fix_max((ZFix)(z_player.shield - Damage), 0);
+    z_player.shield = z_int16_max((int16_t)(z_player.shield - Damage), 0);
 
     return protected;
 }
@@ -139,12 +139,13 @@ void z_player_tick(void)
                                        true);
 
     if(hit) {
-        if(!useShield(Z_SHIELD_DAMAGE_ENEMY)) {
+        if(!useShield(Z_SHIELD_DAMAGE_COLLISION)) {
             z_player.health--;
         }
     } else {
-        z_player.shield = z_fix_min((ZFix)(z_player.shield + Z_SHIELD_INC),
-                                    Z_SHIELD_MAX);
+        z_player.shield = z_int16_min(
+                            (int16_t)(z_player.shield + Z_SHIELD_RESTORE),
+                            Z_SHIELD_MAX);
     }
 
     if(z_player.health <= 0 && z_fps_isNthFrame(10)) {
