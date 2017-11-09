@@ -23,6 +23,7 @@
 #include "util_pool.h"
 #include "util_random.h"
 #include "util_screen.h"
+#include "obj_bullet.h"
 #include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
@@ -33,21 +34,58 @@ static struct {
     int8_t x, y, w, h;
 } g_coll;
 
-static bool nobrain(ZEnemy* Enemy)
+static void nextFrame(ZEnemy* Enemy)
 {
-    ZSprite* sprite = &z_graphics.enemy[Enemy->sprite];
-
-    Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE / 4);
-
     if(z_fps_isNthFrame(6)) {
+        ZSprite* sprite = &z_graphics.enemy[Enemy->sprite];
+
         Enemy->frame = (uint8_t)((Enemy->frame + 1) % sprite->numFrames);
     }
+}
+
+static void glideDown(ZEnemy* Enemy)
+{
+    Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE / 4);
+}
+
+static bool onScreen(ZEnemy* Enemy)
+{
+    ZSprite* sprite = &z_graphics.enemy[Enemy->sprite];
 
     return z_fix_fixtoi(Enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
 }
 
+static bool ai_nobrain(ZEnemy* Enemy)
+{
+    nextFrame(Enemy);
+    glideDown(Enemy);
+
+    return onScreen(Enemy);
+}
+
+static bool ai_shoot(ZEnemy* Enemy)
+{
+    nextFrame(Enemy);
+    glideDown(Enemy);
+
+    if(z_fps_isNthFrame(Z_FPS)) {
+        ZBullet* b = z_pool_alloc(Z_POOL_BULLET);
+
+        if(b) {
+            z_bullet_init(b,
+                          (ZFix)(Enemy->x + z_fix_itofix(z_screen_xShake)),
+                          Enemy->y,
+                          z_fix_itofix(2),
+                          false);
+        }
+    }
+
+    return onScreen(Enemy);
+}
+
 static bool (*g_ai[Z_AI_ID_NUM])(ZEnemy*) = {
-    nobrain
+    ai_nobrain,
+    ai_shoot,
 };
 
 void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint8_t AiId, uint8_t AiArgs)

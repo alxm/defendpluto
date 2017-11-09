@@ -2,6 +2,26 @@
 ; Level 0
 ;
 
+;spawn 32 0 asteroid nobrain 0
+;spawn 96 0 asteroid nobrain 0
+
+spawn 64 0 enemy0 shoot 0
+wait 30
+spawn 48 0 enemy1 shoot 0
+spawn 80 0 enemy1 shoot 0
+wait 30
+spawn 32 0 enemy0 shoot 0
+spawn 96 0 enemy2 shoot 0
+wait 30
+spawn 16 0 enemy1 shoot 0
+spawn 112 0 enemy1 shoot 0
+wait 30
+spawn 8 0 enemy2 shoot 0
+spawn 120 0 enemy0 shoot 0
+
+waitclear
+over
+
 loop 3
     spawn 20 0 enemy0 nobrain 0
     spawn 50 0 enemy1 nobrain 0

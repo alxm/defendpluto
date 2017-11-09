@@ -31,3 +31,5 @@ extern ZPlayer z_player;
 extern void z_player_init(int8_t X, int8_t Y);
 extern void z_player_tick(void);
 extern void z_player_draw(void);
+
+extern void z_player_takeDamage(int16_t Damage);

@@ -18,6 +18,7 @@
 typedef enum {
     Z_AI_ID_INVALID = -1,
     Z_AI_ID_NOBRAIN,
+    Z_AI_ID_SHOOT,
     Z_AI_ID_NUM
 } ZAiId;
 

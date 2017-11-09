@@ -16,18 +16,21 @@
 */
 
 #include "platform.h"
+#include "util_collision.h"
 #include "util_fix.h"
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "obj_bullet.h"
 #include "obj_enemy.h"
+#include "obj_player.h"
 
-void z_bullet_init(ZBullet* Bullet, ZFix X, ZFix Y, ZFix Dy)
+void z_bullet_init(ZBullet* Bullet, ZFix X, ZFix Y, ZFix Dy, bool PlayerBullet)
 {
     Bullet->x = X;
     Bullet->y = Y;
     Bullet->dy = Dy;
+    Bullet->playerBullet = PlayerBullet;
 }
 
 bool z_bullet_tick(ZPoolObject* Bullet)
@@ -42,11 +45,28 @@ bool z_bullet_tick(ZPoolObject* Bullet)
         return false;
     }
 
-    return !z_enemy_checkCollisions(z_fix_fixtoi(bullet->x),
-                                    z_fix_fixtoi(bullet->y),
-                                    2,
-                                    4,
-                                    false);
+    if(bullet->playerBullet) {
+        return !z_enemy_checkCollisions(z_fix_fixtoi(bullet->x),
+                                        z_fix_fixtoi(bullet->y),
+                                        2,
+                                        4,
+                                        false);
+    } else {
+        bool hit = z_collision_boxAndBox(z_fix_fixtoi(bullet->x),
+                                         z_fix_fixtoi(bullet->y),
+                                         2,
+                                         4,
+                                         z_fix_fixtoi(z_player.x),
+                                         z_fix_fixtoi(z_player.y),
+                                         8,
+                                         8);
+
+        if(hit) {
+            z_player_takeDamage(256);
+        }
+
+        return !hit;
+    }
 }
 
 void z_bullet_draw(ZPoolObject* Bullet)

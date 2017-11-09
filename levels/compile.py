@@ -28,6 +28,7 @@ spriteIds = {
 
 aiIds = {
     'nobrain': 0,
+    'shoot': 1,
 }
 
 class Instruction:

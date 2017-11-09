@@ -30,6 +30,7 @@
 
 #define Z_SHIELD_MAX 1024
 #define Z_SHIELD_DAMAGE_COLLISION (Z_SHIELD_MAX / 2)
+#define Z_SHIELD_DAMAGE_SHOT (Z_SHIELD_MAX / 4)
 #define Z_SHIELD_DAMAGE_SHOOTING (Z_SHIELD_MAX / 16)
 #define Z_SHIELD_BOOST_HEART (Z_SHIELD_MAX / 2)
 #define Z_SHIELD_BOOST_REGEN (Z_SHIELD_MAX / (10 * Z_FPS))
@@ -91,7 +92,8 @@ void z_player_tick(void)
                               (ZFix)(z_player.x
                                         + z_fix_itofix(z_screen_xShake)),
                               z_player.y,
-                              z_fix_itofix(-2));
+                              z_fix_itofix(-2),
+                              true);
             }
 
             z_player.lastShot = z_fps_getCounter();
@@ -153,11 +155,7 @@ void z_player_tick(void)
                                        true);
 
     if(hit) {
-        if(!useShield(Z_SHIELD_DAMAGE_COLLISION)) {
-            if(--z_player.health >= 0) {
-                boostShield(Z_SHIELD_BOOST_HEART);
-            }
-        }
+        z_player_takeDamage(Z_SHIELD_DAMAGE_COLLISION);
     } else {
         boostShield(Z_SHIELD_BOOST_REGEN);
     }
@@ -211,4 +209,13 @@ void z_player_draw(void)
                      (int8_t)(maxWidth - width),
                      2,
                      Z_COLOR_BLUE);
+}
+
+void z_player_takeDamage(int16_t Damage)
+{
+    if(!useShield(Damage)) {
+        if(--z_player.health >= 0) {
+            boostShield(Z_SHIELD_BOOST_HEART);
+        }
+    }
 }
