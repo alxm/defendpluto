@@ -25,11 +25,15 @@
 #include "obj_player.h"
 
 #define Z_HEALTH_MAX 3
+
 #define Z_SHIELD_MAX 1024
-#define Z_SHIELD_RESTORE (Z_SHIELD_MAX / (10 * Z_FPS))
 #define Z_SHIELD_DAMAGE_COLLISION (Z_SHIELD_MAX / 2)
 #define Z_SHIELD_DAMAGE_SHOOTING (Z_SHIELD_MAX / 16)
+#define Z_SHIELD_BOOST_HEART (Z_SHIELD_MAX / 2)
+#define Z_SHIELD_BOOST_REGEN (Z_SHIELD_MAX / (10 * Z_FPS))
+
 #define Z_SHOOT_EVERY_N_FRAMES (Z_FPS / 4)
+
 #define Z_SPEED_MAX (Z_FIX_ONE)
 #define Z_SPEED_ACCEL (Z_FIX_ONE / 8)
 #define Z_SPEED_DECEL (Z_FIX_ONE / 16)
@@ -44,6 +48,12 @@ static bool useShield(int16_t Damage)
     z_player.shield = z_int16_max((int16_t)(z_player.shield - Damage), 0);
 
     return protected;
+}
+
+static void boostShield(int16_t Boost)
+{
+    z_player.shield = z_int16_min((int16_t)(z_player.shield + Boost),
+                                  Z_SHIELD_MAX);
 }
 
 void z_player_init(int8_t X, int8_t Y)
@@ -140,12 +150,12 @@ void z_player_tick(void)
 
     if(hit) {
         if(!useShield(Z_SHIELD_DAMAGE_COLLISION)) {
-            z_player.health--;
+            if(--z_player.health >= 0) {
+                boostShield(Z_SHIELD_BOOST_HEART);
+            }
         }
     } else {
-        z_player.shield = z_int16_min(
-                            (int16_t)(z_player.shield + Z_SHIELD_RESTORE),
-                            Z_SHIELD_MAX);
+        boostShield(Z_SHIELD_BOOST_REGEN);
     }
 
     if(z_player.health <= 0 && z_fps_isNthFrame(10)) {
