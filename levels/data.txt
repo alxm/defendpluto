@@ -2,7 +2,25 @@
 ; Level 0
 ;
 
-spawn 32 -8 asteroid straightdown 0
-wait 60
+set x 48
+set y -8
+
+loop 3
+    spawn x y asteroid straightdown 0
+    inc x 16
+    wait 32
+end
+spawn 48 y enemy0 straightdown 0
+
+wait 24
+set x 80
+
+loop 3
+    spawn x y asteroid straightdown 0
+    inc x -16
+    wait 8
+end
+
+wait 24
 
 over

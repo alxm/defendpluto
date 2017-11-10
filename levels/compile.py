@@ -19,6 +19,11 @@
 
 import sys
 
+varIds = {
+    'x': 0,
+    'y': 1,
+}
+
 spriteIds = {
     'asteroid': 0,
     'enemy0': 1,
@@ -36,7 +41,20 @@ class Instruction:
     def __init__(self, NumTokens = 1):
         self.numTokens = NumTokens
         self.opcode = Instruction.numInstructions
+
         Instruction.numInstructions += 1
+
+    def checkVar(self, Bytecode, Tokens, Index):
+        token = Tokens[Index]
+
+        if token in varIds:
+            if 1 <= Index <= 4:
+                Bytecode[0] |= 1 << (Index - 1)
+                return varIds[token]
+            else:
+                return 0
+        else:
+            return int(token)
 
     def compile(self, Tokens):
         if len(Tokens) != self.numTokens:
@@ -44,44 +62,42 @@ class Instruction:
                 .format(Tokens[0], self.numTokens))
             sys.exit(1)
 
-        return self.custom_compile(Tokens)
+        bytecode = [self.opcode << 4]
 
-    def custom_compile(self, Tokens):
-        return [self.opcode]
+        return self.custom_compile(Tokens, bytecode)
+
+    def custom_compile(self, Tokens, Bytecode):
+        return Bytecode
 
 class InstructionSpawn(Instruction):
     def __init__(self):
         Instruction.__init__(self, 6)
 
-    def custom_compile(self, Tokens):
-        bytecode = []
-
+    def custom_compile(self, Tokens, Bytecode):
         #
         # 8b    8b      8b      4b      4b      8b
         # spawn x_coord y_coord type_id ai_id   ai_args
         # spawn 64      -8      enemy0  nobrain 0
         #
-        x_coord = int(Tokens[1])
-        y_coord = int(Tokens[2])
+        x_coord = self.checkVar(Bytecode, Tokens, 1)
+        y_coord = self.checkVar(Bytecode, Tokens, 2)
+
         type_id = spriteIds[Tokens[3]]
         ai_id = aiIds[Tokens[4]]
         ai_args = int(Tokens[5])
 
-        bytecode.append(self.opcode)
-        bytecode.append(x_coord)
-        bytecode.append(y_coord)
-        bytecode.append((type_id << 4) | ai_id)
-        bytecode.append(ai_args)
+        Bytecode.append(x_coord)
+        Bytecode.append(y_coord)
+        Bytecode.append((type_id << 4) | ai_id)
+        Bytecode.append(ai_args)
 
-        return bytecode
+        return Bytecode
 
 class InstructionWait(Instruction):
     def __init__(self):
         Instruction.__init__(self, 2)
 
-    def custom_compile(self, Tokens):
-        bytecode = []
-
+    def custom_compile(self, Tokens, Bytecode):
         #
         # 8b   8b
         # wait frames
@@ -89,18 +105,15 @@ class InstructionWait(Instruction):
         #
         frames = int(Tokens[1])
 
-        bytecode.append(self.opcode)
-        bytecode.append(frames)
+        Bytecode.append(frames)
 
-        return bytecode
+        return Bytecode
 
 class InstructionLoop(Instruction):
     def __init__(self):
         Instruction.__init__(self, 2)
 
-    def custom_compile(self, Tokens):
-        bytecode = []
-
+    def custom_compile(self, Tokens, Bytecode):
         #
         # 8b   8b
         # loop num_times
@@ -108,10 +121,45 @@ class InstructionLoop(Instruction):
         #
         num_times = int(Tokens[1])
 
-        bytecode.append(self.opcode)
-        bytecode.append(num_times)
+        Bytecode.append(num_times)
 
-        return bytecode
+        return Bytecode
+
+class InstructionSet(Instruction):
+    def __init__(self):
+        Instruction.__init__(self, 3)
+
+    def custom_compile(self, Tokens, Bytecode):
+        #
+        # 8b  8b     8b
+        # set var_id value
+        # set x      32
+        #
+        var_id = varIds[Tokens[1]]
+        value = int(Tokens[2])
+
+        Bytecode.append(var_id)
+        Bytecode.append(value)
+
+        return Bytecode
+
+class InstructionInc(Instruction):
+    def __init__(self):
+        Instruction.__init__(self, 3)
+
+    def custom_compile(self, Tokens, Bytecode):
+        #
+        # 8b  8b     8b
+        # inc var_id value
+        # inc x      16
+        #
+        var_id = varIds[Tokens[1]]
+        value = int(Tokens[2])
+
+        Bytecode.append(var_id)
+        Bytecode.append(value)
+
+        return Bytecode
 
 def main(LevelFile):
     instructions = {
@@ -121,6 +169,8 @@ def main(LevelFile):
         'loop': InstructionLoop(),
         'end': Instruction(),
         'over': Instruction(),
+        'set': InstructionSet(),
+        'inc': InstructionInc(),
     }
 
     bytecode = []
