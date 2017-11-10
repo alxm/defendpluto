@@ -2,74 +2,7 @@
 ; Level 0
 ;
 
-;spawn 32 0 asteroid nobrain 0
-;spawn 96 0 asteroid nobrain 0
-
-spawn 64 0 enemy0 shoot 0
-wait 30
-spawn 48 0 enemy1 shoot 0
-spawn 80 0 enemy1 shoot 0
-wait 30
-spawn 32 0 enemy0 shoot 0
-spawn 96 0 enemy2 shoot 0
-wait 30
-spawn 16 0 enemy1 shoot 0
-spawn 112 0 enemy1 shoot 0
-wait 30
-spawn 8 0 enemy2 shoot 0
-spawn 120 0 enemy0 shoot 0
-
-waitclear
-over
-
-loop 3
-    spawn 20 0 enemy0 nobrain 0
-    spawn 50 0 enemy1 nobrain 0
-    spawn 80 0 enemy2 nobrain 0
-
-    wait 45
-end
-
-waitclear
-
-loop 3
-    spawn 20 -8 asteroid nobrain 0
-    wait 20
-    spawn 50 -8 asteroid nobrain 0
-    wait 20
-    spawn 80 -8 asteroid nobrain 0
-    wait 20
-    spawn 110 -8 asteroid nobrain 0
-end
-
-loop 4
-    spawn 64 -8 asteroid nobrain 0
-    wait 10
-    spawn 104 -8 enemy2 nobrain 6
-    spawn 120 -8 enemy2 nobrain 7
-    wait 10
-    spawn 90 -8 asteroid nobrain 0
-    wait 32
-end
-waitclear
-
-spawn 8 -8 enemy0 nobrain 0
-wait 10
-spawn 24 -8 enemy1 nobrain 1
-waitclear
-
-loop 2
-    spawn 40 -8 enemy0 nobrain 2
-    wait 10
-    spawn 56 -8 enemy1 nobrain 3
-    wait 7
-    spawn 72 -8 enemy2 nobrain 4
-    wait 30
-    spawn 88 -8 enemy1 nobrain 5
-end
-
-spawn 104 -8 enemy2 nobrain 6
-spawn 120 -8 enemy2 nobrain 7
-waitclear
+spawn 32 -8 asteroid straightdown 0
+wait 60
 
 over

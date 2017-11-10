@@ -56,14 +56,14 @@ static bool isOnScreen(ZEnemy* Enemy)
     return z_fix_fixtoi(Enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
 }
 
-static bool ai_nobrain(ZEnemy* Enemy)
+static bool ai_straightdown(ZEnemy* Enemy)
 {
     nextFrame(Enemy);
     glideDown(Enemy);
 
     return isOnScreen(Enemy);
 }
-
+/*
 static bool ai_shoot(ZEnemy* Enemy)
 {
     nextFrame(Enemy);
@@ -81,10 +81,9 @@ static bool ai_shoot(ZEnemy* Enemy)
 
     return isOnScreen(Enemy);
 }
-
-static bool (*g_ai[Z_AI_ID_NUM])(ZEnemy*) = {
-    ai_nobrain,
-    ai_shoot,
+*/
+static bool (*g_ai[])(ZEnemy*) = {
+    ai_straightdown,
 };
 
 void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiId, uint8_t AiArgs)
