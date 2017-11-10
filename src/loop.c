@@ -85,4 +85,5 @@ void loop_draw(void)
     z_pool_draw(Z_POOL_CIRCLE, z_circle_draw);
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
     z_player_draw();
+    z_platform_draw();
 }

@@ -81,5 +81,6 @@ typedef enum {
 
 extern void z_platform_setup(void);
 extern void z_platform_tick(void);
+extern void z_platform_draw(void);
 
 Z_EXTERN_C_END

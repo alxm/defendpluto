@@ -17,6 +17,7 @@
 
 #include "platform.h"
 #include <Sprites.h>
+#include "util_font.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
@@ -32,11 +33,36 @@ void z_platform_setup(void)
     z_controls.right = RIGHT_BUTTON;
     z_controls.a = A_BUTTON;
     z_controls.b = B_BUTTON;
+
+    extern uint8_t _end;
+
+    uint16_t x;
+    uint8_t here;
+
+    for(x = (uint16_t)&_end; x < (uint16_t)&here; x++) {
+        *(uint8_t*)x = 0x55;
+    }
 }
 
 void z_platform_tick(void)
 {
     //
+}
+
+void z_platform_draw(void)
+{
+    extern uint8_t _end;
+
+    uint16_t x;
+    int16_t unusedBytes = 0;
+    uint8_t here;
+
+    for(x = (uint16_t)&_end; x < (uint16_t)&here && *(uint8_t*)x == 0x55; x++) {
+        unusedBytes++;
+    }
+
+    z_font_int(g_arduboy.cpuLoad(), 112, 2, Z_FONT_FACE_NUMBERS);
+    z_font_int(unusedBytes, 112, 10, Z_FONT_FACE_NUMBERS);
 }
 
 uint16_t z_fps_getCounter(void)

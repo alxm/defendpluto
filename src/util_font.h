@@ -15,6 +15,8 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+Z_EXTERN_C_START
+
 typedef enum {
     Z_FONT_FACE_INVALID = -1,
     Z_FONT_FACE_NUMBERS,
@@ -39,3 +41,5 @@ extern void z_font_setup(void);
 
 extern void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font);
 extern void z_font_int(int16_t Number, int8_t X, int8_t Y, uint8_t Font);
+
+Z_EXTERN_C_END

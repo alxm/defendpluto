@@ -57,6 +57,11 @@ void z_platform_tick(void)
     }
 }
 
+void z_platform_draw(void)
+{
+    //
+}
+
 uint16_t z_fps_getCounter(void)
 {
     return (uint16_t)a_fps_getCounter();
