@@ -17,6 +17,7 @@
 
 #include "platform.h"
 #include "util_collision.h"
+#include "util_enemy.h"
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_graphics.h"
@@ -29,17 +30,6 @@
 #include "obj_particle.h"
 
 static struct {
-    int8_t w, h;
-    int8_t health;
-    int8_t damage;
-} g_info[Z_ENEMY_NUM] = {
-    {8, 8, 1, 0}, // Asteroid
-    {7, 5, 1, 1}, // Ship 0
-    {7, 5, 1, 1}, // Ship 1
-    {7, 6, 1, 1}, // Ship 2
-};
-
-static struct {
     bool hit;
     bool allowMultiple;
     int8_t x, y, w, h;
@@ -48,7 +38,7 @@ static struct {
 static void nextFrame(ZEnemy* Enemy)
 {
     if(z_fps_isNthFrame(6)) {
-        ZSprite* sprite = &z_graphics.enemy[Enemy->typeId];
+        ZSprite* sprite = &z_enemyData[Enemy->typeId].sprite;
 
         Enemy->frame = (uint8_t)((Enemy->frame + 1) % sprite->numFrames);
     }
@@ -59,9 +49,9 @@ static void glideDown(ZEnemy* Enemy)
     Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE / 4);
 }
 
-static bool onScreen(ZEnemy* Enemy)
+static bool isOnScreen(ZEnemy* Enemy)
 {
-    ZSprite* sprite = &z_graphics.enemy[Enemy->typeId];
+    ZSprite* sprite = &z_enemyData[Enemy->typeId].sprite;
 
     return z_fix_fixtoi(Enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
 }
@@ -71,7 +61,7 @@ static bool ai_nobrain(ZEnemy* Enemy)
     nextFrame(Enemy);
     glideDown(Enemy);
 
-    return onScreen(Enemy);
+    return isOnScreen(Enemy);
 }
 
 static bool ai_shoot(ZEnemy* Enemy)
@@ -89,7 +79,7 @@ static bool ai_shoot(ZEnemy* Enemy)
         }
     }
 
-    return onScreen(Enemy);
+    return isOnScreen(Enemy);
 }
 
 static bool (*g_ai[Z_AI_ID_NUM])(ZEnemy*) = {
@@ -122,10 +112,10 @@ void z_enemy_draw(ZPoolObject* Enemy)
     ZEnemy* enemy = (ZEnemy*)Enemy;
     int8_t x = z_fix_fixtoi(enemy->x);
     int8_t y = z_fix_fixtoi(enemy->y);
-    ZSprite* sprite = &z_graphics.enemy[enemy->typeId];
+    ZSprite* sprite = &z_enemyData[enemy->typeId].sprite;
 
     if(enemy->jetFlicker) {
-        z_graphics_drawJets(enemy->typeId, x, y);
+        z_enemy_drawJets(enemy->typeId, x, y);
     }
 
     z_sprite_blitCentered(sprite,
@@ -148,8 +138,8 @@ static bool checkCollision(ZPoolObject* Enemy)
                                      g_coll.h,
                                      z_fix_fixtoi(enemy->x),
                                      z_fix_fixtoi(enemy->y),
-                                     g_info[enemy->typeId].w,
-                                     g_info[enemy->typeId].h);
+                                     z_enemyData[enemy->typeId].w,
+                                     z_enemyData[enemy->typeId].h);
 
     if(hit) {
         for(int8_t i = Z_PARTICLE_POOL_NUM; i--; ) {

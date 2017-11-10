@@ -28,15 +28,6 @@ typedef enum {
 } ZColor;
 
 typedef enum {
-    Z_SPRITE_ID_INVALID = -1,
-    Z_SPRITE_ID_ASTEROID,
-    Z_SPRITE_ID_ENEMY0,
-    Z_SPRITE_ID_ENEMY1,
-    Z_SPRITE_ID_ENEMY2,
-    Z_SPRITE_ID_NUM,
-} ZSpriteId;
-
-typedef enum {
     Z_BIT_RESTING = 0,
     Z_BIT_FORWARD = (1 << 0),
     Z_BIT_BACK    = (1 << 1),
@@ -46,7 +37,6 @@ typedef enum {
 } ZFrameBits;
 
 typedef struct {
-    ZSprite enemy[Z_SPRITE_ID_NUM];
     ZSprite player[Z_BIT_MAX_VAL + 1];
     ZSprite hearts;
     ZSprite shield;
@@ -55,8 +45,6 @@ typedef struct {
 extern ZGraphics z_graphics;
 
 extern void z_graphics_setup(void);
-
-extern void z_graphics_drawJets(uint8_t Sprite, int8_t X, int8_t Y);
 
 extern void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame);
 extern void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame);

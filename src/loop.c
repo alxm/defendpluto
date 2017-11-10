@@ -16,6 +16,7 @@
 */
 
 #include "platform.h"
+#include "util_enemy.h"
 #include "util_fix.h"
 #include "util_font.h"
 #include "util_graphics.h"
@@ -34,24 +35,29 @@
 void loop_setup(void)
 {
     z_platform_setup();
-    z_graphics_setup();
+
+    z_enemy_setup();
     z_font_setup();
+    z_graphics_setup();
     z_pool_setup();
     z_vm_setup();
+
     z_player_init(Z_WIDTH / 2, Z_HEIGHT * 2 / 3);
 }
 
 static void loop_reset(void)
 {
     z_pool_reset();
-    z_vm_reset();
     z_screen_reset();
+    z_vm_reset();
+
     z_player_init(Z_WIDTH / 2, Z_HEIGHT * 2 / 3);
 }
 
 void loop_tick(void)
 {
     z_platform_tick();
+
     z_vm_tick();
     z_player_tick();
     z_pool_tick(Z_POOL_STAR, z_star_tick);
@@ -85,5 +91,6 @@ void loop_draw(void)
     z_pool_draw(Z_POOL_CIRCLE, z_circle_draw);
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
     z_player_draw();
+
     z_platform_draw();
 }

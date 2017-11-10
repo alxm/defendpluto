@@ -16,25 +16,23 @@
 */
 
 typedef enum {
-    Z_AI_ID_INVALID = -1,
-    Z_AI_ID_NOBRAIN,
-    Z_AI_ID_SHOOT,
-    Z_AI_ID_NUM
-} ZAiId;
+    Z_ENEMY_INVALID = -1,
+    Z_ENEMY_ASTEROID,
+    Z_ENEMY_SHIP0,
+    Z_ENEMY_SHIP1,
+    Z_ENEMY_SHIP2,
+    Z_ENEMY_NUM
+} ZEnemyId;
 
 typedef struct {
-    ZPoolObject poolObject;
-    ZFix x, y;
-    uint8_t typeId;
-    uint8_t frame;
-    uint8_t aiId, aiArgs;
-    bool jetFlicker;
-} ZEnemy;
+    ZSprite sprite;
+    int8_t w, h;
+    int8_t health;
+    int8_t damage;
+} ZEnemyData;
 
-#define Z_ENEMY_POOL_NUM 16
+extern ZEnemyData z_enemyData[Z_ENEMY_NUM];
 
-extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiId, uint8_t AiArgs);
-extern bool z_enemy_tick(ZPoolObject* Enemy);
-extern void z_enemy_draw(ZPoolObject* Enemy);
+extern void z_enemy_setup(void);
 
-extern bool z_enemy_checkCollisions(int8_t X, int8_t Y, int8_t W, int8_t H, bool AllowMultipleCollisions);
+extern void z_enemy_drawJets(uint8_t EnemyId, int8_t X, int8_t Y);
