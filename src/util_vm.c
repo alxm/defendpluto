@@ -49,13 +49,13 @@ static ZOp g_ops[Z_OP_NUM];
 static bool handle_spawn(void)
 {
     /*
-     * 8b    8b      8b      4b        4b      8b
-     * spawn x_coord y_coord sprite_id ai_id   ai_args
-     * spawn 64      -8      enemy0    nobrain 0
+     * 8b    8b      8b      4b      4b      8b
+     * spawn x_coord y_coord type_id ai_id   ai_args
+     * spawn 64      -8      enemy0  nobrain 0
      */
     int8_t x = (int8_t)Z_READ(1);
     int8_t y = (int8_t)Z_READ(2);
-    uint8_t sprite_id = Z_READ(3) >> 4;
+    uint8_t type_id = Z_READ(3) >> 4;
     uint8_t ai_id = Z_READ(3) & 0xf;
     uint8_t ai_args = Z_READ(4);
 
@@ -65,7 +65,7 @@ static bool handle_spawn(void)
         return false;
     }
 
-    z_enemy_init(e, x, y, sprite_id, ai_id, ai_args);
+    z_enemy_init(e, x, y, type_id, ai_id, ai_args);
 
     return true;
 }

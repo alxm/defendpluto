@@ -29,6 +29,17 @@
 #include "obj_particle.h"
 
 static struct {
+    int8_t w, h;
+    int8_t health;
+    int8_t damage;
+} g_info[Z_ENEMY_NUM] = {
+    {8, 8, 1, 0}, // Asteroid
+    {7, 5, 1, 1}, // Ship 0
+    {7, 5, 1, 1}, // Ship 1
+    {7, 6, 1, 1}, // Ship 2
+};
+
+static struct {
     bool hit;
     bool allowMultiple;
     int8_t x, y, w, h;
@@ -37,7 +48,7 @@ static struct {
 static void nextFrame(ZEnemy* Enemy)
 {
     if(z_fps_isNthFrame(6)) {
-        ZSprite* sprite = &z_graphics.enemy[Enemy->sprite];
+        ZSprite* sprite = &z_graphics.enemy[Enemy->typeId];
 
         Enemy->frame = (uint8_t)((Enemy->frame + 1) % sprite->numFrames);
     }
@@ -50,7 +61,7 @@ static void glideDown(ZEnemy* Enemy)
 
 static bool onScreen(ZEnemy* Enemy)
 {
-    ZSprite* sprite = &z_graphics.enemy[Enemy->sprite];
+    ZSprite* sprite = &z_graphics.enemy[Enemy->typeId];
 
     return z_fix_fixtoi(Enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
 }
@@ -86,11 +97,11 @@ static bool (*g_ai[Z_AI_ID_NUM])(ZEnemy*) = {
     ai_shoot,
 };
 
-void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t Sprite, uint8_t AiId, uint8_t AiArgs)
+void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiId, uint8_t AiArgs)
 {
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
-    Enemy->sprite = Sprite;
+    Enemy->typeId = TypeId;
     Enemy->frame = 0;
     Enemy->aiId = AiId;
     Enemy->aiArgs = AiArgs;
@@ -111,10 +122,10 @@ void z_enemy_draw(ZPoolObject* Enemy)
     ZEnemy* enemy = (ZEnemy*)Enemy;
     int8_t x = z_fix_fixtoi(enemy->x);
     int8_t y = z_fix_fixtoi(enemy->y);
-    ZSprite* sprite = &z_graphics.enemy[enemy->sprite];
+    ZSprite* sprite = &z_graphics.enemy[enemy->typeId];
 
     if(enemy->jetFlicker) {
-        z_graphics_drawJets(enemy->sprite, x, y);
+        z_graphics_drawJets(enemy->typeId, x, y);
     }
 
     z_sprite_blitCentered(sprite,
@@ -137,8 +148,8 @@ static bool checkCollision(ZPoolObject* Enemy)
                                      g_coll.h,
                                      z_fix_fixtoi(enemy->x),
                                      z_fix_fixtoi(enemy->y),
-                                     6,
-                                     6);
+                                     g_info[enemy->typeId].w,
+                                     g_info[enemy->typeId].h);
 
     if(hit) {
         for(int8_t i = Z_PARTICLE_POOL_NUM; i--; ) {

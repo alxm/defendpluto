@@ -58,20 +58,20 @@ class InstructionSpawn(Instruction):
         bytecode = []
 
         #
-        # 8b    8b      8b      4b        4b      8b
-        # spawn x_coord y_coord sprite_id ai_id   ai_args
-        # spawn 64      -8      enemy0    nobrain 0
+        # 8b    8b      8b      4b      4b      8b
+        # spawn x_coord y_coord type_id ai_id   ai_args
+        # spawn 64      -8      enemy0  nobrain 0
         #
         x_coord = int(Tokens[1])
         y_coord = int(Tokens[2])
-        sprite_id = spriteIds[Tokens[3]]
+        type_id = spriteIds[Tokens[3]]
         ai_id = aiIds[Tokens[4]]
         ai_args = int(Tokens[5])
 
         bytecode.append(self.opcode)
         bytecode.append(x_coord)
         bytecode.append(y_coord)
-        bytecode.append((sprite_id << 4) | ai_id)
+        bytecode.append((type_id << 4) | ai_id)
         bytecode.append(ai_args)
 
         return bytecode
