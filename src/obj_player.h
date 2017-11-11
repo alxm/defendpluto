@@ -17,6 +17,7 @@
 
 typedef struct {
     ZFix x, y;
+    int8_t w, h;
     ZFix dx, dy;
     uint16_t lastShot;
     uint8_t frame;

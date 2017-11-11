@@ -47,8 +47,8 @@ bool z_bullete_tick(ZPoolObject* Bullet)
                                      4,
                                      z_fix_fixtoi(z_player.x),
                                      z_fix_fixtoi(z_player.y),
-                                     8,
-                                     8);
+                                     z_player.w,
+                                     z_player.h);
 
     if(hit) {
         z_player_takeDamage(256);

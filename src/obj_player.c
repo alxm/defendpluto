@@ -63,6 +63,8 @@ void z_player_init(int8_t X, int8_t Y)
 {
     z_player.x = z_fix_itofix(X);
     z_player.y = z_fix_itofix(Y);
+    z_player.w = 10;
+    z_player.h = 4;
     z_player.dx = 0;
     z_player.dy = 0;
     z_player.lastShot = z_fps_getCounter();
@@ -148,8 +150,8 @@ void z_player_tick(void)
 
     bool hit = z_enemy_checkCollisions(z_fix_fixtoi(z_player.x),
                                        z_fix_fixtoi(z_player.y),
-                                       8,
-                                       8,
+                                       z_player.w,
+                                       z_player.h,
                                        true);
 
     if(hit) {
