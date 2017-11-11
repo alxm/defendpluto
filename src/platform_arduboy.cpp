@@ -34,14 +34,16 @@ void z_platform_setup(void)
     z_controls.a = A_BUTTON;
     z_controls.b = B_BUTTON;
 
-    extern uint8_t _end;
+    #if Z_DEBUG_STATS
+        extern uint8_t _end;
 
-    uint16_t x;
-    uint8_t here;
+        uint16_t x;
+        uint8_t here;
 
-    for(x = u16(&_end); x < u16(&here); x++) {
-        *(uint8_t*)x = 0x55;
-    }
+        for(x = u16(&_end); x < u16(&here); x++) {
+            *(uint8_t*)x = 0x55;
+        }
+    #endif
 }
 
 void z_platform_tick(void)
@@ -51,18 +53,20 @@ void z_platform_tick(void)
 
 void z_platform_draw(void)
 {
-    extern uint8_t _end;
+    #if Z_DEBUG_STATS
+        extern uint8_t _end;
 
-    uint16_t x;
-    int16_t unusedBytes = 0;
-    uint8_t here;
+        uint16_t x;
+        int16_t unusedBytes = 0;
+        uint8_t here;
 
-    for(x = u16(&_end); x < u16(&here) && *(uint8_t*)x == 0x55; x++) {
-        unusedBytes++;
-    }
+        for(x = u16(&_end); x < u16(&here) && *(uint8_t*)x == 0x55; x++) {
+            unusedBytes++;
+        }
 
-    z_font_int(g_arduboy.cpuLoad(), 112, 2, Z_FONT_FACE_NUMBERS);
-    z_font_int(unusedBytes, 112, 10, Z_FONT_FACE_NUMBERS);
+        z_font_int(g_arduboy.cpuLoad(), 112, 2, Z_FONT_FACE_NUMBERS);
+        z_font_int(unusedBytes, 112, 10, Z_FONT_FACE_NUMBERS);
+    #endif
 }
 
 uint16_t z_fps_getCounter(void)

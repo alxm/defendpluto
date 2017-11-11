@@ -50,6 +50,10 @@ static bool useShield(int16_t Damage)
 
     z_player.shield = z_int16_max(i16(z_player.shield - Damage), 0);
 
+    #if Z_DEBUG_INVINCIBLE
+        return true;
+    #endif
+
     return protected;
 }
 

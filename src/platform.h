@@ -15,6 +15,9 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#define Z_DEBUG_STATS 1
+#define Z_DEBUG_INVINCIBLE 1
+
 #ifdef __cplusplus
 #define Z_EXTERN_C_START extern "C" {
 #define Z_EXTERN_C_END }
