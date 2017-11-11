@@ -39,8 +39,8 @@ aiIds = {
 class Instruction:
     numInstructions = 0
 
-    def __init__(self, NumTokens = 1):
-        self.numTokens = NumTokens
+    def __init__(self, NumArgs = 0):
+        self.numArgs = NumArgs
         self.opcode = Instruction.numInstructions
 
         Instruction.numInstructions += 1
@@ -49,8 +49,8 @@ class Instruction:
         token = Tokens[Index]
 
         if token in varIds:
-            if 1 <= Index <= 4:
-                Bytecode[0] |= 1 << (Index - 1)
+            if 0 <= Index <= 7:
+                Bytecode[0] |= 1 << Index
                 return varIds[token]
             else:
                 return 0
@@ -58,34 +58,37 @@ class Instruction:
             return int(token)
 
     def compile(self, Tokens):
-        if len(Tokens) != self.numTokens:
-            print('Instruction {} requires {} tokens'
-                .format(Tokens[0], self.numTokens))
+        if len(Tokens) != 1 + self.numArgs:
+            print('{} requires {} arguments'.format(Tokens[0], self.numArgs))
             sys.exit(1)
 
-        bytecode = [self.opcode << 4]
+        #
+        # 8b    8b
+        # flags op
+        #
+        bytecode = [0, self.opcode]
 
-        return self.custom_compile(Tokens, bytecode)
+        return self.custom_compile(Tokens[1 :], bytecode)
 
     def custom_compile(self, Tokens, Bytecode):
+
         return Bytecode
 
 class InstructionSpawn(Instruction):
     def __init__(self):
-        Instruction.__init__(self, 6)
+        Instruction.__init__(self, 5)
 
     def custom_compile(self, Tokens, Bytecode):
         #
-        # 8b    8b      8b      4b      4b      8b
-        # spawn x_coord y_coord type_id ai_id   ai_args
-        # spawn 64      -8      enemy0  nobrain 0
+        # 8b      8b      4b      4b     8b
+        # x_coord y_coord type_id ai_id  ai_args
+        # 64      -8      enemy0  zigzag 0
         #
-        x_coord = self.checkVar(Bytecode, Tokens, 1)
-        y_coord = self.checkVar(Bytecode, Tokens, 2)
-
-        type_id = spriteIds[Tokens[3]]
-        ai_id = aiIds[Tokens[4]]
-        ai_args = int(Tokens[5])
+        x_coord = self.checkVar(Bytecode, Tokens, 0)
+        y_coord = self.checkVar(Bytecode, Tokens, 1)
+        type_id = spriteIds[Tokens[2]]
+        ai_id = aiIds[Tokens[3]]
+        ai_args = self.checkVar(Bytecode, Tokens, 4)
 
         Bytecode.append(x_coord)
         Bytecode.append(y_coord)
@@ -96,15 +99,15 @@ class InstructionSpawn(Instruction):
 
 class InstructionWait(Instruction):
     def __init__(self):
-        Instruction.__init__(self, 2)
+        Instruction.__init__(self, 1)
 
     def custom_compile(self, Tokens, Bytecode):
         #
-        # 8b   8b
-        # wait frames
-        # wait 30
+        # 8b
+        # frames
+        # 30
         #
-        frames = int(Tokens[1])
+        frames = self.checkVar(Bytecode, Tokens, 0)
 
         Bytecode.append(frames)
 
@@ -112,15 +115,15 @@ class InstructionWait(Instruction):
 
 class InstructionLoop(Instruction):
     def __init__(self):
-        Instruction.__init__(self, 2)
+        Instruction.__init__(self, 1)
 
     def custom_compile(self, Tokens, Bytecode):
         #
-        # 8b   8b
-        # loop num_times
-        # loop 10
+        # 8b
+        # num_times
+        # 10
         #
-        num_times = int(Tokens[1])
+        num_times = self.checkVar(Bytecode, Tokens, 0)
 
         Bytecode.append(num_times)
 
@@ -128,16 +131,16 @@ class InstructionLoop(Instruction):
 
 class InstructionSet(Instruction):
     def __init__(self):
-        Instruction.__init__(self, 3)
+        Instruction.__init__(self, 2)
 
     def custom_compile(self, Tokens, Bytecode):
         #
-        # 8b  8b     8b
-        # set var_id value
-        # set x      32
+        # 8b     8b
+        # var_id value
+        # x      32
         #
-        var_id = varIds[Tokens[1]]
-        value = int(Tokens[2])
+        var_id = varIds[Tokens[0]]
+        value = self.checkVar(Bytecode, Tokens, 1)
 
         Bytecode.append(var_id)
         Bytecode.append(value)
@@ -146,16 +149,16 @@ class InstructionSet(Instruction):
 
 class InstructionInc(Instruction):
     def __init__(self):
-        Instruction.__init__(self, 3)
+        Instruction.__init__(self, 2)
 
     def custom_compile(self, Tokens, Bytecode):
         #
-        # 8b  8b     8b
-        # inc var_id value
-        # inc x      16
+        # 8b     8b
+        # var_id value
+        # x      16
         #
-        var_id = varIds[Tokens[1]]
-        value = int(Tokens[2])
+        var_id = varIds[Tokens[0]]
+        value = self.checkVar(Bytecode, Tokens, 1)
 
         Bytecode.append(var_id)
         Bytecode.append(value)
