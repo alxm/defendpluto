@@ -44,9 +44,10 @@ static void nextFrame(ZEnemy* Enemy)
     }
 }
 
-static void glideDown(ZEnemy* Enemy)
+static void advance(ZEnemy* Enemy)
 {
-    Enemy->y = zf(Enemy->y + Z_FIX_ONE / 4);
+    Enemy->x = zf(Enemy->x + z_fix_mul(z_fix_cos(Enemy->angle), Enemy->speed));
+    Enemy->y = zf(Enemy->y - z_fix_mul(z_fix_sin(Enemy->angle), Enemy->speed));
 }
 
 static bool isOnScreen(ZEnemy* Enemy)
@@ -59,7 +60,7 @@ static bool isOnScreen(ZEnemy* Enemy)
 static bool ai_straightdown(ZEnemy* Enemy)
 {
     nextFrame(Enemy);
-    glideDown(Enemy);
+    advance(Enemy);
 
     return isOnScreen(Enemy);
 }
@@ -67,7 +68,7 @@ static bool ai_straightdown(ZEnemy* Enemy)
 static bool ai_shoot(ZEnemy* Enemy)
 {
     nextFrame(Enemy);
-    glideDown(Enemy);
+    advance(Enemy);
 
     if(z_fps_isNthFrame(Z_FPS)) {
         ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
@@ -90,6 +91,8 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiI
 {
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
+    Enemy->angle = 192;
+    Enemy->speed = Z_FIX_ONE / 4;
     Enemy->typeId = TypeId;
     Enemy->frame = 0;
     Enemy->aiId = AiId;
