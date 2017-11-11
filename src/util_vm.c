@@ -72,8 +72,8 @@ static bool handle_spawn(uint8_t Flags)
      * spawn x_coord y_coord type_id ai_id   ai_args
      * spawn 64      -8      enemy0  nobrain 0
      */
-    int8_t x = (int8_t)Z_READ(1);
-    int8_t y = (int8_t)Z_READ(2);
+    int8_t x = i8(Z_READ(1));
+    int8_t y = i8(Z_READ(2));
     uint8_t type_id = Z_READ(3) >> 4;
     uint8_t ai_id = Z_READ(3) & 0xf;
     uint8_t ai_args = Z_READ(4);
@@ -134,12 +134,12 @@ static bool handle_loop(uint8_t Flags)
 
         do {
             op = Z_READ_OP();
-            g_pc = (uint16_t)(g_pc + g_ops[op].bytes);
+            g_pc = u16(g_pc + g_ops[op].bytes);
         } while(op != Z_OP_END);
 
         return false;
     } else {
-        g_loopStart = (uint16_t)(g_pc + g_ops[Z_OP_LOOP].bytes);
+        g_loopStart = u16(g_pc + g_ops[Z_OP_LOOP].bytes);
         g_loopCounter = num_times;
     }
 
@@ -187,7 +187,7 @@ static bool handle_set(uint8_t Flags)
      * set x      32
      */
     uint8_t var_id = Z_READ(1);
-    int8_t value = (int8_t)Z_READ(2);
+    int8_t value = i8(Z_READ(2));
 
     g_vars[var_id] = value;
 
@@ -205,9 +205,9 @@ static bool handle_inc(uint8_t Flags)
      * inc x      16
      */
     uint8_t var_id = Z_READ(1);
-    int8_t value = (int8_t)Z_READ(2);
+    int8_t value = i8(Z_READ(2));
 
-    g_vars[var_id] = (int8_t)(g_vars[var_id] + value);
+    g_vars[var_id] = i8(g_vars[var_id] + value);
 
     return true;
 }
@@ -246,6 +246,6 @@ void z_vm_tick(void)
     uint8_t flags = Z_READ_FLAGS();
 
     if(g_ops[op].callback(flags)) {
-        g_pc = (uint16_t)(g_pc + g_ops[op].bytes);
+        g_pc = u16(g_pc + g_ops[op].bytes);
     }
 }

@@ -40,13 +40,13 @@ static void nextFrame(ZEnemy* Enemy)
     if(z_fps_isNthFrame(6)) {
         ZSprite* sprite = &z_enemyData[Enemy->typeId].sprite;
 
-        Enemy->frame = (uint8_t)((Enemy->frame + 1) % sprite->numFrames);
+        Enemy->frame = u8((Enemy->frame + 1) % sprite->numFrames);
     }
 }
 
 static void glideDown(ZEnemy* Enemy)
 {
-    Enemy->y = (ZFix)(Enemy->y + Z_FIX_ONE / 4);
+    Enemy->y = zf(Enemy->y + Z_FIX_ONE / 4);
 }
 
 static bool isOnScreen(ZEnemy* Enemy)
@@ -74,7 +74,7 @@ static bool ai_shoot(ZEnemy* Enemy)
 
         if(b) {
             z_bullete_init(b,
-                           (ZFix)(Enemy->x + z_fix_itofix(z_screen_xShake)),
+                           zf(Enemy->x + z_fix_itofix(z_screen_xShake)),
                            Enemy->y);
         }
     }
@@ -118,8 +118,8 @@ void z_enemy_draw(ZPoolObject* Enemy)
     }
 
     z_sprite_blitCentered(sprite,
-                          (int8_t)(x + z_screen_xShake),
-                          (int8_t)(y + z_screen_yShake),
+                          i8(x + z_screen_xShake),
+                          i8(y + z_screen_yShake),
                           enemy->frame);
 }
 
@@ -151,8 +151,7 @@ static bool checkCollision(ZPoolObject* Enemy)
             z_particle_init(p,
                             enemy->x,
                             enemy->y,
-                            (uint8_t)(Z_FPS / 8
-                                        + z_random_uint8(Z_FPS / 4)));
+                            u8(Z_FPS / 8 + z_random_uint8(Z_FPS / 4)));
         }
 
         ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);

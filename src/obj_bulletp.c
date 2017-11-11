@@ -34,7 +34,7 @@ bool z_bulletp_tick(ZPoolObject* Bullet)
 {
     ZBulletP* bullet = (ZBulletP*)Bullet;
 
-    bullet->y = (ZFix)(bullet->y - z_fix_itofix(2));
+    bullet->y = zf(bullet->y - z_fix_itofix(2));
 
     if(bullet->y < 0) {
         return false;
@@ -54,8 +54,8 @@ void z_bulletp_draw(ZPoolObject* Bullet)
     int8_t x = z_fix_fixtoi(bullet->x);
     int8_t y = z_fix_fixtoi(bullet->y);
 
-    z_draw_rectangle((int8_t)(x - 1 + z_screen_xShake),
-                     (int8_t)(y - 2 + z_screen_yShake),
+    z_draw_rectangle(i8(x - 1 + z_screen_xShake),
+                     i8(y - 2 + z_screen_yShake),
                      2,
                      4,
                      Z_COLOR_RED);

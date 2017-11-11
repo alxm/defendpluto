@@ -48,36 +48,28 @@ void z_enemy_drawJets(uint8_t EnemyId, int8_t X, int8_t Y)
     switch(EnemyId) {
         case Z_ENEMY_SHIP0: {
             x = X;
-            y = (int8_t)(Y - 2);
+            y = i8(Y - 2);
             z_draw_pixel(x, y, Z_COLOR_RED);
         } break;
 
         case Z_ENEMY_SHIP1: {
-            x = (int8_t)(X - 3);
-            y = (int8_t)(Y - 3);
+            x = i8(X - 3);
+            y = i8(Y - 3);
             z_draw_pixel(x, y, Z_COLOR_RED);
 
-            x = (int8_t)(X + 3);
+            x = i8(X + 3);
             z_draw_pixel(x, y, Z_COLOR_RED);
         } break;
 
         case Z_ENEMY_SHIP2: {
-            x = (int8_t)(X - 2);
-            y = (int8_t)(Y - 4);
+            x = i8(X - 2);
+            y = i8(Y - 4);
             w = 2;
             h = 1;
-            z_draw_rectangle(x,
-                             (int8_t)(y + z_screen_yShake),
-                             w,
-                             h,
-                             Z_COLOR_RED);
+            z_draw_rectangle(x, i8(y + z_screen_yShake), w, h, Z_COLOR_RED);
 
-            x = (int8_t)(X + 1);
-            z_draw_rectangle(x,
-                             (int8_t)(y + z_screen_yShake),
-                             w,
-                             h,
-                             Z_COLOR_RED);
+            x = i8(X + 1);
+            z_draw_rectangle(x, i8(y + z_screen_yShake), w, h, Z_COLOR_RED);
         } break;
 
         default: return;

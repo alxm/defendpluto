@@ -27,7 +27,7 @@ void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y, uint8_t FramesTtl)
 {
     Particle->x = X;
     Particle->y = Y;
-    Particle->angle = (uint8_t)z_random_uint16(Z_FIX_NUM_ANGLES);
+    Particle->angle = u8(z_random_uint16(Z_FIX_NUM_ANGLES));
     Particle->ttl = FramesTtl;
 }
 
@@ -36,7 +36,7 @@ bool z_particle_tick(ZPoolObject* Particle)
     ZParticle* particle = (ZParticle*)Particle;
 
     particle->x = z_fix_inc(particle->x, z_fix_cos(particle->angle));
-    particle->y = z_fix_inc(particle->y, (ZFix)-z_fix_sin(particle->angle));
+    particle->y = z_fix_inc(particle->y, zf(-z_fix_sin(particle->angle)));
 
     return particle->ttl--;
 }
@@ -45,8 +45,8 @@ void z_particle_draw(ZPoolObject* Particle)
 {
     ZParticle* particle = (ZParticle*)Particle;
 
-    int8_t x = (int8_t)(z_fix_fixtoi(particle->x) + z_screen_xShake);
-    int8_t y = (int8_t)(z_fix_fixtoi(particle->y) + z_screen_yShake);
+    int8_t x = i8(z_fix_fixtoi(particle->x) + z_screen_xShake);
+    int8_t y = i8(z_fix_fixtoi(particle->y) + z_screen_yShake);
 
     z_draw_pixel(x, y, Z_COLOR_YELLOW);
 }

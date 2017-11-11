@@ -35,7 +35,7 @@ bool z_circle_tick(ZPoolObject* Circle)
 {
     ZCircle* circle = (ZCircle*)Circle;
 
-    circle->radius = (ZFix)(circle->radius + circle->growSpeed);
+    circle->radius = zf(circle->radius + circle->growSpeed);
 
     return z_fix_fixtoi(circle->radius) <= circle->maxRadius;
 }
@@ -44,8 +44,8 @@ void z_circle_draw(ZPoolObject* Circle)
 {
     ZCircle* circle = (ZCircle*)Circle;
 
-    z_draw_circle((int8_t)(circle->x + z_screen_xShake),
-                  (int8_t)(circle->y + z_screen_yShake),
-                  (uint8_t)z_fix_fixtoi(circle->radius),
+    z_draw_circle(i8(circle->x + z_screen_xShake),
+                  i8(circle->y + z_screen_yShake),
+                  u8(z_fix_fixtoi(circle->radius)),
                   Z_COLOR_RED);
 }

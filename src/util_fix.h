@@ -26,22 +26,22 @@ extern const ZFix z_fix__sin[Z_FIX_NUM_ANGLES];
 
 static inline ZFix z_fix_itofix(int8_t X)
 {
-    return (ZFix)(X << Z_FIX_BIT_PRECISION);
+    return zf(X << Z_FIX_BIT_PRECISION);
 }
 
 static inline int8_t z_fix_fixtoi(ZFix X)
 {
-    return (int8_t)(X >> Z_FIX_BIT_PRECISION);
+    return i8(X >> Z_FIX_BIT_PRECISION);
 }
 
 static inline ZFix z_fix_mul(ZFix X, ZFix Y)
 {
-    return (ZFix)(((ZFixBig)X * Y) >> Z_FIX_BIT_PRECISION);
+    return zf(((ZFixBig)X * Y) >> Z_FIX_BIT_PRECISION);
 }
 
 static inline ZFix z_fix_div(ZFix X, ZFix Y)
 {
-    return (ZFix)(((ZFixBig)X << Z_FIX_BIT_PRECISION) / Y);
+    return zf(((ZFixBig)X << Z_FIX_BIT_PRECISION) / Y);
 }
 
 static inline ZFix z_fix_sin(uint8_t Angle)
@@ -51,7 +51,7 @@ static inline ZFix z_fix_sin(uint8_t Angle)
 
 static inline ZFix z_fix_cos(uint8_t Angle)
 {
-    return Z_PGM_READ_UINT16(z_fix__sin[(uint8_t)(Angle + 64)]);
+    return Z_PGM_READ_UINT16(z_fix__sin[u8(Angle + 64)]);
 }
 
 #define Z_GEN_MINMAX(Type, Name)                                    \
@@ -80,6 +80,6 @@ static inline ZFix z_fix_inc(ZFix X, ZFix Inc)
     } else if(Inc < 0 && X < z_fix_itofix(INT8_MIN) - Inc) {
         return z_fix_itofix(INT8_MIN);
     } else {
-        return (ZFix)(X + Inc);
+        return zf(X + Inc);
     }
 }

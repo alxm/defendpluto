@@ -66,8 +66,8 @@ void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font)
             }
         }
 
-        z_sprite_blit(sprite, X, Y, (uint8_t)frame);
-        X = (int8_t)(X + z_sprite_getWidth(sprite) + 1);
+        z_sprite_blit(sprite, X, Y, u8(frame));
+        X = i8(X + z_sprite_getWidth(sprite) + 1);
 
         Text++;
     }

@@ -40,6 +40,12 @@
     #define Z_PGM_READ_UINT16(Value) (Value)
 #endif
 
+#define i8(X) (int8_t)(X)
+#define i16(X) (int16_t)(X)
+#define u8(X) (uint8_t)(X)
+#define u16(X) (uint16_t)(X)
+#define zf(X) (ZFix)(X)
+
 Z_EXTERN_C_START
 
 typedef enum {

@@ -64,7 +64,7 @@ void z_platform_draw(void)
 
 uint16_t z_fps_getCounter(void)
 {
-    return (uint16_t)a_fps_getCounter();
+    return u16(a_fps_getCounter());
 }
 
 bool z_fps_isNthFrame(uint8_t N)
@@ -124,7 +124,7 @@ void z_platform__loadSprite(ZSprite* Sprite, const char* Path)
         }
     }
 
-    Sprite->numFrames = (uint8_t)a_spriteframes_getNum(frames);
+    Sprite->numFrames = u8(a_spriteframes_getNum(frames));
 
     a_sprite_free(sheet);
 }
@@ -141,12 +141,12 @@ void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
 
 int8_t z_sprite_getWidth(ZSprite* Sprite)
 {
-    return (int8_t)a_sprite_getWidth(getCurrentSprite(Sprite, 0));
+    return i8(a_sprite_getWidth(getCurrentSprite(Sprite, 0)));
 }
 
 int8_t z_sprite_getHeight(ZSprite* Sprite)
 {
-    return (int8_t)a_sprite_getHeight(getCurrentSprite(Sprite, 0));
+    return i8(a_sprite_getHeight(getCurrentSprite(Sprite, 0)));
 }
 
 #endif // ifndef ARDUINO

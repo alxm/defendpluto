@@ -33,16 +33,16 @@
 void z_star_init(ZStar* Star)
 {
     Star->x = z_fix_itofix(
-        (int8_t)(Z_STARS_BORDER + z_random_int8(Z_WIDTH - 2 * Z_STARS_BORDER)));
+        i8(Z_STARS_BORDER + z_random_int8(Z_WIDTH - 2 * Z_STARS_BORDER)));
     Star->y = 0;
-    Star->speed = (ZFix)(Z_STAR_MIN_SPEED + z_random_int16(Z_STAR_RND_SPEED));
+    Star->speed = zf(Z_STAR_MIN_SPEED + z_random_int16(Z_STAR_RND_SPEED));
 }
 
 bool z_star_tick(ZPoolObject* Star)
 {
     ZStar* star = (ZStar*)Star;
 
-    star->y = (ZFix)(star->y + star->speed);
+    star->y = zf(star->y + star->speed);
 
     return z_fix_fixtoi(star->y) < Z_HEIGHT;
 }
@@ -51,13 +51,12 @@ void z_star_draw(ZPoolObject* Star)
 {
     ZStar* star = (ZStar*)Star;
 
-    int8_t x = (int8_t)(z_fix_fixtoi(star->x) + z_screen_xShake);
-    int8_t y = (int8_t)(z_fix_fixtoi(star->y) + z_screen_yShake);
+    int8_t x = i8(z_fix_fixtoi(star->x) + z_screen_xShake);
+    int8_t y = i8(z_fix_fixtoi(star->y) + z_screen_yShake);
 
-    int8_t centerOffset = (int8_t)(z_fix_fixtoi(z_player.x) - Z_WIDTH / 2);
-    x = (int8_t)(x
-        - (Z_STARS_BORDER * star->speed / Z_STAR_MAX_SPEED)
-                * centerOffset / (Z_WIDTH / 2));
+    int8_t centerOffset = i8(z_fix_fixtoi(z_player.x) - Z_WIDTH / 2);
+    x = i8(x - (Z_STARS_BORDER * star->speed / Z_STAR_MAX_SPEED)
+                    * centerOffset / (Z_WIDTH / 2));
 
     z_draw_pixel(x, y, Z_COLOR_LIGHTBLUE + (star->speed >= Z_STAR_AVG_SPEED));
 }

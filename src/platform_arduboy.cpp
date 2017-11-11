@@ -39,7 +39,7 @@ void z_platform_setup(void)
     uint16_t x;
     uint8_t here;
 
-    for(x = (uint16_t)&_end; x < (uint16_t)&here; x++) {
+    for(x = u16(&_end); x < u16(&here); x++) {
         *(uint8_t*)x = 0x55;
     }
 }
@@ -57,7 +57,7 @@ void z_platform_draw(void)
     int16_t unusedBytes = 0;
     uint8_t here;
 
-    for(x = (uint16_t)&_end; x < (uint16_t)&here && *(uint8_t*)x == 0x55; x++) {
+    for(x = u16(&_end); x < u16(&here) && *(uint8_t*)x == 0x55; x++) {
         unusedBytes++;
     }
 
@@ -114,10 +114,10 @@ void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
 
 int8_t z_sprite_getWidth(ZSprite* Sprite)
 {
-    return (int8_t)pgm_read_byte(Sprite->image);
+    return i8(pgm_read_byte(Sprite->image));
 }
 
 int8_t z_sprite_getHeight(ZSprite* Sprite)
 {
-    return (int8_t)pgm_read_byte(Sprite->image + 1);
+    return i8(pgm_read_byte(Sprite->image + 1));
 }
