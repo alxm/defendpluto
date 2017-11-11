@@ -181,15 +181,25 @@ static void drawShield(int8_t X, int8_t Y)
     z_sprite_blit(&z_graphics.shield, X, Y, 0);
 
     int8_t rX = (int8_t)(X + 7);
-    int8_t rY = (int8_t)(Y + 1);
+    int8_t rY = (int8_t)(Y + 2);
     int8_t maxWidth = 21;
     int8_t width = (int8_t)(maxWidth * z_player.shield / Z_SHIELD_MAX);
+    int8_t height = 1;
 
-    z_draw_rectangle(rX, rY, (int8_t)(maxWidth + 2), 4, Z_COLOR_RED);
+    z_draw_rectangle((int8_t)(rX - 1),
+                     (int8_t)(rY - 1),
+                     (int8_t)(maxWidth + 4),
+                     (int8_t)(height + 4),
+                     Z_COLOR_BLUE);
+    z_draw_rectangle(rX,
+                     rY,
+                     (int8_t)(maxWidth + 2),
+                     (int8_t)(height + 2),
+                     Z_COLOR_RED);
     z_draw_rectangle((int8_t)(rX + 1 + width),
                      (int8_t)(rY + 1),
                      (int8_t)(maxWidth - width),
-                     2,
+                     height,
                      Z_COLOR_BLUE);
 }
 
@@ -217,7 +227,7 @@ void z_player_draw(void)
                           0);
 
     drawHearts(2, 2);
-    drawShield(29, 2);
+    drawShield(28, 2);
 }
 
 void z_player_takeDamage(int16_t Damage)
