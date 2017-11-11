@@ -33,6 +33,7 @@ spriteIds = {
 
 aiIds = {
     'straightdown': 0,
+    'zigzag': 1,
 }
 
 class Instruction:

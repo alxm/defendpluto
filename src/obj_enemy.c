@@ -64,6 +64,33 @@ static bool ai_straightdown(ZEnemy* Enemy)
 
     return isOnScreen(Enemy);
 }
+
+static bool ai_zigzag(ZEnemy* Enemy)
+{
+    nextFrame(Enemy);
+    advance(Enemy);
+
+    if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 8) {
+        if(Enemy->angle == 192) {
+            if(Enemy->aiArgs & 1) {
+                Enemy->angle = 160;
+            } else {
+                Enemy->angle = 224;
+            }
+        }
+
+        if(z_fps_isNthFrame(Z_FPS * 2)) {
+            if(Enemy->angle == 224) {
+                Enemy->angle = 160;
+            } else {
+                Enemy->angle = 224;
+            }
+        }
+    }
+
+    return isOnScreen(Enemy);
+}
+
 /*
 static bool ai_shoot(ZEnemy* Enemy)
 {
@@ -85,6 +112,7 @@ static bool ai_shoot(ZEnemy* Enemy)
 */
 static bool (*g_ai[])(ZEnemy*) = {
     ai_straightdown,
+    ai_zigzag,
 };
 
 void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiId, uint8_t AiArgs)

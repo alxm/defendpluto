@@ -2,6 +2,16 @@
 ; Level 0
 ;
 
+spawn 16 -8 asteroid straightdown 0
+loop 3
+    spawn 32 -8 enemy1 zigzag 0
+    spawn 96 -8 enemy1 zigzag 1
+    wait 60
+    spawn 56 -8 enemy0 straightdown 0
+end
+spawn 112 -8 asteroid straightdown 0
+over
+
 set x 48
 set y -8
 
