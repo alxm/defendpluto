@@ -57,6 +57,8 @@ typedef enum {
     Z_PALETTE_INVALID = -1,
     Z_PALETTE_ARDUBOY,
     Z_PALETTE_DEFAULT,
+    Z_PALETTE_X1,
+    Z_PALETTE_X2,
     Z_PALETTE_NUM
 } ZPalette;
 
