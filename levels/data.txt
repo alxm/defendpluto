@@ -5,6 +5,28 @@
 bind x 0
 bind y 1
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+loop 2
+    set x 48
+
+    loop 3
+        spawn x -8 asteroid straightdown 0
+        inc x 16
+    end
+
+    loop 3
+        spawn 32 -8 enemy0 zigzag 1
+        spawn 96 -8 enemy1 zigzag 0
+        wait 30
+    end
+end
+
+waitclear
+over
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 set x 64
 set y 0
 

@@ -42,9 +42,12 @@ typedef struct {
     uint8_t bytes;
 } ZOp;
 
+#define Z_NESTED_LOOPS_MAX 2
+
 static uint16_t g_pc;
-static uint16_t g_loopStart;
-static uint8_t g_loopCounter;
+static uint8_t g_loopIndex;
+static uint16_t g_loopStart[Z_NESTED_LOOPS_MAX];
+static uint8_t g_loopCounter[Z_NESTED_LOOPS_MAX];
 static uint8_t g_wait;
 static int8_t g_vars[Z_VARS_NUM];
 static ZOp g_ops[Z_OP_NUM];
@@ -143,7 +146,7 @@ static bool handle_loop(uint8_t Flags)
 
     Z_READ_ARGU8(num_times, 0, 0);
 
-    if(num_times == 0) {
+    if(num_times == 0 || g_loopIndex == 0) {
         uint8_t op;
 
         do {
@@ -153,8 +156,9 @@ static bool handle_loop(uint8_t Flags)
 
         return false;
     } else {
-        g_loopStart = u16(g_pc + g_ops[Z_OP_LOOP].bytes);
-        g_loopCounter = num_times;
+        g_loopIndex--;
+        g_loopStart[g_loopIndex] = u16(g_pc + g_ops[Z_OP_LOOP].bytes);
+        g_loopCounter[g_loopIndex] = num_times;
     }
 
     return true;
@@ -169,10 +173,12 @@ static bool handle_end(uint8_t Flags)
      * flags end
      *       end
      */
-    if(--g_loopCounter) {
-        g_pc = g_loopStart;
+    if(--g_loopCounter[g_loopIndex]) {
+        g_pc = g_loopStart[g_loopIndex];
         return false;
     }
+
+    g_loopIndex++;
 
     return true;
 }
@@ -252,6 +258,7 @@ void z_vm_reset(void)
 {
     g_pc = 0;
     g_wait = 0;
+    g_loopIndex = Z_NESTED_LOOPS_MAX;
 
     for(uint8_t v = Z_VARS_NUM; v--; ) {
         g_vars[v] = 0;
