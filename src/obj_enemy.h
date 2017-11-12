@@ -26,7 +26,6 @@ typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
     ZFix angle, angleInc;
-    ZFix speed;
     uint8_t typeId;
     uint8_t frame;
     uint8_t aiId, aiArgs;

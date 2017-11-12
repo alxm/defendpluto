@@ -43,6 +43,8 @@
     #define Z_PGM_READ_UINT16(Value) (Value)
 #endif
 
+typedef int16_t ZFix;
+
 #define i8(X) (int8_t)(X)
 #define i16(X) (int16_t)(X)
 #define u8(X) (uint8_t)(X)

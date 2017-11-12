@@ -17,6 +17,7 @@
 
 #include "platform.h"
 #include "util_enemy.h"
+#include "util_fix.h"
 #include "util_graphics.h"
 #include "util_screen.h"
 #include "data_gfx_asteroid.h"
@@ -28,17 +29,18 @@ ZEnemyData z_enemyData[Z_ENEMY_NUM];
 
 void z_enemy_setup(void)
 {
-    #define enemy(Index, Id, Width, Height, Health, Damage) \
-        z_sprite_load(&z_enemyData[Index].sprite, Id);      \
-        z_enemyData[Index].w = Width;                       \
-        z_enemyData[Index].h = Height;                      \
-        z_enemyData[Index].health = Health;                 \
-        z_enemyData[Index].damage = Damage;
+    #define enemy(Index, Id, Width, Height, Health, Damage, Speed) \
+        z_sprite_load(&z_enemyData[Index].sprite, Id);             \
+        z_enemyData[Index].w = Width;                              \
+        z_enemyData[Index].h = Height;                             \
+        z_enemyData[Index].health = Health;                        \
+        z_enemyData[Index].damage = Damage;                        \
+        z_enemyData[Index].speed = Speed;
 
-    enemy(Z_ENEMY_ASTEROID, asteroid, 8, 8, 1, 0);
-    enemy(Z_ENEMY_SHIP0, enemy00, 7, 5, 1, 1);
-    enemy(Z_ENEMY_SHIP1, enemy01, 7, 5, 1, 1);
-    enemy(Z_ENEMY_SHIP2, enemy02, 7, 6, 1, 1);
+    enemy(Z_ENEMY_ASTEROID, asteroid, 8, 8, 1, 0, Z_FIX_ONE / 4);
+    enemy(Z_ENEMY_SHIP0, enemy00, 7, 5, 1, 1, Z_FIX_ONE / 2);
+    enemy(Z_ENEMY_SHIP1, enemy01, 7, 5, 1, 1, Z_FIX_ONE / 2);
+    enemy(Z_ENEMY_SHIP2, enemy02, 7, 6, 1, 1, Z_FIX_ONE / 2);
 }
 
 void z_enemy_drawJets(uint8_t EnemyId, int8_t X, int8_t Y)

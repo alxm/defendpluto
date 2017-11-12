@@ -49,8 +49,8 @@ static void advance(ZEnemy* Enemy)
     ZFix cos = z_fix_cos(u8(z_fix_fixtoi(Enemy->angle)));
     ZFix sin = z_fix_sin(u8(z_fix_fixtoi(Enemy->angle)));
 
-    ZFix dx = z_fix_mul(cos, Enemy->speed);
-    ZFix dy = z_fix_mul(sin, Enemy->speed);
+    ZFix dx = z_fix_mul(cos, z_enemyData[Enemy->typeId].speed);
+    ZFix dy = z_fix_mul(sin, z_enemyData[Enemy->typeId].speed);
 
     Enemy->x = zf(Enemy->x + dx);
     Enemy->y = zf(Enemy->y - dy);
@@ -127,7 +127,6 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiI
     Enemy->y = z_fix_itofix(Y);
     Enemy->angle = Z_FIX_ANGLE_270;
     Enemy->angleInc = Z_FIX_ONE;
-    Enemy->speed = Z_FIX_ONE / 4;
     Enemy->typeId = TypeId;
     Enemy->frame = 0;
     Enemy->aiId = AiId;

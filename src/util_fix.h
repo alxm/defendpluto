@@ -15,7 +15,6 @@
     along with arduboy-shooter.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-typedef int16_t ZFix;
 typedef int32_t ZFixBig;
 
 #define Z_FIX_BIT_PRECISION (7)

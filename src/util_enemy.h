@@ -29,6 +29,7 @@ typedef struct {
     int8_t w, h;
     int8_t health;
     int8_t damage;
+    ZFix speed;
 } ZEnemyData;
 
 extern ZEnemyData z_enemyData[Z_ENEMY_NUM];
