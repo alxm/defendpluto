@@ -9,10 +9,12 @@ bind y 1
 
 loop 2
     set x 48
+    set y -8
 
     loop 3
-        spawn x -8 asteroid straightdown 0
+        spawn x y asteroid straightdown 0
         inc x 16
+        inc y -8
     end
 
     loop 3

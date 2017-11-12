@@ -23,6 +23,7 @@
 #include "data_levels.h"
 
 #define Z_VARS_NUM 2
+#define Z_NESTED_LOOPS_MAX 2
 
 typedef enum {
     Z_OP_INVALID = -1,
@@ -42,21 +43,24 @@ typedef struct {
     uint8_t bytes;
 } ZOp;
 
-#define Z_NESTED_LOOPS_MAX 2
-
-static uint16_t g_pc;
-static uint8_t g_loopIndex;
-static uint16_t g_loopStart[Z_NESTED_LOOPS_MAX];
-static uint8_t g_loopCounter[Z_NESTED_LOOPS_MAX];
-static uint8_t g_wait;
-static int8_t g_vars[Z_VARS_NUM];
 static ZOp g_ops[Z_OP_NUM];
 
-#define Z__READ(Offset) Z_PGM_READ_UINT8(z_data_levels[g_pc + Offset])
+static struct {
+    uint16_t pc;
+    uint8_t loopIndex;
+    struct {
+        uint16_t start;
+        uint8_t counter;
+    } loopStack[Z_NESTED_LOOPS_MAX];
+    uint8_t block;
+    int8_t vars[Z_VARS_NUM];
+} g_vm;
+
+#define Z__READ(Offset) Z_PGM_READ_UINT8(z_data_levels[g_vm.pc + Offset])
 
 #define Z__CHECKVAR(Type, CVar, ArgIndex) \
     if(Flags & (1 << ArgIndex)) {         \
-        CVar = (Type)g_vars[CVar];        \
+        CVar = (Type)g_vm.vars[CVar];     \
     }
 
 #define Z_READ_FLAGS() Z__READ(0)
@@ -116,7 +120,7 @@ static bool handle_wait(uint8_t Flags)
      * flags wait frames
      *       wait 30
      */
-    Z_READ_ARGU8(g_wait, 0, 0);
+    Z_READ_ARGU8(g_vm.block, 0, 0);
 
     return true;
 }
@@ -146,19 +150,20 @@ static bool handle_loop(uint8_t Flags)
 
     Z_READ_ARGU8(num_times, 0, 0);
 
-    if(num_times == 0 || g_loopIndex == 0) {
+    if(num_times == 0 || g_vm.loopIndex == 0) {
         uint8_t op;
 
         do {
             op = Z_READ_OP();
-            g_pc = u16(g_pc + g_ops[op].bytes);
+            g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
         } while(op != Z_OP_END);
 
         return false;
     } else {
-        g_loopIndex--;
-        g_loopStart[g_loopIndex] = u16(g_pc + g_ops[Z_OP_LOOP].bytes);
-        g_loopCounter[g_loopIndex] = num_times;
+        g_vm.loopIndex--;
+        g_vm.loopStack[g_vm.loopIndex].start =
+                                        u16(g_vm.pc + g_ops[Z_OP_LOOP].bytes);
+        g_vm.loopStack[g_vm.loopIndex].counter = num_times;
     }
 
     return true;
@@ -173,12 +178,12 @@ static bool handle_end(uint8_t Flags)
      * flags end
      *       end
      */
-    if(--g_loopCounter[g_loopIndex]) {
-        g_pc = g_loopStart[g_loopIndex];
+    if(--g_vm.loopStack[g_vm.loopIndex].counter) {
+        g_vm.pc = g_vm.loopStack[g_vm.loopIndex].start;
         return false;
     }
 
-    g_loopIndex++;
+    g_vm.loopIndex++;
 
     return true;
 }
@@ -212,7 +217,7 @@ static bool handle_set(uint8_t Flags)
     Z_READ_ARGU8(var_id, 0, 0);
     Z_READ_ARGI8(value, 1, 1);
 
-    g_vars[var_id] = value;
+    g_vm.vars[var_id] = value;
 
     return true;
 }
@@ -232,7 +237,7 @@ static bool handle_inc(uint8_t Flags)
     Z_READ_ARGU8(var_id, 0, 0);
     Z_READ_ARGI8(value, 1, 1);
 
-    g_vars[var_id] = i8(g_vars[var_id] + value);
+    g_vm.vars[var_id] = i8(g_vm.vars[var_id] + value);
 
     return true;
 }
@@ -256,19 +261,19 @@ void z_vm_setup(void)
 
 void z_vm_reset(void)
 {
-    g_pc = 0;
-    g_wait = 0;
-    g_loopIndex = Z_NESTED_LOOPS_MAX;
+    g_vm.pc = 0;
+    g_vm.block = 0;
+    g_vm.loopIndex = Z_NESTED_LOOPS_MAX;
 
     for(uint8_t v = Z_VARS_NUM; v--; ) {
-        g_vars[v] = 0;
+        g_vm.vars[v] = 0;
     }
 }
 
 void z_vm_tick(void)
 {
-    if(g_wait) {
-        g_wait--;
+    if(g_vm.block) {
+        g_vm.block--;
         return;
     }
 
@@ -276,6 +281,6 @@ void z_vm_tick(void)
     uint8_t flags = Z_READ_FLAGS();
 
     if(g_ops[op].callback(flags)) {
-        g_pc = u16(g_pc + g_ops[op].bytes);
+        g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
     }
 }
