@@ -25,7 +25,7 @@ typedef enum {
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
-    uint8_t angle;
+    ZFix angle, angleInc;
     ZFix speed;
     uint8_t typeId;
     uint8_t frame;

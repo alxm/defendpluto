@@ -46,8 +46,14 @@ static void nextFrame(ZEnemy* Enemy)
 
 static void advance(ZEnemy* Enemy)
 {
-    Enemy->x = zf(Enemy->x + z_fix_mul(z_fix_cos(Enemy->angle), Enemy->speed));
-    Enemy->y = zf(Enemy->y - z_fix_mul(z_fix_sin(Enemy->angle), Enemy->speed));
+    ZFix cos = z_fix_cos(u8(z_fix_fixtoi(Enemy->angle)));
+    ZFix sin = z_fix_sin(u8(z_fix_fixtoi(Enemy->angle)));
+
+    ZFix dx = z_fix_mul(cos, Enemy->speed);
+    ZFix dy = z_fix_mul(sin, Enemy->speed);
+
+    Enemy->x = zf(Enemy->x + dx);
+    Enemy->y = zf(Enemy->y - dy);
 }
 
 static bool isOnScreen(ZEnemy* Enemy)
@@ -71,19 +77,19 @@ static bool ai_zigzag(ZEnemy* Enemy)
     advance(Enemy);
 
     if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 8) {
-        if(Enemy->angle == 192) {
+        if(Enemy->angle == Z_FIX_ANGLE_270) {
             if(Enemy->aiArgs & 1) {
-                Enemy->angle = 160;
+                Enemy->angle = Z_FIX_ANGLE_225;
             } else {
-                Enemy->angle = 224;
+                Enemy->angle = Z_FIX_ANGLE_315;
             }
         }
 
         if(z_fps_isNthFrame(Z_FPS * 2)) {
-            if(Enemy->angle == 224) {
-                Enemy->angle = 160;
+            if(Enemy->angle == Z_FIX_ANGLE_315) {
+                Enemy->angle = Z_FIX_ANGLE_225;
             } else {
-                Enemy->angle = 224;
+                Enemy->angle = Z_FIX_ANGLE_315;
             }
         }
     }
@@ -119,7 +125,8 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiI
 {
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
-    Enemy->angle = 192;
+    Enemy->angle = Z_FIX_ANGLE_270;
+    Enemy->angleInc = Z_FIX_ONE;
     Enemy->speed = Z_FIX_ONE / 4;
     Enemy->typeId = TypeId;
     Enemy->frame = 0;

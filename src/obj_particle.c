@@ -35,8 +35,8 @@ bool z_particle_tick(ZPoolObject* Particle)
 {
     ZParticle* particle = (ZParticle*)Particle;
 
-    particle->x = z_fix_inc(particle->x, z_fix_cos(particle->angle));
-    particle->y = z_fix_inc(particle->y, zf(-z_fix_sin(particle->angle)));
+    particle->x = zf(particle->x + z_fix_cos(particle->angle));
+    particle->y = zf(particle->y - z_fix_sin(particle->angle));
 
     return particle->ttl--;
 }

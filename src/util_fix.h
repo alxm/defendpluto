@@ -18,9 +18,20 @@
 typedef int16_t ZFix;
 typedef int32_t ZFixBig;
 
-#define Z_FIX_BIT_PRECISION (8)
+#define Z_FIX_BIT_PRECISION (7)
 #define Z_FIX_ONE           (1 << Z_FIX_BIT_PRECISION)
 #define Z_FIX_NUM_ANGLES    (256)
+
+typedef enum {
+    Z_FIX_ANGLE_000 = (Z_FIX_ONE / 8 * Z_FIX_NUM_ANGLES * 0),
+    Z_FIX_ANGLE_045 = (Z_FIX_ONE / 8 * Z_FIX_NUM_ANGLES * 1),
+    Z_FIX_ANGLE_090 = (Z_FIX_ONE / 8 * Z_FIX_NUM_ANGLES * 2),
+    Z_FIX_ANGLE_135 = (Z_FIX_ONE / 8 * Z_FIX_NUM_ANGLES * 3),
+    Z_FIX_ANGLE_180 = (Z_FIX_ONE / 8 * Z_FIX_NUM_ANGLES * 4),
+    Z_FIX_ANGLE_225 = (Z_FIX_ONE / 8 * Z_FIX_NUM_ANGLES * 5),
+    Z_FIX_ANGLE_270 = (Z_FIX_ONE / 8 * Z_FIX_NUM_ANGLES * 6),
+    Z_FIX_ANGLE_315 = (Z_FIX_ONE / 8 * Z_FIX_NUM_ANGLES * 7)
+} ZFixAngle;
 
 extern const ZFix z_fix__sin[Z_FIX_NUM_ANGLES];
 
@@ -72,14 +83,3 @@ static inline ZFix z_fix_cos(uint8_t Angle)
 
 Z_GEN_MINMAX(int16_t, int16)
 Z_GEN_MINMAX(ZFix, fix)
-
-static inline ZFix z_fix_inc(ZFix X, ZFix Inc)
-{
-    if(Inc > 0 && z_fix_itofix(INT8_MAX) - Inc < X) {
-        return z_fix_itofix(INT8_MAX);
-    } else if(Inc < 0 && X < z_fix_itofix(INT8_MIN) - Inc) {
-        return z_fix_itofix(INT8_MIN);
-    } else {
-        return zf(X + Inc);
-    }
-}

@@ -139,11 +139,11 @@ void z_player_tick(void)
     z_player.dx = z_fix_clamp(z_player.dx, zf(-maxSpeed), maxSpeed);
     z_player.dy = z_fix_clamp(z_player.dy, zf(-maxSpeed), maxSpeed);
 
-    z_player.x = z_fix_clamp(z_fix_inc(z_player.x, z_player.dx),
+    z_player.x = z_fix_clamp(zf(z_player.x + z_player.dx),
                              0,
                              z_fix_itofix(Z_WIDTH - 1));
 
-    z_player.y = z_fix_clamp(z_fix_inc(z_player.y, z_player.dy),
+    z_player.y = z_fix_clamp(zf(z_player.y + z_player.dy),
                              0,
                              z_fix_itofix(Z_HEIGHT - 1));
 
