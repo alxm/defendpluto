@@ -19,10 +19,7 @@
 
 import sys
 
-varIds = {
-    'x': 0,
-    'y': 1,
-}
+varIds = {}
 
 spriteIds = {
     'asteroid': 0,
@@ -71,7 +68,6 @@ class Instruction:
         return self.custom_compile(Tokens[1 :], bytecode)
 
     def custom_compile(self, Tokens, Bytecode):
-
         return Bytecode
 
 class InstructionSpawn(Instruction):
@@ -165,6 +161,22 @@ class InstructionInc(Instruction):
 
         return Bytecode
 
+class InstructionBind(Instruction):
+    def __init__(self):
+        Instruction.__init__(self, 2)
+
+    def custom_compile(self, Tokens, Bytecode):
+        #
+        # var_name var_id
+        # x        0
+        #
+        var_name = Tokens[0]
+        var_id = int(Tokens[1])
+
+        varIds[var_name] = var_id
+
+        return None
+
 def main(LevelFile):
     instructions = {
         'spawn': InstructionSpawn(),
@@ -175,6 +187,7 @@ def main(LevelFile):
         'over': Instruction(),
         'set': InstructionSet(),
         'inc': InstructionInc(),
+        'bind': InstructionBind(),
     }
 
     bytecode = []
@@ -194,7 +207,10 @@ def main(LevelFile):
                 continue
 
             instruction = instructions[tokens[0]]
-            bytecode.append(instruction.compile(tokens))
+            compiled = instruction.compile(tokens)
+
+            if compiled:
+                bytecode.append(compiled)
 
     formatted_bytecode = ''
 

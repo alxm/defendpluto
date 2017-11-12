@@ -2,6 +2,9 @@
 ; Level 0
 ;
 
+bind x 0
+bind y 1
+
 set x 64
 set y 0
 

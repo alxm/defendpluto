@@ -22,6 +22,8 @@
 #include "obj_enemy.h"
 #include "data_levels.h"
 
+#define Z_VARS_NUM 2
+
 typedef enum {
     Z_OP_INVALID = -1,
     Z_OP_SPAWN,
@@ -35,13 +37,6 @@ typedef enum {
     Z_OP_NUM
 } ZOpType;
 
-typedef enum {
-    Z_VAR_INVALID = -1,
-    Z_VAR_X,
-    Z_VAR_Y,
-    Z_VAR_NUM
-} ZVar;
-
 typedef struct {
     bool (*callback)(uint8_t Flags);
     uint8_t bytes;
@@ -51,7 +46,7 @@ static uint16_t g_pc;
 static uint16_t g_loopStart;
 static uint8_t g_loopCounter;
 static uint8_t g_wait;
-static int8_t g_vars[Z_VAR_NUM];
+static int8_t g_vars[Z_VARS_NUM];
 static ZOp g_ops[Z_OP_NUM];
 
 #define Z__READ(Offset) Z_PGM_READ_UINT8(z_data_levels[g_pc + Offset])
@@ -216,7 +211,6 @@ static bool handle_set(uint8_t Flags)
     return true;
 }
 
-
 static bool handle_inc(uint8_t Flags)
 {
     Z_UNUSED(Flags);
@@ -259,8 +253,9 @@ void z_vm_reset(void)
     g_pc = 0;
     g_wait = 0;
 
-    g_vars[Z_VAR_X] = 0;
-    g_vars[Z_VAR_Y] = 0;
+    for(uint8_t v = Z_VARS_NUM; v--; ) {
+        g_vars[v] = 0;
+    }
 }
 
 void z_vm_tick(void)
