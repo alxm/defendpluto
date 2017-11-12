@@ -27,7 +27,7 @@ void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y, uint8_t FramesTtl)
 {
     Particle->x = X;
     Particle->y = Y;
-    Particle->angle = u8(z_random_uint16(Z_FIX_NUM_ANGLES));
+    Particle->angle = u8(z_random_uint8(Z_FIX_NUM_ANGLES));
     Particle->ttl = FramesTtl;
 }
 
