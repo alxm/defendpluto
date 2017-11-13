@@ -12,15 +12,20 @@ loop 2
     set y -8
 
     loop 3
-        spawn x y asteroid straightdown 0
+        spawn x y asteroid down 0
         inc x 16
         inc y -8
     end
 
     loop 3
         spawn 32 -8 enemy0 zigzag 1
-        spawn 96 -8 enemy1 zigzag 0
-        wait 30
+        spawn 96 -8 enemy1 curve 0
+        wait 15
+    end
+
+    loop 2
+        spawn 96 -8 enemy2 curve 0
+        wait 15
     end
 end
 
@@ -32,33 +37,31 @@ over
 set x 64
 set y 0
 
-spawn 16 -8 asteroid straightdown 0
+spawn 16 -8 asteroid down 0
 loop 3
-    spawn 32 -8 enemy1 zigzag y
-    inc y 1
-    spawn 96 -8 enemy1 zigzag y
-    inc y -1
+    spawn 32 -8 enemy1 zigzag 0
+    spawn 96 -8 enemy2 curve 1
     wait 60
-    spawn x -8 enemy0 straightdown 0
+    spawn x -8 enemy0 down 0
     inc x 16
 end
-spawn 112 -8 asteroid straightdown 0
+spawn 112 -8 asteroid down 0
 
 set x 48
 set y -8
 
 loop 3
-    spawn x y asteroid straightdown 0
+    spawn x y asteroid down 0
     inc x 16
     wait 32
 end
-spawn 48 y enemy0 straightdown 0
+spawn 48 y enemy0 down 0
 
 wait 24
 set x 80
 
 loop 3
-    spawn x y asteroid straightdown 0
+    spawn x y asteroid down 0
     inc x -16
     wait 8
 end

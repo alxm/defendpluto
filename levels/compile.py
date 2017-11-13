@@ -29,8 +29,9 @@ spriteIds = {
 }
 
 aiIds = {
-    'straightdown': 0,
+    'down': 0,
     'zigzag': 1,
+    'curve': 2,
 }
 
 class Instruction:

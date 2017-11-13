@@ -35,90 +35,84 @@ static struct {
     int8_t x, y, w, h;
 } g_coll;
 
-static void nextFrame(ZEnemy* Enemy)
+static ZFix ai_down(ZEnemy* Enemy)
 {
-    if(z_fps_isNthFrame(6)) {
-        ZSprite* sprite = &z_enemyData[Enemy->typeId].sprite;
+    Z_UNUSED(Enemy);
 
-        Enemy->frame = u8((Enemy->frame + 1) % sprite->numFrames);
+    return 0;
+}
+
+static ZFix ai_zigzag(ZEnemy* Enemy)
+{
+    switch(Enemy->aiState) {
+        case 0: {
+            if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 8) {
+                if(Enemy->aiArgs & 1) {
+                    Enemy->angle = Z_FIX_ANGLE_225;
+                } else {
+                    Enemy->angle = Z_FIX_ANGLE_315;
+                }
+
+                Enemy->aiState = 1;
+                Enemy->aiCounter = Z_FPS / 2;
+            }
+        } break;
+
+        case 1: {
+            if(Enemy->aiCounter-- == 0) {
+                if(Enemy->angle == Z_FIX_ANGLE_225) {
+                    Enemy->angle = Z_FIX_ANGLE_315;
+                } else {
+                    Enemy->angle = Z_FIX_ANGLE_225;
+                }
+
+                Enemy->aiCounter = Z_FPS;
+            }
+        } break;
     }
+
+    return 0;
 }
 
-static void advance(ZEnemy* Enemy)
+static ZFix ai_curve(ZEnemy* Enemy)
 {
-    ZFix cos = z_fix_cos(u8(z_fix_fixtoi(Enemy->angle)));
-    ZFix sin = z_fix_sin(u8(z_fix_fixtoi(Enemy->angle)));
+    ZFix angleInc = 0;
 
-    ZFix dx = z_fix_mul(cos, z_enemyData[Enemy->typeId].speed);
-    ZFix dy = z_fix_mul(sin, z_enemyData[Enemy->typeId].speed);
-
-    Enemy->x = zf(Enemy->x + dx);
-    Enemy->y = zf(Enemy->y - dy);
-}
-
-static bool isOnScreen(ZEnemy* Enemy)
-{
-    ZSprite* sprite = &z_enemyData[Enemy->typeId].sprite;
-
-    return z_fix_fixtoi(Enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
-}
-
-static bool ai_straightdown(ZEnemy* Enemy)
-{
-    nextFrame(Enemy);
-    advance(Enemy);
-
-    return isOnScreen(Enemy);
-}
-
-static bool ai_zigzag(ZEnemy* Enemy)
-{
-    nextFrame(Enemy);
-    advance(Enemy);
-
-    if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 8) {
-        if(Enemy->angle == Z_FIX_ANGLE_270) {
+    switch(Enemy->aiState) {
+        case 0: {
             if(Enemy->aiArgs & 1) {
-                Enemy->angle = Z_FIX_ANGLE_225;
+                angleInc = -Z_FIX_ONE;
+                Enemy->aiState = 1;
             } else {
-                Enemy->angle = Z_FIX_ANGLE_315;
+                angleInc = Z_FIX_ONE;
+                Enemy->aiState = 2;
             }
-        }
+        } break;
 
-        if(z_fps_isNthFrame(Z_FPS * 2)) {
-            if(Enemy->angle == Z_FIX_ANGLE_315) {
-                Enemy->angle = Z_FIX_ANGLE_225;
+        case 1: {
+            if(Enemy->angle <= Z_FIX_ANGLE_225) {
+                Enemy->aiState = 2;
             } else {
-                Enemy->angle = Z_FIX_ANGLE_315;
+                angleInc = -Z_FIX_ONE;
             }
-        }
+        } break;
+
+        case 2: {
+            if(Enemy->angle >= Z_FIX_ANGLE_315) {
+                Enemy->aiState = 1;
+            } else {
+                angleInc = Z_FIX_ONE;
+            }
+        } break;
     }
 
-    return isOnScreen(Enemy);
+    return angleInc;
 }
 
-/*
-static bool ai_shoot(ZEnemy* Enemy)
-{
-    nextFrame(Enemy);
-    advance(Enemy);
-
-    if(z_fps_isNthFrame(Z_FPS)) {
-        ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
-
-        if(b) {
-            z_bullete_init(b,
-                           zf(Enemy->x + z_fix_itofix(z_screen_xShake)),
-                           Enemy->y);
-        }
-    }
-
-    return isOnScreen(Enemy);
-}
-*/
-static bool (*g_ai[])(ZEnemy*) = {
-    ai_straightdown,
+static ZFix (*g_ai[])(ZEnemy*) = {
+    ai_down,
     ai_zigzag,
+    ai_curve,
 };
 
 void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiId, uint8_t AiArgs)
@@ -126,21 +120,38 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiI
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
     Enemy->angle = Z_FIX_ANGLE_270;
-    Enemy->angleInc = Z_FIX_ONE;
     Enemy->typeId = TypeId;
     Enemy->frame = 0;
     Enemy->aiId = AiId;
     Enemy->aiArgs = AiArgs;
+    Enemy->aiState = 0;
+    Enemy->aiCounter = 0;
     Enemy->jetFlicker = false;
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
+    ZFix angleInc = g_ai[enemy->aiId](enemy);
+
+    ZFix cos = z_fix_cos(u8(z_fix_fixtoi(enemy->angle)));
+    ZFix sin = z_fix_sin(u8(z_fix_fixtoi(enemy->angle)));
+
+    ZFix dx = z_fix_mul(cos, z_enemyData[enemy->typeId].speed);
+    ZFix dy = z_fix_mul(sin, z_enemyData[enemy->typeId].speed);
+
+    enemy->x = zf(enemy->x + dx);
+    enemy->y = zf(enemy->y - dy);
+    enemy->angle = zf((enemy->angle + angleInc) & (Z_FIX_NUM_ANGLESF - 1));
+
+    if(z_fps_isNthFrame(6)) {
+        ZSprite* sprite = &z_enemyData[enemy->typeId].sprite;
+        enemy->frame = u8((enemy->frame + 1) % sprite->numFrames);
+    }
 
     enemy->jetFlicker = !enemy->jetFlicker;
 
-    return g_ai[enemy->aiId](enemy);
+    return z_fix_fixtoi(enemy->y) - z_enemyData[enemy->typeId].h / 2 < Z_HEIGHT;
 }
 
 void z_enemy_draw(ZPoolObject* Enemy)

@@ -17,18 +17,19 @@
 
 typedef enum {
     Z_AI_ID_INVALID = -1,
-    Z_AI_ID_NOBRAIN,
+    Z_AI_DOWN,
     Z_AI_ZIGZAG,
+    Z_AI_CURVE,
     Z_AI_ID_NUM
 } ZAiId;
 
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
-    ZFix angle, angleInc;
+    ZFix angle;
     uint8_t typeId;
     uint8_t frame;
-    uint8_t aiId, aiArgs;
+    uint8_t aiId, aiArgs, aiState, aiCounter;
     bool jetFlicker;
 } ZEnemy;
 
