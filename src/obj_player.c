@@ -83,7 +83,7 @@ void z_player_tick(void)
     ZFix maxSpeed = Z_SPEED_MAX;
 
     if(z_button_pressed(z_controls.a)) {
-        maxSpeed = Z_SPEED_MAX * 2 / 3;
+        maxSpeed = Z_SPEED_MAX / 2;
 
         if(z_fps_isNthFrame(Z_FPS / 10)) {
             z_player.shootShift ^= 1;
