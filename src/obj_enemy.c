@@ -102,7 +102,7 @@ static void ai_curve(ZEnemy* Enemy)
         } break;
     }
 
-    Enemy->angle = u8((Enemy->angle + angleInc) & (Z_ANGLES_NUM - 1));
+    Enemy->angle = Z_ANGLE_WRAP(Enemy->angle + angleInc);
 }
 
 static void (*g_ai[])(ZEnemy*) = {
@@ -129,6 +129,8 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
+    g_ai[enemy->aiId](enemy);
+
     ZFix cos = z_fix_cos(enemy->angle);
     ZFix sin = z_fix_sin(enemy->angle);
 
@@ -137,8 +139,6 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 
     enemy->x = zf(enemy->x + dx);
     enemy->y = zf(enemy->y - dy);
-
-    g_ai[enemy->aiId](enemy);
 
     if(z_fps_isNthFrame(Z_FPS / 5)) {
         ZSprite* sprite = &z_enemyData[enemy->typeId].sprite;

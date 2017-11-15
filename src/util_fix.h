@@ -19,7 +19,9 @@ typedef int32_t ZFixBig;
 
 #define Z_FIX_BIT_PRECISION (7)
 #define Z_FIX_ONE           (1 << Z_FIX_BIT_PRECISION)
+
 #define Z_ANGLES_NUM        (128)
+#define Z_ANGLE_WRAP(Angle) u8((Angle) & (Z_ANGLES_NUM - 1))
 
 typedef enum {
     Z_ANGLE_000 = (Z_ANGLES_NUM * 0 / 8),
@@ -62,7 +64,7 @@ static inline ZFix z_fix_sin(uint8_t Angle)
 static inline ZFix z_fix_cos(uint8_t Angle)
 {
     return Z_PGM_READ_UINT16(
-        z_fix__sin[(Angle + Z_ANGLES_NUM / 4) & (Z_ANGLES_NUM - 1)]);
+        z_fix__sin[Z_ANGLE_WRAP(Angle + Z_ANGLES_NUM / 4)]);
 }
 
 #define Z_GEN_MINMAX(Type, Name)                                    \
