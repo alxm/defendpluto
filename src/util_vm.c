@@ -63,23 +63,24 @@ static struct {
         CVar = (Type)g_vm.vars[CVar];     \
     }
 
-#define Z_READ_FLAGS() Z__READ(0)
-#define Z_READ_OP()    Z__READ(1)
+#define Z_READ_OP()           Z__READ(0)
+#define Z_READ_FLAGS()        Z__READ(1)
+#define Z_READ_ARG(ByteIndex) Z__READ(2 + ByteIndex)
 
 #define Z_READ_ARGI8(CVar, ArgIndex, ByteIndex) \
-    CVar = i8(Z__READ(2 + ByteIndex));          \
+    CVar = i8(Z_READ_ARG(ByteIndex));           \
     Z__CHECKVAR(int8_t, CVar, ArgIndex)
 
 #define Z_READ_ARGU8(CVar, ArgIndex, ByteIndex) \
-    CVar = u8(Z__READ(2 + ByteIndex));          \
+    CVar = u8(Z_READ_ARG(ByteIndex));           \
     Z__CHECKVAR(uint8_t, CVar, ArgIndex)
 
 #define Z_READ_ARGU4H(CVar, ArgIndex, ByteIndex) \
-    CVar = Z__READ(2 + ByteIndex) >> 4;          \
+    CVar = Z_READ_ARG(ByteIndex) >> 4;           \
     Z__CHECKVAR(uint8_t, CVar, ArgIndex)
 
 #define Z_READ_ARGU4L(CVar, ArgIndex, ByteIndex) \
-    CVar = Z__READ(2 + ByteIndex) & 0xf;         \
+    CVar = Z_READ_ARG(ByteIndex) & 0xf;          \
     Z__CHECKVAR(uint8_t, CVar, ArgIndex)
 
 static bool handle_spawn(uint8_t Flags)
@@ -88,8 +89,8 @@ static bool handle_spawn(uint8_t Flags)
 
     /*
      * 8b    8b    8b      8b      4b      4b     8b
-     * flags spawn x_coord y_coord type_id ai_id  ai_args
-     *       spawn 64      -8      enemy0  zigzag 0
+     * spawn flags x_coord y_coord type_id ai_id  ai_args
+     * spawn       64      -8      enemy0  zigzag 0
      */
     int8_t x, y;
     uint8_t type_id, ai_id, ai_args;
@@ -116,9 +117,9 @@ static bool handle_wait(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b    8b   8b
-     * flags wait frames
-     *       wait 30
+     * 8b   8b    8b
+     * wait flags frames
+     * wait       30
      */
     Z_READ_ARGU8(g_vm.block, 0, 0);
 
@@ -130,9 +131,9 @@ static bool handle_waitclear(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b    8b
-     * flags waitclear
-     *       waitclear
+     * 8b        8b
+     * waitclear flags
+     * waitclear
      */
     return z_pool_noActive(Z_POOL_ENEMY);
 }
@@ -142,9 +143,9 @@ static bool handle_loop(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b    8b   8b
-     * flags loop num_times
-     *       loop 10
+     * 8b   8b    8b
+     * loop flags num_times
+     * loop       10
      */
     uint8_t num_times;
 
@@ -174,9 +175,9 @@ static bool handle_end(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b    8b
-     * flags end
-     *       end
+     * 8b  8b
+     * end flags
+     * end
      */
     if(--g_vm.loopStack[g_vm.loopIndex].counter) {
         g_vm.pc = g_vm.loopStack[g_vm.loopIndex].start;
@@ -193,9 +194,9 @@ static bool handle_over(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b    8b
-     * flags over
-     *       over
+     * 8b   8b
+     * over flags
+     * over
      */
     z_vm_reset();
 
@@ -207,9 +208,9 @@ static bool handle_set(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b    8b  8b     8b
-     * flags set var_id value
-     *       set x      32
+     * 8b  8b    8b     8b
+     * set flags var_id value
+     * set       x      32
      */
     uint8_t var_id;
     int8_t value;
@@ -227,9 +228,9 @@ static bool handle_inc(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b    8b  8b     8b
-     * flags inc var_id value
-     *       inc x      16
+     * 8b  8b    8b     8b
+     * inc flags var_id value
+     * inc       x      16
      */
     uint8_t var_id;
     int8_t value;

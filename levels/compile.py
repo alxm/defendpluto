@@ -43,12 +43,15 @@ class Instruction:
 
         Instruction.numInstructions += 1
 
+    def setVarFlag(self, Bytecode, ArgIndex):
+        Bytecode[1] |= 1 << ArgIndex
+
     def checkVar(self, Bytecode, Tokens, Index):
         token = Tokens[Index]
 
         if token in varIds:
             if 0 <= Index <= 7:
-                Bytecode[0] |= 1 << Index
+                self.setVarFlag(Bytecode, Index)
                 return varIds[token]
             else:
                 return 0
@@ -64,7 +67,7 @@ class Instruction:
         # 8b    8b
         # flags op
         #
-        bytecode = [0, self.opcode]
+        bytecode = [self.opcode, 0]
 
         return self.custom_compile(Tokens[1 :], bytecode)
 
