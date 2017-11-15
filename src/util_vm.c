@@ -245,8 +245,8 @@ static bool op_spawn(uint8_t Flags)
 
 void z_vm_setup(void)
 {
-    #define setOp(Index, Function, ArgBytes)          \
-        g_ops[Index] = (ZOp){Function, 2 + ArgBytes};
+    #define setOp(Index, Function, ArgBytes)                                   \
+        g_ops[Index] = (ZOp){Function, 1 + (ArgBytes > 0 ? 1 + ArgBytes : 0)};
 
     setOp(Z_OP_OVER, op_over, 0);
     setOp(Z_OP_SET, op_set, 2);
@@ -279,7 +279,11 @@ void z_vm_tick(void)
     }
 
     uint8_t op = Z_READ_OP();
-    uint8_t flags = Z_READ_FLAGS();
+    uint8_t flags = 0;
+
+    if(g_ops[op].bytes > 1) {
+        flags = Z_READ_FLAGS();
+    }
 
     if(g_ops[op].callback(flags)) {
         g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);

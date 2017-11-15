@@ -63,11 +63,18 @@ class Op:
             print('{} requires {} arguments'.format(Tokens[0], self.numArgs))
             sys.exit(1)
 
-        #
-        # 8b    8b
-        # flags op
-        #
-        bytecode = [self.opcode, 0]
+        if self.numArgs > 0:
+            #
+            # 8b 8b
+            # op flags
+            #
+            bytecode = [self.opcode, 0]
+        else:
+            #
+            # 8b
+            # op
+            #
+            bytecode = [self.opcode]
 
         return self.custom_compile(Tokens[1 :], bytecode)
 
