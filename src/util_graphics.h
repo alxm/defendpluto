@@ -33,7 +33,7 @@ typedef enum {
     Z_BIT_BACK    = (1 << 1),
     Z_BIT_LEFT    = (1 << 2),
     Z_BIT_RIGHT   = (1 << 3),
-    Z_BIT_MAX_VAL = (Z_BIT_BACK | Z_BIT_RIGHT)
+    Z_BIT_MAX_VAL = (Z_BIT_RIGHT | Z_BIT_BACK)
 } ZFrameBits;
 
 typedef struct {

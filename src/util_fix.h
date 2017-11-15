@@ -19,21 +19,20 @@ typedef int32_t ZFixBig;
 
 #define Z_FIX_BIT_PRECISION (7)
 #define Z_FIX_ONE           (1 << Z_FIX_BIT_PRECISION)
-#define Z_FIX_NUM_ANGLES    (128)
-#define Z_FIX_NUM_ANGLESF   (Z_FIX_NUM_ANGLES * Z_FIX_ONE)
+#define Z_ANGLES_NUM        (128)
 
 typedef enum {
-    Z_FIX_ANGLE_000 = (Z_FIX_ONE * (Z_FIX_NUM_ANGLES * 0 / 8)),
-    Z_FIX_ANGLE_045 = (Z_FIX_ONE * (Z_FIX_NUM_ANGLES * 1 / 8)),
-    Z_FIX_ANGLE_090 = (Z_FIX_ONE * (Z_FIX_NUM_ANGLES * 2 / 8)),
-    Z_FIX_ANGLE_135 = (Z_FIX_ONE * (Z_FIX_NUM_ANGLES * 3 / 8)),
-    Z_FIX_ANGLE_180 = (Z_FIX_ONE * (Z_FIX_NUM_ANGLES * 4 / 8)),
-    Z_FIX_ANGLE_225 = (Z_FIX_ONE * (Z_FIX_NUM_ANGLES * 5 / 8)),
-    Z_FIX_ANGLE_270 = (Z_FIX_ONE * (Z_FIX_NUM_ANGLES * 6 / 8)),
-    Z_FIX_ANGLE_315 = (Z_FIX_ONE * (Z_FIX_NUM_ANGLES * 7 / 8))
-} ZFixAngle;
+    Z_ANGLE_000 = (Z_ANGLES_NUM * 0 / 8),
+    Z_ANGLE_045 = (Z_ANGLES_NUM * 1 / 8),
+    Z_ANGLE_090 = (Z_ANGLES_NUM * 2 / 8),
+    Z_ANGLE_135 = (Z_ANGLES_NUM * 3 / 8),
+    Z_ANGLE_180 = (Z_ANGLES_NUM * 4 / 8),
+    Z_ANGLE_225 = (Z_ANGLES_NUM * 5 / 8),
+    Z_ANGLE_270 = (Z_ANGLES_NUM * 6 / 8),
+    Z_ANGLE_315 = (Z_ANGLES_NUM * 7 / 8)
+} ZAngle;
 
-extern const ZFix z_fix__sin[Z_FIX_NUM_ANGLES];
+extern const ZFix z_fix__sin[Z_ANGLES_NUM];
 
 static inline ZFix z_fix_itofix(int8_t X)
 {
@@ -63,7 +62,7 @@ static inline ZFix z_fix_sin(uint8_t Angle)
 static inline ZFix z_fix_cos(uint8_t Angle)
 {
     return Z_PGM_READ_UINT16(
-        z_fix__sin[(Angle + Z_FIX_NUM_ANGLES / 4) & (Z_FIX_NUM_ANGLES - 1)]);
+        z_fix__sin[(Angle + Z_ANGLES_NUM / 4) & (Z_ANGLES_NUM - 1)]);
 }
 
 #define Z_GEN_MINMAX(Type, Name)                                    \

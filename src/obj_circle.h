@@ -17,14 +17,12 @@
 
 typedef struct {
     ZPoolObject poolObject;
-    ZFix radius;
-    ZFix growSpeed;
     int8_t x, y;
-    uint8_t maxRadius;
+    uint8_t radius;
 } ZCircle;
 
-#define Z_CIRCLE_POOL_NUM 4
+#define Z_CIRCLE_POOL_NUM 2
 
-extern void z_circle_init(ZCircle* Circle, int8_t X, int8_t Y, uint8_t MaxRadius, ZFix GrowSpeed);
+extern void z_circle_init(ZCircle* Circle, int8_t X, int8_t Y);
 extern bool z_circle_tick(ZPoolObject* Circle);
 extern void z_circle_draw(ZPoolObject* Circle);

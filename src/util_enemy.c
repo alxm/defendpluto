@@ -68,10 +68,10 @@ void z_enemy_drawJets(uint8_t EnemyId, int8_t X, int8_t Y)
             y = i8(Y - 4);
             w = 2;
             h = 1;
-            z_draw_rectangle(x, i8(y + z_screen_yShake), w, h, Z_COLOR_RED);
+            z_draw_rectangle(x, i8(y + z_screen_getYShake()), w, h, Z_COLOR_RED);
 
             x = i8(X + 1);
-            z_draw_rectangle(x, i8(y + z_screen_yShake), w, h, Z_COLOR_RED);
+            z_draw_rectangle(x, i8(y + z_screen_getYShake()), w, h, Z_COLOR_RED);
         } break;
 
         default: return;

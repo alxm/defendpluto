@@ -18,9 +18,24 @@
 #define Z_WIDTH 128
 #define Z_HEIGHT 64
 
-extern int8_t z_screen_xShake, z_screen_yShake;
+typedef struct {
+    uint8_t xShake : 4;
+    uint8_t yShake : 4;
+} ZScreen;
+
+extern ZScreen z_screen;
 
 extern void z_screen_reset(void);
 extern void z_screen_tick(void);
 
 extern void z_screen_shake(uint8_t Frames);
+
+static inline int8_t z_screen_getXShake(void)
+{
+    return i8(-1 + z_screen.xShake);
+}
+
+static inline int8_t z_screen_getYShake(void)
+{
+    return i8(-1 + z_screen.yShake);
+}

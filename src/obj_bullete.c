@@ -65,8 +65,8 @@ void z_bullete_draw(ZPoolObject* Bullet)
     int8_t x = z_fix_fixtoi(bullet->x);
     int8_t y = z_fix_fixtoi(bullet->y);
 
-    z_draw_rectangle(i8(x - 1 + z_screen_xShake),
-                     i8(y - 2 + z_screen_yShake),
+    z_draw_rectangle(i8(x - 1 + z_screen_getXShake()),
+                     i8(y - 2 + z_screen_getYShake()),
                      2,
                      4,
                      Z_COLOR_RED);

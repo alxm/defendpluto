@@ -26,9 +26,10 @@ typedef enum {
 
 typedef struct {
     ZSprite sprite;
-    int8_t w, h;
-    int8_t health;
-    int8_t damage;
+    uint8_t w : 4;
+    uint8_t h : 4;
+    uint8_t health : 4;
+    uint8_t damage : 4;
     ZFix speed;
 } ZEnemyData;
 

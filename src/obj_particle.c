@@ -23,20 +23,21 @@
 #include "util_screen.h"
 #include "obj_particle.h"
 
-void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y, uint8_t FramesTtl)
+void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)
 {
     Particle->x = X;
     Particle->y = Y;
-    Particle->angle = u8(z_random_uint8(Z_FIX_NUM_ANGLES));
-    Particle->ttl = FramesTtl;
+    Particle->angle = u4(z_random_uint8(Z_ANGLES_NUM) >> 4);
+    Particle->ttl = u4(z_random_uint8(16));
 }
 
 bool z_particle_tick(ZPoolObject* Particle)
 {
     ZParticle* particle = (ZParticle*)Particle;
+    uint8_t angle = u8(particle->angle << 4);
 
-    particle->x = zf(particle->x + z_fix_cos(particle->angle));
-    particle->y = zf(particle->y - z_fix_sin(particle->angle));
+    particle->x = zf(particle->x + z_fix_cos(angle));
+    particle->y = zf(particle->y - z_fix_sin(angle));
 
     return particle->ttl--;
 }
@@ -45,8 +46,8 @@ void z_particle_draw(ZPoolObject* Particle)
 {
     ZParticle* particle = (ZParticle*)Particle;
 
-    int8_t x = i8(z_fix_fixtoi(particle->x) + z_screen_xShake);
-    int8_t y = i8(z_fix_fixtoi(particle->y) + z_screen_yShake);
+    int8_t x = i8(z_fix_fixtoi(particle->x) + z_screen_getXShake());
+    int8_t y = i8(z_fix_fixtoi(particle->y) + z_screen_getYShake());
 
     z_draw_pixel(x, y, Z_COLOR_YELLOW);
 }

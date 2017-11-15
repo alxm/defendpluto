@@ -18,7 +18,7 @@
 #include "platform.h"
 #include "util_fix.h"
 
-PROGMEM const ZFix z_fix__sin[Z_FIX_NUM_ANGLES] = {
+PROGMEM const ZFix z_fix__sin[Z_ANGLES_NUM] = {
     0, 6, 12, 18, 24,
     31, 37, 43, 48,
     54, 60, 65, 71,

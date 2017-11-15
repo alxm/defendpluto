@@ -20,8 +20,8 @@ typedef struct {
     int8_t w, h;
     ZFix dx, dy;
     uint16_t lastShot;
-    uint8_t frame;
-    int8_t shootShift;
+    uint8_t frame : 4;
+    uint8_t shootShift : 4;
     bool jetFlicker;
     int16_t shield;
     int8_t health;

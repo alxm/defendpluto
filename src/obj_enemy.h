@@ -26,11 +26,14 @@ typedef enum {
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
-    ZFix angle;
-    uint8_t typeId;
-    uint8_t frame;
-    uint8_t aiId, aiArgs, aiState, aiCounter;
-    bool jetFlicker;
+    uint8_t angle : 7;
+    bool jetFlicker : 1;
+    uint8_t typeId : 4;
+    uint8_t frame : 4;
+    uint8_t aiId : 4;
+    uint8_t aiState : 4;
+    uint8_t aiArgs;
+    uint8_t aiCounter;
 } ZEnemy;
 
 #define Z_ENEMY_POOL_NUM 16

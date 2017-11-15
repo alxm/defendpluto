@@ -94,7 +94,7 @@ void z_player_tick(void)
 
             if(b) {
                 z_bulletp_init(b,
-                               zf(z_player.x + z_fix_itofix(z_screen_xShake)),
+                               zf(z_player.x + z_fix_itofix(z_screen_getXShake())),
                                z_player.y);
             }
 
@@ -212,10 +212,10 @@ void z_player_draw(void)
     ZSprite* sprite = &z_graphics.player[z_player.frame];
 
     if(z_player.jetFlicker) {
-        int8_t jy = i8(y + 2 + z_screen_yShake);
+        int8_t jy = i8(y + 2 + z_screen_getYShake());
 
         if(z_player.frame & Z_BIT_BACK) {
-            jy = i8(y - 1 + z_screen_yShake);
+            jy = i8(y - 1 + z_screen_getYShake());
         }
 
         z_draw_rectangle(i8(x - 3), jy, 2, 3, Z_COLOR_RED);
@@ -223,8 +223,8 @@ void z_player_draw(void)
     }
 
     z_sprite_blitCentered(sprite,
-                          i8(x + z_screen_xShake),
-                          i8(y + z_screen_yShake),
+                          i8(x + z_screen_getXShake()),
+                          i8(y + z_screen_getYShake()),
                           0);
 
     drawHearts(2, 2);

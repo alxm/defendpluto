@@ -17,26 +17,28 @@
 
 #include "platform.h"
 #include "util_random.h"
+#include "util_screen.h"
 
+ZScreen z_screen;
 static uint8_t g_shakeFrames;
-int8_t z_screen_xShake, z_screen_yShake;
 
 void z_screen_reset(void)
 {
+    z_screen.xShake = 0;
+    z_screen.yShake = 0;
+
     g_shakeFrames = 0;
-    z_screen_xShake = 0;
-    z_screen_yShake = 0;
 }
 
 void z_screen_tick(void)
 {
     if(g_shakeFrames) {
         g_shakeFrames--;
-        z_screen_xShake = i8((-1 + z_random_int8(3)) * 2);
-        z_screen_yShake = i8((-1 + z_random_int8(3)) * 2);
+        z_screen.xShake = u4(z_random_uint8(3));
+        z_screen.yShake = u4(z_random_uint8(3));
     } else {
-        z_screen_xShake = 0;
-        z_screen_yShake = 0;
+        z_screen.xShake = 1;
+        z_screen.yShake = 1;
     }
 }
 

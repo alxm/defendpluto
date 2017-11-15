@@ -18,7 +18,7 @@
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
-    ZFix speed;
+    uint8_t speed;
 } ZStar;
 
 #define Z_STAR_POOL_NUM 16
