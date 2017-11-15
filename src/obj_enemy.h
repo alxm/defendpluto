@@ -33,7 +33,7 @@ typedef struct {
     uint8_t aiId : 4;
     uint8_t aiState : 4;
     uint8_t aiArgs;
-    uint8_t aiCounter;
+    uint8_t aiCounter1;
 } ZEnemy;
 
 #define Z_ENEMY_POOL_NUM 16

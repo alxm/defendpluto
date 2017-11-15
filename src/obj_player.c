@@ -161,7 +161,7 @@ void z_player_tick(void)
         boostShield(Z_SHIELD_BOOST_REGEN);
     }
 
-    if(z_player.health <= 0 && z_fps_isNthFrame(10)) {
+    if(z_player.health <= 0 && z_fps_isNthFrame(Z_FPS / 3)) {
         g_heartsBlink ^= 1;
     }
 }

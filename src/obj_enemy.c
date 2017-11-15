@@ -35,14 +35,12 @@ static struct {
     int8_t x, y, w, h;
 } g_coll;
 
-static uint8_t ai_down(ZEnemy* Enemy)
+static void ai_down(ZEnemy* Enemy)
 {
     Z_UNUSED(Enemy);
-
-    return 0;
 }
 
-static uint8_t ai_zigzag(ZEnemy* Enemy)
+static void ai_zigzag(ZEnemy* Enemy)
 {
     switch(Enemy->aiState) {
         case 0: {
@@ -54,27 +52,25 @@ static uint8_t ai_zigzag(ZEnemy* Enemy)
                 }
 
                 Enemy->aiState = 1;
-                Enemy->aiCounter = Z_FPS / 2;
+                Enemy->aiCounter1 = Z_FPS;
             }
         } break;
 
         case 1: {
-            if(Enemy->aiCounter-- == 0) {
+            if(Enemy->aiCounter1-- == 0) {
                 if(Enemy->angle == Z_ANGLE_225) {
                     Enemy->angle = Z_ANGLE_315;
                 } else {
                     Enemy->angle = Z_ANGLE_225;
                 }
 
-                Enemy->aiCounter = Z_FPS;
+                Enemy->aiCounter1 = Z_FPS;
             }
         } break;
     }
-
-    return 0;
 }
 
-static uint8_t ai_curve(ZEnemy* Enemy)
+static void ai_curve(ZEnemy* Enemy)
 {
     uint8_t angleInc = 0;
 
@@ -106,10 +102,10 @@ static uint8_t ai_curve(ZEnemy* Enemy)
         } break;
     }
 
-    return angleInc;
+    Enemy->angle = u8((Enemy->angle + angleInc) & (Z_ANGLES_NUM - 1));
 }
 
-static uint8_t (*g_ai[])(ZEnemy*) = {
+static void (*g_ai[])(ZEnemy*) = {
     ai_down,
     ai_zigzag,
     ai_curve,
@@ -126,13 +122,12 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiI
     Enemy->aiId = u4(AiId);
     Enemy->aiState = 0;
     Enemy->aiArgs = AiArgs;
-    Enemy->aiCounter = 0;
+    Enemy->aiCounter1 = 0;
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
-    uint8_t angleInc = g_ai[enemy->aiId](enemy);
 
     ZFix cos = z_fix_cos(enemy->angle);
     ZFix sin = z_fix_sin(enemy->angle);
@@ -142,9 +137,10 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 
     enemy->x = zf(enemy->x + dx);
     enemy->y = zf(enemy->y - dy);
-    enemy->angle = u8((enemy->angle + angleInc) & (Z_ANGLES_NUM - 1));
 
-    if(z_fps_isNthFrame(6)) {
+    g_ai[enemy->aiId](enemy);
+
+    if(z_fps_isNthFrame(Z_FPS / 5)) {
         ZSprite* sprite = &z_enemyData[enemy->typeId].sprite;
         enemy->frame = u4((enemy->frame + 1) % sprite->numFrames);
     }
