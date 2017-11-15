@@ -27,14 +27,14 @@
 
 typedef enum {
     Z_OP_INVALID = -1,
-    Z_OP_SPAWN,
-    Z_OP_WAIT,
-    Z_OP_WAITCLEAR,
-    Z_OP_LOOP,
-    Z_OP_END,
     Z_OP_OVER,
     Z_OP_SET,
     Z_OP_INC,
+    Z_OP_LOOP,
+    Z_OP_END,
+    Z_OP_WAIT,
+    Z_OP_WAITCLEAR,
+    Z_OP_SPAWN,
     Z_OP_NUM
 } ZOpType;
 
@@ -83,62 +83,61 @@ static struct {
     CVar = Z_READ_ARG(ByteIndex) & 0xf;          \
     Z__CHECKVAR(uint8_t, CVar, ArgIndex)
 
-static bool handle_spawn(uint8_t Flags)
+static bool op_over(uint8_t Flags)
 {
     Z_UNUSED(Flags);
 
     /*
-     * 8b    8b    8b      8b      4b      4b     8b
-     * spawn flags x_coord y_coord type_id ai_id  ai_args
-     * spawn       64      -8      enemy0  zigzag 0
+     * 8b   8b
+     * over flags
+     * over
      */
-    int8_t x, y;
-    uint8_t type_id, ai_id, ai_args;
+    z_vm_reset();
 
-    Z_READ_ARGI8(x, 0, 0);
-    Z_READ_ARGI8(y, 1, 1);
-    Z_READ_ARGU4H(type_id, 2, 2);
-    Z_READ_ARGU4L(ai_id, 3, 2);
-    Z_READ_ARGU8(ai_args, 4, 3);
+    return false;
+}
 
-    ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
+static bool op_set(uint8_t Flags)
+{
+    Z_UNUSED(Flags);
 
-    if(e == NULL) {
-        return false;
-    }
+    /*
+     * 8b  8b    8b     8b
+     * set flags var_id value
+     * set       x      32
+     */
+    uint8_t var_id;
+    int8_t value;
 
-    z_enemy_init(e, x, y, type_id, ai_id, ai_args);
+    Z_READ_ARGU8(var_id, 0, 0);
+    Z_READ_ARGI8(value, 1, 1);
+
+    g_vm.vars[var_id] = value;
 
     return true;
 }
 
-static bool handle_wait(uint8_t Flags)
+static bool op_inc(uint8_t Flags)
 {
     Z_UNUSED(Flags);
 
     /*
-     * 8b   8b    8b
-     * wait flags frames
-     * wait       30
+     * 8b  8b    8b     8b
+     * inc flags var_id value
+     * inc       x      16
      */
-    Z_READ_ARGU8(g_vm.block, 0, 0);
+    uint8_t var_id;
+    int8_t value;
+
+    Z_READ_ARGU8(var_id, 0, 0);
+    Z_READ_ARGI8(value, 1, 1);
+
+    g_vm.vars[var_id] = i8(g_vm.vars[var_id] + value);
 
     return true;
 }
 
-static bool handle_waitclear(uint8_t Flags)
-{
-    Z_UNUSED(Flags);
-
-    /*
-     * 8b        8b
-     * waitclear flags
-     * waitclear
-     */
-    return z_pool_noActive(Z_POOL_ENEMY);
-}
-
-static bool handle_loop(uint8_t Flags)
+static bool op_loop(uint8_t Flags)
 {
     Z_UNUSED(Flags);
 
@@ -170,7 +169,7 @@ static bool handle_loop(uint8_t Flags)
     return true;
 }
 
-static bool handle_end(uint8_t Flags)
+static bool op_end(uint8_t Flags)
 {
     Z_UNUSED(Flags);
 
@@ -189,56 +188,57 @@ static bool handle_end(uint8_t Flags)
     return true;
 }
 
-static bool handle_over(uint8_t Flags)
+static bool op_wait(uint8_t Flags)
 {
     Z_UNUSED(Flags);
 
     /*
-     * 8b   8b
-     * over flags
-     * over
+     * 8b   8b    8b
+     * wait flags frames
+     * wait       30
      */
-    z_vm_reset();
-
-    return false;
-}
-
-static bool handle_set(uint8_t Flags)
-{
-    Z_UNUSED(Flags);
-
-    /*
-     * 8b  8b    8b     8b
-     * set flags var_id value
-     * set       x      32
-     */
-    uint8_t var_id;
-    int8_t value;
-
-    Z_READ_ARGU8(var_id, 0, 0);
-    Z_READ_ARGI8(value, 1, 1);
-
-    g_vm.vars[var_id] = value;
+    Z_READ_ARGU8(g_vm.block, 0, 0);
 
     return true;
 }
 
-static bool handle_inc(uint8_t Flags)
+static bool op_waitclear(uint8_t Flags)
 {
     Z_UNUSED(Flags);
 
     /*
-     * 8b  8b    8b     8b
-     * inc flags var_id value
-     * inc       x      16
+     * 8b        8b
+     * waitclear flags
+     * waitclear
      */
-    uint8_t var_id;
-    int8_t value;
+    return z_pool_noActive(Z_POOL_ENEMY);
+}
 
-    Z_READ_ARGU8(var_id, 0, 0);
-    Z_READ_ARGI8(value, 1, 1);
+static bool op_spawn(uint8_t Flags)
+{
+    Z_UNUSED(Flags);
 
-    g_vm.vars[var_id] = i8(g_vm.vars[var_id] + value);
+    /*
+     * 8b    8b    8b      8b      4b      4b     8b
+     * spawn flags x_coord y_coord type_id ai_id  ai_args
+     * spawn       64      -8      enemy0  zigzag 0
+     */
+    int8_t x, y;
+    uint8_t type_id, ai_id, ai_args;
+
+    Z_READ_ARGI8(x, 0, 0);
+    Z_READ_ARGI8(y, 1, 1);
+    Z_READ_ARGU4H(type_id, 2, 2);
+    Z_READ_ARGU4L(ai_id, 3, 2);
+    Z_READ_ARGU8(ai_args, 4, 3);
+
+    ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
+
+    if(e == NULL) {
+        return false;
+    }
+
+    z_enemy_init(e, x, y, type_id, ai_id, ai_args);
 
     return true;
 }
@@ -248,14 +248,14 @@ void z_vm_setup(void)
     #define setOp(Index, Function, ArgBytes)          \
         g_ops[Index] = (ZOp){Function, 2 + ArgBytes};
 
-    setOp(Z_OP_SPAWN, handle_spawn, 4);
-    setOp(Z_OP_WAIT, handle_wait, 1);
-    setOp(Z_OP_WAITCLEAR, handle_waitclear, 0);
-    setOp(Z_OP_LOOP, handle_loop, 1);
-    setOp(Z_OP_END, handle_end, 0);
-    setOp(Z_OP_OVER, handle_over, 0);
-    setOp(Z_OP_SET, handle_set, 2);
-    setOp(Z_OP_INC, handle_inc, 2);
+    setOp(Z_OP_OVER, op_over, 0);
+    setOp(Z_OP_SET, op_set, 2);
+    setOp(Z_OP_INC, op_inc, 2);
+    setOp(Z_OP_LOOP, op_loop, 1);
+    setOp(Z_OP_END, op_end, 0);
+    setOp(Z_OP_WAIT, op_wait, 1);
+    setOp(Z_OP_WAITCLEAR, op_waitclear, 0);
+    setOp(Z_OP_SPAWN, op_spawn, 4);
 
     z_vm_reset();
 }

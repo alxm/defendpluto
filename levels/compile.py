@@ -34,14 +34,14 @@ aiIds = {
     'curve': 2,
 }
 
-class Instruction:
+class Op:
     numInstructions = 0
 
     def __init__(self, NumArgs = 0):
         self.numArgs = NumArgs
-        self.opcode = Instruction.numInstructions
+        self.opcode = Op.numInstructions
 
-        Instruction.numInstructions += 1
+        Op.numInstructions += 1
 
     def setVarFlag(self, Bytecode, ArgIndex):
         Bytecode[1] |= 1 << ArgIndex
@@ -74,9 +74,77 @@ class Instruction:
     def custom_compile(self, Tokens, Bytecode):
         return Bytecode
 
-class InstructionSpawn(Instruction):
+class OpSet(Op):
     def __init__(self):
-        Instruction.__init__(self, 5)
+        Op.__init__(self, 2)
+
+    def custom_compile(self, Tokens, Bytecode):
+        #
+        # 8b     8b
+        # var_id value
+        # x      32
+        #
+        var_id = varIds[Tokens[0]]
+        value = self.checkVar(Bytecode, Tokens, 1)
+
+        Bytecode.append(var_id)
+        Bytecode.append(value)
+
+        return Bytecode
+
+class OpInc(Op):
+    def __init__(self):
+        Op.__init__(self, 2)
+
+    def custom_compile(self, Tokens, Bytecode):
+        #
+        # 8b     8b
+        # var_id value
+        # x      16
+        #
+        var_id = varIds[Tokens[0]]
+        value = self.checkVar(Bytecode, Tokens, 1)
+
+        Bytecode.append(var_id)
+        Bytecode.append(value)
+
+        return Bytecode
+
+class OpLoop(Op):
+    def __init__(self):
+        Op.__init__(self, 1)
+
+    def custom_compile(self, Tokens, Bytecode):
+        #
+        # 8b
+        # num_times
+        # 10
+        #
+        num_times = self.checkVar(Bytecode, Tokens, 0)
+
+        Bytecode.append(num_times)
+
+        return Bytecode
+
+class OpWait(Op):
+    def __init__(self):
+        Op.__init__(self, 1)
+
+    def custom_compile(self, Tokens, Bytecode):
+        #
+        # 8b
+        # frames
+        # 30
+        #
+        frames = self.checkVar(Bytecode, Tokens, 0)
+
+        Bytecode.append(frames)
+
+        return Bytecode
+
+class OpSpawn(Op):
+    def __init__(self):
+        Op.__init__(self, 5)
 
     def custom_compile(self, Tokens, Bytecode):
         #
@@ -97,77 +165,9 @@ class InstructionSpawn(Instruction):
 
         return Bytecode
 
-class InstructionWait(Instruction):
+class OpBind(Op):
     def __init__(self):
-        Instruction.__init__(self, 1)
-
-    def custom_compile(self, Tokens, Bytecode):
-        #
-        # 8b
-        # frames
-        # 30
-        #
-        frames = self.checkVar(Bytecode, Tokens, 0)
-
-        Bytecode.append(frames)
-
-        return Bytecode
-
-class InstructionLoop(Instruction):
-    def __init__(self):
-        Instruction.__init__(self, 1)
-
-    def custom_compile(self, Tokens, Bytecode):
-        #
-        # 8b
-        # num_times
-        # 10
-        #
-        num_times = self.checkVar(Bytecode, Tokens, 0)
-
-        Bytecode.append(num_times)
-
-        return Bytecode
-
-class InstructionSet(Instruction):
-    def __init__(self):
-        Instruction.__init__(self, 2)
-
-    def custom_compile(self, Tokens, Bytecode):
-        #
-        # 8b     8b
-        # var_id value
-        # x      32
-        #
-        var_id = varIds[Tokens[0]]
-        value = self.checkVar(Bytecode, Tokens, 1)
-
-        Bytecode.append(var_id)
-        Bytecode.append(value)
-
-        return Bytecode
-
-class InstructionInc(Instruction):
-    def __init__(self):
-        Instruction.__init__(self, 2)
-
-    def custom_compile(self, Tokens, Bytecode):
-        #
-        # 8b     8b
-        # var_id value
-        # x      16
-        #
-        var_id = varIds[Tokens[0]]
-        value = self.checkVar(Bytecode, Tokens, 1)
-
-        Bytecode.append(var_id)
-        Bytecode.append(value)
-
-        return Bytecode
-
-class InstructionBind(Instruction):
-    def __init__(self):
-        Instruction.__init__(self, 2)
+        Op.__init__(self, 2)
 
     def custom_compile(self, Tokens, Bytecode):
         #
@@ -182,16 +182,18 @@ class InstructionBind(Instruction):
         return None
 
 def main(LevelFile):
-    instructions = {
-        'spawn': InstructionSpawn(),
-        'wait': InstructionWait(),
-        'waitclear': Instruction(),
-        'loop': InstructionLoop(),
-        'end': Instruction(),
-        'over': Instruction(),
-        'set': InstructionSet(),
-        'inc': InstructionInc(),
-        'bind': InstructionBind(),
+    ops = {
+        'over': Op(),
+        'set': OpSet(),
+        'inc': OpInc(),
+        'loop': OpLoop(),
+        'end': Op(),
+        'wait': OpWait(),
+        'waitclear': Op(),
+        'spawn': OpSpawn(),
+
+        # Must always be last, doesn't get compiled
+        'bind': OpBind(),
     }
 
     bytecode = []
@@ -210,7 +212,7 @@ def main(LevelFile):
             if len(tokens) == 0:
                 continue
 
-            instruction = instructions[tokens[0]]
+            instruction = ops[tokens[0]]
             compiled = instruction.compile(tokens)
 
             if compiled:
