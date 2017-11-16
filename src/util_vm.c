@@ -22,7 +22,7 @@
 #include "obj_enemy.h"
 #include "data_levels.h"
 
-#define Z_VARS_NUM 3
+#define Z_VARS_NUM 4
 #define Z_NESTED_LOOPS_MAX 2
 
 typedef enum {

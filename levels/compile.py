@@ -177,19 +177,18 @@ class OpSpawn(Op):
 
         return Bytecode
 
-class OpBind(Op):
+class OpVar(Op):
     def __init__(self):
-        Op.__init__(self, 2)
+        Op.__init__(self, 1)
 
     def custom_compile(self, Compiler, Args, Bytecode):
         #
-        # var_name var_id
-        # x        0
+        # var_name
+        # x
         #
         var_name = Args[0]
-        var_id = int(Args[1])
 
-        Compiler.setVarId(var_name, var_id)
+        Compiler.setVarId(var_name)
 
         return None
 
@@ -197,7 +196,8 @@ class CompilerTool:
     def __init__(self, LevelFile):
         self.levelFile = LevelFile
 
-        self.varMaxId = 3
+        self.nextVarId = 0
+        self.maxVarNum = 4
 
         self.nestedLoopsLimit = 2
         self.nestedLoopsCount = 0
@@ -230,7 +230,7 @@ class CompilerTool:
             'spawn': OpSpawn(),
 
             # Must always be last, doesn't get compiled
-            'bind': OpBind(),
+            'var': OpVar(),
         }
 
     def error(self, Text):
@@ -269,13 +269,15 @@ class CompilerTool:
 
         return self.varIds[Name]
 
-    def setVarId(self, Name, VarId):
+    def setVarId(self, Name):
         if Name in self.varIds:
-            self.error('Var {} was already bound'.format(Name))
-        elif VarId >= self.varMaxId:
-            self.error('Max var ID is {}'.format(self.varMaxId))
+            self.error('Var {} was already declared'.format(Name))
 
-        self.varIds[Name] = VarId
+        if self.nextVarId >= self.maxVarNum:
+            self.error('Exceeded max number of vars ({})'.format(self.maxVarNum))
+
+        self.varIds[Name] = self.nextVarId
+        self.nextVarId += 1
 
     def getEnemyId(self, Name):
         if Name not in self.enemyIds:
