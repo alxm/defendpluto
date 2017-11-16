@@ -87,6 +87,22 @@ class OpInc(Op):
 
         return Bytecode
 
+class OpFlip(Op):
+    def __init__(self):
+        Op.__init__(self, 1)
+
+    def custom_compile(self, Compiler, Args, Bytecode):
+        #
+        # 8b
+        # var_id
+        # x
+        #
+        var_id = Compiler.getVarId(Args[0])
+
+        Bytecode.append(var_id)
+
+        return Bytecode
+
 class OpLoop(Op):
     def __init__(self):
         Op.__init__(self, 1)
@@ -181,7 +197,7 @@ class CompilerTool:
     def __init__(self, LevelFile):
         self.levelFile = LevelFile
 
-        self.varMaxId = 2
+        self.varMaxId = 3
 
         self.nestedLoopsLimit = 2
         self.nestedLoopsCount = 0
@@ -206,6 +222,7 @@ class CompilerTool:
             'over': Op(),
             'set': OpSet(),
             'inc': OpInc(),
+            'flip': OpFlip(),
             'loop': OpLoop(),
             'end': OpEnd(),
             'wait': OpWait(),
@@ -222,27 +239,29 @@ class CompilerTool:
               file = sys.stderr)
         sys.exit(1)
 
-    def checkArg(self, Bytecode, Tokens, Index, Min, Max):
-        token = Tokens[Index]
+    def checkArg(self, Bytecode, Args, Index, Min, Max):
+        arg = Args[Index]
 
-        if self.hasVar(token):
+        if arg in self.varIds:
             if Index >= 8:
                 self.error('Only the first 8 arguments may be variables')
 
             Bytecode[1] |= 1 << Index
+            varId = self.getVarId(arg)
 
-            return self.getVarId(token)
+            if varId < Min or varId > Max:
+                self.error('Var {} ({}) is out of range [{}, {}]'
+                            .format(arg, varId, Min, Max))
+
+            return varId
         else:
-            i = int(token)
+            value = int(arg)
 
-            if i < Min or i > Max:
-                self.error('Value {} is out of range [{}, {})'
-                            .format(i, Min, Max))
+            if value < Min or value > Max:
+                self.error('Value {} is out of range [{}, {}]'
+                            .format(value, Min, Max))
 
-            return i
-
-    def hasVar(self, Name):
-        return Name in self.varIds
+            return value
 
     def getVarId(self, Name):
         if Name not in self.varIds:

@@ -2,14 +2,16 @@
 ; Level 0
 ;
 
-bind x 0
-bind y 1
+bind flipX 0
+bind x 1
+bind y 2
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 loop 2
     set x 48
     set y -8
+    set flipX 0
 
     loop 3
         spawn x y asteroid
@@ -17,9 +19,10 @@ loop 2
         inc y -8
     end
 
-    loop 3
-        spawn 32 -8 enemy0 zigzag
-        spawn 96 -8 enemy1 curve
+    loop 4
+        spawn 32 -8 enemy0 zigzag 0 flipX
+        spawn 96 -8 enemy1 curve 0 flipX
+        flip flipX
         wait 15
     end
 

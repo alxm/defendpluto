@@ -22,7 +22,7 @@
 #include "obj_enemy.h"
 #include "data_levels.h"
 
-#define Z_VARS_NUM 2
+#define Z_VARS_NUM 3
 #define Z_NESTED_LOOPS_MAX 2
 
 typedef enum {
@@ -30,6 +30,7 @@ typedef enum {
     Z_OP_OVER,
     Z_OP_SET,
     Z_OP_INC,
+    Z_OP_FLIP,
     Z_OP_LOOP,
     Z_OP_END,
     Z_OP_WAIT,
@@ -108,7 +109,6 @@ static bool op_set(uint8_t Flags)
      */
     uint8_t var_id;
     int8_t value;
-
     Z_READ_ARGU8(var_id, 0, 0);
     Z_READ_ARGI8(value, 1, 1);
 
@@ -128,11 +128,27 @@ static bool op_inc(uint8_t Flags)
      */
     uint8_t var_id;
     int8_t value;
-
     Z_READ_ARGU8(var_id, 0, 0);
     Z_READ_ARGI8(value, 1, 1);
 
     g_vm.vars[var_id] = i8(g_vm.vars[var_id] + value);
+
+    return true;
+}
+
+static bool op_flip(uint8_t Flags)
+{
+    Z_UNUSED(Flags);
+
+    /*
+     * 8b   8b    8b
+     * flip flags var_id
+     * flip       x
+     */
+    uint8_t var_id;
+    Z_READ_ARGU8(var_id, 0, 0);
+
+    g_vm.vars[var_id] ^= 1;
 
     return true;
 }
@@ -147,7 +163,6 @@ static bool op_loop(uint8_t Flags)
      * loop       10
      */
     uint8_t num_times;
-
     Z_READ_ARGU8(num_times, 0, 0);
 
     if(num_times == 0 || g_vm.loopIndex == 0) {
@@ -225,7 +240,6 @@ static bool op_spawn(uint8_t Flags)
      */
     int8_t x, y;
     uint8_t type_id, ai_id, delay, flipX;
-
     Z_READ_ARGI8(x, 0, 0);
     Z_READ_ARGI8(y, 1, 1);
     Z_READ_ARGU4H(type_id, 2, 2);
@@ -252,6 +266,7 @@ void z_vm_setup(void)
     setOp(Z_OP_OVER, op_over, 0);
     setOp(Z_OP_SET, op_set, 2);
     setOp(Z_OP_INC, op_inc, 2);
+    setOp(Z_OP_FLIP, op_flip, 1);
     setOp(Z_OP_LOOP, op_loop, 1);
     setOp(Z_OP_END, op_end, 0);
     setOp(Z_OP_WAIT, op_wait, 1);
