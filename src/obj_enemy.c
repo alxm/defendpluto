@@ -122,6 +122,7 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiI
     Enemy->aiArgs.delay = u4(Delay);
     Enemy->aiArgs.flipX = u4(FlipX);
     Enemy->aiCounter1 = 0;
+    Enemy->aiCounter2 = 0;
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
@@ -149,6 +150,20 @@ bool z_enemy_tick(ZPoolObject* Enemy)
     }
 
     g_ai[enemy->aiId](enemy, expired);
+
+    if(z_enemyData[enemy->typeId].damage > 0 && enemy->aiCounter2-- == 0) {
+        ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
+
+        if(b) {
+            z_bullete_init(b,
+                           zf(enemy->x + z_fix_itofix(z_screen_getXShake())),
+                           enemy->y);
+
+            enemy->aiCounter2 = u8(Z_FPS + z_random_uint8(4 * Z_FPS));
+        } else {
+            enemy->aiCounter2 = 0;
+        }
+    }
 
     return z_fix_fixtoi(enemy->y) - z_enemyData[enemy->typeId].h / 2 < Z_HEIGHT;
 }

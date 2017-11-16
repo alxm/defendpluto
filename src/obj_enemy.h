@@ -37,6 +37,7 @@ typedef struct {
         uint8_t flipX : 4;
     } aiArgs;
     uint8_t aiCounter1;
+    uint8_t aiCounter2;
 } ZEnemy;
 
 #define Z_ENEMY_POOL_NUM 16
