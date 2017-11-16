@@ -35,29 +35,35 @@ static struct {
     int8_t x, y, w, h;
 } g_coll;
 
-static void ai_down(ZEnemy* Enemy, bool Counter1Expired)
+static void fly_down(ZEnemy* Enemy)
 {
     Z_UNUSED(Enemy);
-    Z_UNUSED(Counter1Expired);
 }
 
-static void ai_zigzag(ZEnemy* Enemy, bool Counter1Expired)
+static void fly_zigzag(ZEnemy* Enemy)
 {
-    switch(Enemy->aiState) {
+    bool expired = false;
+
+    if(Enemy->counters[0]-- == 0) {
+        Enemy->counters[0] = u8(32 + 4 * Enemy->flyArgs.delay);
+        expired = true;
+    }
+
+    switch(Enemy->flyState) {
         case 0: {
             if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 8) {
-                if(Enemy->aiArgs.flipX) {
+                if(Enemy->flyArgs.flipX) {
                     Enemy->angle = Z_ANGLE_225;
                 } else {
                     Enemy->angle = Z_ANGLE_315;
                 }
 
-                Enemy->aiState = 1;
+                Enemy->flyState = 1;
             }
         } break;
 
         case 1: {
-            if(Counter1Expired) {
+            if(expired) {
                 if(Enemy->angle == Z_ANGLE_225) {
                     Enemy->angle = Z_ANGLE_315;
                 } else {
@@ -68,33 +74,39 @@ static void ai_zigzag(ZEnemy* Enemy, bool Counter1Expired)
     }
 }
 
-static void ai_curve(ZEnemy* Enemy, bool Counter1Expired)
+static void fly_curve(ZEnemy* Enemy)
 {
+    bool expired = false;
     int8_t angleInc = 0;
 
-    switch(Enemy->aiState) {
+    if(Enemy->counters[0]-- == 0) {
+        Enemy->counters[0] = u8(4 * Enemy->flyArgs.delay);
+        expired = true;
+    }
+
+    switch(Enemy->flyState) {
         case 0: {
-            if(Enemy->aiArgs.flipX) {
+            if(Enemy->flyArgs.flipX) {
                 angleInc = -1;
-                Enemy->aiState = 1;
+                Enemy->flyState = 1;
             } else {
                 angleInc = 1;
-                Enemy->aiState = 2;
+                Enemy->flyState = 2;
             }
         } break;
 
         case 1: {
             if(Enemy->angle <= Z_ANGLE_225) {
-                Enemy->aiState = 2;
-            } else if(Counter1Expired) {
+                Enemy->flyState = 2;
+            } else if(expired) {
                 angleInc = -1;
             }
         } break;
 
         case 2: {
             if(Enemy->angle >= Z_ANGLE_315) {
-                Enemy->aiState = 1;
-            } else if(Counter1Expired) {
+                Enemy->flyState = 1;
+            } else if(expired) {
                 angleInc = 1;
             }
         } break;
@@ -103,13 +115,13 @@ static void ai_curve(ZEnemy* Enemy, bool Counter1Expired)
     Enemy->angle = Z_ANGLE_WRAP(Enemy->angle + angleInc);
 }
 
-static void (*g_ai[])(ZEnemy*, bool) = {
-    ai_down,
-    ai_zigzag,
-    ai_curve,
+static void (*g_fly[])(ZEnemy*) = {
+    fly_down,
+    fly_zigzag,
+    fly_curve,
 };
 
-void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiId, uint8_t Delay, uint8_t FlipX)
+void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t FlyId, uint8_t Delay, uint8_t FlipX)
 {
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
@@ -117,12 +129,14 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiI
     Enemy->jetFlicker = false;
     Enemy->typeId = u4(TypeId);
     Enemy->frame = 0;
-    Enemy->aiId = u4(AiId);
-    Enemy->aiState = 0;
-    Enemy->aiArgs.delay = u4(Delay);
-    Enemy->aiArgs.flipX = u4(FlipX);
-    Enemy->aiCounter1 = 0;
-    Enemy->aiCounter2 = 0;
+    Enemy->flyId = u4(FlyId);
+    Enemy->flyState = 0;
+    Enemy->flyArgs.delay = u4(Delay);
+    Enemy->flyArgs.flipX = u4(FlipX);
+
+    for(uint8_t i = 0; i < Z_ARRAY_LEN(Enemy->counters); i++) {
+        Enemy->counters[i] = 0;
+    }
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
@@ -142,16 +156,9 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 
     enemy->jetFlicker = !enemy->jetFlicker;
 
-    bool expired = false;
+    g_fly[enemy->flyId](enemy);
 
-    if(enemy->aiCounter1-- == 0) {
-        enemy->aiCounter1 = u8(32 + 4 * enemy->aiArgs.delay);
-        expired = true;
-    }
-
-    g_ai[enemy->aiId](enemy, expired);
-
-    if(z_enemyData[enemy->typeId].damage > 0 && enemy->aiCounter2-- == 0) {
+    if(z_enemyData[enemy->typeId].damage > 0 && enemy->counters[1]-- == 0) {
         ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
 
         if(b) {
@@ -159,9 +166,9 @@ bool z_enemy_tick(ZPoolObject* Enemy)
                            zf(enemy->x + z_fix_itofix(z_screen_getXShake())),
                            enemy->y);
 
-            enemy->aiCounter2 = u8(Z_FPS + z_random_uint8(4 * Z_FPS));
+            enemy->counters[1] = u8(Z_FPS + z_random_uint8(4 * Z_FPS));
         } else {
-            enemy->aiCounter2 = 0;
+            enemy->counters[1] = 0;
         }
     }
 

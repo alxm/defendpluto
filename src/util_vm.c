@@ -235,15 +235,15 @@ static bool op_spawn(uint8_t Flags)
 
     /*
      * 8b    8b    8b      8b      4b      4b     4b    4b
-     * spawn flags x_coord y_coord type_id ai_id  delay flipX
+     * spawn flags x_coord y_coord type_id fly_id delay flipX
      * spawn       64      -8      enemy0  zigzag 0     0
      */
     int8_t x, y;
-    uint8_t type_id, ai_id, delay, flipX;
+    uint8_t type_id, fly_id, delay, flipX;
     Z_READ_ARGI8(x, 0, 0);
     Z_READ_ARGI8(y, 1, 1);
     Z_READ_ARGU4H(type_id, 2, 2);
-    Z_READ_ARGU4L(ai_id, 3, 2);
+    Z_READ_ARGU4L(fly_id, 3, 2);
     Z_READ_ARGU4H(delay, 4, 3);
     Z_READ_ARGU4L(flipX, 5, 3);
 
@@ -253,7 +253,7 @@ static bool op_spawn(uint8_t Flags)
         return false;
     }
 
-    z_enemy_init(e, x, y, type_id, ai_id, delay, flipX);
+    z_enemy_init(e, x, y, type_id, fly_id, delay, flipX);
 
     return true;
 }

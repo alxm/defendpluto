@@ -64,6 +64,7 @@ typedef enum {
 } ZPalette;
 
 #define Z_UNUSED(X) (X = X)
+#define Z_ARRAY_LEN(A) (sizeof(A) / sizeof(A[0]))
 
 #ifdef ARDUINO
     typedef uint8_t ZButton;
