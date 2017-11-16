@@ -62,7 +62,7 @@ class OpSet(Op):
         # x      32
         #
         var_id = Compiler.getVarId(Args[0])
-        value = Compiler.checkVar(Bytecode, Args, 1)
+        value = Compiler.checkArg(Bytecode, Args, 1, -128, 127)
 
         Bytecode.append(var_id)
         Bytecode.append(value)
@@ -80,7 +80,7 @@ class OpInc(Op):
         # x      16
         #
         var_id = Compiler.getVarId(Args[0])
-        value = Compiler.checkVar(Bytecode, Args, 1)
+        value = Compiler.checkArg(Bytecode, Args, 1, -128, 127)
 
         Bytecode.append(var_id)
         Bytecode.append(value)
@@ -103,7 +103,7 @@ class OpLoop(Op):
         # num_times
         # 10
         #
-        num_times = Compiler.checkVar(Bytecode, Args, 0)
+        num_times = Compiler.checkArg(Bytecode, Args, 0, 0, 255)
 
         Bytecode.append(num_times)
 
@@ -131,7 +131,7 @@ class OpWait(Op):
         # frames
         # 30
         #
-        frames = Compiler.checkVar(Bytecode, Args, 0)
+        frames = Compiler.checkArg(Bytecode, Args, 0, 0, 255)
 
         Bytecode.append(frames)
 
@@ -147,12 +147,12 @@ class OpSpawn(Op):
         # x_coord y_coord type_id ai_id  delay flipX
         # 64      -8      enemy0  zigzag 0     0
         #
-        x_coord = Compiler.checkVar(Bytecode, Args, 0)
-        y_coord = Compiler.checkVar(Bytecode, Args, 1)
+        x_coord = Compiler.checkArg(Bytecode, Args, 0, -128, 127)
+        y_coord = Compiler.checkArg(Bytecode, Args, 1, -128, 127)
         type_id = Compiler.getEnemyId(Args[2])
         ai_id = Compiler.getAiId(Args[3]) if len(Args) > 3 else 0
-        delay = Compiler.checkVar(Bytecode, Args, 4) if len(Args) > 4 else 0
-        flipX = Compiler.checkVar(Bytecode, Args, 5) if len(Args) > 5 else 0
+        delay = Compiler.checkArg(Bytecode, Args, 4, 0, 15) if len(Args) > 4 else 0
+        flipX = Compiler.checkArg(Bytecode, Args, 5, 0, 1) if len(Args) > 5 else 0
 
         Bytecode.append(x_coord)
         Bytecode.append(y_coord)
@@ -222,7 +222,7 @@ class CompilerTool:
               file = sys.stderr)
         sys.exit(1)
 
-    def checkVar(self, Bytecode, Tokens, Index):
+    def checkArg(self, Bytecode, Tokens, Index, Min, Max):
         token = Tokens[Index]
 
         if self.hasVar(token):
@@ -233,7 +233,13 @@ class CompilerTool:
 
             return self.getVarId(token)
         else:
-            return int(token)
+            i = int(token)
+
+            if i < Min or i > Max:
+                self.error('Value {} is out of range [{}, {})'
+                            .format(i, Min, Max))
+
+            return i
 
     def hasVar(self, Name):
         return Name in self.varIds
