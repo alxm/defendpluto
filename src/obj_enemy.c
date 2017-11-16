@@ -35,20 +35,14 @@ static struct {
     int8_t x, y, w, h;
 } g_coll;
 
-static void ai_down(ZEnemy* Enemy)
+static void ai_down(ZEnemy* Enemy, bool Counter1Expired)
 {
     Z_UNUSED(Enemy);
+    Z_UNUSED(Counter1Expired);
 }
 
-static void ai_zigzag(ZEnemy* Enemy)
+static void ai_zigzag(ZEnemy* Enemy, bool Counter1Expired)
 {
-    bool expired = false;
-
-    if(Enemy->aiCounter1-- == 0) {
-        Enemy->aiCounter1 = u8(32 + 4 * Enemy->aiArgs.delay);
-        expired = true;
-    }
-
     switch(Enemy->aiState) {
         case 0: {
             if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 8) {
@@ -63,7 +57,7 @@ static void ai_zigzag(ZEnemy* Enemy)
         } break;
 
         case 1: {
-            if(expired) {
+            if(Counter1Expired) {
                 if(Enemy->angle == Z_ANGLE_225) {
                     Enemy->angle = Z_ANGLE_315;
                 } else {
@@ -74,15 +68,9 @@ static void ai_zigzag(ZEnemy* Enemy)
     }
 }
 
-static void ai_curve(ZEnemy* Enemy)
+static void ai_curve(ZEnemy* Enemy, bool Counter1Expired)
 {
     int8_t angleInc = 0;
-    bool expired = false;
-
-    if(Enemy->aiCounter1-- == 0) {
-        Enemy->aiCounter1 = Enemy->aiArgs.delay;
-        expired = true;
-    }
 
     switch(Enemy->aiState) {
         case 0: {
@@ -98,7 +86,7 @@ static void ai_curve(ZEnemy* Enemy)
         case 1: {
             if(Enemy->angle <= Z_ANGLE_225) {
                 Enemy->aiState = 2;
-            } else if(expired) {
+            } else if(Counter1Expired) {
                 angleInc = -1;
             }
         } break;
@@ -106,7 +94,7 @@ static void ai_curve(ZEnemy* Enemy)
         case 2: {
             if(Enemy->angle >= Z_ANGLE_315) {
                 Enemy->aiState = 1;
-            } else if(expired) {
+            } else if(Counter1Expired) {
                 angleInc = 1;
             }
         } break;
@@ -115,7 +103,7 @@ static void ai_curve(ZEnemy* Enemy)
     Enemy->angle = Z_ANGLE_WRAP(Enemy->angle + angleInc);
 }
 
-static void (*g_ai[])(ZEnemy*) = {
+static void (*g_ai[])(ZEnemy*, bool) = {
     ai_down,
     ai_zigzag,
     ai_curve,
@@ -140,16 +128,11 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
-    g_ai[enemy->aiId](enemy);
-
     ZFix cos = z_fix_cos(enemy->angle);
     ZFix sin = z_fix_sin(enemy->angle);
 
-    ZFix dx = z_fix_mul(cos, z_enemyData[enemy->typeId].speed);
-    ZFix dy = z_fix_mul(sin, z_enemyData[enemy->typeId].speed);
-
-    enemy->x = zf(enemy->x + dx);
-    enemy->y = zf(enemy->y - dy);
+    enemy->x = zf(enemy->x + z_fix_mul(cos, z_enemyData[enemy->typeId].speed));
+    enemy->y = zf(enemy->y - z_fix_mul(sin, z_enemyData[enemy->typeId].speed));
 
     if(z_fps_isNthFrame(Z_FPS / 5)) {
         ZSprite* sprite = &z_enemyData[enemy->typeId].sprite;
@@ -157,6 +140,15 @@ bool z_enemy_tick(ZPoolObject* Enemy)
     }
 
     enemy->jetFlicker = !enemy->jetFlicker;
+
+    bool expired = false;
+
+    if(enemy->aiCounter1-- == 0) {
+        enemy->aiCounter1 = u8(32 + 4 * enemy->aiArgs.delay);
+        expired = true;
+    }
+
+    g_ai[enemy->aiId](enemy, expired);
 
     return z_fix_fixtoi(enemy->y) - z_enemyData[enemy->typeId].h / 2 < Z_HEIGHT;
 }
