@@ -32,13 +32,16 @@ typedef struct {
     uint8_t frame : 4;
     uint8_t aiId : 4;
     uint8_t aiState : 4;
-    uint8_t aiArgs;
+    struct {
+        uint8_t delay : 4;
+        uint8_t flipX : 4;
+    } aiArgs;
     uint8_t aiCounter1;
 } ZEnemy;
 
 #define Z_ENEMY_POOL_NUM 16
 
-extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiId, uint8_t AiArgs);
+extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiId, uint8_t Delay, uint8_t FlipX);
 extern bool z_enemy_tick(ZPoolObject* Enemy);
 extern void z_enemy_draw(ZPoolObject* Enemy);
 

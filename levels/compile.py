@@ -28,26 +28,10 @@ class Op:
 
         Op.numInstructions += 1
 
-    def setVarFlag(self, Bytecode, ArgIndex):
-        Bytecode[1] |= 1 << ArgIndex
-
-    def checkVar(self, Compiler, Bytecode, Tokens, Index):
-        token = Tokens[Index]
-
-        if Compiler.hasVar(token):
-            if Index >= 8:
-                Compiler.error('Only the first 8 arguments may be variables')
-
-            self.setVarFlag(Bytecode, Index)
-
-            return Compiler.getVarId(token)
-        else:
-            return int(token)
-
-    def compile(self, Compiler, Tokens):
-        if len(Tokens) != 1 + self.numArgs:
-            Compiler.error('{} requires {} arguments'
-                            .format(Tokens[0], self.numArgs))
+    def compile(self, Compiler, Args):
+        if len(Args) < 1 + self.numArgs:
+            Compiler.error('{} requires at least {} arguments'
+                            .format(Args[0], self.numArgs))
 
         if self.numArgs > 0:
             #
@@ -62,23 +46,23 @@ class Op:
             #
             bytecode = [self.opcode]
 
-        return self.custom_compile(Compiler, Tokens[1 :], bytecode)
+        return self.custom_compile(Compiler, Args[1 :], bytecode)
 
-    def custom_compile(self, Compiler, Tokens, Bytecode):
+    def custom_compile(self, Compiler, Args, Bytecode):
         return Bytecode
 
 class OpSet(Op):
     def __init__(self):
         Op.__init__(self, 2)
 
-    def custom_compile(self, Compiler, Tokens, Bytecode):
+    def custom_compile(self, Compiler, Args, Bytecode):
         #
         # 8b     8b
         # var_id value
         # x      32
         #
-        var_id = Compiler.getVarId(Tokens[0])
-        value = self.checkVar(Compiler, Bytecode, Tokens, 1)
+        var_id = Compiler.getVarId(Args[0])
+        value = Compiler.checkVar(Bytecode, Args, 1)
 
         Bytecode.append(var_id)
         Bytecode.append(value)
@@ -89,14 +73,14 @@ class OpInc(Op):
     def __init__(self):
         Op.__init__(self, 2)
 
-    def custom_compile(self, Compiler, Tokens, Bytecode):
+    def custom_compile(self, Compiler, Args, Bytecode):
         #
         # 8b     8b
         # var_id value
         # x      16
         #
-        var_id = Compiler.getVarId(Tokens[0])
-        value = self.checkVar(Compiler, Bytecode, Tokens, 1)
+        var_id = Compiler.getVarId(Args[0])
+        value = Compiler.checkVar(Bytecode, Args, 1)
 
         Bytecode.append(var_id)
         Bytecode.append(value)
@@ -107,7 +91,7 @@ class OpLoop(Op):
     def __init__(self):
         Op.__init__(self, 1)
 
-    def custom_compile(self, Compiler, Tokens, Bytecode):
+    def custom_compile(self, Compiler, Args, Bytecode):
         Compiler.nestedLoopsCount += 1
 
         if Compiler.nestedLoopsCount > Compiler.nestedLoopsLimit:
@@ -119,7 +103,7 @@ class OpLoop(Op):
         # num_times
         # 10
         #
-        num_times = self.checkVar(Compiler, Bytecode, Tokens, 0)
+        num_times = Compiler.checkVar(Bytecode, Args, 0)
 
         Bytecode.append(num_times)
 
@@ -129,7 +113,7 @@ class OpEnd(Op):
     def __init__(self):
         Op.__init__(self, 0)
 
-    def custom_compile(self, Compiler, Tokens, Bytecode):
+    def custom_compile(self, Compiler, Args, Bytecode):
         Compiler.nestedLoopsCount -= 1
 
         if Compiler.nestedLoopsCount < 0:
@@ -141,13 +125,13 @@ class OpWait(Op):
     def __init__(self):
         Op.__init__(self, 1)
 
-    def custom_compile(self, Compiler, Tokens, Bytecode):
+    def custom_compile(self, Compiler, Args, Bytecode):
         #
         # 8b
         # frames
         # 30
         #
-        frames = self.checkVar(Compiler, Bytecode, Tokens, 0)
+        frames = Compiler.checkVar(Bytecode, Args, 0)
 
         Bytecode.append(frames)
 
@@ -155,24 +139,25 @@ class OpWait(Op):
 
 class OpSpawn(Op):
     def __init__(self):
-        Op.__init__(self, 5)
+        Op.__init__(self, 3)
 
-    def custom_compile(self, Compiler, Tokens, Bytecode):
+    def custom_compile(self, Compiler, Args, Bytecode):
         #
-        # 8b      8b      4b      4b     8b
-        # x_coord y_coord type_id ai_id  ai_args
-        # 64      -8      enemy0  zigzag 0
+        # 8b      8b      4b      4b     4b    4b
+        # x_coord y_coord type_id ai_id  delay flipX
+        # 64      -8      enemy0  zigzag 0     0
         #
-        x_coord = self.checkVar(Compiler, Bytecode, Tokens, 0)
-        y_coord = self.checkVar(Compiler, Bytecode, Tokens, 1)
-        type_id = Compiler.getEnemyId(Tokens[2])
-        ai_id = Compiler.getAiId(Tokens[3])
-        ai_args = self.checkVar(Compiler, Bytecode, Tokens, 4)
+        x_coord = Compiler.checkVar(Bytecode, Args, 0)
+        y_coord = Compiler.checkVar(Bytecode, Args, 1)
+        type_id = Compiler.getEnemyId(Args[2])
+        ai_id = Compiler.getAiId(Args[3]) if len(Args) > 3 else 0
+        delay = Compiler.checkVar(Bytecode, Args, 4) if len(Args) > 4 else 0
+        flipX = Compiler.checkVar(Bytecode, Args, 5) if len(Args) > 5 else 0
 
         Bytecode.append(x_coord)
         Bytecode.append(y_coord)
         Bytecode.append((type_id << 4) | ai_id)
-        Bytecode.append(ai_args)
+        Bytecode.append((delay << 4) | flipX)
 
         return Bytecode
 
@@ -180,13 +165,13 @@ class OpBind(Op):
     def __init__(self):
         Op.__init__(self, 2)
 
-    def custom_compile(self, Compiler, Tokens, Bytecode):
+    def custom_compile(self, Compiler, Args, Bytecode):
         #
         # var_name var_id
         # x        0
         #
-        var_name = Tokens[0]
-        var_id = int(Tokens[1])
+        var_name = Args[0]
+        var_id = int(Args[1])
 
         Compiler.setVarId(var_name, var_id)
 
@@ -236,6 +221,19 @@ class CompilerTool:
                 .format(self.lineNumber + 1, Text),
               file = sys.stderr)
         sys.exit(1)
+
+    def checkVar(self, Bytecode, Tokens, Index):
+        token = Tokens[Index]
+
+        if self.hasVar(token):
+            if Index >= 8:
+                self.error('Only the first 8 arguments may be variables')
+
+            Bytecode[1] |= 1 << Index
+
+            return self.getVarId(token)
+        else:
+            return int(token)
 
     def hasVar(self, Name):
         return Name in self.varIds

@@ -219,18 +219,19 @@ static bool op_spawn(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b    8b    8b      8b      4b      4b     8b
-     * spawn flags x_coord y_coord type_id ai_id  ai_args
-     * spawn       64      -8      enemy0  zigzag 0
+     * 8b    8b    8b      8b      4b      4b     4b    4b
+     * spawn flags x_coord y_coord type_id ai_id  delay flipX
+     * spawn       64      -8      enemy0  zigzag 0     0
      */
     int8_t x, y;
-    uint8_t type_id, ai_id, ai_args;
+    uint8_t type_id, ai_id, delay, flipX;
 
     Z_READ_ARGI8(x, 0, 0);
     Z_READ_ARGI8(y, 1, 1);
     Z_READ_ARGU4H(type_id, 2, 2);
     Z_READ_ARGU4L(ai_id, 3, 2);
-    Z_READ_ARGU8(ai_args, 4, 3);
+    Z_READ_ARGU4H(delay, 4, 3);
+    Z_READ_ARGU4L(flipX, 5, 3);
 
     ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
 
@@ -238,7 +239,7 @@ static bool op_spawn(uint8_t Flags)
         return false;
     }
 
-    z_enemy_init(e, x, y, type_id, ai_id, ai_args);
+    z_enemy_init(e, x, y, type_id, ai_id, delay, flipX);
 
     return true;
 }
