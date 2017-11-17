@@ -159,21 +159,18 @@ class OpSpawn(Op):
 
     def custom_compile(self, Compiler, Args, Bytecode):
         #
-        # 8b      8b      4b      4b     4b    4b
-        # x_coord y_coord type_id fly_id delay flipX
-        # 64      -8      enemy0  zigzag 0     0
+        # 8b      8b      4b      4b
+        # x_coord y_coord type_id drop_id
+        # 64      -8      enemy0  powerup
         #
         x_coord = Compiler.checkArg(Bytecode, Args, 0, -128, 127)
         y_coord = Compiler.checkArg(Bytecode, Args, 1, -128, 127)
         type_id = Compiler.getEnemyId(Args[2])
-        fly_id = Compiler.getFlyId(Args[3]) if len(Args) > 3 else 0
-        delay = Compiler.checkArg(Bytecode, Args, 4, 0, 15) if len(Args) > 4 else 0
-        flipX = Compiler.checkArg(Bytecode, Args, 5, 0, 1) if len(Args) > 5 else 0
+        drop_id = Compiler.getDropId(Args[3]) if len(Args) > 3 else 0
 
         Bytecode.append(x_coord)
         Bytecode.append(y_coord)
-        Bytecode.append((type_id << 4) | fly_id)
-        Bytecode.append((delay << 4) | flipX)
+        Bytecode.append((type_id << 4) | drop_id)
 
         return Bytecode
 
@@ -212,10 +209,8 @@ class CompilerTool:
             'enemy2': 3,
         }
 
-        self.flyIds = {
-            'down': 0,
-            'zigzag': 1,
-            'curve': 2,
+        self.dropIds = {
+            'none': 0,
         }
 
         self.ops = {
@@ -285,11 +280,11 @@ class CompilerTool:
 
         return self.enemyIds[Name]
 
-    def getFlyId(self, Name):
-        if Name not in self.flyIds:
-            self.error('Unknown fly pattern {}'.format(Name))
+    def getDropId(self, Name):
+        if Name not in self.dropIds:
+            self.error('Unknown drop {}'.format(Name))
 
-        return self.flyIds[Name]
+        return self.dropIds[Name]
 
     def getOp(self, Name):
         if Name not in self.ops:

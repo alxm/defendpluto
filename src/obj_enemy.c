@@ -22,9 +22,7 @@
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_pool.h"
-#include "util_random.h"
 #include "util_screen.h"
-#include "obj_bullete.h"
 #include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
@@ -35,108 +33,26 @@ static struct {
     int8_t x, y, w, h;
 } g_coll;
 
-static void fly_down(ZEnemy* Enemy)
+void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t DropId)
 {
-    Z_UNUSED(Enemy);
-}
+    Z_UNUSED(DropId);
 
-static void fly_zigzag(ZEnemy* Enemy)
-{
-    bool expired = false;
-
-    if(Enemy->counters[0]-- == 0) {
-        Enemy->counters[0] = u8(32 + 4 * Enemy->flyArgs.delay);
-        expired = true;
-    }
-
-    switch(Enemy->flyState) {
-        case 0: {
-            if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 8) {
-                if(Enemy->flyArgs.flipX) {
-                    Enemy->angle = Z_ANGLE_225;
-                } else {
-                    Enemy->angle = Z_ANGLE_315;
-                }
-
-                Enemy->flyState = 1;
-            }
-        } break;
-
-        case 1: {
-            if(expired) {
-                if(Enemy->angle == Z_ANGLE_225) {
-                    Enemy->angle = Z_ANGLE_315;
-                } else {
-                    Enemy->angle = Z_ANGLE_225;
-                }
-            }
-        } break;
-    }
-}
-
-static void fly_curve(ZEnemy* Enemy)
-{
-    bool expired = false;
-    int8_t angleInc = 0;
-
-    if(Enemy->counters[0]-- == 0) {
-        Enemy->counters[0] = u8(4 * Enemy->flyArgs.delay);
-        expired = true;
-    }
-
-    switch(Enemy->flyState) {
-        case 0: {
-            if(Enemy->flyArgs.flipX) {
-                angleInc = -1;
-                Enemy->flyState = 1;
-            } else {
-                angleInc = 1;
-                Enemy->flyState = 2;
-            }
-        } break;
-
-        case 1: {
-            if(Enemy->angle <= Z_ANGLE_225) {
-                Enemy->flyState = 2;
-            } else if(expired) {
-                angleInc = -1;
-            }
-        } break;
-
-        case 2: {
-            if(Enemy->angle >= Z_ANGLE_315) {
-                Enemy->flyState = 1;
-            } else if(expired) {
-                angleInc = 1;
-            }
-        } break;
-    }
-
-    Enemy->angle = Z_ANGLE_WRAP(Enemy->angle + angleInc);
-}
-
-static void (*g_fly[])(ZEnemy*) = {
-    fly_down,
-    fly_zigzag,
-    fly_curve,
-};
-
-void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t FlyId, uint8_t Delay, uint8_t FlipX)
-{
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
     Enemy->angle = Z_ANGLE_270;
     Enemy->jetFlicker = false;
     Enemy->typeId = u4(TypeId);
     Enemy->frame = 0;
-    Enemy->flyId = u4(FlyId);
-    Enemy->flyState = 0;
-    Enemy->flyArgs.delay = u4(Delay);
-    Enemy->flyArgs.flipX = u4(FlipX);
 
-    for(uint8_t i = 0; i < Z_ARRAY_LEN(Enemy->counters); i++) {
-        Enemy->counters[i] = 0;
-    }
+    Enemy->fly.id = Z_FLY_DOWN;
+    Enemy->fly.state = 0;
+    Enemy->fly.mod.delay = 0;
+    Enemy->fly.mod.flipX = 0;
+    Enemy->fly.mod.flipY = 0;
+    Enemy->fly.counter = 0;
+
+    Enemy->attack.id = Z_ATTACK_NONE;
+    Enemy->attack.counter = 0;
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
@@ -145,9 +61,10 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 
     ZFix cos = z_fix_cos(enemy->angle);
     ZFix sin = z_fix_sin(enemy->angle);
+    ZFix speed = z_enemyData[enemy->typeId].speed;
 
-    enemy->x = zf(enemy->x + z_fix_mul(cos, z_enemyData[enemy->typeId].speed));
-    enemy->y = zf(enemy->y - z_fix_mul(sin, z_enemyData[enemy->typeId].speed));
+    enemy->x = zf(enemy->x + z_fix_mul(cos, speed));
+    enemy->y = zf(enemy->y - z_fix_mul(sin, speed));
 
     if(z_fps_isNthFrame(Z_FPS / 5)) {
         ZSprite* sprite = &z_enemyData[enemy->typeId].sprite;
@@ -156,21 +73,9 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 
     enemy->jetFlicker = !enemy->jetFlicker;
 
-    g_fly[enemy->flyId](enemy);
-
-    if(z_enemyData[enemy->typeId].damage > 0 && enemy->counters[1]-- == 0) {
-        ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
-
-        if(b) {
-            z_bullete_init(b,
-                           zf(enemy->x + z_fix_itofix(z_screen_getXShake())),
-                           enemy->y);
-
-            enemy->counters[1] = u8(Z_FPS + z_random_uint8(4 * Z_FPS));
-        } else {
-            enemy->counters[1] = 0;
-        }
-    }
+    z_enemy__ai[enemy->typeId](enemy);
+    z_enemy__fly[enemy->fly.id](enemy);
+    z_enemy__attack[enemy->attack.id](enemy);
 
     return z_fix_fixtoi(enemy->y) - z_enemyData[enemy->typeId].h / 2 < Z_HEIGHT;
 }

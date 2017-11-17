@@ -16,6 +16,7 @@
 */
 
 #include "platform.h"
+#include "util_enemy.h"
 #include "util_fix.h"
 #include "util_pool.h"
 #include "util_vm.h"
@@ -234,18 +235,16 @@ static bool op_spawn(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b    8b    8b      8b      4b      4b     4b    4b
-     * spawn flags x_coord y_coord type_id fly_id delay flipX
-     * spawn       64      -8      enemy0  zigzag 0     0
+     * 8b    8b    8b      8b      4b      4b
+     * spawn flags x_coord y_coord type_id drop_id
+     * spawn       64      -8      enemy0  powerup
      */
     int8_t x, y;
-    uint8_t type_id, fly_id, delay, flipX;
+    uint8_t type_id, drop_id;
     Z_READ_ARGI8(x, 0, 0);
     Z_READ_ARGI8(y, 1, 1);
     Z_READ_ARGU4H(type_id, 2, 2);
-    Z_READ_ARGU4L(fly_id, 3, 2);
-    Z_READ_ARGU4H(delay, 4, 3);
-    Z_READ_ARGU4L(flipX, 5, 3);
+    Z_READ_ARGU4L(drop_id, 3, 2);
 
     ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
 
@@ -253,7 +252,7 @@ static bool op_spawn(uint8_t Flags)
         return false;
     }
 
-    z_enemy_init(e, x, y, type_id, fly_id, delay, flipX);
+    z_enemy_init(e, x, y, type_id, drop_id);
 
     return true;
 }
@@ -271,7 +270,7 @@ void z_vm_setup(void)
     setOp(Z_OP_END, op_end, 0);
     setOp(Z_OP_WAIT, op_wait, 1);
     setOp(Z_OP_WAITCLEAR, op_waitclear, 0);
-    setOp(Z_OP_SPAWN, op_spawn, 4);
+    setOp(Z_OP_SPAWN, op_spawn, 3);
 
     z_vm_reset();
 }

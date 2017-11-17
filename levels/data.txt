@@ -20,15 +20,15 @@ loop 2
     end
 
     loop 4
-        spawn 32 -8 enemy0 zigzag delay flipX
-        spawn 96 -8 enemy1 curve delay flipX
+        spawn 32 -8 enemy0
+        spawn 96 -8 enemy1
         inc delay 4
         flip flipX
         wait 15
     end
 
     loop 2
-        spawn 96 -8 enemy2 curve
+        spawn 96 -8 enemy2
         wait 15
     end
 end
