@@ -17,7 +17,9 @@
 
 #include "platform.h"
 #include "util_enemy.h"
+#include "util_fix.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "obj_enemy.h"
 
 static void ai_asteroid(ZEnemy* Enemy)
@@ -27,8 +29,10 @@ static void ai_asteroid(ZEnemy* Enemy)
 
 static void ai_ship0(ZEnemy* Enemy)
 {
-    Enemy->fly.id = Z_FLY_ZIGZAG;
-    Enemy->attack.id = Z_ATTACK_RANDOM;
+    if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 4) {
+        Enemy->fly.id = Z_FLY_ZIGZAG;
+        Enemy->attack.id = Z_ATTACK_RANDOM;
+    }
 }
 
 static void ai_ship1(ZEnemy* Enemy)
@@ -39,8 +43,16 @@ static void ai_ship1(ZEnemy* Enemy)
 
 static void ai_ship2(ZEnemy* Enemy)
 {
-    Enemy->fly.id = Z_FLY_DOWN;
+    Enemy->fly.id = Z_FLY_LINE;
     Enemy->attack.id = Z_ATTACK_RANDOM;
+
+    if(Enemy->angle == Z_ANGLE_270) {
+        if(z_fix_fixtoi(Enemy->x) < Z_WIDTH / 2) {
+            Enemy->angle = Z_ANGLE_315;
+        } else {
+            Enemy->angle = Z_ANGLE_225;
+        }
+    }
 }
 
 ZEnemyCallback z_enemy__ai[Z_ENEMY_NUM] = {

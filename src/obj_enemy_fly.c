@@ -23,7 +23,7 @@
 #include "util_screen.h"
 #include "obj_enemy.h"
 
-static void fly_down(ZEnemy* Enemy)
+static void fly_line(ZEnemy* Enemy)
 {
     Z_UNUSED(Enemy);
 }
@@ -104,7 +104,7 @@ static void fly_curve(ZEnemy* Enemy)
 }
 
 ZEnemyCallback z_enemy__fly[Z_FLY_NUM] = {
-    fly_down,
+    fly_line,
     fly_zigzag,
     fly_curve,
 };

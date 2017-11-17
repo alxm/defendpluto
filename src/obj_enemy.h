@@ -17,7 +17,7 @@
 
 typedef enum {
     Z_FLY_INVALID = -1,
-    Z_FLY_DOWN,
+    Z_FLY_LINE,
     Z_FLY_ZIGZAG,
     Z_FLY_CURVE,
     Z_FLY_NUM
