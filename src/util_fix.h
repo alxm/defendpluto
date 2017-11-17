@@ -36,6 +36,8 @@ typedef enum {
 
 extern const ZFix z_fix__sin[Z_ANGLES_NUM];
 
+extern uint8_t z_fix_atan(ZFix X1, ZFix Y1, ZFix X2, ZFix Y2);
+
 static inline ZFix z_fix_itofix(int8_t X)
 {
     return zf(X << Z_FIX_BIT_PRECISION);
@@ -68,6 +70,11 @@ static inline ZFix z_fix_cos(uint8_t Angle)
 }
 
 #define Z_GEN_MINMAX(Type, Name)                                    \
+    static inline Type z_##Name##_abs(Type X)                       \
+    {                                                               \
+        return X < 0 ? (Type)-X : X;                                \
+    }                                                               \
+                                                                    \
     static inline Type z_##Name##_min(Type X, Type Y)               \
     {                                                               \
         return X < Y ? X : Y;                                       \

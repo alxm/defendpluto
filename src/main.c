@@ -18,6 +18,7 @@
 #ifndef ARDUINO
 
 #include "platform.h"
+#include "util_fix.h"
 #include "util_fps.h"
 #include "util_screen.h"
 #include "loop.h"
@@ -56,8 +57,66 @@ A_STATE(run)
 
 A_MAIN
 {
-    a_state_new("run", run, "", "");
-    a_state_push("run");
+    #if Z_DEBUG_GENERATE_LUT
+        {
+            uint8_t angle = 0;
+            ZFix lastRatio = 0;
+
+            printf("PROGMEM static const uint8_t g_atanAngles[Z_FIX_ONE] = {");
+
+            for(ZFix refRatio = 0; refRatio < Z_FIX_ONE; refRatio++) {
+                if(refRatio % 16 == 0) {
+                    printf("\n    ");
+                }
+
+                ZFix ratio = zf(a_fix_div(a_fix_sin(angle), a_fix_cos(angle))
+                                    / (A_FIX_ONE / Z_FIX_ONE));
+
+                while(ratio < refRatio) {
+                    angle++;
+                    lastRatio = ratio;
+                    ratio = zf(a_fix_div(a_fix_sin(angle), a_fix_cos(angle))
+                                    / (A_FIX_ONE / Z_FIX_ONE));
+                }
+
+                ZFix diff1 = zf(refRatio - lastRatio);
+                ZFix diff2 = zf(ratio - refRatio);
+
+                if(diff2 <= diff1) {
+                    printf("%d, ",
+                           angle / (A_MATH_ANGLES_NUM / Z_ANGLES_NUM));
+                } else {
+                    printf("%d, ",
+                           (unsigned)
+                            (angle - 1) / (A_MATH_ANGLES_NUM / Z_ANGLES_NUM));
+                }
+            }
+
+            printf("\n};\n");
+        }
+
+        printf("\n");
+
+        {
+            printf("PROGMEM const ZFix z_fix__sin[Z_ANGLES_NUM] = {");
+
+            for(unsigned a = 0;
+                a < A_MATH_ANGLES_NUM;
+                a += A_MATH_ANGLES_NUM / Z_ANGLES_NUM) {
+
+                if(a % 16 == 0) {
+                    printf("\n    ");
+                }
+
+                printf("%d, ", a_fix_sin(a) / (A_FIX_ONE / Z_FIX_ONE));
+            }
+
+            printf("\n};\n");
+        }
+    #else
+        a_state_new("run", run, "", "");
+        a_state_push("run");
+    #endif
 }
 
 #endif // ifndef ARDUINO
