@@ -23,28 +23,28 @@ class Op:
     numInstructions = 0
 
     def __init__(self, NumArgs = 0):
-        self.numArgs = NumArgs
-        self.opcode = Op.numInstructions
+        self.__numArgs = NumArgs
+        self.__opcode = Op.numInstructions
 
         Op.numInstructions += 1
 
     def compile(self, Compiler, Args):
-        if len(Args) < 1 + self.numArgs:
+        if len(Args) < 1 + self.__numArgs:
             Compiler.error('{} requires at least {} arguments'
-                            .format(Args[0], self.numArgs))
+                            .format(Args[0], self.__numArgs))
 
-        if self.numArgs > 0:
+        if self.__numArgs > 0:
             #
             # 8b 8b
             # op flags
             #
-            bytecode = [self.opcode, 0]
+            bytecode = [self.__opcode, 0]
         else:
             #
             # 8b
             # op
             #
-            bytecode = [self.opcode]
+            bytecode = [self.__opcode]
 
         return self.custom_compile(Compiler, Args[1 :], bytecode)
 
@@ -184,28 +184,25 @@ class OpVar(Op):
 
 class CompilerTool:
     def __init__(self, LevelFile):
-        self.levelFile = LevelFile
+        self.__levelFile = LevelFile
+        self.__nextVarId = 0
+        self.__nestedLoopsMax = 0
+        self.__nestedLoopsCount = 0
+        self.__lineNumber = 0
+        self.__varIds = {}
 
-        self.nextVarId = 0
-
-        self.nestedLoopsMax = 0
-        self.nestedLoopsCount = 0
-
-        self.lineNumber = 0
-        self.varIds = {}
-
-        self.enemyIds = {
+        self.__enemyIds = {
             'asteroid': 0,
             'enemy0': 1,
             'enemy1': 2,
             'enemy2': 3,
         }
 
-        self.dropIds = {
+        self.__dropIds = {
             'none': 0,
         }
 
-        self.ops = {
+        self.__ops = {
             'over': Op(),
             'set': OpSet(),
             'inc': OpInc(),
@@ -222,14 +219,14 @@ class CompilerTool:
 
     def error(self, Text):
         print('\033[1;31m[Script Error]\033[0m Line {}: {}'
-                .format(self.lineNumber + 1, Text),
+                .format(self.__lineNumber + 1, Text),
               file = sys.stderr)
         sys.exit(1)
 
     def checkArg(self, Bytecode, Args, Index, Min, Max):
         arg = Args[Index]
 
-        if arg in self.varIds:
+        if arg in self.__varIds:
             if Index >= 8:
                 self.error('Only the first 8 arguments may be variables')
 
@@ -251,51 +248,52 @@ class CompilerTool:
             return value
 
     def getVarId(self, Name):
-        if Name not in self.varIds:
+        if Name not in self.__varIds:
             self.error('Unknown var {}'.format(Name))
 
-        return self.varIds[Name]
+        return self.__varIds[Name]
 
     def setVarId(self, Name):
-        if Name in self.varIds:
+        if Name in self.__varIds:
             self.error('Var {} was already declared'.format(Name))
 
-        self.varIds[Name] = self.nextVarId
-        self.nextVarId += 1
+        self.__varIds[Name] = self.__nextVarId
+        self.__nextVarId += 1
 
     def getEnemyId(self, Name):
-        if Name not in self.enemyIds:
+        if Name not in self.__enemyIds:
             self.error('Unknown enemy {}'.format(Name))
 
-        return self.enemyIds[Name]
+        return self.__enemyIds[Name]
 
     def getDropId(self, Name):
-        if Name not in self.dropIds:
+        if Name not in self.__dropIds:
             self.error('Unknown drop {}'.format(Name))
 
-        return self.dropIds[Name]
+        return self.__dropIds[Name]
 
     def getOp(self, Name):
-        if Name not in self.ops:
+        if Name not in self.__ops:
             self.error('Unknown op {}'.format(Name))
 
-        return self.ops[Name]
+        return self.__ops[Name]
 
     def loopInc(self):
-        self.nestedLoopsCount += 1
-        self.nestedLoopsMax = max(self.nestedLoopsMax, self.nestedLoopsCount)
+        self.__nestedLoopsCount += 1
+        self.__nestedLoopsMax = max(self.__nestedLoopsMax,
+                                    self.__nestedLoopsCount)
 
     def loopDec(self):
-        self.nestedLoopsCount -= 1
+        self.__nestedLoopsCount -= 1
 
-        if self.nestedLoopsCount < 0:
+        if self.__nestedLoopsCount < 0:
             self.error('Mismatched loop end')
 
     def run(self):
         bytecode = []
 
-        with open(self.levelFile, 'rU') as f:
-            for self.lineNumber, line in enumerate(f):
+        with open(self.__levelFile, 'rU') as f:
+            for self.__lineNumber, line in enumerate(f):
                 tokens = []
                 rawTokens = line.split()
 
@@ -330,7 +328,7 @@ class CompilerTool:
 
 PROGMEM static const uint8_t z_data_levels[] = {{{}
 }};\
-""".format(self.nextVarId, self.nestedLoopsMax, fmt_bytecode)
+""".format(self.__nextVarId, self.__nestedLoopsMax, fmt_bytecode)
 
         print(contents)
 
