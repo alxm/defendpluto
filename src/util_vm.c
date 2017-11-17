@@ -23,7 +23,6 @@
 #include "obj_enemy.h"
 #include "data_levels.h"
 
-#define Z_VARS_NUM 4
 #define Z_NESTED_LOOPS_MAX 2
 
 typedef enum {
@@ -55,7 +54,7 @@ static struct {
         uint8_t counter;
     } loopStack[Z_NESTED_LOOPS_MAX];
     uint8_t block;
-    int8_t vars[Z_VARS_NUM];
+    int8_t vars[Z_LEVELS_VARS_NUM];
 } g_vm;
 
 #define Z__READ(Offset) Z_PGM_READ_UINT8(z_data_levels[g_vm.pc + Offset])
@@ -281,7 +280,7 @@ void z_vm_reset(void)
     g_vm.block = 0;
     g_vm.loopIndex = Z_NESTED_LOOPS_MAX;
 
-    for(uint8_t v = Z_VARS_NUM; v--; ) {
+    for(uint8_t v = Z_LEVELS_VARS_NUM; v--; ) {
         g_vm.vars[v] = 0;
     }
 }
