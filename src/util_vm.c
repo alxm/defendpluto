@@ -23,8 +23,6 @@
 #include "obj_enemy.h"
 #include "data_levels.h"
 
-#define Z_NESTED_LOOPS_MAX 2
-
 typedef enum {
     Z_OP_INVALID = -1,
     Z_OP_OVER,
@@ -52,7 +50,7 @@ static struct {
     struct {
         uint16_t start;
         uint8_t counter;
-    } loopStack[Z_NESTED_LOOPS_MAX];
+    } loopStack[Z_LEVELS_NESTED_LOOPS_MAX];
     uint8_t block;
     int8_t vars[Z_LEVELS_VARS_NUM];
 } g_vm;
@@ -278,7 +276,7 @@ void z_vm_reset(void)
 {
     g_vm.pc = 0;
     g_vm.block = 0;
-    g_vm.loopIndex = Z_NESTED_LOOPS_MAX;
+    g_vm.loopIndex = Z_LEVELS_NESTED_LOOPS_MAX;
 
     for(uint8_t v = Z_LEVELS_VARS_NUM; v--; ) {
         g_vm.vars[v] = 0;
