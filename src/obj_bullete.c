@@ -25,17 +25,23 @@
 #include "obj_bullete.h"
 #include "obj_player.h"
 
-void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y)
+void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraSpeed)
 {
     Bullet->x = X;
     Bullet->y = Y;
+    Bullet->angle = Z_ANGLE_WRAP(Angle);
+    Bullet->speed = ExtraSpeed;
 }
 
 bool z_bullete_tick(ZPoolObject* Bullet)
 {
     ZBulletE* bullet = (ZBulletE*)Bullet;
 
-    bullet->y = zf(bullet->y + z_fix_itofix(2));
+    ZFix cos = z_fix_cos(bullet->angle);
+    ZFix sin = z_fix_sin(bullet->angle);
+
+    bullet->x = zf(bullet->x + cos * (1 + bullet->speed));
+    bullet->y = zf(bullet->y - sin * (1 + bullet->speed));
 
     if(z_fix_fixtoi(bullet->y) >= Z_HEIGHT) {
         return false;

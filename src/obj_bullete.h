@@ -18,10 +18,12 @@
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
+    uint8_t angle : 7;
+    uint8_t speed : 1;
 } ZBulletE;
 
 #define Z_BULLETE_POOL_NUM 8
 
-extern void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y);
+extern void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraSpeed);
 extern bool z_bullete_tick(ZPoolObject* Bullet);
 extern void z_bullete_draw(ZPoolObject* Bullet);

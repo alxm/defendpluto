@@ -41,7 +41,9 @@ static void attack_random(ZEnemy* Enemy)
     if(b) {
         z_bullete_init(b,
                        zf(Enemy->x + z_fix_itofix(z_screen_getXShake())),
-                       Enemy->y);
+                       Enemy->y,
+                       Z_ANGLE_270,
+                       false);
 
         Enemy->attack.counter = u8(Z_FPS + z_random_uint8(4 * Z_FPS));
     } else {
