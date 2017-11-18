@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PXML xmlns="http://openpandora.org/namespaces/PXML">
 <!-- please see http://pandorawiki.org/PXML_specification for more information before editing, and remember the order does matter -->
-	<package id="alxm.arduboy-shooter">
+	<package id="alxm.defendpluto">
 		<author name="alxm" website="http://www.alxm.org"/>
 		<version major="1" minor="0" release="0" build="0"/>
 		<titles>
-			<title lang="en_US">arduboy-shooter</title>
+			<title lang="en_US">Defend Pluto</title>
 		</titles>
 		<descriptions>
-			<description lang="en_US">arduboy-shooter prototype</description>
+			<description lang="en_US">Vertical space shooter game.</description>
 		</descriptions>
 	</package>
-	<application id="alxm.arduboy-shooter">
-		<exec command="arduboy-shooter.pnd.bin"/>
+	<application id="alxm.defendpluto">
+		<exec command="defendpluto.pnd.bin"/>
 		<author name="alxm" website="http://www.alxm.org"/>
 		<version major="1" minor="0" release="0" build="0" type="release"/>
 		<osversion major="1" minor="0" release="0" build="0"/>
 		<titles>
-			<title lang="en_US">arduboy-shooter</title>
+			<title lang="en_US">Defend Pluto</title>
 		</titles>
 		<descriptions>
-			<description lang="en_US">arduboy-shooter prototype</description>
+			<description lang="en_US">Vertical space shooter game.</description>
 		</descriptions>
 		<licenses>
 			<license name="Freeware"/>

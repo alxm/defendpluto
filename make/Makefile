@@ -1,4 +1,4 @@
-A_APP_NAME = arduboy-shooter
+A_APP_NAME = defendpluto
 
 Z_LEVELS_COMPILER = ../levels/compile.py
 Z_LEVELS_TXT = ../levels/data.txt

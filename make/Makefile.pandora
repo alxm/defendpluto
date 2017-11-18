@@ -1,6 +1,6 @@
-A_APP_NAME = arduboy-shooter.pnd.bin
+A_APP_NAME = defendpluto.pnd.bin
 A_PND_DIR = ../pnd
-A_PND_NAME = arduboy-shooter.pnd
+A_PND_NAME = defendpluto.pnd
 A_EMBED_MEDIA = true
 
 #
