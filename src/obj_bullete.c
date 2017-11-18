@@ -53,7 +53,7 @@ bool z_bullete_tick(ZPoolObject* Bullet)
     bool hit = z_collision_boxAndBox(z_fix_fixtoi(bullet->x),
                                      z_fix_fixtoi(bullet->y),
                                      2,
-                                     4,
+                                     3,
                                      z_fix_fixtoi(z_player.x),
                                      z_fix_fixtoi(z_player.y),
                                      z_player.w,
@@ -81,12 +81,10 @@ void z_bullete_draw(ZPoolObject* Bullet)
 {
     ZBulletE* bullet = (ZBulletE*)Bullet;
 
-    int8_t x = z_fix_fixtoi(bullet->x);
-    int8_t y = z_fix_fixtoi(bullet->y);
-
-    z_draw_rectangle(i8(x - 1 + z_screen_getXShake()),
-                     i8(y - 2 + z_screen_getYShake()),
-                     2,
-                     4,
-                     Z_COLOR_RED);
+    z_sprite_blitCentered(&z_graphics.bullets,
+                          z_fix_fixtoi(bullet->x),
+                          z_fix_fixtoi(bullet->y),
+                          u8(
+                            Z_ANGLE_WRAP(bullet->angle + Z_ANGLE_045 / 2)
+                                / Z_ANGLE_045));
 }

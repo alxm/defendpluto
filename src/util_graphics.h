@@ -37,8 +37,9 @@ typedef enum {
 } ZFrameBits;
 
 typedef struct {
-    ZSprite hearts;
     ZSprite player[Z_BIT_MAX_VAL + 1];
+    ZSprite bullets;
+    ZSprite hearts;
     ZSprite shield;
     ZSprite title;
 } ZGraphics;
