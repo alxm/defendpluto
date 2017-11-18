@@ -58,7 +58,7 @@ void z_loop_setup(void)
     z_pool_setup();
     z_vm_setup();
 
-    z_loop_setState(Z_STATE_GAME);
+    z_loop_setState(Z_STATE_TITLE);
 }
 
 void z_loop_tick(void)

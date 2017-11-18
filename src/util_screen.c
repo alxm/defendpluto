@@ -24,8 +24,8 @@ static uint8_t g_shakeFrames;
 
 void z_screen_reset(void)
 {
-    z_screen.xShake = 0;
-    z_screen.yShake = 0;
+    z_screen.xShake = 1;
+    z_screen.yShake = 1;
 
     g_shakeFrames = 0;
 }

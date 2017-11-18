@@ -16,6 +16,10 @@
 */
 
 #include "platform.h"
+#include "loop.h"
+#include "util_font.h"
+#include "util_graphics.h"
+#include "util_input.h"
 
 void z_loop_title_init(void)
 {
@@ -29,10 +33,13 @@ void z_loop_title_free(void)
 
 void z_loop_title_tick(void)
 {
-    //
+    if(z_button_pressed(z_controls.a)) {
+        z_loop_setState(Z_STATE_GAME);
+    }
 }
 
 void z_loop_title_draw(void)
 {
-    //
+    z_draw_fill(Z_COLOR_BLUE);
+    z_font_text("Press FIRE to Start", 8, 26, Z_FONT_FACE_ALPHANUM);
 }
