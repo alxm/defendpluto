@@ -27,6 +27,7 @@ typedef enum {
     Z_ATTACK_INVALID = -1,
     Z_ATTACK_NONE,
     Z_ATTACK_RANDOM,
+    Z_ATTACK_TARGET,
     Z_ATTACK_NUM
 } ZAttackId;
 

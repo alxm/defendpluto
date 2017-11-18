@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_enemy.h"
 #include "util_fix.h"
+#include "util_fps.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "obj_enemy.h"
@@ -43,14 +44,13 @@ static void ai_ship1(ZEnemy* Enemy)
 
 static void ai_ship2(ZEnemy* Enemy)
 {
-    Enemy->fly.id = Z_FLY_LINE;
-    Enemy->attack.id = Z_ATTACK_RANDOM;
-
-    if(Enemy->angle == Z_ANGLE_270) {
-        if(z_fix_fixtoi(Enemy->x) < Z_WIDTH / 2) {
-            Enemy->angle = Z_ANGLE_315;
+    if(z_fps_isNthFrame(2 * Z_FPS)) {
+        if(Enemy->fly.id == Z_FLY_LINE) {
+            Enemy->fly.id = Z_FLY_ZIGZAG;
+            Enemy->attack.id = Z_ATTACK_TARGET;
         } else {
-            Enemy->angle = Z_ANGLE_225;
+            Enemy->fly.id = Z_FLY_LINE;
+            Enemy->attack.id = Z_ATTACK_RANDOM;
         }
     }
 }

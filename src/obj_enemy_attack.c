@@ -24,6 +24,7 @@
 #include "util_screen.h"
 #include "obj_bullete.h"
 #include "obj_enemy.h"
+#include "obj_player.h"
 
 static void attack_none(ZEnemy* Enemy)
 {
@@ -45,7 +46,28 @@ static void attack_random(ZEnemy* Enemy)
                        Z_ANGLE_270,
                        false);
 
-        Enemy->attack.counter = u8(Z_FPS + z_random_uint8(4 * Z_FPS));
+        Enemy->attack.counter = 1 * Z_FPS;
+    } else {
+        Enemy->attack.counter = 0;
+    }
+}
+
+static void attack_target(ZEnemy* Enemy)
+{
+    if(Enemy->attack.counter-- > 0) {
+        return;
+    }
+
+    ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
+
+    if(b) {
+        z_bullete_init(b,
+                       zf(Enemy->x + z_fix_itofix(z_screen_getXShake())),
+                       Enemy->y,
+                       z_fix_atan(Enemy->x, Enemy->y, z_player.x, z_player.y),
+                       false);
+
+        Enemy->attack.counter = 1 * Z_FPS;
     } else {
         Enemy->attack.counter = 0;
     }
@@ -54,4 +76,5 @@ static void attack_random(ZEnemy* Enemy)
 ZEnemyCallback z_enemy__attack[Z_ATTACK_NUM] = {
     attack_none,
     attack_random,
+    attack_target,
 };
