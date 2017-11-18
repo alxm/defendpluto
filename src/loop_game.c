@@ -56,14 +56,7 @@ void z_loop_game_tick(void)
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick);
     z_screen_tick();
-
-    if(z_random_int8(2 * Z_HEIGHT / Z_STAR_POOL_NUM) == 0) {
-        ZStar* star = z_pool_alloc(Z_POOL_STAR);
-
-        if(star != NULL) {
-            z_star_init(star);
-        }
-    }
+    z_star_spawn();
 
     if(z_player.health < 0) {
         z_loop_setState(Z_STATE_TITLE);

@@ -60,3 +60,16 @@ void z_star_draw(ZPoolObject* Star)
 
     z_draw_pixel(x, y, Z_COLOR_LIGHTBLUE + (star->speed >= Z_STAR_AVG_SPEED));
 }
+
+void z_star_spawn(void)
+{
+    if(z_random_int8(
+        (Z_FIX_ONE / Z_STAR_AVG_SPEED) * Z_HEIGHT / Z_STAR_POOL_NUM) == 0) {
+
+        ZStar* star = z_pool_alloc(Z_POOL_STAR);
+
+        if(star != NULL) {
+            z_star_init(star);
+        }
+    }
+}
