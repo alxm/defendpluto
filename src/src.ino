@@ -26,7 +26,7 @@ void setup()
     g_arduboy.begin();
     g_arduboy.setFrameRate(Z_FPS);
 
-    loop_setup();
+    z_loop_setup();
 }
 
 void loop()
@@ -38,8 +38,8 @@ void loop()
 
     g_arduboy.pollButtons();
 
-    loop_tick();
-    loop_draw();
+    z_loop_tick();
+    z_loop_draw();
 
     g_arduboy.display();
 }

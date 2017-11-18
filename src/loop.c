@@ -16,81 +16,69 @@
 */
 
 #include "platform.h"
+#include "loop.h"
+#include "loop_game.h"
+#include "loop_title.h"
 #include "util_enemy.h"
-#include "util_fix.h"
 #include "util_font.h"
 #include "util_graphics.h"
 #include "util_pool.h"
-#include "util_random.h"
-#include "util_screen.h"
 #include "util_vm.h"
-#include "obj_bullete.h"
-#include "obj_bulletp.h"
-#include "obj_circle.h"
-#include "obj_enemy.h"
-#include "obj_particle.h"
-#include "obj_player.h"
-#include "obj_star.h"
 
-void loop_setup(void)
+typedef struct {
+    ZStateCallback* init;
+    ZStateCallback* free;
+    ZStateCallback* tick;
+    ZStateCallback* draw;
+} ZState;
+
+static ZState g_states[Z_STATE_NUM] = {
+    {
+        z_loop_title_init,
+        z_loop_title_free,
+        z_loop_title_tick,
+        z_loop_title_draw
+    },
+    {
+        z_loop_game_init,
+        z_loop_game_free,
+        z_loop_game_tick,
+        z_loop_game_draw
+    },
+};
+
+static uint8_t g_state = Z_STATE_NUM;
+
+void z_loop_setup(void)
 {
     z_platform_setup();
-
     z_enemy_setup();
     z_font_setup();
     z_graphics_setup();
     z_pool_setup();
     z_vm_setup();
 
-    z_player_init(Z_WIDTH / 2, Z_HEIGHT * 2 / 3);
+    z_loop_setState(Z_STATE_GAME);
 }
 
-static void loop_reset(void)
-{
-    z_pool_reset();
-    z_screen_reset();
-    z_vm_reset();
-
-    z_player_init(Z_WIDTH / 2, Z_HEIGHT * 2 / 3);
-}
-
-void loop_tick(void)
+void z_loop_tick(void)
 {
     z_platform_tick();
-
-    z_vm_tick();
-    z_player_tick();
-    z_pool_tick(Z_POOL_STAR, z_star_tick);
-    z_pool_tick(Z_POOL_BULLETE, z_bullete_tick);
-    z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick);
-    z_pool_tick(Z_POOL_ENEMY, z_enemy_tick);
-    z_pool_tick(Z_POOL_CIRCLE, z_circle_tick);
-    z_pool_tick(Z_POOL_PARTICLE, z_particle_tick);
-    z_screen_tick();
-
-    if(z_random_int8(2 * Z_HEIGHT / Z_STAR_POOL_NUM) == 0) {
-        ZStar* star = z_pool_alloc(Z_POOL_STAR);
-
-        if(star != NULL) {
-            z_star_init(star);
-        }
-    }
-
-    if(z_player.health < 0) {
-        loop_reset();
-    }
+    g_states[g_state].tick();
 }
 
-void loop_draw(void)
+void z_loop_draw(void)
 {
-    z_draw_fill(Z_COLOR_BLUE);
-    z_pool_draw(Z_POOL_STAR, z_star_draw);
-    z_pool_draw(Z_POOL_BULLETE, z_bullete_draw);
-    z_pool_draw(Z_POOL_BULLETP, z_bulletp_draw);
-    z_pool_draw(Z_POOL_ENEMY, z_enemy_draw);
-    z_pool_draw(Z_POOL_CIRCLE, z_circle_draw);
-    z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
-    z_player_draw();
-
+    g_states[g_state].draw();
     z_platform_draw();
+}
+
+void z_loop_setState(uint8_t State)
+{
+    if(g_state < Z_STATE_NUM) {
+        g_states[g_state].free();
+    }
+
+    g_state = State;
+    g_states[g_state].init();
 }

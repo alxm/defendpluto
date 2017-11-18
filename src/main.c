@@ -41,17 +41,17 @@ A_STATE(run)
 {
     A_STATE_INIT
     {
-        loop_setup();
+        z_loop_setup();
     }
 
     A_STATE_TICK
     {
-        loop_tick();
+        z_loop_tick();
     }
 
     A_STATE_DRAW
     {
-        loop_draw();
+        z_loop_draw();
     }
 }
 

@@ -15,21 +15,24 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-Z_EXTERN_C_START
+#include "platform.h"
 
-typedef enum {
-    Z_STATE_INVALID = -1,
-    Z_STATE_TITLE,
-    Z_STATE_GAME,
-    Z_STATE_NUM
-} ZStateId;
+void z_loop_title_init(void)
+{
+    //
+}
 
-typedef void (ZStateCallback)(void);
+void z_loop_title_free(void)
+{
+    //
+}
 
-extern void z_loop_setup(void);
-extern void z_loop_tick(void);
-extern void z_loop_draw(void);
+void z_loop_title_tick(void)
+{
+    //
+}
 
-extern void z_loop_setState(uint8_t State);
-
-Z_EXTERN_C_END
+void z_loop_title_draw(void)
+{
+    //
+}
