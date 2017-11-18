@@ -23,6 +23,7 @@
 #include "util_pool.h"
 #include "util_screen.h"
 #include "obj_bullete.h"
+#include "obj_particle.h"
 #include "obj_player.h"
 
 void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraSpeed)
@@ -61,6 +62,16 @@ bool z_bullete_tick(ZPoolObject* Bullet)
     if(hit) {
         z_player_takeDamage(256);
         z_screen_shake(Z_FPS / 15);
+
+        for(int8_t i = 4; i--; ) {
+            ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
+
+            if(p == NULL) {
+                break;
+            }
+
+            z_particle_init(p, bullet->x, bullet->y);
+        }
     }
 
     return !hit;
