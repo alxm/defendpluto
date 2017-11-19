@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "loop.h"
 #include "loop_game.h"
+#include "loop_over.h"
 #include "loop_title.h"
 #include "util_enemy.h"
 #include "util_font.h"
@@ -34,16 +35,22 @@ typedef struct {
 
 static ZState g_states[Z_STATE_NUM] = {
     {
-        z_loop_title_init,
-        z_loop_title_free,
-        z_loop_title_tick,
-        z_loop_title_draw
-    },
-    {
         z_loop_game_init,
         z_loop_game_free,
         z_loop_game_tick,
         z_loop_game_draw
+    },
+    {
+        z_loop_over_init,
+        z_loop_over_free,
+        z_loop_over_tick,
+        z_loop_over_draw
+    },
+    {
+        z_loop_title_init,
+        z_loop_title_free,
+        z_loop_title_tick,
+        z_loop_title_draw
     },
 };
 

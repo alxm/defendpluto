@@ -60,8 +60,8 @@ void z_loop_game_tick(void)
     z_star_spawn();
 
     if(z_player.health < 0) {
-        z_loop_setState(Z_STATE_TITLE);
         z_button_release(Z_BUTTON_A);
+        z_loop_setState(Z_STATE_OVER);
     }
 }
 

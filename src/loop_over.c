@@ -27,17 +27,17 @@
 
 static bool g_blink;
 
-void z_loop_title_init(void)
+void z_loop_over_init(void)
 {
     g_blink = true;
 }
 
-void z_loop_title_free(void)
+void z_loop_over_free(void)
 {
     //
 }
 
-void z_loop_title_tick(void)
+void z_loop_over_tick(void)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick);
     z_star_spawn();
@@ -48,17 +48,20 @@ void z_loop_title_tick(void)
 
     if(z_button_pressed(Z_BUTTON_A)) {
         z_button_release(Z_BUTTON_A);
-        z_loop_setState(Z_STATE_GAME);
+        z_loop_setState(Z_STATE_TITLE);
     }
 }
 
-void z_loop_title_draw(void)
+void z_loop_over_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
-    z_sprite_blitCentered(&z_graphics.title, Z_WIDTH / 2, Z_HEIGHT / 2, 0);
+
+    z_font_text("Pluto fell to the", 4, 4, Z_FONT_FACE_ALPHANUM);
+    z_font_text("Proxima Centauri", 4, 14, Z_FONT_FACE_ALPHANUM);
+    z_font_text("invaders", 4, 24, Z_FONT_FACE_ALPHANUM);
 
     if(g_blink) {
-        z_font_text("Press FIRE to start", 8, 39, Z_FONT_FACE_ALPHANUM);
+        z_font_text("Press FIRE to go on", 4, 44, Z_FONT_FACE_ALPHANUM);
     }
 }
