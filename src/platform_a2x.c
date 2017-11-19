@@ -21,20 +21,19 @@
 #include "util_graphics.h"
 #include "util_input.h"
 
-ZControls z_controls;
-
+static AInputButton* g_buttons[Z_BUTTON_NUM];
 static ZPalette g_paletteIndex;
 static AInputButton* g_paletteSwitch;
 static APixel g_palettes[Z_PALETTE_NUM][Z_COLOR_NUM];
 
 void z_platform_setup(void)
 {
-    z_controls.up = a_button_new("key.up gamepad.b.up");
-    z_controls.down = a_button_new("key.down gamepad.b.down");
-    z_controls.left = a_button_new("key.left gamepad.b.left");
-    z_controls.right = a_button_new("key.right gamepad.b.right");
-    z_controls.a = a_button_new("key.z gamepad.b.a");
-    z_controls.b = a_button_new("key.x gamepad.b.b");
+    g_buttons[Z_BUTTON_UP] = a_button_new("key.up gamepad.b.up");
+    g_buttons[Z_BUTTON_DOWN] = a_button_new("key.down gamepad.b.down");
+    g_buttons[Z_BUTTON_LEFT] = a_button_new("key.left gamepad.b.left");
+    g_buttons[Z_BUTTON_RIGHT] = a_button_new("key.right gamepad.b.right");
+    g_buttons[Z_BUTTON_A] = a_button_new("key.z gamepad.b.a");
+    g_buttons[Z_BUTTON_B] = a_button_new("key.x gamepad.b.b");
 
     g_paletteIndex = 0;
     g_paletteSwitch = a_button_new("key.c gamepad.b.select");
@@ -72,9 +71,14 @@ bool z_fps_isNthFrame(uint8_t N)
     return a_fps_isNthFrame(N);
 }
 
-bool z_button_pressed(ZButton Button)
+bool z_button_pressed(uint8_t Button)
 {
-    return a_button_getPressed(Button);
+    return a_button_getPressed(g_buttons[Button]);
+}
+
+void z_button_release(uint8_t Button)
+{
+    a_button_release(g_buttons[Button]);
 }
 
 void z_draw_fill(uint8_t Color)

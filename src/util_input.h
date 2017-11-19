@@ -17,17 +17,18 @@
 
 Z_EXTERN_C_START
 
-typedef struct {
-    ZButton up;
-    ZButton down;
-    ZButton left;
-    ZButton right;
-    ZButton a;
-    ZButton b;
-} ZControls;
+typedef enum {
+    Z_BUTTON_INVALID = -1,
+    Z_BUTTON_UP,
+    Z_BUTTON_DOWN,
+    Z_BUTTON_LEFT,
+    Z_BUTTON_RIGHT,
+    Z_BUTTON_A,
+    Z_BUTTON_B,
+    Z_BUTTON_NUM
+} ZButtonId;
 
-extern ZControls z_controls;
-
-extern bool z_button_pressed(ZButton Button);
+extern bool z_button_pressed(uint8_t Button);
+extern void z_button_release(uint8_t Button);
 
 Z_EXTERN_C_END

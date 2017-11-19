@@ -46,8 +46,9 @@ void z_loop_title_tick(void)
         g_blink = !g_blink;
     }
 
-    if(z_button_pressed(z_controls.a)) {
+    if(z_button_pressed(Z_BUTTON_A)) {
         z_loop_setState(Z_STATE_GAME);
+        z_button_release(Z_BUTTON_A);
     }
 }
 

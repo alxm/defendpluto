@@ -17,7 +17,7 @@
 
 #define Z_DEBUG_GENERATE_LUT 0
 #define Z_DEBUG_STATS 0
-#define Z_DEBUG_INVINCIBLE 1
+#define Z_DEBUG_INVINCIBLE 0
 
 #ifdef __cplusplus
 #define Z_EXTERN_C_START extern "C" {
@@ -68,7 +68,6 @@ typedef enum {
 #define Z_ARRAY_LEN(A) (sizeof(A) / sizeof(A[0]))
 
 #ifdef ARDUINO
-    typedef uint8_t ZButton;
     typedef struct {
         const uint8_t* image;
         const uint8_t* mask;
@@ -83,7 +82,6 @@ typedef enum {
 
     extern void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Image, const uint8_t* Mask, uint8_t NumFrames);
 #else
-    typedef AInputButton* ZButton;
     typedef struct {
         ASpriteFrames* frames[Z_PALETTE_NUM];
         uint8_t numFrames;

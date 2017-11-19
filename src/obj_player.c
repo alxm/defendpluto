@@ -53,9 +53,9 @@ static bool useShield(int16_t Damage)
 
     #if Z_DEBUG_INVINCIBLE
         return true;
+    #else
+        return protected;
     #endif
-
-    return protected;
 }
 
 static void boostShield(int16_t Boost)
@@ -83,7 +83,7 @@ void z_player_tick(void)
 {
     ZFix maxSpeed = Z_SPEED_MAX;
 
-    if(z_button_pressed(z_controls.a)) {
+    if(z_button_pressed(Z_BUTTON_A)) {
         maxSpeed = Z_SPEED_MAX / 2;
 
         if(z_fps_isNthFrame(Z_FPS / 10)) {
@@ -109,10 +109,10 @@ void z_player_tick(void)
 
     z_player.frame = Z_BIT_RESTING;
 
-    if(z_button_pressed(z_controls.up)) {
+    if(z_button_pressed(Z_BUTTON_UP)) {
         z_player.frame |= Z_BIT_FORWARD;
         z_player.dy = zf(z_player.dy - Z_SPEED_ACCEL);
-    } else if(z_button_pressed(z_controls.down)) {
+    } else if(z_button_pressed(Z_BUTTON_DOWN)) {
         z_player.frame |= Z_BIT_BACK;
         z_player.dy = zf(z_player.dy + Z_SPEED_ACCEL);
     } else {
@@ -123,10 +123,10 @@ void z_player_tick(void)
         }
     }
 
-    if(z_button_pressed(z_controls.left)) {
+    if(z_button_pressed(Z_BUTTON_LEFT)) {
         z_player.frame |= Z_BIT_LEFT;
         z_player.dx = zf(z_player.dx - Z_SPEED_ACCEL);
-    } else if(z_button_pressed(z_controls.right)) {
+    } else if(z_button_pressed(Z_BUTTON_RIGHT)) {
         z_player.frame |= Z_BIT_RIGHT;
         z_player.dx = zf(z_player.dx + Z_SPEED_ACCEL);
     } else {

@@ -23,16 +23,21 @@
 #include "util_input.h"
 
 extern Arduboy2Base g_arduboy;
-ZControls z_controls;
+
+static struct {
+    uint8_t code;
+    bool pressed : 1;
+    bool released : 1;
+} g_buttons[Z_BUTTON_NUM];
 
 void z_platform_setup(void)
 {
-    z_controls.up = UP_BUTTON;
-    z_controls.down = DOWN_BUTTON;
-    z_controls.left = LEFT_BUTTON;
-    z_controls.right = RIGHT_BUTTON;
-    z_controls.a = A_BUTTON;
-    z_controls.b = B_BUTTON;
+    g_buttons[Z_BUTTON_UP].code = UP_BUTTON;
+    g_buttons[Z_BUTTON_DOWN].code = DOWN_BUTTON;
+    g_buttons[Z_BUTTON_LEFT].code = LEFT_BUTTON;
+    g_buttons[Z_BUTTON_RIGHT].code = RIGHT_BUTTON;
+    g_buttons[Z_BUTTON_A].code = A_BUTTON;
+    g_buttons[Z_BUTTON_B].code = B_BUTTON;
 
     #if Z_DEBUG_STATS
         extern uint8_t _end;
@@ -48,7 +53,17 @@ void z_platform_setup(void)
 
 void z_platform_tick(void)
 {
-    //
+    for(uint8_t b = 0; b < Z_BUTTON_NUM; b++) {
+        bool pressed = g_arduboy.pressed(g_buttons[b].code);
+
+        if(g_buttons[b].released) {
+            if(!pressed) {
+                g_buttons[b].released = false;
+            }
+        } else {
+            g_buttons[b].pressed = pressed;
+        }
+    }
 }
 
 void z_platform_draw(void)
@@ -79,9 +94,15 @@ bool z_fps_isNthFrame(uint8_t N)
     return g_arduboy.everyXFrames(N);
 }
 
-bool z_button_pressed(ZButton Button)
+bool z_button_pressed(uint8_t Button)
 {
-    return g_arduboy.pressed(Button);
+    return g_buttons[Button].pressed;
+}
+
+void z_button_release(uint8_t Button)
+{
+    g_buttons[Button].pressed = false;
+    g_buttons[Button].released = true;
 }
 
 void z_draw_fill(uint8_t Color)
