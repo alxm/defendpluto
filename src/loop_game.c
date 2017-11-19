@@ -19,6 +19,7 @@
 #include "loop.h"
 #include "util_enemy.h"
 #include "util_fix.h"
+#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
 #include "util_pool.h"
@@ -59,7 +60,7 @@ void z_loop_game_tick(void)
     z_screen_tick();
     z_star_spawn();
 
-    if(z_player.health < 0) {
+    if(z_player.health < 0 && --z_player.health < -3 * Z_FPS) {
         z_button_release(Z_BUTTON_A);
         z_loop_setState(Z_STATE_OVER);
     }

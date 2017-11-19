@@ -22,9 +22,12 @@
 #include "util_graphics.h"
 #include "util_input.h"
 #include "util_pool.h"
+#include "util_random.h"
 #include "util_screen.h"
 #include "obj_bulletp.h"
+#include "obj_circle.h"
 #include "obj_enemy.h"
+#include "obj_particle.h"
 #include "obj_player.h"
 
 #define Z_HEALTH_MAX 3
@@ -81,6 +84,29 @@ void z_player_init(int8_t X, int8_t Y)
 
 void z_player_tick(void)
 {
+    if(z_player.health < 0) {
+        z_screen_shake(1);
+
+        if(z_random_uint8(4) == 0) {
+            ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
+
+            if(c) {
+                int8_t x = i8(z_fix_fixtoi(z_player.x) - 1 + z_random_int8(3));
+                int8_t y = i8(z_fix_fixtoi(z_player.y) - 1 + z_random_int8(3));
+
+                z_circle_init(c, x, y);
+            }
+        } else {
+            ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
+
+            if(p) {
+                z_particle_init(p, z_player.x, z_player.y);
+            }
+        }
+
+        return;
+    }
+
     ZFix maxSpeed = Z_SPEED_MAX;
 
     if(z_button_pressed(Z_BUTTON_A)) {
@@ -207,26 +233,28 @@ static void drawShield(int8_t X, int8_t Y)
 
 void z_player_draw(void)
 {
-    int8_t x = z_fix_fixtoi(z_player.x);
-    int8_t y = i8(z_fix_fixtoi(z_player.y) + z_player.shootShift);
+    if(z_player.health >= 0) {
+        int8_t x = z_fix_fixtoi(z_player.x);
+        int8_t y = i8(z_fix_fixtoi(z_player.y) + z_player.shootShift);
 
-    ZSprite* sprite = &z_graphics.player[z_player.frame];
+        ZSprite* sprite = &z_graphics.player[z_player.frame];
 
-    if(z_player.jetFlicker) {
-        int8_t jy = i8(y + 2 + z_screen_getYShake());
+        if(z_player.jetFlicker) {
+            int8_t jy = i8(y + 2 + z_screen_getYShake());
 
-        if(z_player.frame & Z_BIT_BACK) {
-            jy = i8(y - 1 + z_screen_getYShake());
+            if(z_player.frame & Z_BIT_BACK) {
+                jy = i8(y - 1 + z_screen_getYShake());
+            }
+
+            z_draw_rectangle(i8(x - 3), jy, 2, 3, Z_COLOR_RED);
+            z_draw_rectangle(i8(x + 1), jy, 2, 3, Z_COLOR_RED);
         }
 
-        z_draw_rectangle(i8(x - 3), jy, 2, 3, Z_COLOR_RED);
-        z_draw_rectangle(i8(x + 1), jy, 2, 3, Z_COLOR_RED);
+        z_sprite_blitCentered(sprite,
+                              i8(x + z_screen_getXShake()),
+                              i8(y + z_screen_getYShake()),
+                              0);
     }
-
-    z_sprite_blitCentered(sprite,
-                          i8(x + z_screen_getXShake()),
-                          i8(y + z_screen_getYShake()),
-                          0);
 
     drawHearts(2, 2);
     drawShield(28, 2);
@@ -234,6 +262,10 @@ void z_player_draw(void)
 
 void z_player_takeDamage(int16_t Damage)
 {
+    if(z_player.health < 0) {
+        return;
+    }
+
     if(!useShield(Damage)) {
         if(--z_player.health >= 0) {
             boostShield(Z_SHIELD_BOOST_HEART);
