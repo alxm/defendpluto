@@ -90,5 +90,6 @@ static inline ZFix z_fix_cos(uint8_t Angle)
         return X < Min ? Min : (X > Max ? Max : X);                 \
     }
 
+Z_GEN_MINMAX(int8_t, int8)
 Z_GEN_MINMAX(int16_t, int16)
 Z_GEN_MINMAX(ZFix, fix)

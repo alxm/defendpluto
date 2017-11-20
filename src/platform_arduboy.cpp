@@ -25,20 +25,12 @@
 extern Arduboy2Base g_arduboy;
 
 static struct {
-    uint8_t code;
     bool pressed : 1;
     bool released : 1;
 } g_buttons[Z_BUTTON_NUM];
 
 void z_platform_setup(void)
 {
-    g_buttons[Z_BUTTON_UP].code = UP_BUTTON;
-    g_buttons[Z_BUTTON_DOWN].code = DOWN_BUTTON;
-    g_buttons[Z_BUTTON_LEFT].code = LEFT_BUTTON;
-    g_buttons[Z_BUTTON_RIGHT].code = RIGHT_BUTTON;
-    g_buttons[Z_BUTTON_A].code = A_BUTTON;
-    g_buttons[Z_BUTTON_B].code = B_BUTTON;
-
     #if Z_DEBUG_STATS
         extern uint8_t _end;
 
@@ -51,19 +43,27 @@ void z_platform_setup(void)
     #endif
 }
 
+static void pollButton(uint8_t Button, uint8_t Code)
+{
+    bool pressed = g_arduboy.pressed(Code);
+
+    if(g_buttons[Button].released) {
+        if(!pressed) {
+            g_buttons[Button].released = false;
+        }
+    } else {
+        g_buttons[Button].pressed = pressed;
+    }
+}
+
 void z_platform_tick(void)
 {
-    for(uint8_t b = 0; b < Z_BUTTON_NUM; b++) {
-        bool pressed = g_arduboy.pressed(g_buttons[b].code);
-
-        if(g_buttons[b].released) {
-            if(!pressed) {
-                g_buttons[b].released = false;
-            }
-        } else {
-            g_buttons[b].pressed = pressed;
-        }
-    }
+    pollButton(Z_BUTTON_UP, UP_BUTTON);
+    pollButton(Z_BUTTON_DOWN, DOWN_BUTTON);
+    pollButton(Z_BUTTON_LEFT, LEFT_BUTTON);
+    pollButton(Z_BUTTON_RIGHT, RIGHT_BUTTON);
+    pollButton(Z_BUTTON_A, A_BUTTON);
+    pollButton(Z_BUTTON_B, B_BUTTON);
 }
 
 void z_platform_draw(void)

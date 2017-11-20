@@ -32,11 +32,6 @@ void z_loop_title_init(void)
     g_blink = true;
 }
 
-void z_loop_title_free(void)
-{
-    //
-}
-
 void z_loop_title_tick(void)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick);

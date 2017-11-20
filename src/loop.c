@@ -17,6 +17,7 @@
 
 #include "platform.h"
 #include "loop.h"
+#include "loop_died.h"
 #include "loop_game.h"
 #include "loop_over.h"
 #include "loop_title.h"
@@ -28,33 +29,34 @@
 
 typedef struct {
     ZStateCallback* init;
-    ZStateCallback* free;
     ZStateCallback* tick;
     ZStateCallback* draw;
 } ZState;
 
 static ZState g_states[Z_STATE_NUM] = {
     {
+        z_loop_died_init,
+        z_loop_died_tick,
+        z_loop_died_draw
+    },
+    {
         z_loop_game_init,
-        z_loop_game_free,
         z_loop_game_tick,
         z_loop_game_draw
     },
     {
         z_loop_over_init,
-        z_loop_over_free,
         z_loop_over_tick,
         z_loop_over_draw
     },
     {
         z_loop_title_init,
-        z_loop_title_free,
         z_loop_title_tick,
         z_loop_title_draw
     },
 };
 
-static uint8_t g_state = Z_STATE_NUM;
+static uint8_t g_state;
 
 void z_loop_setup(void)
 {
@@ -82,10 +84,6 @@ void z_loop_draw(void)
 
 void z_loop_setState(uint8_t State)
 {
-    if(g_state < Z_STATE_NUM) {
-        g_states[g_state].free();
-    }
-
     g_state = State;
     g_states[g_state].init();
 }

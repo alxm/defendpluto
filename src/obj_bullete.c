@@ -60,7 +60,7 @@ bool z_bullete_tick(ZPoolObject* Bullet)
                                      z_player.h);
 
     if(hit) {
-        z_player_takeDamage(256);
+        z_player_takeDamage(Z_SHIELD_DAMAGE_SHOT);
         z_screen_shake(Z_FPS / 15);
 
         for(int8_t i = 4; i--; ) {

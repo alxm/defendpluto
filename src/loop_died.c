@@ -34,18 +34,14 @@
 #include "obj_player.h"
 #include "obj_star.h"
 
-void z_loop_game_init(void)
+void z_loop_died_init(void)
 {
-    z_pool_reset();
-    z_screen_reset();
-    z_vm_reset();
-    z_player_init(Z_WIDTH / 2, Z_HEIGHT * 2 / 3);
+    //
 }
 
-void z_loop_game_tick(void)
+void z_loop_died_tick(void)
 {
     z_vm_tick();
-    z_player_tick();
     z_player_hudTick();
     z_pool_tick(Z_POOL_STAR, z_star_tick);
     z_pool_tick(Z_POOL_BULLETE, z_bullete_tick);
@@ -56,12 +52,32 @@ void z_loop_game_tick(void)
     z_screen_tick();
     z_star_spawn();
 
-    if(z_player.health < 0) {
-        z_loop_setState(Z_STATE_DIED);
+    if(z_player.health-- < -3 * Z_FPS) {
+        z_button_release(Z_BUTTON_A);
+        z_loop_setState(Z_STATE_OVER);
+    }
+
+    z_screen_shake(1);
+
+    if(z_random_uint8(4) == 0) {
+        ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
+
+        if(c) {
+            int8_t x = i8(z_fix_fixtoi(z_player.x) - 1 + z_random_int8(3));
+            int8_t y = i8(z_fix_fixtoi(z_player.y) - 1 + z_random_int8(3));
+
+            z_circle_init(c, x, y);
+        }
+    } else {
+        ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
+
+        if(p) {
+            z_particle_init(p, z_player.x, z_player.y);
+        }
     }
 }
 
-void z_loop_game_draw(void)
+void z_loop_died_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
@@ -70,6 +86,5 @@ void z_loop_game_draw(void)
     z_pool_draw(Z_POOL_ENEMY, z_enemy_draw);
     z_pool_draw(Z_POOL_CIRCLE, z_circle_draw);
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
-    z_player_draw();
     z_player_hudDraw();
 }

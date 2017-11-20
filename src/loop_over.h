@@ -16,6 +16,5 @@
 */
 
 extern ZStateCallback z_loop_over_init;
-extern ZStateCallback z_loop_over_free;
 extern ZStateCallback z_loop_over_tick;
 extern ZStateCallback z_loop_over_draw;

@@ -16,6 +16,5 @@
 */
 
 extern ZStateCallback z_loop_game_init;
-extern ZStateCallback z_loop_game_free;
 extern ZStateCallback z_loop_game_tick;
 extern ZStateCallback z_loop_game_draw;
