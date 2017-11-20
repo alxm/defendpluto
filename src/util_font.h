@@ -21,21 +21,9 @@ typedef enum {
     Z_FONT_FACE_INVALID = -1,
     Z_FONT_FACE_NUMBERS,
     Z_FONT_FACE_ALPHANUM,
+    Z_FONT_FACE_ALPHANUM_OUTLINE,
     Z_FONT_FACE_NUM
 } ZFontFace;
-
-typedef enum {
-    Z_FONT_FLAG_NUMERIC = 0x1,
-    Z_FONT_FLAG_ALPHA_L = 0x2,
-    Z_FONT_FLAG_ALPHA_U = 0x4,
-} ZFontFlag;
-
-typedef struct {
-    ZSprite sprites;
-    uint8_t flags;
-} ZFont;
-
-extern ZFont z_fonts[Z_FONT_FACE_NUM];
 
 extern void z_font_setup(void);
 

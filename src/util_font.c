@@ -21,13 +21,24 @@
 #include "data_gfx_font_num.h"
 #include "data_gfx_font_alphanum.h"
 
-ZFont z_fonts[Z_FONT_FACE_NUM];
+typedef enum {
+    Z_FONT_FLAG_NUMERIC = 0x1,
+    Z_FONT_FLAG_ALPHA_L = 0x2,
+    Z_FONT_FLAG_ALPHA_U = 0x4,
+} ZFontFlag;
+
+typedef struct {
+    ZSprite sprites;
+    uint8_t flags;
+} ZFont;
+
+ZFont g_fonts[Z_FONT_FACE_NUM];
 
 void z_font_setup(void)
 {
     #define loadFont(Index, Id, Flags)              \
-        z_sprite_load(&z_fonts[Index].sprites, Id); \
-        z_fonts[Index].flags = Flags;
+        z_sprite_load(&g_fonts[Index].sprites, Id); \
+        g_fonts[Index].flags = Flags;
 
     loadFont(Z_FONT_FACE_NUMBERS, font_num, Z_FONT_FLAG_NUMERIC);
     loadFont(Z_FONT_FACE_ALPHANUM,
@@ -35,12 +46,17 @@ void z_font_setup(void)
              Z_FONT_FLAG_NUMERIC
            | Z_FONT_FLAG_ALPHA_U
            | Z_FONT_FLAG_ALPHA_L);
+    loadFont(Z_FONT_FACE_ALPHANUM_OUTLINE,
+             font_alphanum_outline,
+             Z_FONT_FLAG_NUMERIC
+           | Z_FONT_FLAG_ALPHA_U
+           | Z_FONT_FLAG_ALPHA_L);
 }
 
 void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font)
 {
-    uint8_t flags = z_fonts[Font].flags;
-    ZSprite* sprite = &z_fonts[Font].sprites;
+    uint8_t flags = g_fonts[Font].flags;
+    ZSprite* sprite = &g_fonts[Font].sprites;
 
     while(*Text != '\0') {
         char c = *Text;
