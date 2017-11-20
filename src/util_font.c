@@ -20,6 +20,7 @@
 #include "util_graphics.h"
 #include "data_gfx_font_num.h"
 #include "data_gfx_font_alphanum.h"
+#include "data_gfx_font_alphanum_outline.h"
 
 typedef enum {
     Z_FONT_FLAG_NUMERIC = 0x1,
