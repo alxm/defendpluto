@@ -24,10 +24,18 @@
 
 extern Arduboy2Base g_arduboy;
 
+#define buttonFields(Prefix)   \
+    bool Prefix##Pressed : 1;  \
+    bool Prefix##Released : 1;
+
 static struct {
-    bool pressed : 1;
-    bool released : 1;
-} g_buttons[Z_BUTTON_NUM];
+    buttonFields(up)
+    buttonFields(down)
+    buttonFields(left)
+    buttonFields(right)
+    buttonFields(a)
+    buttonFields(b)
+} g_buttons;
 
 void z_platform_setup(void)
 {
@@ -43,27 +51,27 @@ void z_platform_setup(void)
     #endif
 }
 
-static void pollButton(uint8_t Button, uint8_t Code)
-{
-    bool pressed = g_arduboy.pressed(Code);
-
-    if(g_buttons[Button].released) {
-        if(!pressed) {
-            g_buttons[Button].released = false;
-        }
-    } else {
-        g_buttons[Button].pressed = pressed;
-    }
-}
-
 void z_platform_tick(void)
 {
-    pollButton(Z_BUTTON_UP, UP_BUTTON);
-    pollButton(Z_BUTTON_DOWN, DOWN_BUTTON);
-    pollButton(Z_BUTTON_LEFT, LEFT_BUTTON);
-    pollButton(Z_BUTTON_RIGHT, RIGHT_BUTTON);
-    pollButton(Z_BUTTON_A, A_BUTTON);
-    pollButton(Z_BUTTON_B, B_BUTTON);
+    #define pollButton(Prefix, Code)                \
+    {                                               \
+        bool pressed = g_arduboy.pressed(Code);     \
+                                                    \
+        if(g_buttons.Prefix##Released) {            \
+            if(!pressed) {                          \
+                g_buttons.Prefix##Released = false; \
+            }                                       \
+        } else {                                    \
+            g_buttons.Prefix##Pressed = pressed;    \
+        }                                           \
+    }
+
+    pollButton(up, UP_BUTTON);
+    pollButton(down, DOWN_BUTTON);
+    pollButton(left, LEFT_BUTTON);
+    pollButton(right, RIGHT_BUTTON);
+    pollButton(a, A_BUTTON);
+    pollButton(b, B_BUTTON);
 }
 
 void z_platform_draw(void)
@@ -96,13 +104,43 @@ bool z_fps_isNthFrame(uint8_t N)
 
 bool z_button_pressed(uint8_t Button)
 {
-    return g_buttons[Button].pressed;
+    #define buttonCase(Id, Prefix)            \
+        case Id:                              \
+            return g_buttons.Prefix##Pressed; \
+
+    switch(Button) {
+        buttonCase(Z_BUTTON_UP, up)
+        buttonCase(Z_BUTTON_DOWN, down)
+        buttonCase(Z_BUTTON_LEFT, left)
+        buttonCase(Z_BUTTON_RIGHT, right)
+        buttonCase(Z_BUTTON_A, a)
+        buttonCase(Z_BUTTON_B, b)
+
+        default:
+            return false;
+    }
+
+    #undef buttonCase
 }
 
 void z_button_release(uint8_t Button)
 {
-    g_buttons[Button].pressed = false;
-    g_buttons[Button].released = true;
+    #define buttonCase(Id, Prefix)             \
+        case Id:                               \
+            g_buttons.Prefix##Pressed = false; \
+            g_buttons.Prefix##Released = true; \
+            break;
+
+    switch(Button) {
+        buttonCase(Z_BUTTON_UP, up)
+        buttonCase(Z_BUTTON_DOWN, down)
+        buttonCase(Z_BUTTON_LEFT, left)
+        buttonCase(Z_BUTTON_RIGHT, right)
+        buttonCase(Z_BUTTON_A, a)
+        buttonCase(Z_BUTTON_B, b)
+    }
+
+    #undef buttonCase
 }
 
 void z_draw_fill(uint8_t Color)
