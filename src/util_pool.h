@@ -29,7 +29,7 @@ typedef enum {
 typedef struct ZPool ZPool;
 
 typedef struct {
-    void* next;
+    ZPoolOffset nextOffset;
 } ZPoolObject;
 
 extern void z_pool_setup(void);

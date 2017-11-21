@@ -37,11 +37,13 @@
     #endif
     #define Z_PGM_READ_UINT8(Value) pgm_read_byte(&Value)
     #define Z_PGM_READ_UINT16(Value) pgm_read_word(&Value)
+    typedef uint8_t ZPoolOffset;
 #else
     #include <a2x.h>
     #define PROGMEM
     #define Z_PGM_READ_UINT8(Value) (Value)
     #define Z_PGM_READ_UINT16(Value) (Value)
+    typedef size_t ZPoolOffset;
 #endif
 
 typedef int16_t ZFix;
@@ -52,6 +54,7 @@ typedef int16_t ZFix;
 #define u8(X) (uint8_t)(X)
 #define u16(X) (uint16_t)(X)
 #define zf(X) (ZFix)(X)
+#define zpo(X) (ZPoolOffset)(X)
 
 Z_EXTERN_C_START
 
