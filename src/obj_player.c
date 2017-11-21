@@ -46,7 +46,7 @@ static bool useShield(uint8_t Damage)
     bool protected = z_player.shield >= Damage;
 
     if(protected) {
-        z_player.shield = u8(z_player.shield - Damage);
+        z_player.shield = u4(z_player.shield - Damage);
     } else {
         z_player.shield = 0;
     }
@@ -61,7 +61,7 @@ static bool useShield(uint8_t Damage)
 static void boostShield(uint8_t Boost)
 {
     if(Z_SHIELD_MAX - z_player.shield > Boost) {
-        z_player.shield = u8(z_player.shield + Boost);
+        z_player.shield = u4(z_player.shield + Boost);
     } else {
         z_player.shield = Z_SHIELD_MAX;
     }
