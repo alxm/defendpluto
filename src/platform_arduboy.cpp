@@ -163,10 +163,14 @@ void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
     g_arduboy.drawCircle(X, Y, Radius, Color ? WHITE : BLACK);
 }
 
-void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Image, const uint8_t* Mask, uint8_t NumFrames)
+void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Buffer, uint8_t NumFrames)
 {
-    Sprite->image = Image;
-    Sprite->mask = Mask;
+    Sprite->image = Buffer;
+    Sprite->mask = Buffer
+                    + 2
+                    + NumFrames
+                        * z_sprite_getWidth(Sprite)
+                        * ((z_sprite_getHeight(Sprite) + 7) / 8);
     Sprite->numFrames = NumFrames;
 }
 

@@ -90,7 +90,8 @@ def main(PaletteName, ImageName, UniqueName):
     palette = Palette(PaletteName)
     sheet = Sheet(ImageName, palette)
 
-    spriteBytes = [sheet.frameWidth, sheet.frameHeight]
+    dimBytes = [sheet.frameWidth, sheet.frameHeight]
+    spriteBytes = []
     maskBytes = []
     numFrames = 0
 
@@ -117,19 +118,22 @@ def main(PaletteName, ImageName, UniqueName):
 
 #ifdef ARDUINO
 
-static const uint8_t z_data_gfx_{0}_frames = {3};
+static const uint8_t z_data_gfx_{name}_frames = {numFrames};
 
-PROGMEM static const uint8_t z_data_gfx_{0}_buffer[] = {{{1}
-}};
+PROGMEM static const uint8_t z_data_gfx_{name}_buffer[] = {{
+    // Frame dimension{dimBytes}
 
-PROGMEM static const uint8_t z_data_gfx_{0}_mask[] = {{{2}
+    // Image frames{spriteBytes}
+
+    // Mask frames{maskBytes}
 }};
 
 #endif\
-""".format(UniqueName,
-           formatBytes(spriteBytes),
-           formatBytes(maskBytes),
-           numFrames)
+""".format(name = UniqueName,
+           dimBytes = formatBytes(dimBytes),
+           spriteBytes = formatBytes(spriteBytes),
+           maskBytes = formatBytes(maskBytes),
+           numFrames = numFrames)
 
     print(contents)
 

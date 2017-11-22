@@ -80,10 +80,9 @@ typedef enum {
     #define z_sprite_load(Sprite, Id)                    \
         z_platform__loadSprite(Sprite,                   \
                                z_data_gfx_##Id##_buffer, \
-                               z_data_gfx_##Id##_mask,   \
                                z_data_gfx_##Id##_frames);
 
-    extern void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Image, const uint8_t* Mask, uint8_t NumFrames);
+    extern void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Buffer, uint8_t NumFrames);
 #else
     typedef struct {
         ASpriteFrames* frames[Z_PALETTE_NUM];
