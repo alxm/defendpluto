@@ -15,6 +15,10 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifdef ARDUINO_AVR_LEONARDO
+    #define Z_PLATFORM_ARDUBOY 1
+#endif
+
 #define Z_DEBUG_GENERATE_LUT 0
 #define Z_DEBUG_STATS 0
 #define Z_DEBUG_INVINCIBLE 0
@@ -32,8 +36,10 @@
     #include <stdbool.h>
     #include <stdint.h>
     #include <Arduino.h>
-    #ifdef __cplusplus
-        #include <Arduboy2.h>
+    #if Z_PLATFORM_ARDUBOY
+        #ifdef __cplusplus
+            #include <Arduboy2.h>
+        #endif
     #endif
     #define Z_PGM_READ_UINT8(Value) pgm_read_byte(Value)
     #define Z_PGM_READ_UINT16(Value) pgm_read_word(Value)
@@ -70,7 +76,7 @@ typedef enum {
 #define Z_UNUSED(X) (X = X)
 #define Z_ARRAY_LEN(A) (sizeof(A) / sizeof(A[0]))
 
-#ifdef ARDUINO
+#if Z_PLATFORM_ARDUBOY
     typedef struct {
         const uint8_t* image;
         const uint8_t* mask;
