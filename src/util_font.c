@@ -55,39 +55,43 @@ void z_font_setup(void)
            | Z_FONT_FLAG_ALPHA_L);
 }
 
+static int8_t drawChar(char Char, int8_t X, int8_t Y, uint8_t Flags, ZSprite* Sprite, int8_t Width)
+{
+    char frame = 0;
+
+    if(Char >= 48 && Char < 58) {
+        if(Flags & Z_FONT_FLAG_NUMERIC) {
+            // numbers
+            frame = (char)(1 + Char - 48);
+        }
+    } else if(Char >= 65 && Char < 91) {
+        if(Flags & Z_FONT_FLAG_ALPHA_U) {
+            // uppercase
+            frame = (char)(1 + 10 + Char - 65);
+        }
+    } else if(Char >= 97 && Char < 123) {
+        if(Flags & Z_FONT_FLAG_ALPHA_L) {
+            // lowercase
+            frame = (char)(1 + 10 + 26 + Char - 97);
+        } else if(Flags & Z_FONT_FLAG_ALPHA_U) {
+            // fallback to uppercase
+            frame = (char)(1 + 10 + Char - 97);
+        }
+    }
+
+    z_sprite_blit(Sprite, X, Y, u8(frame));
+
+    return i8(X + Width + 1);
+}
+
 void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font)
 {
     uint8_t flags = g_fonts[Font].flags;
     ZSprite* sprite = &g_fonts[Font].sprites;
+    int8_t width = z_sprite_getWidth(sprite);
 
-    while(*Text != '\0') {
-        char c = *Text;
-        char frame = 0;
-
-        if(c >= 48 && c < 58) {
-            if(flags & Z_FONT_FLAG_NUMERIC) {
-                // numbers
-                frame = (char)(1 + c - 48);
-            }
-        } else if(c >= 65 && c < 91) {
-            if(flags & Z_FONT_FLAG_ALPHA_U) {
-                // uppercase
-                frame = (char)(1 + 10 + c - 65);
-            }
-        } else if(c >= 97 && c < 123) {
-            if(flags & Z_FONT_FLAG_ALPHA_L) {
-                // lowercase
-                frame = (char)(1 + 10 + 26 + c - 97);
-            } else if(flags & Z_FONT_FLAG_ALPHA_U) {
-                // fallback to uppercase
-                frame = (char)(1 + 10 + c - 97);
-            }
-        }
-
-        z_sprite_blit(sprite, X, Y, u8(frame));
-        X = i8(X + z_sprite_getWidth(sprite) + 1);
-
-        Text++;
+    for(char c = *Text; c != '\0'; c = *++Text) {
+        X = drawChar(c, X, Y, flags, sprite, width);
     }
 }
 
@@ -95,36 +99,11 @@ void z_font_textp(uint8_t StringId, int8_t X, int8_t Y, uint8_t Font)
 {
     uint8_t flags = g_fonts[Font].flags;
     ZSprite* sprite = &g_fonts[Font].sprites;
-    const char* text = z_strings[StringId];
+    int8_t width = z_sprite_getWidth(sprite);
+    const char* s = z_strings[StringId];
 
-    for(char c = Z_PGM_READ_UINT8(text);
-        c != '\0';
-        c = Z_PGM_READ_UINT8(++text)) {
-
-        char frame = 0;
-
-        if(c >= 48 && c < 58) {
-            if(flags & Z_FONT_FLAG_NUMERIC) {
-                // numbers
-                frame = (char)(1 + c - 48);
-            }
-        } else if(c >= 65 && c < 91) {
-            if(flags & Z_FONT_FLAG_ALPHA_U) {
-                // uppercase
-                frame = (char)(1 + 10 + c - 65);
-            }
-        } else if(c >= 97 && c < 123) {
-            if(flags & Z_FONT_FLAG_ALPHA_L) {
-                // lowercase
-                frame = (char)(1 + 10 + 26 + c - 97);
-            } else if(flags & Z_FONT_FLAG_ALPHA_U) {
-                // fallback to uppercase
-                frame = (char)(1 + 10 + c - 97);
-            }
-        }
-
-        z_sprite_blit(sprite, X, Y, u8(frame));
-        X = i8(X + z_sprite_getWidth(sprite) + 1);
+    for(char c = Z_PGM_READ_UINT8(s); c != '\0'; c = Z_PGM_READ_UINT8(++s)) {
+        X = drawChar(c, X, Y, flags, sprite, width);
     }
 }
 
