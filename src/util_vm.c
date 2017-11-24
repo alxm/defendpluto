@@ -19,6 +19,7 @@
 #include "util_enemy.h"
 #include "util_fix.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "util_vm.h"
 #include "obj_enemy.h"
 #include "data_levels.h"
@@ -248,6 +249,9 @@ static bool op_spawn(uint8_t Flags)
     if(e == NULL) {
         return false;
     }
+
+    x = i8((Z_WIDTH - 1) * x / 100);
+    y = i8((Z_HEIGHT - 1) * y / 100);
 
     z_enemy_init(e, x, y, type_id, drop_id);
 
