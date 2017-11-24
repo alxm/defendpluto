@@ -30,17 +30,18 @@ static void fly_line(ZEnemy* Enemy)
 
 static void fly_zigzag(ZEnemy* Enemy)
 {
-    bool expired = false;
+    bool expired = Enemy->fly.counter == 0;
 
-    if(Enemy->fly.counter-- == 0) {
-        Enemy->fly.counter = u8(Z_FPS + Enemy->fly.mod.delay * Z_FPS / 10);
-        expired = true;
+    if(expired) {
+        Enemy->fly.counter = Z_FPS;
+    } else {
+        Enemy->fly.counter--;
     }
 
     switch(Enemy->fly.state) {
         case 0: {
             if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 8) {
-                if(Enemy->fly.mod.flipX) {
+                if(Enemy->fly.flipX) {
                     Enemy->angle = Z_ANGLE_225;
                 } else {
                     Enemy->angle = Z_ANGLE_315;
@@ -64,17 +65,19 @@ static void fly_zigzag(ZEnemy* Enemy)
 
 static void fly_curve(ZEnemy* Enemy)
 {
-    bool expired = false;
-    int8_t angleInc = 0;
+    bool expired = Enemy->fly.counter == 0;
 
-    if(Enemy->fly.counter-- == 0) {
-        Enemy->fly.counter = u8(4 * Enemy->fly.mod.delay);
-        expired = true;
+    if(expired) {
+        Enemy->fly.counter = 1;
+    } else {
+        Enemy->fly.counter--;
     }
+
+    int8_t angleInc = 0;
 
     switch(Enemy->fly.state) {
         case 0: {
-            if(Enemy->fly.mod.flipX) {
+            if(Enemy->fly.flipX) {
                 angleInc = -1;
                 Enemy->fly.state = 1;
             } else {

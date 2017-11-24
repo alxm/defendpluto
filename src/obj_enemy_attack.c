@@ -33,7 +33,11 @@ static void attack_none(ZEnemy* Enemy)
 
 static void attack_random(ZEnemy* Enemy)
 {
-    if(Enemy->attack.counter-- > 0) {
+    if(Enemy->attack.counter > 0) {
+        if(z_fps_isNthFrame(2)) {
+            Enemy->attack.counter--;
+        }
+
         return;
     }
 
@@ -46,7 +50,7 @@ static void attack_random(ZEnemy* Enemy)
                        Z_ANGLE_270,
                        false);
 
-        Enemy->attack.counter = 1 * Z_FPS;
+        Enemy->attack.counter = Z_FPS / 2;
     } else {
         Enemy->attack.counter = 0;
     }
@@ -54,7 +58,11 @@ static void attack_random(ZEnemy* Enemy)
 
 static void attack_target(ZEnemy* Enemy)
 {
-    if(Enemy->attack.counter-- > 0) {
+    if(Enemy->attack.counter > 0) {
+        if(z_fps_isNthFrame(2)) {
+            Enemy->attack.counter--;
+        }
+
         return;
     }
 
@@ -67,7 +75,7 @@ static void attack_target(ZEnemy* Enemy)
                        z_fix_atan(Enemy->x, Enemy->y, z_player.x, z_player.y),
                        false);
 
-        Enemy->attack.counter = 1 * Z_FPS;
+        Enemy->attack.counter = Z_FPS / 2;
     } else {
         Enemy->attack.counter = 0;
     }

@@ -41,16 +41,13 @@ typedef struct {
     struct {
         uint8_t id : 4;
         uint8_t state : 4;
-        struct {
-            uint8_t delay : 6;
-            uint8_t flipX : 1;
-            uint8_t flipY : 1;
-        } mod;
-        uint8_t counter;
+        uint8_t flipX : 1;
+        uint8_t flipY : 1;
+        uint8_t counter : 6;
     } fly;
     struct {
-        uint8_t id;
-        uint8_t counter;
+        uint8_t id : 4;
+        uint8_t counter : 4;
     } attack;
 } ZEnemy;
 

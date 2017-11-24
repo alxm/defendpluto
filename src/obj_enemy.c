@@ -46,9 +46,8 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t Dro
 
     Enemy->fly.id = Z_FLY_LINE;
     Enemy->fly.state = 0;
-    Enemy->fly.mod.delay = 0;
-    Enemy->fly.mod.flipX = 0;
-    Enemy->fly.mod.flipY = 0;
+    Enemy->fly.flipX = 0;
+    Enemy->fly.flipY = 0;
     Enemy->fly.counter = 0;
 
     Enemy->attack.id = Z_ATTACK_NONE;
