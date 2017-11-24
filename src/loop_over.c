@@ -23,6 +23,7 @@
 #include "util_input.h"
 #include "util_pool.h"
 #include "util_screen.h"
+#include "util_str.h"
 #include "obj_star.h"
 
 static bool g_blink;
@@ -52,11 +53,11 @@ void z_loop_over_draw(void)
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
 
-    z_font_text("Pluto fell to the", 4, 4, Z_FONT_FACE_ALPHANUM);
-    z_font_text("Proxima Centauri", 4, 14, Z_FONT_FACE_ALPHANUM);
-    z_font_text("invaders", 4, 24, Z_FONT_FACE_ALPHANUM);
+    z_font_textp(Z_STR_END1, 4, 4, Z_FONT_FACE_ALPHANUM);
+    z_font_textp(Z_STR_END2, 4, 14, Z_FONT_FACE_ALPHANUM);
+    z_font_textp(Z_STR_END3, 4, 24, Z_FONT_FACE_ALPHANUM);
 
     if(g_blink) {
-        z_font_text("Press FIRE to go on", 4, 44, Z_FONT_FACE_ALPHANUM);
+        z_font_textp(Z_STR_PRESS_FIRE2, 4, 44, Z_FONT_FACE_ALPHANUM);
     }
 }

@@ -25,6 +25,7 @@
 #include "util_font.h"
 #include "util_graphics.h"
 #include "util_pool.h"
+#include "util_str.h"
 #include "util_vm.h"
 
 typedef struct {
@@ -65,6 +66,7 @@ void z_loop_setup(void)
     z_font_setup();
     z_graphics_setup();
     z_pool_setup();
+    z_str_setup();
     z_vm_setup();
 
     z_loop_setState(Z_STATE_TITLE);

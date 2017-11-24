@@ -15,20 +15,16 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-Z_EXTERN_C_START
-
 typedef enum {
-    Z_FONT_FACE_INVALID = -1,
-    Z_FONT_FACE_NUMBERS,
-    Z_FONT_FACE_ALPHANUM,
-    Z_FONT_FACE_ALPHANUM_OUTLINE,
-    Z_FONT_FACE_NUM
-} ZFontFace;
+    Z_STR_INVALID = -1,
+    Z_STR_PRESS_FIRE1,
+    Z_STR_PRESS_FIRE2,
+    Z_STR_END1,
+    Z_STR_END2,
+    Z_STR_END3,
+    Z_STR_NUM
+} ZStringId;
 
-extern void z_font_setup(void);
+extern const char* z_strings[Z_STR_NUM];
 
-extern void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font);
-extern void z_font_textp(uint8_t StringId, int8_t X, int8_t Y, uint8_t Font);
-extern void z_font_int(int16_t Number, int8_t X, int8_t Y, uint8_t Font);
-
-Z_EXTERN_C_END
+extern void z_str_setup(void);

@@ -55,7 +55,7 @@ static struct {
     int8_t vars[Z_LEVELS_VARS_NUM];
 } g_vm;
 
-#define Z__READ(Offset) Z_PGM_READ_UINT8(z_data_levels[g_vm.pc + Offset])
+#define Z__READ(Offset) Z_PGM_READ_UINT8(z_data_levels + g_vm.pc + Offset)
 
 #define Z__CHECKVAR(Type, CVar, ArgIndex) \
     if(Flags & (1 << ArgIndex)) {         \

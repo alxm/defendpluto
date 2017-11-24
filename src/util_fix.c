@@ -82,7 +82,7 @@ uint8_t z_fix_atan(ZFix X1, ZFix Y1, ZFix X2, ZFix Y2)
     }
 
     const ZFix ratio = z_fix_div(z_fix_min(dx, dy), z_fix_max(dx, dy));
-    const uint8_t cachedAngle = Z_PGM_READ_UINT8(g_atanAngles[ratio]);
+    const uint8_t cachedAngle = Z_PGM_READ_UINT8(g_atanAngles + ratio);
 
     if(dy < dx) {
         if(X2 >= X1) {

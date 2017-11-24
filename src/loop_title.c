@@ -23,6 +23,7 @@
 #include "util_input.h"
 #include "util_pool.h"
 #include "util_screen.h"
+#include "util_str.h"
 #include "obj_star.h"
 
 static bool g_blink;
@@ -54,6 +55,6 @@ void z_loop_title_draw(void)
     z_sprite_blit(&z_graphics.title, 0, 0, 0);
 
     if(g_blink) {
-        z_font_text("Press FIRE", 24, 41, Z_FONT_FACE_ALPHANUM_OUTLINE);
+        z_font_textp(Z_STR_PRESS_FIRE1, 24, 41, Z_FONT_FACE_ALPHANUM_OUTLINE);
     }
 }

@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_font.h"
 #include "util_graphics.h"
+#include "util_str.h"
 #include "data_gfx_font_num.h"
 #include "data_gfx_font_alphanum.h"
 #include "data_gfx_font_alphanum_outline.h"
@@ -87,6 +88,43 @@ void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font)
         X = i8(X + z_sprite_getWidth(sprite) + 1);
 
         Text++;
+    }
+}
+
+void z_font_textp(uint8_t StringId, int8_t X, int8_t Y, uint8_t Font)
+{
+    uint8_t flags = g_fonts[Font].flags;
+    ZSprite* sprite = &g_fonts[Font].sprites;
+    const char* text = z_strings[StringId];
+
+    for(char c = Z_PGM_READ_UINT8(text);
+        c != '\0';
+        c = Z_PGM_READ_UINT8(++text)) {
+
+        char frame = 0;
+
+        if(c >= 48 && c < 58) {
+            if(flags & Z_FONT_FLAG_NUMERIC) {
+                // numbers
+                frame = (char)(1 + c - 48);
+            }
+        } else if(c >= 65 && c < 91) {
+            if(flags & Z_FONT_FLAG_ALPHA_U) {
+                // uppercase
+                frame = (char)(1 + 10 + c - 65);
+            }
+        } else if(c >= 97 && c < 123) {
+            if(flags & Z_FONT_FLAG_ALPHA_L) {
+                // lowercase
+                frame = (char)(1 + 10 + 26 + c - 97);
+            } else if(flags & Z_FONT_FLAG_ALPHA_U) {
+                // fallback to uppercase
+                frame = (char)(1 + 10 + c - 97);
+            }
+        }
+
+        z_sprite_blit(sprite, X, Y, u8(frame));
+        X = i8(X + z_sprite_getWidth(sprite) + 1);
     }
 }
 
