@@ -7,7 +7,7 @@ var x
 set x 0
 
 loop 5
-    spawn x 0 asteroid
+    spawn x -1 asteroid
     inc x 25
 end
 

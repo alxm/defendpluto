@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_enemy.h"
 #include "util_fix.h"
+#include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_vm.h"
@@ -238,8 +239,15 @@ static bool op_spawn(uint8_t Flags)
         return false;
     }
 
-    x = i8((Z_WIDTH - 1) * x / 100);
-    y = i8((Z_HEIGHT - 1) * y / 100);
+    x = i8((Z_WIDTH - 1) * z_int8_clamp(x, 0, 100) / 100);
+
+    if(y < 0) {
+        y = i8(-z_sprite_getHeight(&z_enemyData[type_id].sprite) / 2);
+    } else if(y > 100) {
+        y = i8(Z_HEIGHT + z_sprite_getHeight(&z_enemyData[type_id].sprite) / 2);
+    } else {
+        y = i8((Z_HEIGHT - 1) * y / 100);
+    }
 
     z_enemy_init(e, x, y, type_id, drop_id);
 
