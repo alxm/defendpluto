@@ -88,8 +88,8 @@ static bool op_over(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b   8b
-     * over flags
+     * 8b
+     * over
      * over
      */
     z_vm_reset();
@@ -99,8 +99,6 @@ static bool op_over(uint8_t Flags)
 
 static bool op_set(uint8_t Flags)
 {
-    Z_UNUSED(Flags);
-
     /*
      * 8b  8b    8b     8b
      * set flags var_id value
@@ -118,8 +116,6 @@ static bool op_set(uint8_t Flags)
 
 static bool op_inc(uint8_t Flags)
 {
-    Z_UNUSED(Flags);
-
     /*
      * 8b  8b    8b     8b
      * inc flags var_id value
@@ -137,8 +133,6 @@ static bool op_inc(uint8_t Flags)
 
 static bool op_flip(uint8_t Flags)
 {
-    Z_UNUSED(Flags);
-
     /*
      * 8b   8b    8b
      * flip flags var_id
@@ -154,8 +148,6 @@ static bool op_flip(uint8_t Flags)
 
 static bool op_loop(uint8_t Flags)
 {
-    Z_UNUSED(Flags);
-
     /*
      * 8b   8b    8b
      * loop flags num_times
@@ -188,8 +180,8 @@ static bool op_end(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b  8b
-     * end flags
+     * 8b
+     * end
      * end
      */
     if(--g_vm.loopStack[g_vm.loopIndex].counter) {
@@ -204,8 +196,6 @@ static bool op_end(uint8_t Flags)
 
 static bool op_wait(uint8_t Flags)
 {
-    Z_UNUSED(Flags);
-
     /*
      * 8b   8b    8b
      * wait flags frames
@@ -221,8 +211,8 @@ static bool op_waitclear(uint8_t Flags)
     Z_UNUSED(Flags);
 
     /*
-     * 8b        8b
-     * waitclear flags
+     * 8b
+     * waitclear
      * waitclear
      */
     return z_pool_noActive(Z_POOL_ENEMY);
@@ -230,8 +220,6 @@ static bool op_waitclear(uint8_t Flags)
 
 static bool op_spawn(uint8_t Flags)
 {
-    Z_UNUSED(Flags);
-
     /*
      * 8b    8b    8b      8b      4b      4b
      * spawn flags x_coord y_coord type_id drop_id
