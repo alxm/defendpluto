@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_enemy.h"
 #include "util_fix.h"
+#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
@@ -199,10 +200,13 @@ static bool op_wait(uint8_t Flags)
 {
     /*
      * 8b   8b    8b
-     * wait flags frames
-     * wait       30
+     * wait flags ds
+     * wait       25
      */
-    Z_READ_ARGU8(g_vm.block, 0, 0);
+    uint8_t ds;
+    Z_READ_ARGU8(ds, 0, 0);
+
+    g_vm.block = u8(Z_FPS * ds / 10);
 
     return true;
 }

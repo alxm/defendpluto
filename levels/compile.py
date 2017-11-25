@@ -137,12 +137,12 @@ class OpWait(Op):
     def custom_compile(self, Compiler, Args, Bytecode):
         #
         # 8b
-        # frames
-        # 30
+        # ds
+        # 25
         #
-        frames = Compiler.checkArg(Bytecode, Args, 0, 0, 255)
+        ds = Compiler.checkArg(Bytecode, Args, 0, 0, 50)
 
-        Bytecode.append(frames)
+        Bytecode.append(ds)
 
         return Bytecode
 
