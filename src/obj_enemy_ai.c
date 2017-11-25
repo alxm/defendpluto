@@ -30,32 +30,52 @@ static void ai_asteroid(ZEnemy* Enemy)
 
 static void ai_ship0(ZEnemy* Enemy)
 {
-    if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 4) {
-        Enemy->fly.id = Z_FLY_ZIGZAG;
-        Enemy->attack.id = Z_ATTACK_RANDOM;
+    switch(Enemy->state) {
+        case 0: {
+            if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 4) {
+                z_enemy_setFly(Enemy, Z_FLY_ZIGZAG);
+                z_enemy_setAttack(Enemy, Z_ATTACK_RANDOM);
+                Enemy->state = 1;
+            }
+        } break;
     }
 }
 
 static void ai_ship1(ZEnemy* Enemy)
 {
-    Enemy->fly.id = Z_FLY_CURVE;
-    Enemy->attack.id = Z_ATTACK_RANDOM;
+    switch(Enemy->state) {
+        case 0: {
+            if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 4) {
+                z_enemy_setFly(Enemy, Z_FLY_CURVE);
+                z_enemy_setAttack(Enemy, Z_ATTACK_RANDOM);
+                Enemy->state = 1;
+            }
+        } break;
+    }
 }
 
 static void ai_ship2(ZEnemy* Enemy)
 {
-    if(z_fps_isNthFrame(2 * Z_FPS)) {
-        if(Enemy->fly.id == Z_FLY_LINE) {
+    if(!z_fps_isNthFrame(2 * Z_FPS)) {
+        return;
+    }
+
+    switch(Enemy->state) {
+        case 0: {
             Enemy->fly.id = Z_FLY_ZIGZAG;
             Enemy->attack.id = Z_ATTACK_TARGET;
-        } else {
+            Enemy->state = 1;
+        } break;
+
+        case 1: {
             Enemy->fly.id = Z_FLY_LINE;
             Enemy->attack.id = Z_ATTACK_RANDOM;
-        }
+            Enemy->state = 0;
+        } break;
     }
 }
 
-ZEnemyCallback z_enemy__ai[Z_ENEMY_NUM] = {
+ZEnemyCallback z_enemy_aiTable[Z_ENEMY_NUM] = {
     ai_asteroid,
     ai_ship0,
     ai_ship1,

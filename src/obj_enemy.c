@@ -43,15 +43,10 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t Dro
     Enemy->jetFlicker = false;
     Enemy->typeId = u4(TypeId);
     Enemy->frame = 0;
+    Enemy->state = 0;
 
-    Enemy->fly.id = Z_FLY_LINE;
-    Enemy->fly.state = 0;
-    Enemy->fly.flipX = 0;
-    Enemy->fly.flipY = 0;
-    Enemy->fly.counter = 0;
-
-    Enemy->attack.id = Z_ATTACK_NONE;
-    Enemy->attack.counter = 0;
+    z_enemy_setFly(Enemy, Z_FLY_LINE);
+    z_enemy_setAttack(Enemy, Z_ATTACK_NONE);
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
@@ -72,9 +67,9 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 
     enemy->jetFlicker = !enemy->jetFlicker;
 
-    z_enemy__ai[enemy->typeId](enemy);
-    z_enemy__fly[enemy->fly.id](enemy);
-    z_enemy__attack[enemy->attack.id](enemy);
+    z_enemy_aiTable[enemy->typeId](enemy);
+    z_enemy_flyTable[enemy->fly.id](enemy);
+    z_enemy_attackTable[enemy->attack.id](enemy);
 
     return z_fix_fixtoi(enemy->y) - z_enemyData[enemy->typeId].h / 2 < Z_HEIGHT;
 }
@@ -150,4 +145,19 @@ bool z_enemy_checkCollisions(int8_t X, int8_t Y, int8_t W, int8_t H, bool AllowM
     z_pool_tick(Z_POOL_ENEMY, checkCollision);
 
     return g_coll.hit;
+}
+
+void z_enemy_setFly(ZEnemy* Enemy, uint8_t FlyId)
+{
+    Enemy->fly.id = u4(FlyId);
+    Enemy->fly.state = 0;
+    Enemy->fly.flipX = 0;
+    Enemy->fly.flipY = 0;
+    Enemy->fly.counter = 0;
+}
+
+void z_enemy_setAttack(ZEnemy* Enemy, uint8_t AttackId)
+{
+    Enemy->attack.id = u4(AttackId);
+    Enemy->attack.counter = 0;
 }

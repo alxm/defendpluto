@@ -81,7 +81,7 @@ static void attack_target(ZEnemy* Enemy)
     }
 }
 
-ZEnemyCallback z_enemy__attack[Z_ATTACK_NUM] = {
+ZEnemyCallback z_enemy_attackTable[Z_ATTACK_NUM] = {
     attack_none,
     attack_random,
     attack_target,

@@ -106,7 +106,7 @@ static void fly_curve(ZEnemy* Enemy)
     Enemy->angle = Z_ANGLE_WRAP(Enemy->angle + angleInc);
 }
 
-ZEnemyCallback z_enemy__fly[Z_FLY_NUM] = {
+ZEnemyCallback z_enemy_flyTable[Z_FLY_NUM] = {
     fly_line,
     fly_zigzag,
     fly_curve,
