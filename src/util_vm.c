@@ -159,20 +159,26 @@ static bool op_loop(uint8_t Flags)
     Z_READ_ARGU8(num_times, 0, 0);
 
     if(num_times == 0 || g_vm.loopIndex == 0) {
-        uint8_t op;
+        uint8_t loopCount = 0;
 
         do {
-            op = Z_READ_OP();
+            uint8_t op = Z_READ_OP();
             g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
-        } while(op != Z_OP_END);
+
+            if(op == Z_OP_LOOP) {
+                loopCount++;
+            } else if(op == Z_OP_END) {
+                loopCount--;
+            }
+        } while(loopCount > 0);
 
         return false;
-    } else {
-        g_vm.loopIndex--;
-        g_vm.loopStack[g_vm.loopIndex].start =
-                                        u16(g_vm.pc + g_ops[Z_OP_LOOP].bytes);
-        g_vm.loopStack[g_vm.loopIndex].counter = num_times;
     }
+
+    g_vm.loopIndex--;
+    g_vm.loopStack[g_vm.loopIndex].start =
+                                    u16(g_vm.pc + g_ops[Z_OP_LOOP].bytes);
+    g_vm.loopStack[g_vm.loopIndex].counter = num_times;
 
     return true;
 }
