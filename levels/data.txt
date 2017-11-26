@@ -5,19 +5,31 @@
 var x1
 var x2
 
+set x1 30
+loop 5
+    spawn x1 -1 asteroid
+    inc x1 10
+end
+waitclear
+
 loop 2
     wait 10
 
     set x1 40
 
-    loop 2
+    loop 3
         spawn x1 -1 asteroid
         wait 15
         inc x1 10
     end
 
-    spawn x1 -1 asteroid
-    spawn 20 -1 enemy0 2
+    iter 0
+        spawn 20 -1 enemy0 2
+    endi
+
+    iter 1
+        spawn 80 -1 enemy0 1
+    endi
 end
 
 waitclear

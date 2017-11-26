@@ -34,6 +34,8 @@ typedef enum {
     Z_OP_FLIP,
     Z_OP_LOOP,
     Z_OP_END,
+    Z_OP_ITER,
+    Z_OP_ENDI,
     Z_OP_WAIT,
     Z_OP_WAITCLEAR,
     Z_OP_SPAWN,
@@ -53,6 +55,7 @@ static struct {
     struct {
         uint16_t start;
         uint8_t counter;
+        uint8_t counterMax;
     } loopStack[Z_LEVELS_NESTED_LOOPS_MAX];
     uint8_t waitCounter;
     int8_t vars[Z_LEVELS_VARS_NUM];
@@ -178,7 +181,8 @@ static bool op_loop(uint8_t Flags)
     g_vm.loopIndex--;
     g_vm.loopStack[g_vm.loopIndex].start =
                                     u16(g_vm.pc + g_ops[Z_OP_LOOP].bytes);
-    g_vm.loopStack[g_vm.loopIndex].counter = num_times;
+    g_vm.loopStack[g_vm.loopIndex].counter = 0;
+    g_vm.loopStack[g_vm.loopIndex].counterMax = num_times;
 
     return true;
 }
@@ -192,13 +196,52 @@ static bool op_end(uint8_t Flags)
      * end
      * end
      */
-    if(--g_vm.loopStack[g_vm.loopIndex].counter) {
-        g_vm.pc = g_vm.loopStack[g_vm.loopIndex].start;
-        return false;
+    if(++g_vm.loopStack[g_vm.loopIndex].counter
+        == g_vm.loopStack[g_vm.loopIndex].counterMax) {
+
+        g_vm.loopIndex++;
+
+        return true;
     }
 
-    g_vm.loopIndex++;
+    g_vm.pc = g_vm.loopStack[g_vm.loopIndex].start;
 
+    return false;
+}
+
+static bool op_iter(uint8_t Flags)
+{
+    /*
+     * 8b   8b    8b
+     * iter flags iteration
+     * iter       0
+     */
+    uint8_t iteration;
+    Z_READ_ARGU8(iteration, 0, 0);
+
+    if(g_vm.loopStack[g_vm.loopIndex].counter != iteration) {
+        while(true) {
+            uint8_t op = Z_READ_OP();
+            g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
+
+            if(op == Z_OP_ENDI) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+static bool op_endi(uint8_t Flags)
+{
+    Z_UNUSED(Flags);
+
+    /*
+     * 8b
+     * endi
+     * endi
+     */
     return true;
 }
 
@@ -281,6 +324,8 @@ void z_vm_setup(void)
     setOp(Z_OP_FLIP, op_flip, 1);
     setOp(Z_OP_LOOP, op_loop, 1);
     setOp(Z_OP_END, op_end, 0);
+    setOp(Z_OP_ITER, op_iter, 1);
+    setOp(Z_OP_ENDI, op_endi, 0);
     setOp(Z_OP_WAIT, op_wait, 1);
     setOp(Z_OP_WAITCLEAR, op_waitclear, 0);
     setOp(Z_OP_SPAWN, op_spawn, 4);

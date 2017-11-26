@@ -130,6 +130,22 @@ class OpEnd(Op):
 
         return Bytecode
 
+class OpIter(Op):
+    def __init__(self):
+        Op.__init__(self, 1)
+
+    def custom_compile(self, Compiler, Args, Bytecode):
+        #
+        # 8b
+        # iteration
+        # 0
+        #
+        iteration = Compiler.checkArg(Bytecode, Args, 0, 0, 255)
+
+        Bytecode.append(iteration)
+
+        return Bytecode
+
 class OpWait(Op):
     def __init__(self):
         Op.__init__(self, 1)
@@ -212,6 +228,8 @@ class CompilerTool:
             'flip': OpFlip(),
             'loop': OpLoop(),
             'end': OpEnd(),
+            'iter': OpIter(),
+            'endi': Op(),
             'wait': OpWait(),
             'waitclear': Op(),
             'spawn': OpSpawn(),
