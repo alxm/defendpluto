@@ -54,7 +54,7 @@ static struct {
         uint16_t start;
         uint8_t counter;
     } loopStack[Z_LEVELS_NESTED_LOOPS_MAX];
-    uint8_t block;
+    uint8_t waitCounter;
     int8_t vars[Z_LEVELS_VARS_NUM];
 } g_vm;
 
@@ -209,14 +209,14 @@ static bool op_wait(uint8_t Flags)
      * wait flags ds
      * wait       25
      */
-    if(g_vm.block > 0) {
-        return --g_vm.block == 0;
+    if(g_vm.waitCounter > 0) {
+        return --g_vm.waitCounter == 0;
     }
 
     uint8_t ds;
     Z_READ_ARGU8(ds, 0, 0);
 
-    g_vm.block = u8(Z_FPS * ds / 10);
+    g_vm.waitCounter = u8(Z_FPS * ds / 10);
 
     return ds == 0;
 }
@@ -291,7 +291,7 @@ void z_vm_setup(void)
 void z_vm_reset(void)
 {
     g_vm.pc = 0;
-    g_vm.block = 0;
+    g_vm.waitCounter = 0;
     g_vm.loopIndex = Z_LEVELS_NESTED_LOOPS_MAX;
 
     for(uint8_t v = Z_LEVELS_VARS_NUM; v--; ) {
