@@ -135,6 +135,8 @@ class OpIter(Op):
         Op.__init__(self, 1)
 
     def custom_compile(self, Compiler, Args, Bytecode):
+        Compiler.iterInc()
+
         #
         # 8b
         # iteration
@@ -143,6 +145,15 @@ class OpIter(Op):
         iteration = Compiler.checkArg(Bytecode, Args, 0, 0, 255)
 
         Bytecode.append(iteration)
+
+        return Bytecode
+
+class OpEndI(Op):
+    def __init__(self):
+        Op.__init__(self, 0)
+
+    def custom_compile(self, Compiler, Args, Bytecode):
+        Compiler.iterDec()
 
         return Bytecode
 
@@ -207,6 +218,7 @@ class CompilerTool:
         self.__nextVarId = 0
         self.__nestedLoopsMax = 0
         self.__nestedLoopsCount = 0
+        self.__nestedIterCount = 0
         self.__lineNumber = 0
         self.__varIds = {}
 
@@ -229,7 +241,7 @@ class CompilerTool:
             'loop': OpLoop(),
             'end': OpEnd(),
             'iter': OpIter(),
-            'endi': Op(),
+            'endi': OpEndI(),
             'wait': OpWait(),
             'waitclear': Op(),
             'spawn': OpSpawn(),
@@ -312,6 +324,18 @@ class CompilerTool:
 
         if self.__nestedLoopsCount < 0:
             self.error('Mismatched loop end')
+
+    def iterInc(self):
+        self.__nestedIterCount += 1
+
+        if self.__nestedIterCount > 1:
+            self.error('Nested iter block')
+
+    def iterDec(self):
+        self.__nestedIterCount -= 1
+
+        if self.__nestedIterCount < 0:
+            self.error('Mismatched iter endi')
 
     def run(self):
         bytecode = []
