@@ -301,14 +301,18 @@ void z_vm_reset(void)
 
 void z_vm_tick(void)
 {
-    uint8_t op = Z_READ_OP();
-    uint8_t flags = 0;
+    while(true) {
+        uint8_t op = Z_READ_OP();
+        uint8_t flags = 0;
 
-    if(g_ops[op].bytes > 1) {
-        flags = Z_READ_FLAGS();
-    }
+        if(g_ops[op].bytes > 1) {
+            flags = Z_READ_FLAGS();
+        }
 
-    if(g_ops[op].callback(flags)) {
-        g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
+        if(g_ops[op].callback(flags)) {
+            g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
+        } else {
+            break;
+        }
     }
 }
