@@ -25,7 +25,7 @@
 
 static void fly_line(ZEnemy* Enemy)
 {
-    Enemy->angle = Z_ANGLE_270;
+    Z_UNUSED(Enemy);
 }
 
 static void fly_zigzag(ZEnemy* Enemy)

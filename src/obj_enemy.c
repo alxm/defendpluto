@@ -33,7 +33,7 @@ static struct {
     int8_t x, y, w, h;
 } g_coll;
 
-void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t DropId)
+void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags, uint8_t DropId)
 {
     Z_UNUSED(DropId);
 
@@ -43,7 +43,8 @@ void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t Dro
     Enemy->jetFlicker = false;
     Enemy->typeId = u4(TypeId);
     Enemy->frame = 0;
-    Enemy->state = 0;
+    Enemy->ai.state = u4(AiState);
+    Enemy->ai.flags = u4(AiFlags);
 
     z_enemy_setFly(Enemy, Z_FLY_LINE);
     z_enemy_setAttack(Enemy, Z_ATTACK_NONE);

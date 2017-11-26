@@ -152,18 +152,21 @@ class OpSpawn(Op):
 
     def custom_compile(self, Compiler, Args, Bytecode):
         #
-        # 8b      8b      4b      4b
-        # x_coord y_coord type_id drop_id
-        # 64      -8      enemy0  powerup
+        # 8b      8b      4b      4b       4b       4b
+        # x_coord y_coord type_id ai_state ai_flags drop_id
+        # 64      -8      enemy0  1        0        powerup
         #
         x_coord = Compiler.checkArg(Bytecode, Args, 0, -128, 127)
         y_coord = Compiler.checkArg(Bytecode, Args, 1, -128, 127)
         type_id = Compiler.getEnemyId(Args[2])
-        drop_id = Compiler.getDropId(Args[3]) if len(Args) > 3 else 0
+        ai_state = Compiler.checkArg(Bytecode, Args, 3, 0, 0xf, True)
+        ai_flags = Compiler.checkArg(Bytecode, Args, 4, 0, 0xf, True)
+        drop_id = Compiler.getDropId(Args[5]) if len(Args) > 5 else 0
 
         Bytecode.append(x_coord)
         Bytecode.append(y_coord)
-        Bytecode.append((type_id << 4) | drop_id)
+        Bytecode.append((type_id << 4) | ai_state)
+        Bytecode.append((ai_flags << 4) | drop_id)
 
         return Bytecode
 
@@ -223,7 +226,10 @@ class CompilerTool:
               file = sys.stderr)
         sys.exit(1)
 
-    def checkArg(self, Bytecode, Args, Index, Min, Max):
+    def checkArg(self, Bytecode, Args, Index, Min, Max, Hex = False):
+        if Index >= len(Args):
+            return 0
+
         arg = Args[Index]
 
         if arg in self.__varIds:
@@ -239,7 +245,7 @@ class CompilerTool:
 
             return varId
         else:
-            value = int(arg)
+            value = int(arg, 16 if Hex else 10)
 
             if value < Min or value > Max:
                 self.error('Value {} is out of range [{}, {}]'

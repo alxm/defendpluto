@@ -2,13 +2,46 @@
 ; Level 0
 ;
 
-var x
+var x1
+var x2
 
-set x 0
+loop 2
+    wait 10
 
-loop 5
-    spawn x -1 asteroid
-    inc x 25
+    set x1 40
+
+    loop 2
+        spawn x1 -1 asteroid
+        wait 15
+        inc x1 10
+    end
+
+    spawn x1 -1 asteroid
+    spawn 20 -1 enemy0 2
+end
+
+waitclear
+
+set x1 20
+set x2 80
+
+loop 3
+    spawn x1 -1 enemy0 4
+    spawn x2 -1 enemy0 3
+    wait 10
+    inc x1 10
+    inc x2 -10
+end
+
+set x1 10
+set x2 90
+
+loop 2
+    spawn x1 -1 enemy0 4 1
+    spawn x2 -1 enemy0 3 1
+    wait 5
+    inc x1 10
+    inc x2 -10
 end
 
 waitclear

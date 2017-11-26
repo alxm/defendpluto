@@ -26,7 +26,7 @@ typedef enum {
 typedef enum {
     Z_ATTACK_INVALID = -1,
     Z_ATTACK_NONE,
-    Z_ATTACK_RANDOM,
+    Z_ATTACK_STRAIGHT,
     Z_ATTACK_TARGET,
     Z_ATTACK_NUM
 } ZAttackId;
@@ -38,7 +38,10 @@ typedef struct {
     bool jetFlicker : 1;
     uint8_t typeId : 4;
     uint8_t frame : 4;
-    uint8_t state;
+    struct {
+        uint8_t state : 4;
+        uint8_t flags : 4;
+    } ai;
     struct {
         uint8_t id : 4;
         uint8_t state : 4;
@@ -60,7 +63,7 @@ extern ZEnemyCallback z_enemy_aiTable[Z_ENEMY_NUM];
 extern ZEnemyCallback z_enemy_flyTable[Z_FLY_NUM];
 extern ZEnemyCallback z_enemy_attackTable[Z_ATTACK_NUM];
 
-extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t DropId);
+extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags, uint8_t DropId);
 extern bool z_enemy_tick(ZPoolObject* Enemy);
 extern void z_enemy_draw(ZPoolObject* Enemy);
 

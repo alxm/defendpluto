@@ -31,7 +31,7 @@ static void attack_none(ZEnemy* Enemy)
     Z_UNUSED(Enemy);
 }
 
-static void attack_random(ZEnemy* Enemy)
+static void attack_straight(ZEnemy* Enemy)
 {
     if(Enemy->attack.counter > 0) {
         if(z_fps_isNthFrame(2)) {
@@ -49,11 +49,9 @@ static void attack_random(ZEnemy* Enemy)
                        Enemy->y,
                        Z_ANGLE_270,
                        false);
-
-        Enemy->attack.counter = Z_FPS / 2;
-    } else {
-        Enemy->attack.counter = 0;
     }
+
+    Enemy->attack.counter = u4(z_random_uint8(Z_FPS / 2));
 }
 
 static void attack_target(ZEnemy* Enemy)
@@ -83,6 +81,6 @@ static void attack_target(ZEnemy* Enemy)
 
 ZEnemyCallback z_enemy_attackTable[Z_ATTACK_NUM] = {
     attack_none,
-    attack_random,
+    attack_straight,
     attack_target,
 };

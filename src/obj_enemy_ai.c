@@ -23,6 +23,8 @@
 #include "util_screen.h"
 #include "obj_enemy.h"
 
+#define DONE_STATE 0xf
+
 static void ai_asteroid(ZEnemy* Enemy)
 {
     Z_UNUSED(Enemy);
@@ -30,12 +32,40 @@ static void ai_asteroid(ZEnemy* Enemy)
 
 static void ai_ship0(ZEnemy* Enemy)
 {
-    switch(Enemy->state) {
+    switch(Enemy->ai.state) {
         case 0: {
-            if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 4) {
-                z_enemy_setFly(Enemy, Z_FLY_ZIGZAG);
-                z_enemy_setAttack(Enemy, Z_ATTACK_RANDOM);
-                Enemy->state = 1;
+            if(Enemy->ai.flags & 1) {
+                z_enemy_setAttack(Enemy, Z_ATTACK_STRAIGHT);
+            }
+
+            Enemy->ai.state = DONE_STATE;
+        } break;
+
+        case 1: {
+            if(z_fix_fixtoi(Enemy->y) > 6) {
+                Enemy->angle = Z_ANGLE_225;
+                Enemy->ai.state = DONE_STATE;
+            }
+        } break;
+
+        case 2: {
+            if(z_fix_fixtoi(Enemy->y) > 6) {
+                Enemy->angle = Z_ANGLE_315;
+                Enemy->ai.state = DONE_STATE;
+            }
+        } break;
+
+        case 3: {
+            if(z_fix_fixtoi(Enemy->y) > 16) {
+                Enemy->angle = Z_ANGLE_225;
+                Enemy->ai.state = 0;
+            }
+        } break;
+
+        case 4: {
+            if(z_fix_fixtoi(Enemy->y) > 16) {
+                Enemy->angle = Z_ANGLE_315;
+                Enemy->ai.state = 0;
             }
         } break;
     }
@@ -43,12 +73,12 @@ static void ai_ship0(ZEnemy* Enemy)
 
 static void ai_ship1(ZEnemy* Enemy)
 {
-    switch(Enemy->state) {
+    switch(Enemy->ai.state) {
         case 0: {
             if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 4) {
                 z_enemy_setFly(Enemy, Z_FLY_CURVE);
-                z_enemy_setAttack(Enemy, Z_ATTACK_RANDOM);
-                Enemy->state = 1;
+                z_enemy_setAttack(Enemy, Z_ATTACK_STRAIGHT);
+                Enemy->ai.state = DONE_STATE;
             }
         } break;
     }
@@ -60,17 +90,17 @@ static void ai_ship2(ZEnemy* Enemy)
         return;
     }
 
-    switch(Enemy->state) {
+    switch(Enemy->ai.state) {
         case 0: {
             Enemy->fly.id = Z_FLY_ZIGZAG;
             Enemy->attack.id = Z_ATTACK_TARGET;
-            Enemy->state = 1;
+            Enemy->ai.state = 1;
         } break;
 
         case 1: {
             Enemy->fly.id = Z_FLY_LINE;
-            Enemy->attack.id = Z_ATTACK_RANDOM;
-            Enemy->state = 0;
+            Enemy->attack.id = Z_ATTACK_STRAIGHT;
+            Enemy->ai.state = 0;
         } break;
     }
 }
