@@ -161,7 +161,7 @@ static bool op_loop(uint8_t Flags)
     uint8_t num_times;
     Z_READ_ARGU8(num_times, 0, 0);
 
-    if(num_times == 0 || g_vm.loopIndex == 0) {
+    if(num_times == 0) {
         uint8_t loopCount = 0;
 
         do {
