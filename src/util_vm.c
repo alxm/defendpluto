@@ -162,27 +162,22 @@ static bool op_loop(uint8_t Flags)
     Z_READ_ARGU8(num_times, 0, 0);
 
     if(num_times == 0) {
-        uint8_t loopCount = 0;
-
-        do {
-            uint8_t op = Z_READ_OP();
+        for(uint8_t op = Z_OP_LOOP, loopCount = 1; loopCount > 0; ) {
             g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
+            op = Z_READ_OP();
 
             if(op == Z_OP_LOOP) {
                 loopCount++;
             } else if(op == Z_OP_END) {
                 loopCount--;
             }
-        } while(loopCount > 0);
-
-        return false;
+        }
+    } else {
+        g_vm.loopIndex--;
+        g_vm.loopStack[g_vm.loopIndex].start = g_vm.pc;
+        g_vm.loopStack[g_vm.loopIndex].counter = 0;
+        g_vm.loopStack[g_vm.loopIndex].counterMax = num_times;
     }
-
-    g_vm.loopIndex--;
-    g_vm.loopStack[g_vm.loopIndex].start =
-                                    u16(g_vm.pc + g_ops[Z_OP_LOOP].bytes);
-    g_vm.loopStack[g_vm.loopIndex].counter = 0;
-    g_vm.loopStack[g_vm.loopIndex].counterMax = num_times;
 
     return true;
 }
@@ -200,13 +195,11 @@ static bool op_end(uint8_t Flags)
         == g_vm.loopStack[g_vm.loopIndex].counterMax) {
 
         g_vm.loopIndex++;
-
-        return true;
+    } else {
+        g_vm.pc = g_vm.loopStack[g_vm.loopIndex].start;
     }
 
-    g_vm.pc = g_vm.loopStack[g_vm.loopIndex].start;
-
-    return false;
+    return true;
 }
 
 static bool op_iter(uint8_t Flags)
@@ -220,13 +213,8 @@ static bool op_iter(uint8_t Flags)
     Z_READ_ARGU8(iteration, 0, 0);
 
     if(g_vm.loopStack[g_vm.loopIndex].counter != iteration) {
-        while(true) {
-            uint8_t op = Z_READ_OP();
+        for(uint8_t op = Z_OP_ITER; op != Z_OP_ENDI; op = Z_READ_OP()) {
             g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
-
-            if(op == Z_OP_ENDI) {
-                return false;
-            }
         }
     }
 
@@ -355,6 +343,7 @@ void z_vm_tick(void)
         }
 
         if(g_ops[op].callback(flags)) {
+            op = Z_READ_OP();
             g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
         } else {
             break;
