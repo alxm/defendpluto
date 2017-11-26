@@ -331,6 +331,9 @@ class CompilerTool:
         if self.__nestedIterCount > 1:
             self.error('Nested iter block')
 
+        if self.__nestedLoopsCount == 0:
+            self.error('iter block outside a loop block')
+
     def iterDec(self):
         self.__nestedIterCount -= 1
 
