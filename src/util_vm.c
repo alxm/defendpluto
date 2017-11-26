@@ -209,12 +209,16 @@ static bool op_wait(uint8_t Flags)
      * wait flags ds
      * wait       25
      */
+    if(g_vm.block > 0) {
+        return --g_vm.block == 0;
+    }
+
     uint8_t ds;
     Z_READ_ARGU8(ds, 0, 0);
 
     g_vm.block = u8(Z_FPS * ds / 10);
 
-    return true;
+    return ds == 0;
 }
 
 static bool op_waitclear(uint8_t Flags)
@@ -297,11 +301,6 @@ void z_vm_reset(void)
 
 void z_vm_tick(void)
 {
-    if(g_vm.block) {
-        g_vm.block--;
-        return;
-    }
-
     uint8_t op = Z_READ_OP();
     uint8_t flags = 0;
 
