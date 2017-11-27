@@ -69,8 +69,17 @@ bool z_enemy_tick(ZPoolObject* Enemy)
     enemy->jetFlicker = !enemy->jetFlicker;
 
     z_enemy_aiTable[enemy->typeId](enemy);
-    z_enemy_flyTable[enemy->fly.id](enemy);
-    z_enemy_attackTable[enemy->attack.id](enemy);
+
+    if(enemy->fly.counter-- == 0) {
+        enemy->fly.counter = z_enemy_flyTable[enemy->fly.id].counterMax;
+        z_enemy_flyTable[enemy->fly.id].callback(enemy);
+    }
+
+    if(enemy->attack.counter == 0) {
+        z_enemy_attackTable[enemy->attack.id](enemy);
+    } else if(z_fps_isNthFrame(2)) {
+        enemy->attack.counter--;
+    }
 
     return z_fix_fixtoi(enemy->y) - z_enemyData[enemy->typeId].h / 2 < Z_HEIGHT;
 }

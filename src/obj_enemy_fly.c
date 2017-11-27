@@ -30,14 +30,6 @@ static void fly_line(ZEnemy* Enemy)
 
 static void fly_zigzag(ZEnemy* Enemy)
 {
-    bool expired = Enemy->fly.counter == 0;
-
-    if(expired) {
-        Enemy->fly.counter = Z_FPS;
-    } else {
-        Enemy->fly.counter--;
-    }
-
     switch(Enemy->fly.state) {
         case 0: {
             if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 8) {
@@ -52,12 +44,10 @@ static void fly_zigzag(ZEnemy* Enemy)
         } break;
 
         case 1: {
-            if(expired) {
-                if(Enemy->angle == Z_ANGLE_225) {
-                    Enemy->angle = Z_ANGLE_315;
-                } else {
-                    Enemy->angle = Z_ANGLE_225;
-                }
+            if(Enemy->angle == Z_ANGLE_225) {
+                Enemy->angle = Z_ANGLE_315;
+            } else {
+                Enemy->angle = Z_ANGLE_225;
             }
         } break;
     }
@@ -65,14 +55,6 @@ static void fly_zigzag(ZEnemy* Enemy)
 
 static void fly_curve(ZEnemy* Enemy)
 {
-    bool expired = Enemy->fly.counter == 0;
-
-    if(expired) {
-        Enemy->fly.counter = 1;
-    } else {
-        Enemy->fly.counter--;
-    }
-
     int8_t angleInc = 0;
 
     switch(Enemy->fly.state) {
@@ -89,7 +71,7 @@ static void fly_curve(ZEnemy* Enemy)
         case 1: {
             if(Enemy->angle <= Z_ANGLE_225) {
                 Enemy->fly.state = 2;
-            } else if(expired) {
+            } else {
                 angleInc = -1;
             }
         } break;
@@ -97,7 +79,7 @@ static void fly_curve(ZEnemy* Enemy)
         case 2: {
             if(Enemy->angle >= Z_ANGLE_315) {
                 Enemy->fly.state = 1;
-            } else if(expired) {
+            } else {
                 angleInc = 1;
             }
         } break;
@@ -106,8 +88,8 @@ static void fly_curve(ZEnemy* Enemy)
     Enemy->angle = Z_ANGLE_WRAP(Enemy->angle + angleInc);
 }
 
-ZEnemyCallback z_enemy_flyTable[Z_FLY_NUM] = {
-    fly_line,
-    fly_zigzag,
-    fly_curve,
+ZEnemyFlyPattern z_enemy_flyTable[Z_FLY_NUM] = {
+    {fly_line, 0},
+    {fly_zigzag, Z_FPS},
+    {fly_curve, 1},
 };

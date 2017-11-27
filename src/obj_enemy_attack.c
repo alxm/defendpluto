@@ -33,14 +33,6 @@ static void attack_none(ZEnemy* Enemy)
 
 static void attack_straight(ZEnemy* Enemy)
 {
-    if(Enemy->attack.counter > 0) {
-        if(z_fps_isNthFrame(2)) {
-            Enemy->attack.counter--;
-        }
-
-        return;
-    }
-
     ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
 
     if(b) {
@@ -56,14 +48,6 @@ static void attack_straight(ZEnemy* Enemy)
 
 static void attack_target(ZEnemy* Enemy)
 {
-    if(Enemy->attack.counter > 0) {
-        if(z_fps_isNthFrame(2)) {
-            Enemy->attack.counter--;
-        }
-
-        return;
-    }
-
     ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
 
     if(b) {
