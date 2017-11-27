@@ -25,12 +25,14 @@
 
 #define DONE_STATE 0xf
 
-static void ai_asteroid(ZEnemy* Enemy)
+static bool ai_asteroid(ZEnemy* Enemy)
 {
     Z_UNUSED(Enemy);
+
+    return true;
 }
 
-static void ai_ship0(ZEnemy* Enemy)
+static bool ai_ship0(ZEnemy* Enemy)
 {
     switch(Enemy->ai.state) {
         case 0: {
@@ -69,9 +71,11 @@ static void ai_ship0(ZEnemy* Enemy)
             }
         } break;
     }
+
+    return true;
 }
 
-static void ai_ship1(ZEnemy* Enemy)
+static bool ai_ship1(ZEnemy* Enemy)
 {
     switch(Enemy->ai.state) {
         case 0: {
@@ -82,12 +86,14 @@ static void ai_ship1(ZEnemy* Enemy)
             }
         } break;
     }
+
+    return true;
 }
 
-static void ai_ship2(ZEnemy* Enemy)
+static bool ai_ship2(ZEnemy* Enemy)
 {
-    if(!Z_EVERY_N_DS(20)) {
-        return;
+    if(Z_EVERY_N_DS(20)) {
+        return true;
     }
 
     switch(Enemy->ai.state) {
@@ -103,6 +109,8 @@ static void ai_ship2(ZEnemy* Enemy)
             Enemy->ai.state = 0;
         } break;
     }
+
+    return true;
 }
 
 ZEnemyCallback z_enemy_aiTable[Z_ENEMY_NUM] = {

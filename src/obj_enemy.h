@@ -55,7 +55,7 @@ typedef struct {
     } attack;
 } ZEnemy;
 
-typedef void (*ZEnemyCallback)(ZEnemy*);
+typedef bool (*ZEnemyCallback)(ZEnemy*);
 
 typedef struct {
     ZEnemyCallback callback;

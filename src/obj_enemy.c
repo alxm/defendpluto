@@ -68,20 +68,22 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 
     enemy->jetFlicker = !enemy->jetFlicker;
 
-    z_enemy_aiTable[enemy->typeId](enemy);
+    bool alive = z_enemy_aiTable[enemy->typeId](enemy);
 
-    if(enemy->fly.counter-- == 0) {
-        enemy->fly.counter = z_enemy_flyTable[enemy->fly.id].framesPeriod;
-        z_enemy_flyTable[enemy->fly.id].callback(enemy);
+    if(alive) {
+        if(enemy->fly.counter-- == 0) {
+            enemy->fly.counter = z_enemy_flyTable[enemy->fly.id].framesPeriod;
+            alive = z_enemy_flyTable[enemy->fly.id].callback(enemy);
+        }
+
+        if(enemy->attack.counter == 0) {
+            z_enemy_attackTable[enemy->attack.id](enemy);
+        } else if(Z_EVERY_N_DS(2)) {
+            enemy->attack.counter--;
+        }
     }
 
-    if(enemy->attack.counter == 0) {
-        z_enemy_attackTable[enemy->attack.id](enemy);
-    } else if(Z_EVERY_N_DS(2)) {
-        enemy->attack.counter--;
-    }
-
-    return z_fix_fixtoi(enemy->y) - z_enemyData[enemy->typeId].h / 2 < Z_HEIGHT;
+    return alive;
 }
 
 void z_enemy_draw(ZPoolObject* Enemy)

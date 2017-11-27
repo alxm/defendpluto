@@ -26,12 +26,14 @@
 #include "obj_enemy.h"
 #include "obj_player.h"
 
-static void attack_none(ZEnemy* Enemy)
+static bool attack_none(ZEnemy* Enemy)
 {
     Z_UNUSED(Enemy);
+
+    return true;
 }
 
-static void attack_straight(ZEnemy* Enemy)
+static bool attack_straight(ZEnemy* Enemy)
 {
     ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
 
@@ -44,9 +46,11 @@ static void attack_straight(ZEnemy* Enemy)
     }
 
     Enemy->attack.counter = Z_DS_TO_FRAMES(5);
+
+    return true;
 }
 
-static void attack_target(ZEnemy* Enemy)
+static bool attack_target(ZEnemy* Enemy)
 {
     ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
 
@@ -61,6 +65,8 @@ static void attack_target(ZEnemy* Enemy)
     } else {
         Enemy->attack.counter = 0;
     }
+
+    return true;
 }
 
 ZEnemyCallback z_enemy_attackTable[Z_ATTACK_NUM] = {

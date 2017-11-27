@@ -23,12 +23,17 @@
 #include "util_screen.h"
 #include "obj_enemy.h"
 
-static void fly_line(ZEnemy* Enemy)
+static bool onScreen(ZEnemy* Enemy)
 {
-    Z_UNUSED(Enemy);
+    return z_fix_fixtoi(Enemy->y) - z_enemyData[Enemy->typeId].h / 2 < Z_HEIGHT;
 }
 
-static void fly_zigzag(ZEnemy* Enemy)
+static bool fly_line(ZEnemy* Enemy)
+{
+    return onScreen(Enemy);
+}
+
+static bool fly_zigzag(ZEnemy* Enemy)
 {
     switch(Enemy->fly.state) {
         case 0: {
@@ -51,9 +56,11 @@ static void fly_zigzag(ZEnemy* Enemy)
             }
         } break;
     }
+
+    return onScreen(Enemy);
 }
 
-static void fly_curve(ZEnemy* Enemy)
+static bool fly_curve(ZEnemy* Enemy)
 {
     int8_t angleInc = 0;
 
@@ -86,6 +93,8 @@ static void fly_curve(ZEnemy* Enemy)
     }
 
     Enemy->angle = Z_ANGLE_WRAP(Enemy->angle + angleInc);
+
+    return onScreen(Enemy);
 }
 
 ZEnemyFlyPattern z_enemy_flyTable[Z_FLY_NUM] = {
