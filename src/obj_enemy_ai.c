@@ -86,7 +86,7 @@ static void ai_ship1(ZEnemy* Enemy)
 
 static void ai_ship2(ZEnemy* Enemy)
 {
-    if(!z_fps_isNthFrame(2 * Z_FPS)) {
+    if(!Z_EVERY_N_DS(20)) {
         return;
     }
 

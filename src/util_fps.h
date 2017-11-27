@@ -22,4 +22,7 @@ Z_EXTERN_C_START
 extern uint16_t z_fps_getCounter(void);
 extern bool z_fps_isNthFrame(uint8_t N);
 
+#define Z_DS_TO_FRAMES(Ds) u8(Z_FPS * (Ds) / 10)
+#define Z_EVERY_N_DS(DsPeriod) z_fps_isNthFrame(Z_DS_TO_FRAMES(DsPeriod))
+
 Z_EXTERN_C_END

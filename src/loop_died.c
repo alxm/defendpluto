@@ -52,7 +52,7 @@ void z_loop_died_tick(void)
     z_screen_tick();
     z_star_spawn();
 
-    if(z_fps_isNthFrame(Z_FPS) && z_player.health-- < -3) {
+    if(Z_EVERY_N_DS(10) && z_player.health-- < -2) {
         z_button_release(Z_BUTTON_A);
         z_loop_setState(Z_STATE_OVER);
     }

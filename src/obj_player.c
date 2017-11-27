@@ -32,7 +32,7 @@
 
 #define Z_HEALTH_MAX 3
 
-#define Z_SHOOT_EVERY_N_FRAMES (Z_FPS / 4)
+#define Z_SHOOT_EVERY_N_FRAMES Z_DS_TO_FRAMES(3)
 
 #define Z_SPEED_SCALE_DIV 2
 #define Z_SPEED_MAX (Z_FIX_ONE / Z_SPEED_SCALE_DIV)
@@ -90,7 +90,7 @@ void z_player_tick(void)
     if(z_button_pressed(Z_BUTTON_A)) {
         maxSpeed = Z_SPEED_MAX / 2;
 
-        if(z_fps_isNthFrame(Z_FPS / 10)) {
+        if(Z_EVERY_N_DS(1)) {
             z_player.shootShift ^= 1;
         }
 
@@ -162,7 +162,7 @@ void z_player_tick(void)
 
     if(hit) {
         z_player_takeDamage(Z_SHIELD_DAMAGE_COLLISION);
-    } else if(z_fps_isNthFrame(Z_FPS)) {
+    } else if(Z_EVERY_N_DS(10)) {
         boostShield(Z_SHIELD_BOOST_REGEN);
     }
 }
@@ -213,7 +213,7 @@ void z_player_takeDamage(uint8_t Damage)
 
 void z_player_hudTick(void)
 {
-    if(z_player.health <= 0 && z_fps_isNthFrame(Z_FPS / 3)) {
+    if(z_player.health <= 0 && Z_EVERY_N_DS(3)) {
         z_player.heartsBlink ^= 1;
     }
 }

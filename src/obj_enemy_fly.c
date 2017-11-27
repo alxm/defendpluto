@@ -89,7 +89,7 @@ static void fly_curve(ZEnemy* Enemy)
 }
 
 ZEnemyFlyPattern z_enemy_flyTable[Z_FLY_NUM] = {
-    {fly_line, 0},
-    {fly_zigzag, Z_FPS},
-    {fly_curve, 1},
+    {fly_line, Z_DS_TO_FRAMES(0)},
+    {fly_zigzag, Z_DS_TO_FRAMES(10)},
+    {fly_curve, Z_DS_TO_FRAMES(1)},
 };

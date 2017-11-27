@@ -247,7 +247,7 @@ static bool op_wait(uint8_t Flags)
     uint8_t ds;
     Z_READ_ARGU8(ds, 0, 0);
 
-    g_vm.waitCounter = u8(Z_FPS * ds / 10);
+    g_vm.waitCounter = Z_DS_TO_FRAMES(ds);
 
     return ds == 0;
 }

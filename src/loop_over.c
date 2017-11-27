@@ -38,7 +38,7 @@ void z_loop_over_tick(void)
     z_pool_tick(Z_POOL_STAR, z_star_tick);
     z_star_spawn();
 
-    if(z_fps_isNthFrame(Z_FPS * 3 / 2)) {
+    if(Z_EVERY_N_DS(10)) {
         g_blink = !g_blink;
     }
 

@@ -43,7 +43,7 @@ static void attack_straight(ZEnemy* Enemy)
                        false);
     }
 
-    Enemy->attack.counter = u4(z_random_uint8(Z_FPS / 2));
+    Enemy->attack.counter = Z_DS_TO_FRAMES(5);
 }
 
 static void attack_target(ZEnemy* Enemy)
@@ -57,7 +57,7 @@ static void attack_target(ZEnemy* Enemy)
                        z_fix_atan(Enemy->x, Enemy->y, z_player.x, z_player.y),
                        false);
 
-        Enemy->attack.counter = Z_FPS / 2;
+        Enemy->attack.counter = Z_DS_TO_FRAMES(5);
     } else {
         Enemy->attack.counter = 0;
     }

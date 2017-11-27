@@ -59,7 +59,7 @@ typedef void (*ZEnemyCallback)(ZEnemy*);
 
 typedef struct {
     ZEnemyCallback callback;
-    uint8_t counterMax : 6;
+    uint8_t framesPeriod : 6;
 } ZEnemyFlyPattern;
 
 #define Z_ENEMY_POOL_NUM 16

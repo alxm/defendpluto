@@ -61,7 +61,7 @@ bool z_bullete_tick(ZPoolObject* Bullet)
 
     if(hit) {
         z_player_takeDamage(Z_SHIELD_DAMAGE_SHOT);
-        z_screen_shake(Z_FPS / 15);
+        z_screen_shake(Z_DS_TO_FRAMES(1));
 
         for(int8_t i = 4; i--; ) {
             ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
