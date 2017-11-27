@@ -179,21 +179,20 @@ class OpSpawn(Op):
 
     def custom_compile(self, Compiler, Args, Bytecode):
         #
-        # 8b      8b      4b      4b       4b       4b
-        # x_coord y_coord type_id ai_state ai_flags drop_id
-        # 64      -8      enemy0  1        0        powerup
+        # 8b      8b      4b      4b       8b
+        # x_coord y_coord type_id ai_state ai_flags
+        # 64      -8      enemy0  1        0
         #
         x_coord = Compiler.checkArg(Bytecode, Args, 0, -128, 127)
         y_coord = Compiler.checkArg(Bytecode, Args, 1, -128, 127)
         type_id = Compiler.getEnemyId(Args[2])
         ai_state = Compiler.checkArg(Bytecode, Args, 3, 0, 0xf, True)
-        ai_flags = Compiler.checkArg(Bytecode, Args, 4, 0, 0xf, True)
-        drop_id = Compiler.getDropId(Args[5]) if len(Args) > 5 else 0
+        ai_flags = Compiler.checkArg(Bytecode, Args, 4, 0, 0xff, True)
 
         Bytecode.append(x_coord)
         Bytecode.append(y_coord)
         Bytecode.append((type_id << 4) | ai_state)
-        Bytecode.append((ai_flags << 4) | drop_id)
+        Bytecode.append(ai_flags)
 
         return Bytecode
 

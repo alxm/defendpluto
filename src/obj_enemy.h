@@ -68,7 +68,7 @@ extern ZEnemyCallback z_enemy_aiTable[Z_ENEMY_NUM];
 extern ZEnemyFlyPattern z_enemy_flyTable[Z_FLY_NUM];
 extern ZEnemyCallback z_enemy_attackTable[Z_ATTACK_NUM];
 
-extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags, uint8_t DropId);
+extern void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags);
 extern bool z_enemy_tick(ZPoolObject* Enemy);
 extern void z_enemy_draw(ZPoolObject* Enemy);
 

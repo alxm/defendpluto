@@ -33,10 +33,8 @@ static struct {
     int8_t x, y, w, h;
 } g_coll;
 
-void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags, uint8_t DropId)
+void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags)
 {
-    Z_UNUSED(DropId);
-
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
     Enemy->angle = Z_ANGLE_270;
