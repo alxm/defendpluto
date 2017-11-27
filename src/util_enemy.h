@@ -37,4 +37,4 @@ extern ZEnemyData z_enemyData[Z_ENEMY_NUM];
 
 extern void z_enemy_setup(void);
 
-extern void z_enemy_drawJets(uint8_t EnemyId, int8_t X, int8_t Y);
+extern void z_enemy_drawJets(uint8_t EnemyId, int16_t X, int16_t Y);

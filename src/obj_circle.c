@@ -24,7 +24,7 @@
 
 #define Z_RADIUS_MAX 4
 
-void z_circle_init(ZCircle* Circle, int8_t X, int8_t Y)
+void z_circle_init(ZCircle* Circle, int16_t X, int16_t Y)
 {
     Circle->x = X;
     Circle->y = Y;
@@ -41,8 +41,8 @@ bool z_circle_tick(ZPoolObject* Circle)
 void z_circle_draw(ZPoolObject* Circle)
 {
     ZCircle* circle = (ZCircle*)Circle;
-    int8_t x = i8(circle->x + z_screen_getXShake());
-    int8_t y = i8(circle->y + z_screen_getYShake());
+    int16_t x = i16(circle->x + z_screen_getXShake());
+    int16_t y = i16(circle->y + z_screen_getYShake());
 
     z_draw_circle(x, y, u8(circle->radius), Z_COLOR_RED);
     z_draw_circle(x, y, u8(circle->radius * 2), Z_COLOR_RED);

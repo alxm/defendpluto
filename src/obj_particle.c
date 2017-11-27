@@ -46,8 +46,8 @@ void z_particle_draw(ZPoolObject* Particle)
 {
     ZParticle* particle = (ZParticle*)Particle;
 
-    int8_t x = i8(z_fix_fixtoi(particle->x) + z_screen_getXShake());
-    int8_t y = i8(z_fix_fixtoi(particle->y) + z_screen_getYShake());
+    int16_t x = i16(z_fix_fixtoi(particle->x) + z_screen_getXShake());
+    int16_t y = i16(z_fix_fixtoi(particle->y) + z_screen_getYShake());
 
     z_draw_pixel(x, y, Z_COLOR_YELLOW);
 }

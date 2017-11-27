@@ -271,7 +271,7 @@ static bool op_spawn(uint8_t Flags)
      * spawn flags x_coord y_coord type_id ai_state ai_flags
      * spawn       64      -8      enemy0  1        0
      */
-    int8_t x, y;
+    int16_t x, y;
     uint8_t type_id, ai_state, ai_flags;
     Z_READ_ARGI8(x, 0, 0);
     Z_READ_ARGI8(y, 1, 1);
@@ -285,14 +285,14 @@ static bool op_spawn(uint8_t Flags)
         return false;
     }
 
-    x = i8((Z_WIDTH - 1) * z_int8_clamp(x, 0, 100) / 100);
+    x = i16((Z_WIDTH - 1) * z_int16_clamp(x, 0, 100) / 100);
 
     if(y < 0) {
-        y = i8(-z_sprite_getHeight(&z_enemyData[type_id].sprite) / 2);
+        y = i16(-z_sprite_getHeight(&z_enemyData[type_id].sprite) / 2);
     } else if(y > 100) {
-        y = i8(Z_HEIGHT + z_sprite_getHeight(&z_enemyData[type_id].sprite) / 2);
+        y = i16(Z_HEIGHT + z_sprite_getHeight(&z_enemyData[type_id].sprite) / 2);
     } else {
-        y = i8((Z_HEIGHT - 1) * y / 100);
+        y = i16((Z_HEIGHT - 1) * y / 100);
     }
 
     z_enemy_init(e, x, y, type_id, ai_state, ai_flags & 0xf);

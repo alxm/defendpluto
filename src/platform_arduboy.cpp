@@ -148,17 +148,17 @@ void z_draw_fill(uint8_t Color)
     g_arduboy.fillScreen(Color ? WHITE : BLACK);
 }
 
-void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color)
+void z_draw_rectangle(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Color)
 {
     g_arduboy.fillRect(X, Y, W, H, Color ? WHITE : BLACK);
 }
 
-void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
+void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
 {
     g_arduboy.drawPixel(X, Y, Color ? WHITE : BLACK);
 }
 
-void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
+void z_draw_circle(int16_t X, int16_t Y, uint8_t Radius, uint8_t Color)
 {
     g_arduboy.drawCircle(X, Y, Radius, Color ? WHITE : BLACK);
 }
@@ -174,7 +174,7 @@ void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Buffer, uint8_t NumF
     Sprite->numFrames = NumFrames;
 }
 
-void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
+void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
     Sprites::drawExternalMask(X, Y, Sprite->image, Sprite->mask, Frame, Frame);
 }

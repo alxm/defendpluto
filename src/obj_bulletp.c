@@ -52,11 +52,11 @@ void z_bulletp_draw(ZPoolObject* Bullet)
 {
     ZBulletP* bullet = (ZBulletP*)Bullet;
 
-    int8_t x = z_fix_fixtoi(bullet->x);
-    int8_t y = z_fix_fixtoi(bullet->y);
+    int16_t x = z_fix_fixtoi(bullet->x);
+    int16_t y = z_fix_fixtoi(bullet->y);
 
-    z_draw_rectangle(i8(x - 1 + z_screen_getXShake()),
-                     i8(y - 2 + z_screen_getYShake()),
+    z_draw_rectangle(i16(x - 1 + z_screen_getXShake()),
+                     i16(y - 2 + z_screen_getYShake()),
                      2,
                      4,
                      Z_COLOR_RED);

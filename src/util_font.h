@@ -27,8 +27,8 @@ typedef enum {
 
 extern void z_font_setup(void);
 
-extern void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font);
-extern void z_font_textp(uint8_t StringId, int8_t X, int8_t Y, uint8_t Font);
-extern void z_font_int(int16_t Number, int8_t X, int8_t Y, uint8_t Font);
+extern void z_font_text(const char* Text, int16_t X, int16_t Y, uint8_t Font);
+extern void z_font_textp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font);
+extern void z_font_int(int16_t Number, int16_t X, int16_t Y, uint8_t Font);
 
 Z_EXTERN_C_END

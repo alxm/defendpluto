@@ -43,35 +43,44 @@ void z_enemy_setup(void)
     enemy(Z_ENEMY_SHIP2, enemy02, 7, 6, 1, 1, Z_FIX_ONE / 2);
 }
 
-void z_enemy_drawJets(uint8_t EnemyId, int8_t X, int8_t Y)
+void z_enemy_drawJets(uint8_t EnemyId, int16_t X, int16_t Y)
 {
-    int8_t x, y, w, h;
+    int16_t x, y;
+    int8_t w, h;
 
     switch(EnemyId) {
         case Z_ENEMY_SHIP0: {
             x = X;
-            y = i8(Y - 2);
+            y = i16(Y - 2);
             z_draw_pixel(x, y, Z_COLOR_RED);
         } break;
 
         case Z_ENEMY_SHIP1: {
-            x = i8(X - 3);
-            y = i8(Y - 3);
+            x = i16(X - 3);
+            y = i16(Y - 3);
             z_draw_pixel(x, y, Z_COLOR_RED);
 
-            x = i8(X + 3);
+            x = i16(X + 3);
             z_draw_pixel(x, y, Z_COLOR_RED);
         } break;
 
         case Z_ENEMY_SHIP2: {
-            x = i8(X - 2);
-            y = i8(Y - 4);
+            x = i16(X - 2);
+            y = i16(Y - 4);
             w = 2;
             h = 1;
-            z_draw_rectangle(x, i8(y + z_screen_getYShake()), w, h, Z_COLOR_RED);
+            z_draw_rectangle(x,
+                             i16(y + z_screen_getYShake()),
+                             w,
+                             h,
+                             Z_COLOR_RED);
 
-            x = i8(X + 1);
-            z_draw_rectangle(x, i8(y + z_screen_getYShake()), w, h, Z_COLOR_RED);
+            x = i16(X + 1);
+            z_draw_rectangle(x,
+                             i16(y + z_screen_getYShake()),
+                             w,
+                             h,
+                             Z_COLOR_RED);
         } break;
 
         default: return;

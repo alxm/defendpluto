@@ -55,7 +55,7 @@ void z_font_setup(void)
            | Z_FONT_FLAG_ALPHA_L);
 }
 
-static int8_t drawChar(char Char, int8_t X, int8_t Y, uint8_t Flags, ZSprite* Sprite, int8_t Width)
+static int16_t drawChar(char Char, int16_t X, int16_t Y, uint8_t Flags, ZSprite* Sprite, int8_t Width)
 {
     char frame = 0;
 
@@ -81,10 +81,10 @@ static int8_t drawChar(char Char, int8_t X, int8_t Y, uint8_t Flags, ZSprite* Sp
 
     z_sprite_blit(Sprite, X, Y, u8(frame));
 
-    return i8(X + Width + 1);
+    return i16(X + Width + 1);
 }
 
-void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font)
+void z_font_text(const char* Text, int16_t X, int16_t Y, uint8_t Font)
 {
     uint8_t flags = g_fonts[Font].flags;
     ZSprite* sprite = &g_fonts[Font].sprites;
@@ -95,7 +95,7 @@ void z_font_text(const char* Text, int8_t X, int8_t Y, uint8_t Font)
     }
 }
 
-void z_font_textp(uint8_t StringId, int8_t X, int8_t Y, uint8_t Font)
+void z_font_textp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
 {
     uint8_t flags = g_fonts[Font].flags;
     ZSprite* sprite = &g_fonts[Font].sprites;
@@ -107,7 +107,7 @@ void z_font_textp(uint8_t StringId, int8_t X, int8_t Y, uint8_t Font)
     }
 }
 
-void z_font_int(int16_t Number, int8_t X, int8_t Y, uint8_t Font)
+void z_font_int(int16_t Number, int16_t X, int16_t Y, uint8_t Font)
 {
     #define Z_BUFFER_SIZE 6
     char buffer[Z_BUFFER_SIZE];

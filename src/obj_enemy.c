@@ -30,10 +30,11 @@
 static struct {
     bool hit;
     bool allowMultiple;
-    int8_t x, y, w, h;
+    int16_t x, y;
+    int8_t w, h;
 } g_coll;
 
-void z_enemy_init(ZEnemy* Enemy, int8_t X, int8_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags)
+void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags)
 {
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
@@ -87,8 +88,8 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 void z_enemy_draw(ZPoolObject* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
-    int8_t x = z_fix_fixtoi(enemy->x);
-    int8_t y = z_fix_fixtoi(enemy->y);
+    int16_t x = z_fix_fixtoi(enemy->x);
+    int16_t y = z_fix_fixtoi(enemy->y);
     ZSprite* sprite = &z_enemyData[enemy->typeId].sprite;
 
     if(enemy->jetFlicker) {
@@ -96,8 +97,8 @@ void z_enemy_draw(ZPoolObject* Enemy)
     }
 
     z_sprite_blitCentered(sprite,
-                          i8(x + z_screen_getXShake()),
-                          i8(y + z_screen_getYShake()),
+                          i16(x + z_screen_getXShake()),
+                          i16(y + z_screen_getYShake()),
                           enemy->frame);
 }
 
@@ -143,7 +144,7 @@ static bool checkCollision(ZPoolObject* Enemy)
     return !hit;
 }
 
-bool z_enemy_checkCollisions(int8_t X, int8_t Y, int8_t W, int8_t H, bool AllowMultipleCollisions)
+bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, bool AllowMultipleCollisions)
 {
     g_coll.x = X;
     g_coll.y = Y;

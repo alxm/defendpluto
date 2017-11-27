@@ -51,10 +51,10 @@ void z_graphics_setup(void)
     z_sprite_load(&z_graphics.title, title);
 }
 
-void z_sprite_blitCentered(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
+void z_sprite_blitCentered(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
     z_sprite_blit(Sprite,
-                  i8(X - z_sprite_getWidth(Sprite) / 2),
-                  i8(Y - z_sprite_getHeight(Sprite) / 2),
+                  i16(X - z_sprite_getWidth(Sprite) / 2),
+                  i16(Y - z_sprite_getHeight(Sprite) / 2),
                   Frame);
 }

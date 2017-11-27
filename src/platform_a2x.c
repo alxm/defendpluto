@@ -87,19 +87,19 @@ void z_draw_fill(uint8_t Color)
     a_draw_fill();
 }
 
-void z_draw_rectangle(int8_t X, int8_t Y, int8_t W, int8_t H, uint8_t Color)
+void z_draw_rectangle(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Color)
 {
     a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
     a_draw_rectangle(X, Y, W, H);
 }
 
-void z_draw_pixel(int8_t X, int8_t Y, uint8_t Color)
+void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
 {
     a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
     a_draw_pixel(X, Y);
 }
 
-void z_draw_circle(int8_t X, int8_t Y, uint8_t Radius, uint8_t Color)
+void z_draw_circle(int16_t X, int16_t Y, uint8_t Radius, uint8_t Color)
 {
     a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
     a_draw_circle(X, Y, Radius);
@@ -138,7 +138,7 @@ static ASprite* getCurrentSprite(ZSprite* Sprite, uint8_t Frame)
     return a_spriteframes_getIndex(Sprite->frames[g_paletteIndex], Frame);
 }
 
-void z_sprite_blit(ZSprite* Sprite, int8_t X, int8_t Y, uint8_t Frame)
+void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
     a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
 }

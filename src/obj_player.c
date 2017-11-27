@@ -67,7 +67,7 @@ static void boostShield(uint8_t Boost)
     }
 }
 
-void z_player_init(int8_t X, int8_t Y)
+void z_player_init(int16_t X, int16_t Y)
 {
     z_player.x = z_fix_itofix(X);
     z_player.y = z_fix_itofix(Y);
@@ -169,32 +169,32 @@ void z_player_tick(void)
 
 void z_player_draw(void)
 {
-    int8_t x = z_fix_fixtoi(z_player.x);
-    int8_t y = i8(z_fix_fixtoi(z_player.y) + z_player.shootShift);
+    int16_t x = z_fix_fixtoi(z_player.x);
+    int16_t y = i16(z_fix_fixtoi(z_player.y) + z_player.shootShift);
 
-    int8_t fx = i8(1
-                    - !!(z_player.frame & Z_BIT_LEFT)
-                    + !!(z_player.frame & Z_BIT_RIGHT));
-    int8_t fy = i8(1
-                    - !!(z_player.frame & Z_BIT_FORWARD)
-                    + !!(z_player.frame & Z_BIT_BACK));
+    int16_t fx = i16(1
+                     - !!(z_player.frame & Z_BIT_LEFT)
+                     + !!(z_player.frame & Z_BIT_RIGHT));
+    int16_t fy = i16(1
+                     - !!(z_player.frame & Z_BIT_FORWARD)
+                     + !!(z_player.frame & Z_BIT_BACK));
 
     ZSprite* sprite = &z_graphics.player[fy][fx];
 
     if(z_player.jetFlicker) {
-        int8_t jy = i8(y + 2 + z_screen_getYShake());
+        int16_t jy = i16(y + 2 + z_screen_getYShake());
 
         if(z_player.frame & Z_BIT_BACK) {
-            jy = i8(y - 1 + z_screen_getYShake());
+            jy = i16(y - 1 + z_screen_getYShake());
         }
 
-        z_draw_rectangle(i8(x - 3), jy, 2, 3, Z_COLOR_RED);
-        z_draw_rectangle(i8(x + 1), jy, 2, 3, Z_COLOR_RED);
+        z_draw_rectangle(i16(x - 3), jy, 2, 3, Z_COLOR_RED);
+        z_draw_rectangle(i16(x + 1), jy, 2, 3, Z_COLOR_RED);
     }
 
     z_sprite_blitCentered(sprite,
-                          i8(x + z_screen_getXShake()),
-                          i8(y + z_screen_getYShake()),
+                          i16(x + z_screen_getXShake()),
+                          i16(y + z_screen_getYShake()),
                           0);
 }
 
@@ -218,29 +218,29 @@ void z_player_hudTick(void)
     }
 }
 
-static void drawHearts(int8_t X, int8_t Y)
+static void drawHearts(int16_t X, int16_t Y)
 {
     for(int8_t i = 0; i < Z_HEALTH_MAX; i++) {
         uint8_t heartFrame = z_player.health > 0
                              ? z_player.health > i
                              : z_player.heartsBlink;
 
-        z_sprite_blit(&z_graphics.hearts, i8(X + i * 8), Y, heartFrame);
+        z_sprite_blit(&z_graphics.hearts, i16(X + i * 8), Y, heartFrame);
     }
 }
 
-static void drawShield(int8_t X, int8_t Y)
+static void drawShield(int16_t X, int16_t Y)
 {
     z_sprite_blit(&z_graphics.shield, X, Y, 0);
 
-    int8_t rX = i8(X + 7);
-    int8_t rY = i8(Y + 2);
+    int16_t rX = i16(X + 7);
+    int16_t rY = i16(Y + 2);
     int8_t maxWidth = 21;
     int8_t width = i8(maxWidth * z_player.shield / Z_SHIELD_MAX);
     int8_t height = 1;
 
-    z_draw_rectangle(i8(rX - 1),
-                     i8(rY - 1),
+    z_draw_rectangle(i16(rX - 1),
+                     i16(rY - 1),
                      i8(maxWidth + 4),
                      i8(height + 4),
                      Z_COLOR_BLUE);
@@ -249,8 +249,8 @@ static void drawShield(int8_t X, int8_t Y)
                      i8(maxWidth + 2),
                      i8(height + 2),
                      Z_COLOR_RED);
-    z_draw_rectangle(i8(rX + 1 + width),
-                     i8(rY + 1),
+    z_draw_rectangle(i16(rX + 1 + width),
+                     i16(rY + 1),
                      i8(maxWidth - width),
                      height,
                      Z_COLOR_BLUE);

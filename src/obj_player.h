@@ -38,7 +38,7 @@ typedef struct {
 
 extern ZPlayer z_player;
 
-extern void z_player_init(int8_t X, int8_t Y);
+extern void z_player_init(int16_t X, int16_t Y);
 extern void z_player_tick(void);
 extern void z_player_draw(void);
 
