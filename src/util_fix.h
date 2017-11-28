@@ -25,13 +25,21 @@ typedef int32_t ZFixBig;
 
 typedef enum {
     Z_ANGLE_000 = (Z_ANGLES_NUM * 0 / 8),
+    Z_ANGLE_022 = (Z_ANGLES_NUM * 1 / 16),
     Z_ANGLE_045 = (Z_ANGLES_NUM * 1 / 8),
+    Z_ANGLE_067 = (Z_ANGLE_045 + Z_ANGLE_022),
     Z_ANGLE_090 = (Z_ANGLES_NUM * 2 / 8),
+    Z_ANGLE_112 = (Z_ANGLE_090 + Z_ANGLE_022),
     Z_ANGLE_135 = (Z_ANGLES_NUM * 3 / 8),
+    Z_ANGLE_157 = (Z_ANGLE_135 + Z_ANGLE_022),
     Z_ANGLE_180 = (Z_ANGLES_NUM * 4 / 8),
+    Z_ANGLE_202 = (Z_ANGLE_180 + Z_ANGLE_022),
     Z_ANGLE_225 = (Z_ANGLES_NUM * 5 / 8),
+    Z_ANGLE_247 = (Z_ANGLE_225 + Z_ANGLE_022),
     Z_ANGLE_270 = (Z_ANGLES_NUM * 6 / 8),
-    Z_ANGLE_315 = (Z_ANGLES_NUM * 7 / 8)
+    Z_ANGLE_292 = (Z_ANGLE_270 + Z_ANGLE_022),
+    Z_ANGLE_315 = (Z_ANGLES_NUM * 7 / 8),
+    Z_ANGLE_327 = (Z_ANGLE_315 + Z_ANGLE_022)
 } ZAngle;
 
 extern const ZFix z_fix__sin[Z_ANGLES_NUM];

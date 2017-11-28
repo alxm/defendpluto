@@ -79,11 +79,11 @@ static bool ai_ship1(ZEnemy* Enemy)
 {
     switch(Enemy->ai.state) {
         case 0: {
-            if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 4) {
-                z_enemy_setFly(Enemy, Z_FLY_CURVE);
-                z_enemy_setAttack(Enemy, Z_ATTACK_STRAIGHT);
-                Enemy->ai.state = DONE_STATE;
-            }
+            Enemy->angle = Z_ANGLE_327;
+        } break;
+
+        case 1: {
+            Enemy->angle = Z_ANGLE_202;
         } break;
     }
 

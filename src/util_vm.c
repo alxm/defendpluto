@@ -285,7 +285,13 @@ static bool op_spawn(uint8_t Flags)
         return false;
     }
 
-    x = i16((Z_WIDTH - 1) * z_int16_clamp(x, 0, 100) / 100);
+    if(x < 0) {
+        x = i16(-z_sprite_getWidth(&z_enemyData[type_id].sprite) / 2);
+    } else if(x > 100) {
+        x = i16(Z_WIDTH + z_sprite_getWidth(&z_enemyData[type_id].sprite) / 2);
+    } else {
+        x = i16((Z_WIDTH - 1) * x / 100);
+    }
 
     if(y < 0) {
         y = i16(-z_sprite_getHeight(&z_enemyData[type_id].sprite) / 2);
