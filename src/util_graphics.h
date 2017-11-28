@@ -38,6 +38,7 @@ typedef enum {
 typedef struct {
     ZSprite player[3][3];
     ZSprite bullets;
+    ZSprite energy;
     ZSprite hearts;
     ZSprite shield;
     ZSprite title;

@@ -28,6 +28,7 @@
 #include "data_gfx_player_back_left.h"
 #include "data_gfx_player_back_right.h"
 #include "data_gfx_bullets.h"
+#include "data_gfx_energy.h"
 #include "data_gfx_hearts.h"
 #include "data_gfx_shield.h"
 #include "data_gfx_title.h"
@@ -46,6 +47,7 @@ void z_graphics_setup(void)
     z_sprite_load(&z_graphics.player[2][1], player_back);
     z_sprite_load(&z_graphics.player[2][2], player_back_right);
     z_sprite_load(&z_graphics.bullets, bullets);
+    z_sprite_load(&z_graphics.energy, energy);
     z_sprite_load(&z_graphics.hearts, hearts);
     z_sprite_load(&z_graphics.shield, shield);
     z_sprite_load(&z_graphics.title, title);

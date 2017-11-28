@@ -229,35 +229,46 @@ static void drawHearts(int16_t X, int16_t Y)
     }
 }
 
-static void drawShield(int16_t X, int16_t Y)
+static void drawBar(int16_t X, int16_t Y, uint8_t Value, uint8_t Max)
 {
-    z_sprite_blit(&z_graphics.shield, X, Y, 0);
-
-    int16_t rX = i16(X + 7);
-    int16_t rY = i16(Y + 2);
-    int8_t maxWidth = 21;
-    int8_t width = i8(maxWidth * z_player.shield / Z_SHIELD_MAX);
     int8_t height = 1;
+    int8_t maxWidth = 21;
+    int8_t width = i8(maxWidth * Value / Max);
 
-    z_draw_rectangle(i16(rX - 1),
-                     i16(rY - 1),
+    z_draw_rectangle(X,
+                     Y,
                      i8(maxWidth + 4),
                      i8(height + 4),
                      Z_COLOR_BLUE);
-    z_draw_rectangle(rX,
-                     rY,
+
+    z_draw_rectangle(i16(X + 1),
+                     i16(Y + 1),
                      i8(maxWidth + 2),
                      i8(height + 2),
                      Z_COLOR_RED);
-    z_draw_rectangle(i16(rX + 1 + width),
-                     i16(rY + 1),
+
+    z_draw_rectangle(i16(X + 2 + width),
+                     i16(Y + 2),
                      i8(maxWidth - width),
                      height,
                      Z_COLOR_BLUE);
+}
+
+static void drawShield(int16_t X, int16_t Y)
+{
+    z_sprite_blit(&z_graphics.shield, X, Y, 0);
+    drawBar(i16(X + 6), i16(Y + 1), z_player.shield, Z_SHIELD_MAX);
+}
+
+static void drawEnergy(int16_t X, int16_t Y)
+{
+    z_sprite_blit(&z_graphics.energy, X, Y, 0);
+    drawBar(i16(X + 4), i16(Y + 2), z_random_uint8(11), 10);
 }
 
 void z_player_hudDraw(void)
 {
     drawHearts(2, 2);
     drawShield(28, 2);
+    drawEnergy(60, 1);
 }
