@@ -30,7 +30,7 @@ void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraS
 {
     Bullet->x = X;
     Bullet->y = Y;
-    Bullet->angle = Z_ANGLE_WRAP(Angle);
+    Bullet->angle = Z_ANGLE_TO_U4(Angle);
     Bullet->speed = ExtraSpeed;
 }
 
@@ -38,8 +38,9 @@ bool z_bullete_tick(ZPoolObject* Bullet)
 {
     ZBulletE* bullet = (ZBulletE*)Bullet;
 
-    ZFix cos = z_fix_cos(bullet->angle);
-    ZFix sin = z_fix_sin(bullet->angle);
+    uint8_t angle = Z_U4_TO_ANGLE(bullet->angle);
+    ZFix cos = z_fix_cos(angle);
+    ZFix sin = z_fix_sin(angle);
 
     bullet->x = zf(bullet->x + cos * (1 + bullet->speed));
     bullet->y = zf(bullet->y - sin * (1 + bullet->speed));
@@ -80,11 +81,11 @@ bool z_bullete_tick(ZPoolObject* Bullet)
 void z_bullete_draw(ZPoolObject* Bullet)
 {
     ZBulletE* bullet = (ZBulletE*)Bullet;
+    uint8_t angle = Z_U4_TO_ANGLE(bullet->angle);
+    uint8_t frame = u8(Z_ANGLE_WRAP(angle + Z_ANGLE_045 / 2) / Z_ANGLE_045);
 
     z_sprite_blitCentered(&z_graphics.bullets,
                           z_fix_fixtoi(bullet->x),
                           z_fix_fixtoi(bullet->y),
-                          u8(
-                            Z_ANGLE_WRAP(bullet->angle + Z_ANGLE_045 / 2)
-                                / Z_ANGLE_045));
+                          frame);
 }

@@ -18,8 +18,9 @@
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
-    uint8_t angle : 7;
+    uint8_t angle : 4;
     uint8_t speed : 1;
+    uint8_t damage : 3;
 } ZBulletE;
 
 #define Z_BULLETE_POOL_NUM 8

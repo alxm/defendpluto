@@ -21,7 +21,10 @@ typedef int32_t ZFixBig;
 #define Z_FIX_ONE           (1 << Z_FIX_BIT_PRECISION)
 
 #define Z_ANGLES_NUM        (128)
+
 #define Z_ANGLE_WRAP(Angle) u8((Angle) & (Z_ANGLES_NUM - 1))
+#define Z_ANGLE_TO_U4(Angle) u4((Angle) >> 3)
+#define Z_U4_TO_ANGLE(U4) u8((U4) << 3)
 
 typedef enum {
     Z_ANGLE_000 = (Z_ANGLES_NUM * 0 / 8),

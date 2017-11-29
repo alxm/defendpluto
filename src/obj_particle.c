@@ -27,14 +27,14 @@ void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)
 {
     Particle->x = X;
     Particle->y = Y;
-    Particle->angle = u4(z_random_uint8(Z_ANGLES_NUM) >> 4);
+    Particle->angle = Z_ANGLE_TO_U4(z_random_uint8(Z_ANGLES_NUM));
     Particle->ttl = u4(z_random_uint8(16));
 }
 
 bool z_particle_tick(ZPoolObject* Particle)
 {
     ZParticle* particle = (ZParticle*)Particle;
-    uint8_t angle = u8(particle->angle << 4);
+    uint8_t angle = Z_U4_TO_ANGLE(particle->angle);
 
     particle->x = zf(particle->x + z_fix_cos(angle));
     particle->y = zf(particle->y - z_fix_sin(angle));
