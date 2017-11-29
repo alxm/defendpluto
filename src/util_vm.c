@@ -285,18 +285,21 @@ static bool op_spawn(uint8_t Flags)
         return false;
     }
 
+    int8_t spriteWidth = z_sprite_getWidth(&z_enemyData[type_id].sprite);
+    int8_t spriteHeight = z_sprite_getHeight(&z_enemyData[type_id].sprite);
+
     if(x < 0) {
-        x = i16(-z_sprite_getWidth(&z_enemyData[type_id].sprite) / 2);
+        x = i16(x * spriteWidth + spriteWidth / 2);
     } else if(x > 100) {
-        x = i16(Z_WIDTH + z_sprite_getWidth(&z_enemyData[type_id].sprite) / 2);
+        x = i16(Z_WIDTH + (x - 100) * spriteWidth - spriteWidth / 2);
     } else {
         x = i16((Z_WIDTH - 1) * x / 100);
     }
 
     if(y < 0) {
-        y = i16(-z_sprite_getHeight(&z_enemyData[type_id].sprite) / 2);
+        y = i16(y * spriteHeight + spriteHeight / 2);
     } else if(y > 100) {
-        y = i16(Z_HEIGHT + z_sprite_getHeight(&z_enemyData[type_id].sprite) / 2);
+        y = i16(Z_HEIGHT + (y - 100) * spriteHeight - spriteHeight / 2);
     } else {
         y = i16((Z_HEIGHT - 1) * y / 100);
     }
