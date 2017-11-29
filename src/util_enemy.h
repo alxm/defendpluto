@@ -28,9 +28,9 @@ typedef struct {
     ZSprite sprite;
     uint8_t w : 4;
     uint8_t h : 4;
-    uint8_t health : 4;
-    uint8_t damage : 4;
-    ZFix speed;
+    uint8_t health : 2;
+    uint8_t damage : 3;
+    uint8_t speedDiv : 3;
 } ZEnemyData;
 
 extern ZEnemyData z_enemyData[Z_ENEMY_NUM];

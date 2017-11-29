@@ -35,12 +35,12 @@ void z_enemy_setup(void)
         z_enemyData[Index].h = Height;                             \
         z_enemyData[Index].health = Health;                        \
         z_enemyData[Index].damage = Damage;                        \
-        z_enemyData[Index].speed = Speed;
+        z_enemyData[Index].speedDiv = Speed;
 
-    enemy(Z_ENEMY_ASTEROID, asteroid, 8, 8, 1, 0, Z_FIX_ONE / 4);
-    enemy(Z_ENEMY_SHIP0, enemy00, 7, 5, 1, 1, Z_FIX_ONE / 2);
-    enemy(Z_ENEMY_SHIP1, enemy01, 7, 5, 1, 1, Z_FIX_ONE / 2);
-    enemy(Z_ENEMY_SHIP2, enemy02, 7, 6, 1, 1, Z_FIX_ONE / 2);
+    enemy(Z_ENEMY_ASTEROID, asteroid, 8, 8, 1, 0, 4);
+    enemy(Z_ENEMY_SHIP0, enemy00, 7, 5, 1, 2, 2);
+    enemy(Z_ENEMY_SHIP1, enemy01, 7, 5, 1, 4, 2);
+    enemy(Z_ENEMY_SHIP2, enemy02, 7, 6, 1, 6, 2);
 }
 
 void z_enemy_drawJets(uint8_t EnemyId, int16_t X, int16_t Y)
