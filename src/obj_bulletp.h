@@ -20,8 +20,6 @@ typedef struct {
     ZFix x, y;
 } ZBulletP;
 
-#define Z_BULLETP_POOL_NUM 3
-
 extern void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y);
 extern bool z_bulletp_tick(ZPoolObject* Bullet);
 extern void z_bulletp_draw(ZPoolObject* Bullet);

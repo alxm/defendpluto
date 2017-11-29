@@ -64,7 +64,7 @@ void z_star_draw(ZPoolObject* Star)
 void z_star_spawn(void)
 {
     if(z_random_int8(
-        (Z_FIX_ONE / Z_STAR_AVG_SPEED) * Z_HEIGHT / Z_STAR_POOL_NUM) == 0) {
+        (Z_FIX_ONE / Z_STAR_AVG_SPEED) * Z_HEIGHT / Z_POOL_NUM_STAR) == 0) {
 
         ZStar* star = z_pool_alloc(Z_POOL_STAR);
 

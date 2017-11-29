@@ -62,8 +62,6 @@ typedef struct {
     uint8_t framesPeriod : 6;
 } ZEnemyFlyPattern;
 
-#define Z_ENEMY_POOL_NUM 16
-
 extern ZEnemyCallback z_enemy_aiTable[Z_ENEMY_NUM];
 extern ZEnemyFlyPattern z_enemy_flyTable[Z_FLY_NUM];
 extern ZEnemyCallback z_enemy_attackTable[Z_ATTACK_NUM];
