@@ -22,6 +22,7 @@
 #define Z_DEBUG_GENERATE_LUT 0
 #define Z_DEBUG_STATS 0
 #define Z_DEBUG_INVINCIBLE 0
+#define Z_DEBUG_INFINITE_ENERGY 0
 
 #ifdef __cplusplus
 #define Z_EXTERN_C_START extern "C" {

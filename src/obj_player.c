@@ -32,14 +32,50 @@
 
 #define Z_HEALTH_MAX 3
 
-#define Z_SHOOT_EVERY_N_FRAMES Z_DS_TO_FRAMES(3)
+#define Z_SHOOT_EVERY_DS 3
 
 #define Z_SPEED_SCALE_DIV 2
 #define Z_SPEED_MAX (Z_FIX_ONE / Z_SPEED_SCALE_DIV)
 #define Z_SPEED_ACCEL (Z_FIX_ONE / 8 / Z_SPEED_SCALE_DIV)
 #define Z_SPEED_DECEL (Z_FIX_ONE / 16 / Z_SPEED_SCALE_DIV)
 
+#define Z_SHIELD_MAX 15
+#define Z_SHIELD_DAMAGE_COLLISION Z_SHIELD_MAX
+#define Z_SHIELD_DAMAGE_SHOOTING 3
+#define Z_SHIELD_BOOST_AFTER_LOST_HEART 8
+#define Z_SHIELD_REGEN_EVERY_DS 20
+
+#define Z_ENERGY_MAX 15
+#define Z_ENERGY_USE_SHOOTING 2
+#define Z_ENERGY_REGEN_EVERY_DS 10
+
 ZPlayer z_player;
+
+static bool useEnergy(uint8_t Amount)
+{
+    bool enough = z_player.energy >= Amount;
+
+    if(enough) {
+        z_player.energy = u4(z_player.energy - Amount);
+    } else {
+        z_player.energy = 0;
+    }
+
+    #if Z_DEBUG_INFINITE_ENERGY
+        return true;
+    #else
+        return enough;
+    #endif
+}
+
+static void boostEnergy(uint8_t Boost)
+{
+    if(Z_ENERGY_MAX - z_player.energy > Boost) {
+        z_player.energy = u4(z_player.energy + Boost);
+    } else {
+        z_player.energy = Z_ENERGY_MAX;
+    }
+}
 
 static bool useShield(uint8_t Damage)
 {
@@ -75,12 +111,14 @@ void z_player_init(int16_t X, int16_t Y)
     z_player.dy = 0;
     z_player.w = 10;
     z_player.h = 4;
-    z_player.lastShotCounter = 0;
     z_player.frame = 0;
-    z_player.shootShift = 0;
-    z_player.jetFlicker = false;
+    z_player.energy = Z_ENERGY_MAX;
     z_player.shield = Z_SHIELD_MAX;
     z_player.health = Z_HEALTH_MAX;
+    z_player.lastShotCounter = 0;
+    z_player.shootShift = 0;
+    z_player.jetFlicker = false;
+
 }
 
 void z_player_tick(void)
@@ -103,12 +141,19 @@ void z_player_tick(void)
                                z_player.y);
             }
 
-            z_player.lastShotCounter = Z_SHOOT_EVERY_N_FRAMES;
-            useShield(Z_SHIELD_DAMAGE_SHOOTING);
+            if(!useEnergy(Z_ENERGY_USE_SHOOTING)) {
+                useShield(Z_SHIELD_DAMAGE_SHOOTING);
+            }
+
+            z_player.lastShotCounter = Z_DS_TO_FRAMES(Z_SHOOT_EVERY_DS);
         }
     } else {
         z_player.shootShift = 0;
         z_player.lastShotCounter = 0;
+
+        if(Z_EVERY_N_DS(Z_ENERGY_REGEN_EVERY_DS)) {
+            boostEnergy(1);
+        }
     }
 
     z_player.frame = Z_BIT_RESTING;
@@ -162,8 +207,8 @@ void z_player_tick(void)
 
     if(hit) {
         z_player_takeDamage(Z_SHIELD_DAMAGE_COLLISION);
-    } else if(Z_EVERY_N_DS(10)) {
-        boostShield(Z_SHIELD_BOOST_REGEN);
+    } else if(Z_EVERY_N_DS(Z_SHIELD_REGEN_EVERY_DS)) {
+        boostShield(1);
     }
 }
 
@@ -206,7 +251,7 @@ void z_player_takeDamage(uint8_t Damage)
 
     if(!useShield(Damage)) {
         if(--z_player.health >= 0) {
-            boostShield(Z_SHIELD_BOOST_HEART);
+            boostShield(Z_SHIELD_BOOST_AFTER_LOST_HEART);
         }
     }
 }
@@ -263,7 +308,7 @@ static void drawShield(int16_t X, int16_t Y)
 static void drawEnergy(int16_t X, int16_t Y)
 {
     z_sprite_blit(&z_graphics.energy, X, Y, 0);
-    drawBar(i16(X + 4), i16(Y + 2), z_random_uint8(11), 10);
+    drawBar(i16(X + 4), i16(Y + 2), z_player.energy, Z_ENERGY_MAX);
 }
 
 void z_player_hudDraw(void)

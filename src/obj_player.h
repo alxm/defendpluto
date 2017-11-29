@@ -15,12 +15,7 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define Z_SHIELD_MAX 15
-#define Z_SHIELD_DAMAGE_COLLISION Z_SHIELD_MAX
 #define Z_SHIELD_DAMAGE_SHOT 8
-#define Z_SHIELD_DAMAGE_SHOOTING 2
-#define Z_SHIELD_BOOST_HEART 8
-#define Z_SHIELD_BOOST_REGEN 1
 
 typedef struct {
     ZFix x, y;
@@ -28,12 +23,13 @@ typedef struct {
     uint8_t w : 4;
     uint8_t h : 4;
     uint8_t frame : 4;
-    uint8_t shootShift : 1;
-    bool jetFlicker : 1;
+    uint8_t energy : 4;
     uint8_t shield : 4;
     int8_t health : 4;
-    uint8_t lastShotCounter : 7;
+    uint8_t lastShotCounter : 5;
     bool heartsBlink : 1;
+    uint8_t shootShift : 1;
+    bool jetFlicker : 1;
 } ZPlayer;
 
 extern ZPlayer z_player;
