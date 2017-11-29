@@ -92,20 +92,20 @@ static bool ai_ship1(ZEnemy* Enemy)
 
 static bool ai_ship2(ZEnemy* Enemy)
 {
-    if(Z_EVERY_N_DS(20)) {
+    if(!Z_EVERY_N_DS(20)) {
         return true;
     }
 
     switch(Enemy->ai.state) {
         case 0: {
-            Enemy->fly.id = Z_FLY_ZIGZAG;
-            Enemy->attack.id = Z_ATTACK_TARGET;
+            z_enemy_setFly(Enemy, Z_FLY_ZIGZAG);
+            z_enemy_setAttack(Enemy, Z_ATTACK_TARGET);
             Enemy->ai.state = 1;
         } break;
 
         case 1: {
-            Enemy->fly.id = Z_FLY_LINE;
-            Enemy->attack.id = Z_ATTACK_STRAIGHT;
+            z_enemy_setFly(Enemy, Z_FLY_LINE);
+            z_enemy_setAttack(Enemy, Z_ATTACK_STRAIGHT);
             Enemy->ai.state = 0;
         } break;
     }

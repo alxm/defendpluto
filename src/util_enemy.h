@@ -30,7 +30,7 @@ typedef struct {
     uint8_t h : 4;
     uint8_t health : 2;
     uint8_t damage : 3;
-    uint8_t speedDiv : 3;
+    uint8_t speedShift : 3;
 } ZEnemyData;
 
 extern ZEnemyData z_enemyData[Z_ENEMY_NUM];

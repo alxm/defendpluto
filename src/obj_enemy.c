@@ -55,10 +55,10 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 
     ZFix cos = z_fix_cos(enemy->angle);
     ZFix sin = z_fix_sin(enemy->angle);
-    ZFix speed = zf(Z_FIX_ONE / z_enemyData[enemy->typeId].speedDiv);
+    ZFix speed = z_enemyData[enemy->typeId].speedShift;
 
-    enemy->x = zf(enemy->x + z_fix_mul(cos, speed));
-    enemy->y = zf(enemy->y - z_fix_mul(sin, speed));
+    enemy->x = zf(enemy->x + (cos >> speed));
+    enemy->y = zf(enemy->y - (sin >> speed));
 
     if(Z_EVERY_N_DS(2)) {
         ZSprite* sprite = &z_enemyData[enemy->typeId].sprite;

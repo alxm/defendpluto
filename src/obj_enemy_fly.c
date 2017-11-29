@@ -30,6 +30,13 @@ static bool onScreen(ZEnemy* Enemy)
 
 static bool fly_line(ZEnemy* Enemy)
 {
+    switch(Enemy->fly.state) {
+        case 0: {
+            Enemy->angle = Z_ANGLE_270;
+            Enemy->fly.state = 1;
+        } break;
+    }
+
     return onScreen(Enemy);
 }
 
@@ -45,6 +52,8 @@ static bool fly_zigzag(ZEnemy* Enemy)
                 }
 
                 Enemy->fly.state = 1;
+            } else {
+                Enemy->angle = Z_ANGLE_270;
             }
         } break;
 
