@@ -26,12 +26,13 @@
 #include "obj_particle.h"
 #include "obj_player.h"
 
-void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraSpeed)
+void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraSpeed, uint8_t Damage)
 {
     Bullet->x = X;
     Bullet->y = Y;
     Bullet->angle = Z_ANGLE_TO_U4(Angle);
     Bullet->speed = ExtraSpeed;
+    Bullet->damage = bf(Damage, 3);
 }
 
 bool z_bullete_tick(ZPoolObject* Bullet)
@@ -61,7 +62,7 @@ bool z_bullete_tick(ZPoolObject* Bullet)
                                      z_player.h);
 
     if(hit) {
-        z_player_takeDamage(Z_SHIELD_DAMAGE_SHOT);
+        z_player_takeDamage(bullet->damage);
         z_screen_shake(Z_DS_TO_FRAMES(1));
 
         for(int8_t i = 4; i--; ) {

@@ -15,8 +15,6 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define Z_SHIELD_DAMAGE_SHOT 8
-
 typedef struct {
     ZFix x, y;
     int8_t dx, dy;

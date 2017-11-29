@@ -26,6 +26,22 @@
 #include "obj_enemy.h"
 #include "obj_player.h"
 
+static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
+{
+    ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
+
+    if(b) {
+        z_bullete_init(b,
+                       zf(Enemy->x + z_fix_itofix(z_screen_getXShake())),
+                       Enemy->y,
+                       Angle,
+                       ExtraSpeed,
+                       z_enemyData[Enemy->typeId].damage);
+    }
+
+    Enemy->attack.counter = Z_DS_TO_FRAMES(5);
+}
+
 static bool attack_none(ZEnemy* Enemy)
 {
     Z_UNUSED(Enemy);
@@ -35,36 +51,14 @@ static bool attack_none(ZEnemy* Enemy)
 
 static bool attack_straight(ZEnemy* Enemy)
 {
-    ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
-
-    if(b) {
-        z_bullete_init(b,
-                       zf(Enemy->x + z_fix_itofix(z_screen_getXShake())),
-                       Enemy->y,
-                       Z_ANGLE_270,
-                       false);
-    }
-
-    Enemy->attack.counter = Z_DS_TO_FRAMES(5);
+    shoot(Enemy, Z_ANGLE_270, false);
 
     return true;
 }
 
 static bool attack_target(ZEnemy* Enemy)
 {
-    ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
-
-    if(b) {
-        z_bullete_init(b,
-                       zf(Enemy->x + z_fix_itofix(z_screen_getXShake())),
-                       Enemy->y,
-                       z_fix_atan(Enemy->x, Enemy->y, z_player.x, z_player.y),
-                       false);
-
-        Enemy->attack.counter = Z_DS_TO_FRAMES(5);
-    } else {
-        Enemy->attack.counter = 0;
-    }
+    shoot(Enemy, z_fix_atan(Enemy->x, Enemy->y, z_player.x, z_player.y), false);
 
     return true;
 }

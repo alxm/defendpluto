@@ -62,6 +62,7 @@ typedef int16_t ZFix;
 #define u16(X) (uint16_t)(X)
 #define zf(X) (ZFix)(X)
 #define zpo(X) (ZPoolOffset)(X)
+#define bf(X, Bits) u8((X) & ((1 << (Bits)) - 1))
 
 Z_EXTERN_C_START
 
