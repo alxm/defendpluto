@@ -16,26 +16,27 @@
 */
 
 #include "platform.h"
-#include "util_enemy.h"
 #include "util_fix.h"
 #include "util_graphics.h"
+#include "util_pool.h"
 #include "util_screen.h"
+#include "obj_enemy.h"
 #include "data_gfx_asteroid.h"
 #include "data_gfx_enemy00.h"
 #include "data_gfx_enemy01.h"
 #include "data_gfx_enemy02.h"
 
-ZEnemyData z_enemyData[Z_ENEMY_NUM];
+ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
 void z_enemy_setup(void)
 {
     #define enemy(Index, Id, Width, Height, Health, Damage, Speed) \
-        z_sprite_load(&z_enemyData[Index].sprite, Id);             \
-        z_enemyData[Index].w = Width;                              \
-        z_enemyData[Index].h = Height;                             \
-        z_enemyData[Index].health = Health;                        \
-        z_enemyData[Index].damage = Damage;                        \
-        z_enemyData[Index].speedShift = Speed;
+        z_sprite_load(&z_enemy_data[Index].sprite, Id);            \
+        z_enemy_data[Index].w = Width;                             \
+        z_enemy_data[Index].h = Height;                            \
+        z_enemy_data[Index].health = Health;                       \
+        z_enemy_data[Index].damage = Damage;                       \
+        z_enemy_data[Index].speedShift = Speed;
 
     enemy(Z_ENEMY_ASTEROID, asteroid, 8, 8, 1, 0, 2);
     enemy(Z_ENEMY_SHIP0, enemy00, 7, 5, 1, 2, 1);

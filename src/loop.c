@@ -21,12 +21,12 @@
 #include "loop_game.h"
 #include "loop_over.h"
 #include "loop_title.h"
-#include "util_enemy.h"
 #include "util_font.h"
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_str.h"
 #include "util_vm.h"
+#include "obj_enemy.h"
 
 typedef struct {
     ZStateCallback* init;

@@ -16,7 +16,6 @@
 */
 
 #include "platform.h"
-#include "util_enemy.h"
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_pool.h"
@@ -25,7 +24,7 @@
 
 static bool onScreen(ZEnemy* Enemy)
 {
-    return z_fix_fixtoi(Enemy->y) - z_enemyData[Enemy->typeId].h / 2 < Z_HEIGHT;
+    return z_fix_fixtoi(Enemy->y) - z_enemy_data[Enemy->typeId].h / 2 < Z_HEIGHT;
 }
 
 static bool fly_line(ZEnemy* Enemy)

@@ -16,7 +16,6 @@
 */
 
 #include "platform.h"
-#include "util_enemy.h"
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_pool.h"
@@ -36,7 +35,7 @@ static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
                        Enemy->y,
                        Angle,
                        ExtraSpeed,
-                       z_enemyData[Enemy->typeId].damage);
+                       z_enemy_data[Enemy->typeId].damage);
     }
 
     Enemy->attack.counter = Z_DS_TO_FRAMES(5);

@@ -16,7 +16,6 @@
 */
 
 #include "platform.h"
-#include "util_enemy.h"
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_pool.h"

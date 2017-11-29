@@ -16,6 +16,15 @@
 */
 
 typedef enum {
+    Z_ENEMY_INVALID = -1,
+    Z_ENEMY_ASTEROID,
+    Z_ENEMY_SHIP0,
+    Z_ENEMY_SHIP1,
+    Z_ENEMY_SHIP2,
+    Z_ENEMY_NUM
+} ZEnemyId;
+
+typedef enum {
     Z_FLY_INVALID = -1,
     Z_FLY_LINE,
     Z_FLY_ZIGZAG,
@@ -55,6 +64,15 @@ typedef struct {
     } attack;
 } ZEnemy;
 
+typedef struct {
+    ZSprite sprite;
+    uint8_t w : 4;
+    uint8_t h : 4;
+    uint8_t health : 2;
+    uint8_t damage : 3;
+    uint8_t speedShift : 3;
+} ZEnemyData;
+
 typedef bool (*ZEnemyCallback)(ZEnemy*);
 
 typedef struct {
@@ -62,15 +80,18 @@ typedef struct {
     uint8_t framesPeriod : 6;
 } ZEnemyFlyPattern;
 
+extern ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 extern ZEnemyCallback z_enemy_aiTable[Z_ENEMY_NUM];
 extern ZEnemyFlyPattern z_enemy_flyTable[Z_FLY_NUM];
 extern ZEnemyCallback z_enemy_attackTable[Z_ATTACK_NUM];
+
+extern void z_enemy_setup(void);
 
 extern void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags);
 extern bool z_enemy_tick(ZPoolObject* Enemy);
 extern void z_enemy_draw(ZPoolObject* Enemy);
 
+extern void z_enemy_drawJets(uint8_t EnemyId, int16_t X, int16_t Y);
 extern bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, bool AllowMultipleCollisions);
-
 extern void z_enemy_setFly(ZEnemy* Enemy, uint8_t FlyId);
 extern void z_enemy_setAttack(ZEnemy* Enemy, uint8_t AttackId);

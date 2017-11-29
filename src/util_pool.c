@@ -16,7 +16,6 @@
 */
 
 #include "platform.h"
-#include "util_enemy.h"
 #include "util_fix.h"
 #include "util_pool.h"
 #include "obj_bullete.h"

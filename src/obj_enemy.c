@@ -17,7 +17,6 @@
 
 #include "platform.h"
 #include "util_collision.h"
-#include "util_enemy.h"
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_graphics.h"
@@ -55,13 +54,13 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 
     ZFix cos = z_fix_cos(enemy->angle);
     ZFix sin = z_fix_sin(enemy->angle);
-    ZFix speed = z_enemyData[enemy->typeId].speedShift;
+    ZFix speed = z_enemy_data[enemy->typeId].speedShift;
 
     enemy->x = zf(enemy->x + (cos >> speed));
     enemy->y = zf(enemy->y - (sin >> speed));
 
     if(Z_EVERY_N_DS(2)) {
-        ZSprite* sprite = &z_enemyData[enemy->typeId].sprite;
+        ZSprite* sprite = &z_enemy_data[enemy->typeId].sprite;
         enemy->frame = u4((enemy->frame + 1) % sprite->numFrames);
     }
 
@@ -90,7 +89,7 @@ void z_enemy_draw(ZPoolObject* Enemy)
     ZEnemy* enemy = (ZEnemy*)Enemy;
     int16_t x = z_fix_fixtoi(enemy->x);
     int16_t y = z_fix_fixtoi(enemy->y);
-    ZSprite* sprite = &z_enemyData[enemy->typeId].sprite;
+    ZSprite* sprite = &z_enemy_data[enemy->typeId].sprite;
 
     if(enemy->jetFlicker) {
         z_enemy_drawJets(enemy->typeId, x, y);
@@ -116,8 +115,8 @@ static bool checkCollision(ZPoolObject* Enemy)
                                      g_coll.h,
                                      z_fix_fixtoi(enemy->x),
                                      z_fix_fixtoi(enemy->y),
-                                     z_enemyData[enemy->typeId].w,
-                                     z_enemyData[enemy->typeId].h);
+                                     z_enemy_data[enemy->typeId].w,
+                                     z_enemy_data[enemy->typeId].h);
 
     if(hit) {
         for(int8_t i = 4; i--; ) {
