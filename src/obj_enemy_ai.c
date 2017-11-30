@@ -28,6 +28,13 @@ static bool ai_asteroid(ZEnemy* Enemy)
 {
     Z_UNUSED(Enemy);
 
+    switch(Enemy->ai.state) {
+        case 0: {
+            z_enemy_setFly(Enemy, Z_FLY_LOOP_RECTANGLE);
+            Enemy->ai.state = 1;
+        } break;
+    }
+
     return true;
 }
 

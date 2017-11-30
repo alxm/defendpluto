@@ -6,6 +6,22 @@ var x1
 var x2
 var y
 
+set y -1
+
+loop 4
+    set x1 15
+
+    loop 4
+        spawn x1 y asteroid
+        inc x1 20
+    end
+
+    inc y -1
+end
+
+waitclear
+over
+
 loop 2
     wait 10
 

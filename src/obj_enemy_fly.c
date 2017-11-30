@@ -105,8 +105,43 @@ static bool fly_curve(ZEnemy* Enemy)
     return onScreen(Enemy);
 }
 
+static bool fly_loop_rectangle(ZEnemy* Enemy)
+{
+    switch(Enemy->fly.state) {
+        case 0: {
+            if(z_fix_fixtoi(Enemy->y) >= Z_HEIGHT / 2) {
+                Enemy->angle = Z_ANGLE_000;
+                Enemy->fly.state = 1;
+            }
+        } break;
+
+        case 1: {
+            Enemy->angle = Z_ANGLE_090;
+            Enemy->fly.state = 2;
+        } break;
+
+        case 2: {
+            Enemy->angle = Z_ANGLE_180;
+            Enemy->fly.state = 3;
+        } break;
+
+        case 3: {
+            Enemy->angle = Z_ANGLE_270;
+            Enemy->fly.state = 4;
+        } break;
+
+        case 4: {
+            Enemy->angle = Z_ANGLE_000;
+            Enemy->fly.state = 1;
+        } break;
+    }
+
+    return true;
+}
+
 ZEnemyFlyPattern z_enemy_flyTable[Z_FLY_NUM] = {
     {fly_line, Z_DS_TO_FRAMES(0)},
     {fly_zigzag, Z_DS_TO_FRAMES(10)},
     {fly_curve, Z_DS_TO_FRAMES(1)},
+    {fly_loop_rectangle, Z_DS_TO_FRAMES(10)},
 };

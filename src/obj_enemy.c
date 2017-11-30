@@ -69,8 +69,8 @@ bool z_enemy_tick(ZPoolObject* Enemy)
     bool alive = z_enemy_aiTable[enemy->typeId](enemy);
 
     if(alive) {
-        if(enemy->fly.counter-- == 0) {
-            enemy->fly.counter = z_enemy_flyTable[enemy->fly.id].framesPeriod;
+        if(enemy->fly.counter-- == 0 || enemy->fly.state == 0) {
+            enemy->fly.counter = z_enemy_flyTable[enemy->fly.id].everyNFrames;
             alive = z_enemy_flyTable[enemy->fly.id].callback(enemy);
         }
 

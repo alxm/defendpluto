@@ -29,6 +29,7 @@ typedef enum {
     Z_FLY_LINE,
     Z_FLY_ZIGZAG,
     Z_FLY_CURVE,
+    Z_FLY_LOOP_RECTANGLE,
     Z_FLY_NUM
 } ZFlyId;
 
@@ -77,7 +78,7 @@ typedef bool (*ZEnemyCallback)(ZEnemy*);
 
 typedef struct {
     ZEnemyCallback callback;
-    uint8_t framesPeriod : 6;
+    uint8_t everyNFrames : 6;
 } ZEnemyFlyPattern;
 
 extern ZEnemyData z_enemy_data[Z_ENEMY_NUM];
