@@ -20,45 +20,41 @@
 #include "util_pool.h"
 #include "obj_enemy.h"
 
-bool z_enemy_ai_ship0(ZEnemy* Enemy)
+void z_enemy_ai_ship0(ZEnemy* Enemy)
 {
-    switch(Enemy->ai.state) {
-        case 0: {
-            if(Enemy->ai.flags & 1) {
-                z_enemy_setAttack(Enemy, Z_ATTACK_STRAIGHT);
+    Z_AI {
+        Z_AI_STATE(0) {
+            Z_AI_FLAG(0) {
+                z_enemy_attack(Enemy, Z_ATTACK_STRAIGHT);
             }
+        }
 
-            Enemy->ai.state = Z_DONE_STATE;
-        } break;
-
-        case 1: {
+        Z_AI_STATE(1) {
             if(z_fix_fixtoi(Enemy->y) > 6) {
                 Enemy->angle = Z_ANGLE_225;
-                Enemy->ai.state = Z_DONE_STATE;
+                Z_AI_DONE();
             }
-        } break;
+        }
 
-        case 2: {
+        Z_AI_STATE(2) {
             if(z_fix_fixtoi(Enemy->y) > 6) {
                 Enemy->angle = Z_ANGLE_315;
-                Enemy->ai.state = Z_DONE_STATE;
+                Z_AI_DONE();
             }
-        } break;
+        }
 
-        case 3: {
+        Z_AI_STATE(3) {
             if(z_fix_fixtoi(Enemy->y) > 16) {
                 Enemy->angle = Z_ANGLE_225;
-                Enemy->ai.state = 0;
+                Z_AI_GO(0);
             }
-        } break;
+        }
 
-        case 4: {
+        Z_AI_STATE(4) {
             if(z_fix_fixtoi(Enemy->y) > 16) {
                 Enemy->angle = Z_ANGLE_315;
-                Enemy->ai.state = 0;
+                Z_AI_GO(0);
             }
-        } break;
+        }
     }
-
-    return true;
 }

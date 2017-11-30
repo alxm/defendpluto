@@ -20,17 +20,19 @@
 #include "util_pool.h"
 #include "obj_enemy.h"
 
-bool z_enemy_ai_ship1(ZEnemy* Enemy)
+void z_enemy_ai_ship1(ZEnemy* Enemy)
 {
-    switch(Enemy->ai.state) {
-        case 0: {
+    Z_AI {
+        Z_AI_STATE(0) {
             Enemy->angle = Z_ANGLE_327;
-        } break;
+            Z_AI_DONE();
+        }
 
-        case 1: {
+        Z_AI_STATE(1) {
             Enemy->angle = Z_ANGLE_202;
-        } break;
+            Z_AI_DONE();
+        }
     }
 
-    return true;
+    z_enemy_attack(Enemy, Z_ATTACK_TARGET);
 }

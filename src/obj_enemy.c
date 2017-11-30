@@ -26,6 +26,7 @@
 #include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
+#include "obj_player.h"
 #include "data_gfx_asteroid.h"
 #include "data_gfx_enemy00.h"
 #include "data_gfx_enemy01.h"
@@ -68,8 +69,10 @@ void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t A
     Enemy->ai.state = u4(AiState);
     Enemy->ai.flags = u4(AiFlags);
 
-    z_enemy_setFly(Enemy, Z_FLY_LINE);
-    z_enemy_setAttack(Enemy, Z_ATTACK_NONE);
+    Enemy->fly.state = 0;
+    Enemy->fly.counter = 0;
+
+    Enemy->attack.counter = 0;
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
@@ -79,33 +82,20 @@ bool z_enemy_tick(ZPoolObject* Enemy)
     ZFix cos = z_fix_cos(enemy->angle);
     ZFix sin = z_fix_sin(enemy->angle);
     ZFix speed = z_enemy_data[enemy->typeId].speedShift;
+    ZSprite* sprite = &z_enemy_data[enemy->typeId].sprite;
 
     enemy->x = zf(enemy->x + (cos >> speed));
     enemy->y = zf(enemy->y - (sin >> speed));
 
     if(Z_EVERY_N_DS(2)) {
-        ZSprite* sprite = &z_enemy_data[enemy->typeId].sprite;
         enemy->frame = u4((enemy->frame + 1) % sprite->numFrames);
     }
 
     enemy->jetFlicker = !enemy->jetFlicker;
 
-    bool alive = z_enemy_data[enemy->typeId].ai(enemy);
+    z_enemy_data[enemy->typeId].ai(enemy);
 
-    if(alive) {
-        if(enemy->fly.counter-- == 0 || enemy->fly.state == 0) {
-            enemy->fly.counter = z_enemy_flyTable[enemy->fly.id].everyNFrames;
-            alive = z_enemy_flyTable[enemy->fly.id].callback(enemy);
-        }
-
-        if(enemy->attack.counter == 0) {
-            z_enemy_attackTable[enemy->attack.id](enemy);
-        } else if(Z_EVERY_N_DS(2)) {
-            enemy->attack.counter--;
-        }
-    }
-
-    return alive;
+    return z_fix_fixtoi(enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
 }
 
 static void drawJets(uint8_t EnemyId, int16_t X, int16_t Y)
@@ -225,23 +215,12 @@ bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, bool Allo
     return g_coll.hit;
 }
 
-void z_enemy_setFly(ZEnemy* Enemy, uint8_t FlyId)
+static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
 {
-    Enemy->fly.id = u4(FlyId);
-    Enemy->fly.state = 0;
-    Enemy->fly.flipX = 0;
-    Enemy->fly.flipY = 0;
-    Enemy->fly.counter = 0;
-}
+    if(Enemy->attack.counter-- > 0) {
+        return;
+    }
 
-void z_enemy_setAttack(ZEnemy* Enemy, uint8_t AttackId)
-{
-    Enemy->attack.id = u4(AttackId);
-    Enemy->attack.counter = 0;
-}
-
-void z_enemy_shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
-{
     ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
 
     if(b) {
@@ -253,5 +232,20 @@ void z_enemy_shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
                        z_enemy_data[Enemy->typeId].damage);
     }
 
-    Enemy->attack.counter = Z_DS_TO_FRAMES(5);
+    Enemy->attack.counter = Z_DS_TO_FRAMES(8);
+}
+
+void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId)
+{
+    switch(AttackId) {
+        case Z_ATTACK_STRAIGHT: {
+            shoot(Enemy, Enemy->angle, false);
+        } break;
+
+        case Z_ATTACK_TARGET: {
+            shoot(Enemy,
+                  z_fix_atan(Enemy->x, Enemy->y, z_player.x, z_player.y),
+                  false);
+        } break;
+    }
 }

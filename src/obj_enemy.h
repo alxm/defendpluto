@@ -25,15 +25,6 @@ typedef enum {
 } ZEnemyId;
 
 typedef enum {
-    Z_FLY_INVALID = -1,
-    Z_FLY_LINE,
-    Z_FLY_ZIGZAG,
-    Z_FLY_CURVE,
-    Z_FLY_LOOP_RECTANGLE,
-    Z_FLY_NUM
-} ZFlyId;
-
-typedef enum {
     Z_ATTACK_INVALID = -1,
     Z_ATTACK_NONE,
     Z_ATTACK_STRAIGHT,
@@ -53,19 +44,15 @@ typedef struct {
         uint8_t flags : 4;
     } ai;
     struct {
-        uint8_t id : 4;
         uint8_t state : 4;
-        uint8_t flipX : 1;
-        uint8_t flipY : 1;
-        uint8_t counter : 6;
+        uint8_t counter : 4;
     } fly;
     struct {
-        uint8_t id : 4;
-        uint8_t counter : 4;
+        uint8_t counter;
     } attack;
 } ZEnemy;
 
-typedef bool (ZEnemyCallback)(ZEnemy*);
+typedef void (ZEnemyCallback)(ZEnemy*);
 
 typedef struct {
     ZSprite sprite;
@@ -77,16 +64,30 @@ typedef struct {
     uint8_t speedShift : 3;
 } ZEnemyData;
 
-typedef struct {
-    ZEnemyCallback* callback;
-    uint8_t everyNFrames : 6;
-} ZEnemyFlyPattern;
+#define Z_AI switch(Enemy->ai.state)
+#define Z_AI_DONE() Enemy->ai.state = 0xf
+#define Z_AI_GO(State) Enemy->ai.state = (State)
+#define Z_AI_FLAG(Bit) if(Enemy->ai.flags & (1 << (Bit)))
 
-#define Z_DONE_STATE 0xf
+#define Z_AI_STATE(State)                 \
+    case (State):                         \
+        for(uint8_t z__u = 0; ; z__u = 1) \
+            if(z__u == 1) {               \
+                return;                   \
+            } else
+
+#define Z_AI_FLY_COUNTER_BLOCK(Enemy, Ds)            \
+    if(Enemy->fly.counter == 0) {                    \
+        Enemy->fly.counter = Z_DS_TO_FRAMES(Ds) / 2; \
+    } else {                                         \
+        if(z_fps_isNthFrame(2)) {                    \
+            Enemy->fly.counter--;                    \
+        }                                            \
+                                                     \
+        return;                                      \
+    }
 
 extern ZEnemyData z_enemy_data[Z_ENEMY_NUM];
-extern ZEnemyFlyPattern z_enemy_flyTable[Z_FLY_NUM];
-extern ZEnemyCallback* z_enemy_attackTable[Z_ATTACK_NUM];
 
 extern void z_enemy_setup(void);
 
@@ -95,9 +96,8 @@ extern bool z_enemy_tick(ZPoolObject* Enemy);
 extern void z_enemy_draw(ZPoolObject* Enemy);
 
 extern bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, bool AllowMultipleCollisions);
-extern void z_enemy_setFly(ZEnemy* Enemy, uint8_t FlyId);
-extern void z_enemy_setAttack(ZEnemy* Enemy, uint8_t AttackId);
-extern void z_enemy_shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed);
+
+extern void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId);
 
 extern ZEnemyCallback z_enemy_ai_asteroid;
 extern ZEnemyCallback z_enemy_ai_ship0;
