@@ -17,28 +17,10 @@
 
 #include "platform.h"
 #include "util_fix.h"
-#include "util_fps.h"
 #include "util_pool.h"
-#include "util_screen.h"
 #include "obj_enemy.h"
 
-#define DONE_STATE 0xf
-
-static bool ai_asteroid(ZEnemy* Enemy)
-{
-    Z_UNUSED(Enemy);
-
-    switch(Enemy->ai.state) {
-        case 0: {
-            z_enemy_setFly(Enemy, Z_FLY_LOOP_RECTANGLE);
-            Enemy->ai.state = 1;
-        } break;
-    }
-
-    return true;
-}
-
-static bool ai_ship0(ZEnemy* Enemy)
+bool z_enemy_ai_ship0(ZEnemy* Enemy)
 {
     switch(Enemy->ai.state) {
         case 0: {
@@ -46,20 +28,20 @@ static bool ai_ship0(ZEnemy* Enemy)
                 z_enemy_setAttack(Enemy, Z_ATTACK_STRAIGHT);
             }
 
-            Enemy->ai.state = DONE_STATE;
+            Enemy->ai.state = Z_DONE_STATE;
         } break;
 
         case 1: {
             if(z_fix_fixtoi(Enemy->y) > 6) {
                 Enemy->angle = Z_ANGLE_225;
-                Enemy->ai.state = DONE_STATE;
+                Enemy->ai.state = Z_DONE_STATE;
             }
         } break;
 
         case 2: {
             if(z_fix_fixtoi(Enemy->y) > 6) {
                 Enemy->angle = Z_ANGLE_315;
-                Enemy->ai.state = DONE_STATE;
+                Enemy->ai.state = Z_DONE_STATE;
             }
         } break;
 
@@ -80,48 +62,3 @@ static bool ai_ship0(ZEnemy* Enemy)
 
     return true;
 }
-
-static bool ai_ship1(ZEnemy* Enemy)
-{
-    switch(Enemy->ai.state) {
-        case 0: {
-            Enemy->angle = Z_ANGLE_327;
-        } break;
-
-        case 1: {
-            Enemy->angle = Z_ANGLE_202;
-        } break;
-    }
-
-    return true;
-}
-
-static bool ai_ship2(ZEnemy* Enemy)
-{
-    if(!Z_EVERY_N_DS(20)) {
-        return true;
-    }
-
-    switch(Enemy->ai.state) {
-        case 0: {
-            z_enemy_setFly(Enemy, Z_FLY_ZIGZAG);
-            z_enemy_setAttack(Enemy, Z_ATTACK_TARGET);
-            Enemy->ai.state = 1;
-        } break;
-
-        case 1: {
-            z_enemy_setFly(Enemy, Z_FLY_LINE);
-            z_enemy_setAttack(Enemy, Z_ATTACK_STRAIGHT);
-            Enemy->ai.state = 0;
-        } break;
-    }
-
-    return true;
-}
-
-ZEnemyCallback z_enemy_aiTable[Z_ENEMY_NUM] = {
-    ai_asteroid,
-    ai_ship0,
-    ai_ship1,
-    ai_ship2,
-};

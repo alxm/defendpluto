@@ -22,9 +22,14 @@
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
+#include "obj_bullete.h"
 #include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
+#include "data_gfx_asteroid.h"
+#include "data_gfx_enemy00.h"
+#include "data_gfx_enemy01.h"
+#include "data_gfx_enemy02.h"
 
 static struct {
     bool hit;
@@ -32,6 +37,25 @@ static struct {
     int16_t x, y;
     int8_t w, h;
 } g_coll;
+
+ZEnemyData z_enemy_data[Z_ENEMY_NUM];
+
+void z_enemy_setup(void)
+{
+    #define enemy(Index, Id, Ai, Width, Height, Health, Damage, Speed) \
+        z_sprite_load(&z_enemy_data[Index].sprite, Id);                \
+        z_enemy_data[Index].ai = Ai;                                   \
+        z_enemy_data[Index].w = Width;                                 \
+        z_enemy_data[Index].h = Height;                                \
+        z_enemy_data[Index].health = Health;                           \
+        z_enemy_data[Index].damage = Damage;                           \
+        z_enemy_data[Index].speedShift = Speed;                        \
+
+    enemy(Z_ENEMY_ASTEROID, asteroid, z_enemy_ai_asteroid, 8, 8, 1, 0, 2);
+    enemy(Z_ENEMY_SHIP0, enemy00, z_enemy_ai_ship0, 7, 5, 1, 2, 1);
+    enemy(Z_ENEMY_SHIP1, enemy01, z_enemy_ai_ship1, 7, 5, 1, 4, 1);
+    enemy(Z_ENEMY_SHIP2, enemy02, z_enemy_ai_ship2, 7, 6, 1, 6, 2);
+}
 
 void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags)
 {
@@ -66,7 +90,7 @@ bool z_enemy_tick(ZPoolObject* Enemy)
 
     enemy->jetFlicker = !enemy->jetFlicker;
 
-    bool alive = z_enemy_aiTable[enemy->typeId](enemy);
+    bool alive = z_enemy_data[enemy->typeId].ai(enemy);
 
     if(alive) {
         if(enemy->fly.counter-- == 0 || enemy->fly.state == 0) {
@@ -84,6 +108,50 @@ bool z_enemy_tick(ZPoolObject* Enemy)
     return alive;
 }
 
+static void drawJets(uint8_t EnemyId, int16_t X, int16_t Y)
+{
+    int16_t x, y;
+    int8_t w, h;
+
+    switch(EnemyId) {
+        case Z_ENEMY_SHIP0: {
+            x = X;
+            y = i16(Y - 2);
+            z_draw_pixel(x, y, Z_COLOR_RED);
+        } break;
+
+        case Z_ENEMY_SHIP1: {
+            x = i16(X - 3);
+            y = i16(Y - 3);
+            z_draw_pixel(x, y, Z_COLOR_RED);
+
+            x = i16(X + 3);
+            z_draw_pixel(x, y, Z_COLOR_RED);
+        } break;
+
+        case Z_ENEMY_SHIP2: {
+            x = i16(X - 2);
+            y = i16(Y - 4);
+            w = 2;
+            h = 1;
+            z_draw_rectangle(x,
+                             i16(y + z_screen_getYShake()),
+                             w,
+                             h,
+                             Z_COLOR_RED);
+
+            x = i16(X + 1);
+            z_draw_rectangle(x,
+                             i16(y + z_screen_getYShake()),
+                             w,
+                             h,
+                             Z_COLOR_RED);
+        } break;
+
+        default: return;
+    }
+}
+
 void z_enemy_draw(ZPoolObject* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
@@ -92,7 +160,7 @@ void z_enemy_draw(ZPoolObject* Enemy)
     ZSprite* sprite = &z_enemy_data[enemy->typeId].sprite;
 
     if(enemy->jetFlicker) {
-        z_enemy_drawJets(enemy->typeId, x, y);
+        drawJets(enemy->typeId, x, y);
     }
 
     z_sprite_blitCentered(sprite,
@@ -170,4 +238,20 @@ void z_enemy_setAttack(ZEnemy* Enemy, uint8_t AttackId)
 {
     Enemy->attack.id = u4(AttackId);
     Enemy->attack.counter = 0;
+}
+
+void z_enemy_shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
+{
+    ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
+
+    if(b) {
+        z_bullete_init(b,
+                       zf(Enemy->x + z_fix_itofix(z_screen_getXShake())),
+                       Enemy->y,
+                       Angle,
+                       ExtraSpeed,
+                       z_enemy_data[Enemy->typeId].damage);
+    }
+
+    Enemy->attack.counter = Z_DS_TO_FRAMES(5);
 }

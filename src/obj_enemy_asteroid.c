@@ -16,38 +16,19 @@
 */
 
 #include "platform.h"
-#include "util_fix.h"
-#include "util_fps.h"
 #include "util_pool.h"
-#include "util_random.h"
-#include "util_screen.h"
-#include "obj_bullete.h"
 #include "obj_enemy.h"
-#include "obj_player.h"
 
-static bool attack_none(ZEnemy* Enemy)
+bool z_enemy_ai_asteroid(ZEnemy* Enemy)
 {
     Z_UNUSED(Enemy);
 
-    return true;
-}
-
-static bool attack_straight(ZEnemy* Enemy)
-{
-    z_enemy_shoot(Enemy, Z_ANGLE_270, false);
-
-    return true;
-}
-
-static bool attack_target(ZEnemy* Enemy)
-{
-    z_enemy_shoot(Enemy, z_fix_atan(Enemy->x, Enemy->y, z_player.x, z_player.y), false);
+    switch(Enemy->ai.state) {
+        case 0: {
+            z_enemy_setFly(Enemy, Z_FLY_LOOP_RECTANGLE);
+            Enemy->ai.state = 1;
+        } break;
+    }
 
     return true;
 }
-
-ZEnemyCallback* z_enemy_attackTable[Z_ATTACK_NUM] = {
-    attack_none,
-    attack_straight,
-    attack_target,
-};
