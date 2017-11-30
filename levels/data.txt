@@ -8,15 +8,15 @@ var y
 
 set y -1
 
-loop 4
+loop 3
     set x1 15
 
     loop 4
-        spawn x1 y asteroid
+        spawn x1 y enemy2 2
         inc x1 20
     end
 
-    inc y -1
+    inc y -2
 end
 
 waitclear

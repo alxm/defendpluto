@@ -45,7 +45,7 @@ typedef struct {
     } ai;
     struct {
         uint8_t state : 4;
-        uint8_t counter : 4;
+        uint8_t counter;
     } fly;
     struct {
         uint8_t counter;
@@ -65,8 +65,8 @@ typedef struct {
 } ZEnemyData;
 
 #define Z_AI switch(Enemy->ai.state)
-#define Z_AI_DONE() Enemy->ai.state = 0xf
-#define Z_AI_GO(State) Enemy->ai.state = (State)
+#define Z_AI_DONE() Enemy->ai.state = 0xf;
+#define Z_AI_GO(State) Enemy->ai.state = (State);
 #define Z_AI_FLAG(Bit) if(Enemy->ai.flags & (1 << (Bit)))
 
 #define Z_AI_STATE(State)                 \
@@ -76,7 +76,10 @@ typedef struct {
                 return;                   \
             } else
 
-#define Z_AI_FLY_COUNTER_BLOCK(Enemy, Ds)            \
+#define Z_AI_FLY_COUNTER_SET(Ds)                 \
+    Enemy->fly.counter = Z_DS_TO_FRAMES(Ds) / 2;
+
+#define Z_AI_FLY_COUNTER_BLOCK(Ds)                   \
     if(Enemy->fly.counter == 0) {                    \
         Enemy->fly.counter = Z_DS_TO_FRAMES(Ds) / 2; \
     } else {                                         \
