@@ -117,6 +117,7 @@ void z_player_init(int16_t X, int16_t Y)
     z_player.lastShotCounter = 0;
     z_player.shootShift = 0;
     z_player.jetFlicker = false;
+    z_player.damage = 1;
 
 }
 
@@ -202,6 +203,7 @@ void z_player_tick(void)
                                        z_fix_fixtoi(z_player.y),
                                        z_player.w,
                                        z_player.h,
+                                       Z_ENEMY_MAX_HEALTH,
                                        true);
 
     if(hit) {

@@ -23,11 +23,13 @@
 #include "util_screen.h"
 #include "obj_bulletp.h"
 #include "obj_enemy.h"
+#include "obj_player.h"
 
 void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y)
 {
     Bullet->x = X;
     Bullet->y = Y;
+    Bullet->damage = z_player.damage;
 }
 
 bool z_bulletp_tick(ZPoolObject* Bullet)
@@ -44,6 +46,7 @@ bool z_bulletp_tick(ZPoolObject* Bullet)
                                     z_fix_fixtoi(bullet->y),
                                     2,
                                     4,
+                                    bullet->damage,
                                     false);
 }
 

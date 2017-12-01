@@ -28,6 +28,7 @@ typedef struct {
     bool heartsBlink : 1;
     uint8_t shootShift : 1;
     bool jetFlicker : 1;
+    uint8_t damage;
 } ZPlayer;
 
 extern ZPlayer z_player;

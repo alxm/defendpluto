@@ -37,6 +37,7 @@ static struct {
     bool allowMultiple;
     int16_t x, y;
     int8_t w, h;
+    uint8_t damage;
 } g_coll;
 
 ZEnemyData z_enemy_data[Z_ENEMY_NUM];
@@ -52,10 +53,10 @@ void z_enemy_setup(void)
         z_enemy_data[Index].damage = Damage;                           \
         z_enemy_data[Index].speedShift = Speed;                        \
 
-    enemy(Z_ENEMY_ASTEROID, asteroid, z_enemy_ai_asteroid, 8, 8, 1, 0, 2);
-    enemy(Z_ENEMY_SHIP0, enemy00, z_enemy_ai_ship0, 7, 5, 1, 2, 1);
-    enemy(Z_ENEMY_SHIP1, enemy01, z_enemy_ai_ship1, 7, 5, 1, 4, 1);
-    enemy(Z_ENEMY_SHIP2, enemy02, z_enemy_ai_ship2, 7, 6, 1, 6, 2);
+    enemy(Z_ENEMY_ASTEROID, asteroid, z_enemy_ai_asteroid, 8, 8, 3, 0, 2);
+    enemy(Z_ENEMY_SHIP0,    enemy00,  z_enemy_ai_ship0,    7, 5, 1, 2, 1);
+    enemy(Z_ENEMY_SHIP1,    enemy01,  z_enemy_ai_ship1,    7, 5, 1, 4, 1);
+    enemy(Z_ENEMY_SHIP2,    enemy02,  z_enemy_ai_ship2,    7, 6, 2, 6, 2);
 }
 
 void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags)
@@ -71,6 +72,7 @@ void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t A
     Enemy->fly.state = 0;
     Enemy->fly.counter = 0;
     Enemy->attack.counter = 0;
+    Enemy->health = z_enemy_data[TypeId].health;
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy)
@@ -165,16 +167,23 @@ static bool checkCollision(ZPoolObject* Enemy)
 
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
-    bool hit = z_collision_boxAndBox(g_coll.x,
-                                     g_coll.y,
-                                     g_coll.w,
-                                     g_coll.h,
-                                     z_fix_fixtoi(enemy->x),
-                                     z_fix_fixtoi(enemy->y),
-                                     z_enemy_data[enemy->typeId].w,
-                                     z_enemy_data[enemy->typeId].h);
+    if(z_collision_boxAndBox(g_coll.x,
+                             g_coll.y,
+                             g_coll.w,
+                             g_coll.h,
+                             z_fix_fixtoi(enemy->x),
+                             z_fix_fixtoi(enemy->y),
+                             z_enemy_data[enemy->typeId].w,
+                             z_enemy_data[enemy->typeId].h)) {
 
-    if(hit) {
+        g_coll.hit = true;
+
+        if(enemy->health > g_coll.damage) {
+            enemy->health = u8((enemy->health - g_coll.damage) & 3);
+        } else {
+            enemy->health = 0;
+        }
+
         for(int8_t i = 4; i--; ) {
             ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
 
@@ -194,18 +203,17 @@ static bool checkCollision(ZPoolObject* Enemy)
         z_screen_shake(Z_DS_TO_FRAMES(3));
     }
 
-    g_coll.hit |= hit;
-
-    return !hit;
+    return enemy->health > 0;
 }
 
-bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, bool AllowMultipleCollisions)
+bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage, bool AllowMultipleCollisions)
 {
     g_coll.x = X;
     g_coll.y = Y;
     g_coll.w = W;
     g_coll.h = H;
     g_coll.hit = false;
+    g_coll.damage = Damage;
     g_coll.allowMultiple = AllowMultipleCollisions;
 
     z_pool_tick(Z_POOL_ENEMY, checkCollision);

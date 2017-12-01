@@ -32,6 +32,8 @@ typedef enum {
     Z_ATTACK_NUM
 } ZAttackId;
 
+#define Z_ENEMY_MAX_HEALTH 3
+
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
@@ -50,6 +52,7 @@ typedef struct {
     struct {
         uint8_t counter;
     } attack;
+    uint8_t health;
 } ZEnemy;
 
 typedef void (ZEnemyCallback)(ZEnemy*);
@@ -101,7 +104,7 @@ extern void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, ui
 extern bool z_enemy_tick(ZPoolObject* Enemy);
 extern void z_enemy_draw(ZPoolObject* Enemy);
 
-extern bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, bool AllowMultipleCollisions);
+extern bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage, bool AllowMultipleCollisions);
 
 extern void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId);
 

@@ -18,6 +18,7 @@
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
+    uint8_t damage;
 } ZBulletP;
 
 extern void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y);
