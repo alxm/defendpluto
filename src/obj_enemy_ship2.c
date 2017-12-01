@@ -94,9 +94,7 @@ void z_enemy_ai_ship2(ZEnemy* Enemy)
         }
 
         Z_AI_STATE(2) {
-            if(Enemy->y >= 0) {
-                z_enemy_attack(Enemy, Z_ATTACK_TARGET);
-            }
+            z_enemy_attack(Enemy, Z_ATTACK_TARGET);
 
             Z_FLY {
                 Z_FLY_STATE(0) {

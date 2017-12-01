@@ -229,6 +229,10 @@ static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
 
 void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId)
 {
+    if(Enemy->y < 0) {
+        return;
+    }
+
     if(Enemy->attack.counter-- == 0) {
         Enemy->attack.counter = Z_DS_TO_FRAMES(8);
     } else {

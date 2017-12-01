@@ -22,6 +22,8 @@
 
 void z_enemy_ai_ship1(ZEnemy* Enemy)
 {
+    z_enemy_attack(Enemy, Z_ATTACK_TARGET);
+
     Z_AI {
         Z_AI_STATE(0) {
             Enemy->angle = Z_ANGLE_327;
@@ -33,6 +35,4 @@ void z_enemy_ai_ship1(ZEnemy* Enemy)
             Z_AI_DONE();
         }
     }
-
-    z_enemy_attack(Enemy, Z_ATTACK_TARGET);
 }
