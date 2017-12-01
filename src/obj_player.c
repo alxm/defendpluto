@@ -127,7 +127,7 @@ void z_player_tick(void)
     if(z_button_pressed(Z_BUTTON_A)) {
         maxSpeed = Z_SPEED_MAX / 2;
 
-        if(Z_EVERY_N_DS(1)) {
+        Z_EVERY_DS(1) {
             z_player.shootShift ^= 1;
         }
 
@@ -150,7 +150,7 @@ void z_player_tick(void)
         z_player.shootShift = 0;
         z_player.lastShotCounter = 0;
 
-        if(Z_EVERY_N_DS(Z_ENERGY_REGEN_EVERY_DS)) {
+        Z_EVERY_DS(Z_ENERGY_REGEN_EVERY_DS) {
             boostEnergy(1);
         }
     }
@@ -206,7 +206,7 @@ void z_player_tick(void)
 
     if(hit) {
         z_player_takeDamage(Z_SHIELD_DAMAGE_COLLISION);
-    } else if(Z_EVERY_N_DS(Z_SHIELD_REGEN_EVERY_DS)) {
+    } else Z_EVERY_DS(Z_SHIELD_REGEN_EVERY_DS) {
         boostShield(1);
     }
 }
@@ -257,8 +257,10 @@ void z_player_takeDamage(uint8_t Damage)
 
 void z_player_hudTick(void)
 {
-    if(z_player.health <= 0 && Z_EVERY_N_DS(3)) {
-        z_player.heartsBlink ^= 1;
+    if(z_player.health <= 0) {
+        Z_EVERY_DS(3) {
+            z_player.heartsBlink ^= 1;
+        }
     }
 }
 

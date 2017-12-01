@@ -51,9 +51,11 @@ void z_loop_died_tick(void)
     z_screen_tick();
     z_star_spawn();
 
-    if(Z_EVERY_N_DS(10) && z_player.health-- < -2) {
-        z_button_release(Z_BUTTON_A);
-        z_loop_setState(Z_STATE_OVER);
+    Z_EVERY_DS(10) {
+        if(z_player.health-- < -2) {
+            z_button_release(Z_BUTTON_A);
+            z_loop_setState(Z_STATE_OVER);
+        }
     }
 
     z_screen_shake(1);

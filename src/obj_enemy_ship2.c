@@ -44,12 +44,12 @@ void z_enemy_ai_ship2(ZEnemy* Enemy)
                 } break;
 
                 case 1: {
-                    Z_AI_FLY_COUNTER_BLOCK(10);
-
-                    if(Enemy->angle == Z_ANGLE_225) {
-                        Enemy->angle = Z_ANGLE_315;
-                    } else {
-                        Enemy->angle = Z_ANGLE_225;
+                    Z_AI_FLY_EVERY_DS(10) {
+                        if(Enemy->angle == Z_ANGLE_225) {
+                            Enemy->angle = Z_ANGLE_315;
+                        } else {
+                            Enemy->angle = Z_ANGLE_225;
+                        }
                     }
                 } break;
             }
@@ -88,13 +88,15 @@ void z_enemy_ai_ship2(ZEnemy* Enemy)
                 } break;
             }
 
-            Z_AI_FLY_COUNTER_BLOCK(1);
-
-            Enemy->angle = Z_ANGLE_WRAP(Enemy->angle + angleInc);
+            Z_AI_FLY_EVERY_DS(1) {
+                Enemy->angle = Z_ANGLE_WRAP(Enemy->angle + angleInc);
+            }
         }
 
         Z_AI_STATE(2) {
-            z_enemy_attack(Enemy, Z_ATTACK_TARGET);
+            if(Enemy->y >= 0) {
+                z_enemy_attack(Enemy, Z_ATTACK_TARGET);
+            }
 
             switch(Enemy->fly.state) {
                 case 0: {
@@ -107,31 +109,31 @@ void z_enemy_ai_ship2(ZEnemy* Enemy)
                 } break;
 
                 case 1: {
-                    Z_AI_FLY_COUNTER_BLOCK(10);
-
-                    Enemy->angle = Z_ANGLE_090;
-                    Enemy->fly.state = 2;
+                    Z_AI_FLY_EVERY_DS(10) {
+                        Enemy->angle = Z_ANGLE_090;
+                        Enemy->fly.state = 2;
+                    }
                 } break;
 
                 case 2: {
-                    Z_AI_FLY_COUNTER_BLOCK(20);
-
-                    Enemy->angle = Z_ANGLE_180;
-                    Enemy->fly.state = 3;
+                    Z_AI_FLY_EVERY_DS(20) {
+                        Enemy->angle = Z_ANGLE_180;
+                        Enemy->fly.state = 3;
+                    }
                 } break;
 
                 case 3: {
-                    Z_AI_FLY_COUNTER_BLOCK(10);
-
-                    Enemy->angle = Z_ANGLE_270;
-                    Enemy->fly.state = 4;
+                    Z_AI_FLY_EVERY_DS(10) {
+                        Enemy->angle = Z_ANGLE_270;
+                        Enemy->fly.state = 4;
+                    }
                 } break;
 
                 case 4: {
-                    Z_AI_FLY_COUNTER_BLOCK(20);
-
-                    Enemy->angle = Z_ANGLE_000;
-                    Enemy->fly.state = 1;
+                    Z_AI_FLY_EVERY_DS(20) {
+                        Enemy->angle = Z_ANGLE_000;
+                        Enemy->fly.state = 1;
+                    }
                 } break;
             }
         }

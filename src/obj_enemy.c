@@ -68,10 +68,8 @@ void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t A
     Enemy->frame = 0;
     Enemy->ai.state = u4(AiState);
     Enemy->ai.flags = u4(AiFlags);
-
     Enemy->fly.state = 0;
     Enemy->fly.counter = 0;
-
     Enemy->attack.counter = 0;
 }
 
@@ -87,7 +85,7 @@ bool z_enemy_tick(ZPoolObject* Enemy)
     enemy->x = zf(enemy->x + (cos >> speed));
     enemy->y = zf(enemy->y - (sin >> speed));
 
-    if(Z_EVERY_N_DS(2)) {
+    Z_EVERY_DS(2) {
         enemy->frame = u4((enemy->frame + 1) % sprite->numFrames);
     }
 
@@ -217,10 +215,6 @@ bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, bool Allo
 
 static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
 {
-    if(Enemy->attack.counter-- > 0) {
-        return;
-    }
-
     ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
 
     if(b) {
@@ -231,12 +225,16 @@ static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
                        ExtraSpeed,
                        z_enemy_data[Enemy->typeId].damage);
     }
-
-    Enemy->attack.counter = Z_DS_TO_FRAMES(8);
 }
 
 void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId)
 {
+    if(Enemy->attack.counter-- == 0) {
+        Enemy->attack.counter = Z_DS_TO_FRAMES(8);
+    } else {
+        return;
+    }
+
     switch(AttackId) {
         case Z_ATTACK_STRAIGHT: {
             shoot(Enemy, Enemy->angle, false);

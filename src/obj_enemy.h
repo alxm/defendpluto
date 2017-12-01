@@ -79,16 +79,15 @@ typedef struct {
 #define Z_AI_FLY_COUNTER_SET(Ds)                 \
     Enemy->fly.counter = Z_DS_TO_FRAMES(Ds) / 2;
 
-#define Z_AI_FLY_COUNTER_BLOCK(Ds)                   \
-    if(Enemy->fly.counter == 0) {                    \
-        Enemy->fly.counter = Z_DS_TO_FRAMES(Ds) / 2; \
-    } else {                                         \
-        if(z_fps_isNthFrame(2)) {                    \
-            Enemy->fly.counter--;                    \
-        }                                            \
-                                                     \
-        return;                                      \
-    }
+#define Z_AI_FLY_EVERY_DS(Ds)                            \
+    for(uint8_t z__u = 0; z__u < 2; z__u++)              \
+        if(z__u == 0) {                                  \
+            if(Enemy->fly.counter-- == 0) {              \
+                Enemy->fly.counter = Z_DS_TO_FRAMES(Ds); \
+            } else {                                     \
+                break;                                   \
+            }                                            \
+        } else
 
 extern ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
