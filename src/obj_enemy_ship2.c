@@ -28,8 +28,8 @@ void z_enemy_ai_ship2(ZEnemy* Enemy)
         Z_AI_STATE(0) {
             z_enemy_attack(Enemy, Z_ATTACK_TARGET);
 
-            switch(Enemy->fly.state) {
-                case 0: {
+            Z_FLY {
+                Z_FLY_STATE(0) {
                     if(z_fix_fixtoi(Enemy->y) > Z_HEIGHT / 8) {
                         Z_AI_FLAG(3) {
                             Enemy->angle = Z_ANGLE_225;
@@ -37,21 +37,21 @@ void z_enemy_ai_ship2(ZEnemy* Enemy)
                             Enemy->angle = Z_ANGLE_315;
                         }
 
-                        Enemy->fly.state = 1;
+                        Z_FLY_GO(1);
                     } else {
                         Enemy->angle = Z_ANGLE_270;
                     }
-                } break;
+                }
 
-                case 1: {
-                    Z_AI_FLY_EVERY_DS(10) {
+                Z_FLY_STATE(1) {
+                    Z_FLY_EVERY_DS(10) {
                         if(Enemy->angle == Z_ANGLE_225) {
                             Enemy->angle = Z_ANGLE_315;
                         } else {
                             Enemy->angle = Z_ANGLE_225;
                         }
                     }
-                } break;
+                }
             }
         }
 
@@ -60,35 +60,35 @@ void z_enemy_ai_ship2(ZEnemy* Enemy)
 
             int8_t angleInc = 0;
 
-            switch(Enemy->fly.state) {
-                case 0: {
+            Z_FLY {
+                Z_FLY_STATE(0) {
                     Z_AI_FLAG(3) {
                         angleInc = -1;
-                        Enemy->fly.state = 1;
+                        Z_FLY_GO(1);
                     } else {
                         angleInc = 1;
-                        Enemy->fly.state = 2;
+                        Z_FLY_GO(2);
                     }
-                } break;
+                }
 
-                case 1: {
+                Z_FLY_STATE(1) {
                     if(Enemy->angle <= Z_ANGLE_225) {
-                        Enemy->fly.state = 2;
+                        Z_FLY_GO(2);
                     } else {
                         angleInc = -1;
                     }
-                } break;
+                }
 
-                case 2: {
+                Z_FLY_STATE(2) {
                     if(Enemy->angle >= Z_ANGLE_315) {
-                        Enemy->fly.state = 1;
+                        Z_FLY_GO(1);
                     } else {
                         angleInc = 1;
                     }
-                } break;
+                }
             }
 
-            Z_AI_FLY_EVERY_DS(1) {
+            Z_FLY_EVERY_DS(1) {
                 Enemy->angle = Z_ANGLE_WRAP(Enemy->angle + angleInc);
             }
         }
@@ -98,43 +98,43 @@ void z_enemy_ai_ship2(ZEnemy* Enemy)
                 z_enemy_attack(Enemy, Z_ATTACK_TARGET);
             }
 
-            switch(Enemy->fly.state) {
-                case 0: {
+            Z_FLY {
+                Z_FLY_STATE(0) {
                     if(z_fix_fixtoi(Enemy->y) >= Z_HEIGHT / 2) {
                         Enemy->angle = Z_ANGLE_000;
-                        Enemy->fly.state = 1;
+                        Z_FLY_GO(1);
 
-                        Z_AI_FLY_COUNTER_SET(20);
+                        Z_FLY_COUNTER_SET(20);
                     }
-                } break;
+                }
 
-                case 1: {
-                    Z_AI_FLY_EVERY_DS(10) {
+                Z_FLY_STATE(1) {
+                    Z_FLY_EVERY_DS(10) {
                         Enemy->angle = Z_ANGLE_090;
-                        Enemy->fly.state = 2;
+                        Z_FLY_GO(2);
                     }
-                } break;
+                }
 
-                case 2: {
-                    Z_AI_FLY_EVERY_DS(20) {
+                Z_FLY_STATE(2) {
+                    Z_FLY_EVERY_DS(20) {
                         Enemy->angle = Z_ANGLE_180;
-                        Enemy->fly.state = 3;
+                        Z_FLY_GO(3);
                     }
-                } break;
+                }
 
-                case 3: {
-                    Z_AI_FLY_EVERY_DS(10) {
+                Z_FLY_STATE(3) {
+                    Z_FLY_EVERY_DS(10) {
                         Enemy->angle = Z_ANGLE_270;
-                        Enemy->fly.state = 4;
+                        Z_FLY_GO(4);
                     }
-                } break;
+                }
 
-                case 4: {
-                    Z_AI_FLY_EVERY_DS(20) {
+                Z_FLY_STATE(4) {
+                    Z_FLY_EVERY_DS(20) {
                         Enemy->angle = Z_ANGLE_000;
-                        Enemy->fly.state = 1;
+                        Z_FLY_GO(1);
                     }
-                } break;
+                }
             }
         }
     }
