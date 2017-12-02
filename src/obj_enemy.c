@@ -182,6 +182,14 @@ static bool checkCollision(ZPoolObject* Enemy)
             enemy->health = u8((enemy->health - g_coll.damage) & 3);
         } else {
             enemy->health = 0;
+
+            ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
+
+            if(c) {
+                z_circle_init(c, z_fix_fixtoi(enemy->x), z_fix_fixtoi(enemy->y));
+            }
+
+            z_screen_shake(Z_DS_TO_FRAMES(3));
         }
 
         for(int8_t i = 4; i--; ) {
@@ -193,14 +201,6 @@ static bool checkCollision(ZPoolObject* Enemy)
 
             z_particle_init(p, enemy->x, enemy->y);
         }
-
-        ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
-
-        if(c) {
-            z_circle_init(c, z_fix_fixtoi(enemy->x), z_fix_fixtoi(enemy->y));
-        }
-
-        z_screen_shake(Z_DS_TO_FRAMES(3));
     }
 
     return enemy->health > 0;
