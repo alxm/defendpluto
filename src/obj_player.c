@@ -50,6 +50,15 @@
 
 ZPlayer z_player;
 
+static bool hasEnergy(uint8_t Amount)
+{
+    #if Z_DEBUG_INFINITE_ENERGY
+        return true;
+    #else
+        return z_player.energy >= Amount;
+    #endif
+}
+
 static bool useEnergy(uint8_t Amount)
 {
     bool enough = z_player.energy >= Amount;
@@ -125,7 +134,7 @@ void z_player_tick(void)
 {
     int8_t maxSpeed = Z_SPEED_MAX;
 
-    if(z_button_pressed(Z_BUTTON_A)) {
+    if(z_button_pressed(Z_BUTTON_A) && hasEnergy(Z_ENERGY_USE_SHOOTING)) {
         maxSpeed = Z_SPEED_MAX / 2;
 
         Z_EVERY_DS(1) {
@@ -137,15 +146,15 @@ void z_player_tick(void)
 
             if(b) {
                 z_bulletp_init(b,
-                               zf(z_player.x + z_fix_itofix(z_screen_getXShake())),
+                               zf(z_player.x
+                                    + z_fix_itofix(z_screen_getXShake())),
                                z_player.y);
-            }
 
-            if(!useEnergy(Z_ENERGY_USE_SHOOTING)) {
-                useShield(Z_SHIELD_DAMAGE_SHOOTING);
+                z_player.lastShotCounter = Z_DS_TO_FRAMES(Z_SHOOT_EVERY_DS);
+                useEnergy(Z_ENERGY_USE_SHOOTING);
+            } else {
+                z_player.lastShotCounter = 0;
             }
-
-            z_player.lastShotCounter = Z_DS_TO_FRAMES(Z_SHOOT_EVERY_DS);
         }
     } else {
         z_player.shootShift = 0;
