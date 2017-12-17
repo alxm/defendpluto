@@ -101,8 +101,13 @@ void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
 
 void z_draw_circle(int16_t X, int16_t Y, uint8_t Radius, uint8_t Color)
 {
+    a_pixel_push();
+
     a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
+    a_pixel_setFillDraw(false);
     a_draw_circle(X, Y, Radius);
+
+    a_pixel_pop();
 }
 
 void z_platform__loadSprite(ZSprite* Sprite, const char* Path)
@@ -120,11 +125,10 @@ void z_platform__loadSprite(ZSprite* Sprite, const char* Path)
         AList* sprites = a_spriteframes_getSprites(Sprite->frames[p]);
 
         A_LIST_ITERATE(sprites, ASprite*, s) {
-            for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
-                a_sprite_replaceColor(s,
-                                      g_palettes[Z_PALETTE_DEFAULT][c],
-                                      g_palettes[p][c]);
-            }
+            a_sprite_swapColors(s,
+                                g_palettes[Z_PALETTE_DEFAULT],
+                                g_palettes[p],
+                                Z_COLOR_NUM);
         }
     }
 
@@ -135,7 +139,7 @@ void z_platform__loadSprite(ZSprite* Sprite, const char* Path)
 
 static ASprite* getCurrentSprite(ZSprite* Sprite, uint8_t Frame)
 {
-    return a_spriteframes_getIndex(Sprite->frames[g_paletteIndex], Frame);
+    return a_spriteframes_getByIndex(Sprite->frames[g_paletteIndex], Frame);
 }
 
 void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
