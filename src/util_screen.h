@@ -15,8 +15,13 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define Z_WIDTH 128
-#define Z_HEIGHT 64
+#if Z_PLATFORM_ARDUBOY
+    #define Z_WIDTH 128
+    #define Z_HEIGHT 64
+#else
+    #define Z_WIDTH 80
+    #define Z_HEIGHT 64
+#endif
 
 typedef struct {
     uint8_t xShake : 4;

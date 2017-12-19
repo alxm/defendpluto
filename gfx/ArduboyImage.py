@@ -54,21 +54,41 @@ class Sheet:
 
         for x in range(0, self.width):
             if self.pixels[x, 0] == Palette.limit:
-                break
+                foundGap = False
+
+                for y in range(1, self.height):
+                    if self.pixels[x, y] != Palette.limit:
+                        foundGap = True
+                        break
+
+                if not foundGap:
+                    break
 
             self.frameWidth += 1
 
         for y in range(0, self.height):
             if self.pixels[0, y] == Palette.limit:
-                break
+                foundGap = False
+
+                for x in range(1, self.width):
+                    if self.pixels[x, y] != Palette.limit:
+                        foundGap = True
+                        break
+
+                if not foundGap:
+                    break
 
             self.frameHeight += 1
 
 class Frame:
     def __init__(self, Palette, Sheet, X, Y):
-        self.spriteBytes = []
-        self.maskBytes = []
+        self.arduboySpriteBytes = []
+        self.arduboyMaskBytes = []
+        self.metaSpriteBytes = []
 
+        #
+        # Arduboy
+        #
         for yStart in range(Y, Y + Sheet.frameHeight, 8):
             for x in range(X, X + Sheet.frameWidth):
                 spriteByte = 0
@@ -83,26 +103,39 @@ class Frame:
                     if pixel in Palette.white:
                         spriteByte |= 1 << y
 
-                self.spriteBytes.append(spriteByte)
-                self.maskBytes.append(maskByte)
+                self.arduboySpriteBytes.append(spriteByte)
+                self.arduboyMaskBytes.append(maskByte)
+
+        #
+        # Gamebuino META
+        #
+        for y in range(Y, Y + Sheet.frameHeight):
+            for x in range(X, X + Sheet.frameWidth):
+                r, g, b = Sheet.pixels[x, y]
+                packed = ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3)
+
+                self.metaSpriteBytes.append(packed)
 
 def main(PaletteName, ImageName, UniqueName):
     palette = Palette(PaletteName)
     sheet = Sheet(ImageName, palette)
 
     dimBytes = [sheet.frameWidth, sheet.frameHeight]
-    spriteBytes = []
-    maskBytes = []
+    arduboySpriteBytes = []
+    arduboyMaskBytes = []
+    metaSpriteBytes = []
     numFrames = 0
 
     for x in range(0, sheet.width, sheet.frameWidth + 1):
         frame = Frame(palette, sheet, x, 0)
 
-        spriteBytes += frame.spriteBytes
-        maskBytes += frame.maskBytes
+        arduboySpriteBytes += frame.arduboySpriteBytes
+        arduboyMaskBytes += frame.arduboyMaskBytes
+        metaSpriteBytes += frame.metaSpriteBytes
+
         numFrames += 1
 
-    def formatBytes(Bytes):
+    def formatBytes8(Bytes):
         formattedBytes = ''
 
         for index, byte in enumerate(Bytes):
@@ -110,6 +143,17 @@ def main(PaletteName, ImageName, UniqueName):
                 formattedBytes += '\n    '
 
             formattedBytes += '0x{:0>2x},'.format(byte)
+
+        return formattedBytes
+
+    def formatBytes16(Bytes):
+        formattedBytes = ''
+
+        for index, pixel in enumerate(Bytes):
+            if index % 10 == 0:
+                formattedBytes += '\n    '
+
+            formattedBytes += '0x{:0>4x},'.format(pixel)
 
         return formattedBytes
 
@@ -123,17 +167,28 @@ static const uint8_t z_data_gfx_{name}_frames = {numFrames};
 PROGMEM static const uint8_t z_data_gfx_{name}_buffer[] = {{
     // Frame dimension{dimBytes}
 
-    // Image frames{spriteBytes}
+    // Image frames{arduboySpriteBytes}
 
-    // Mask frames{maskBytes}
+    // Mask frames{arduboyMaskBytes}
 }};
 
-#endif // Z_PLATFORM_ARDUBOY\
+#elif Z_PLATFORM_GAMEBUINOMETA
+
+static const uint8_t z_data_gfx_{name}_frames = {numFrames};
+
+static const uint16_t z_data_gfx_{name}_buffer[] = {{
+    // Frame dimension{dimBytes}
+
+    // Image frames{metaSpriteBytes}
+}};
+
+#endif\
 """.format(name = UniqueName,
-           dimBytes = formatBytes(dimBytes),
-           spriteBytes = formatBytes(spriteBytes),
-           maskBytes = formatBytes(maskBytes),
-           numFrames = numFrames)
+           dimBytes = formatBytes8 (dimBytes),
+           numFrames = numFrames,
+           arduboySpriteBytes = formatBytes8(arduboySpriteBytes),
+           arduboyMaskBytes = formatBytes8(arduboyMaskBytes),
+           metaSpriteBytes = formatBytes16(metaSpriteBytes))
 
     print(contents)
 

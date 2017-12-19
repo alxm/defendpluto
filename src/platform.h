@@ -19,6 +19,10 @@
     #define Z_PLATFORM_ARDUBOY 1
 #endif
 
+#ifdef ARDUINO_SAMD_ZERO
+    #define Z_PLATFORM_GAMEBUINOMETA 1
+#endif
+
 #define Z_DEBUG_GENERATE_LUT 0
 #define Z_DEBUG_STATS 0
 #define Z_DEBUG_INVINCIBLE 0
@@ -41,16 +45,26 @@
         #ifdef __cplusplus
             #include <Arduboy2.h>
         #endif
+
+        #define Z_PGM_READ_UINT8(Value) pgm_read_byte(Value)
+        #define Z_PGM_READ_UINT16(Value) pgm_read_word(Value)
+    #elif Z_PLATFORM_GAMEBUINOMETA
+        #ifdef __cplusplus
+            #define DISPLAY_MODE DISPLAY_MODE_RGB565
+            #include <Gamebuino-Meta.h>
+        #endif
     #endif
-    #define Z_PGM_READ_UINT8(Value) pgm_read_byte(Value)
-    #define Z_PGM_READ_UINT16(Value) pgm_read_word(Value)
     typedef uint8_t ZPoolOffset;
 #else
     #include <a2x.h>
     #define PROGMEM
+
+    typedef size_t ZPoolOffset;
+#endif
+
+#ifndef Z_PGM_READ_UINT8
     #define Z_PGM_READ_UINT8(Value) (*(Value))
     #define Z_PGM_READ_UINT16(Value) (*(Value))
-    typedef size_t ZPoolOffset;
 #endif
 
 typedef int16_t ZFix;
@@ -91,6 +105,18 @@ typedef enum {
                                z_data_gfx_##Id##_frames);
 
     extern void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Buffer, uint8_t NumFrames);
+#elif Z_PLATFORM_GAMEBUINOMETA
+    typedef struct {
+        void* image;
+        uint8_t numFrames;
+    } ZSprite;
+
+    #define z_sprite_load(Sprite, Id)                     \
+        z_platform__loadSprite(Sprite,                    \
+                               z_data_gfx_##Id##_buffer,  \
+                               z_data_gfx_##Id##_frames);
+
+    extern void z_platform__loadSprite(ZSprite* Sprite, const uint16_t* Buffer, uint8_t NumFrames);
 #else
     typedef struct {
         ASpriteFrames* frames[Z_PALETTE_NUM];

@@ -16,6 +16,9 @@
 */
 
 #include "platform.h"
+
+#if Z_PLATFORM_ARDUBOY
+
 #include <Sprites.h>
 #include "util_font.h"
 #include "util_fps.h"
@@ -188,3 +191,5 @@ int8_t z_sprite_getHeight(ZSprite* Sprite)
 {
     return i8(pgm_read_byte(Sprite->image + 1));
 }
+
+#endif // Z_PLATFORM_ARDUBOY

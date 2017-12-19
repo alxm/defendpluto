@@ -19,27 +19,42 @@
 #include "util_fps.h"
 #include "loop.h"
 
-Arduboy2Base g_arduboy;
+#if Z_PLATFORM_ARDUBOY
+    Arduboy2Base g_arduboy;
+#endif
 
 void setup()
 {
-    g_arduboy.begin();
-    g_arduboy.setFrameRate(Z_FPS);
+    #if Z_PLATFORM_ARDUBOY
+        g_arduboy.begin();
+        g_arduboy.setFrameRate(Z_FPS);
+    #elif Z_PLATFORM_GAMEBUINOMETA
+        gb.begin();
+        gb.setFrameRate(Z_FPS);
+    #endif
 
     z_loop_setup();
 }
 
 void loop()
 {
-    if(!g_arduboy.nextFrameDEV()) {
-        g_arduboy.idle();
-        return;
-    }
+    #if Z_PLATFORM_ARDUBOY
+        if(!g_arduboy.nextFrameDEV()) {
+            g_arduboy.idle();
+            return;
+        }
 
-    g_arduboy.pollButtons();
+        g_arduboy.pollButtons();
+    #elif Z_PLATFORM_GAMEBUINOMETA
+        if(!gb.update()) {
+            return;
+        }
+    #endif
 
     z_loop_tick();
     z_loop_draw();
 
-    g_arduboy.display();
+    #if Z_PLATFORM_ARDUBOY
+        g_arduboy.display();
+    #endif
 }
