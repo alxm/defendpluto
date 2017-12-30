@@ -3,3 +3,4 @@
 /src/a2x_gen/
 /src/data_gfx_palette.h
 *.bin
+/sketchsize
