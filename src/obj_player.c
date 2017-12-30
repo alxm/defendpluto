@@ -289,7 +289,7 @@ static void drawHearts(int16_t X, int16_t Y)
 static void drawBar(int16_t X, int16_t Y, uint8_t Value, uint8_t Max)
 {
     int8_t height = 1;
-    int8_t maxWidth = 21;
+    int8_t maxWidth = 15;
     int8_t width = i8(maxWidth * Value / Max);
 
     z_draw_rectangle(X,
@@ -327,5 +327,5 @@ void z_player_hudDraw(void)
 {
     drawHearts(2, 2);
     drawShield(28, 2);
-    drawEnergy(60, 1);
+    drawEnergy(54, 1);
 }
