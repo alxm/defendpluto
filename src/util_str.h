@@ -17,11 +17,8 @@
 
 typedef enum {
     Z_STR_INVALID = -1,
-    Z_STR_PRESS_FIRE1,
-    Z_STR_PRESS_FIRE2,
-    Z_STR_END1,
-    Z_STR_END2,
-    Z_STR_END3,
+    Z_STR_PRESS_A,
+    Z_STR_END,
     Z_STR_NUM
 } ZStringId;
 

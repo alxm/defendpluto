@@ -32,6 +32,7 @@
 #include "data_gfx_hearts.h"
 #include "data_gfx_shield.h"
 #include "data_gfx_title.h"
+#include "data_gfx_title80.h"
 
 ZGraphics z_graphics;
 
@@ -50,7 +51,12 @@ void z_graphics_setup(void)
     z_sprite_load(&z_graphics.energy, energy);
     z_sprite_load(&z_graphics.hearts, hearts);
     z_sprite_load(&z_graphics.shield, shield);
-    z_sprite_load(&z_graphics.title, title);
+
+    #if Z_PLATFORM_ARDUBOY
+        z_sprite_load(&z_graphics.title, title);
+    #else
+        z_sprite_load(&z_graphics.title, title80);
+    #endif
 }
 
 void z_sprite_blitCentered(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)

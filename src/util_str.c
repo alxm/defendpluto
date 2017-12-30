@@ -28,9 +28,6 @@ const char* z_strings[Z_STR_NUM];
 
 void z_str_setup(void)
 {
-    SET_STR(Z_STR_PRESS_FIRE1, "Press FIRE");
-    SET_STR(Z_STR_PRESS_FIRE2, "Press FIRE to go on");
-    SET_STR(Z_STR_END1, "Pluto fell to the");
-    SET_STR(Z_STR_END2, "Proxima Centauri");
-    SET_STR(Z_STR_END3, "invaders");
+    SET_STR(Z_STR_PRESS_A, "Press A");
+    SET_STR(Z_STR_END, "Pluto fell to the Proxima Centauri invaders");
 }

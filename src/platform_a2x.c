@@ -35,7 +35,7 @@ void z_platform_setup(void)
     g_buttons[Z_BUTTON_A] = a_button_new("key.z gamepad.b.a");
     g_buttons[Z_BUTTON_B] = a_button_new("key.x gamepad.b.b");
 
-    g_paletteIndex = 0;
+    g_paletteIndex = Z_PALETTE_DEFAULT;
     g_paletteSwitch = a_button_new("key.c gamepad.b.select");
 
     ASprite* pal = a_sprite_newFromFile("gfx/palette.png");

@@ -21,7 +21,8 @@ typedef enum {
     Z_FONT_FACE_INVALID = -1,
     Z_FONT_FACE_NUMBERS,
     Z_FONT_FACE_ALPHANUM,
-    Z_FONT_FACE_ALPHANUM_OUTLINE,
+    Z_FONT_FACE_ALPHANUM_OUTLINE_RED,
+    Z_FONT_FACE_ALPHANUM_OUTLINE_YELLOW,
     Z_FONT_FACE_NUM
 } ZFontFace;
 
@@ -29,6 +30,8 @@ extern void z_font_setup(void);
 
 extern void z_font_text(const char* Text, int16_t X, int16_t Y, uint8_t Font);
 extern void z_font_textp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font);
+extern void z_font_textCenterp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font);
+extern void z_font_textWrapp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font);
 extern void z_font_int(int16_t Number, int16_t X, int16_t Y, uint8_t Font);
 
 Z_EXTERN_C_END

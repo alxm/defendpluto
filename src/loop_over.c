@@ -53,11 +53,9 @@ void z_loop_over_draw(void)
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
 
-    z_font_textp(Z_STR_END1, 4, 4, Z_FONT_FACE_ALPHANUM);
-    z_font_textp(Z_STR_END2, 4, 14, Z_FONT_FACE_ALPHANUM);
-    z_font_textp(Z_STR_END3, 4, 24, Z_FONT_FACE_ALPHANUM);
+    z_font_textWrapp(Z_STR_END, 4, 4, Z_FONT_FACE_ALPHANUM);
 
     if(g_blink) {
-        z_font_textp(Z_STR_PRESS_FIRE2, 4, 44, Z_FONT_FACE_ALPHANUM);
+        z_font_textp(Z_STR_PRESS_A, 4, 52, Z_FONT_FACE_ALPHANUM_OUTLINE_YELLOW);
     }
 }
