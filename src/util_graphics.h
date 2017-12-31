@@ -35,23 +35,31 @@ typedef enum {
     Z_BIT_RIGHT   = (1 << 3),
 } ZFrameBits;
 
-typedef struct {
-    ZSprite player[3][3];
-    ZSprite bullets;
-    ZSprite energy;
-    ZSprite hearts;
-    ZSprite shield;
-    ZSprite title;
-} ZGraphics;
-
-extern ZGraphics z_graphics;
+typedef enum {
+    Z_SPRITE_ASTEROID,
+    Z_SPRITE_BULLETS,
+    Z_SPRITE_ENEMY00,
+    Z_SPRITE_ENEMY01,
+    Z_SPRITE_ENEMY02,
+    Z_SPRITE_ENERGY,
+    Z_SPRITE_FONT_NUM,
+    Z_SPRITE_FONT_ALPHANUM,
+    Z_SPRITE_FONT_ALPHANUM_OUTLINE,
+    Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW,
+    Z_SPRITE_HEARTS,
+    Z_SPRITE_PLAYER,
+    Z_SPRITE_SHIELD,
+    Z_SPRITE_TITLE,
+    Z_SPRITE_NUM
+} ZSpriteId;
 
 extern void z_graphics_setup(void);
 
-extern void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame);
-extern void z_sprite_blitCentered(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame);
-extern int16_t z_sprite_getWidth(ZSprite* Sprite);
-extern int16_t z_sprite_getHeight(ZSprite* Sprite);
+extern void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame);
+extern void z_sprite_blitCentered(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame);
+extern int16_t z_sprite_getWidth(uint8_t Sprite);
+extern int16_t z_sprite_getHeight(uint8_t Sprite);
+extern uint8_t z_sprite_getNumFrames(uint8_t Sprite);
 
 extern void z_draw_fill(uint8_t Color);
 extern void z_draw_rectangle(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Color);

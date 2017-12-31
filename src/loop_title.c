@@ -52,7 +52,7 @@ void z_loop_title_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
-    z_sprite_blit(&z_graphics.title, 0, 0, 0);
+    z_sprite_blit(Z_SPRITE_TITLE, 0, 0, 0);
 
     if(g_blink) {
         z_font_textCenterp(Z_STR_PRESS_A,

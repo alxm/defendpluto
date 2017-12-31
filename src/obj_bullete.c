@@ -85,7 +85,7 @@ void z_bullete_draw(ZPoolObject* Bullet)
     uint8_t angle = Z_U4_TO_ANGLE(bullet->angle);
     uint8_t frame = u8(Z_ANGLE_WRAP(angle + Z_ANGLE_045 / 2) / Z_ANGLE_045);
 
-    z_sprite_blitCentered(&z_graphics.bullets,
+    z_sprite_blitCentered(Z_SPRITE_BULLETS,
                           z_fix_fixtoi(bullet->x),
                           z_fix_fixtoi(bullet->y),
                           frame);

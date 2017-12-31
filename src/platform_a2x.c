@@ -16,15 +16,22 @@
 */
 
 #ifndef ARDUINO
+#include <a2x.h>
 
 #include "platform.h"
 #include "util_graphics.h"
 #include "util_input.h"
 
+typedef struct {
+    ASpriteFrames* frames[Z_PALETTE_NUM];
+    uint8_t numFrames;
+} ZSprite;
+
 static AInputButton* g_buttons[Z_BUTTON_NUM];
 static ZPalette g_paletteIndex;
 static AInputButton* g_paletteSwitch;
 static APixel g_palettes[Z_PALETTE_NUM][Z_COLOR_NUM];
+static ZSprite g_sprites[Z_SPRITE_NUM];
 
 void z_platform_setup(void)
 {
@@ -110,19 +117,20 @@ void z_draw_circle(int16_t X, int16_t Y, uint8_t Radius, uint8_t Color)
     a_pixel_pop();
 }
 
-void z_platform__loadSprite(ZSprite* Sprite, const char* Path)
+void z_platform__loadSprite(uint8_t Sprite, const char* Path)
 {
+    ZSprite* sprite = &g_sprites[Sprite];
     ASprite* sheet = a_sprite_newFromFile(Path);
     ASpriteFrames* frames = a_spriteframes_new(sheet, 0, 0, 0);
 
     for(ZPalette p = 0; p < Z_PALETTE_NUM; p++) {
         if(p == Z_PALETTE_DEFAULT) {
-            Sprite->frames[p] = frames;
+            sprite->frames[p] = frames;
             continue;
         }
 
-        Sprite->frames[p] = a_spriteframes_dup(frames, true);
-        AList* sprites = a_spriteframes_getSprites(Sprite->frames[p]);
+        sprite->frames[p] = a_spriteframes_dup(frames, true);
+        AList* sprites = a_spriteframes_getSprites(sprite->frames[p]);
 
         A_LIST_ITERATE(sprites, ASprite*, s) {
             a_sprite_swapColors(s,
@@ -132,29 +140,34 @@ void z_platform__loadSprite(ZSprite* Sprite, const char* Path)
         }
     }
 
-    Sprite->numFrames = u8(a_spriteframes_getNum(frames));
+    sprite->numFrames = u8(a_spriteframes_getNum(frames));
 
     a_sprite_free(sheet);
 }
 
-static ASprite* getCurrentSprite(ZSprite* Sprite, uint8_t Frame)
+static ASprite* getCurrentSprite(uint8_t Sprite, uint8_t Frame)
 {
-    return a_spriteframes_getByIndex(Sprite->frames[g_paletteIndex], Frame);
+    return a_spriteframes_getByIndex(g_sprites[Sprite].frames[g_paletteIndex],
+                                     Frame);
 }
 
-void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
+void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
     a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
 }
 
-int16_t z_sprite_getWidth(ZSprite* Sprite)
+int16_t z_sprite_getWidth(uint8_t Sprite)
 {
     return i16(a_sprite_getWidth(getCurrentSprite(Sprite, 0)));
 }
 
-int16_t z_sprite_getHeight(ZSprite* Sprite)
+int16_t z_sprite_getHeight(uint8_t Sprite)
 {
     return i16(a_sprite_getHeight(getCurrentSprite(Sprite, 0)));
 }
 
+uint8_t z_sprite_getNumFrames(uint8_t Sprite)
+{
+    return g_sprites[Sprite].numFrames;
+}
 #endif // ifndef ARDUINO

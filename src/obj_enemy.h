@@ -58,7 +58,7 @@ typedef struct {
 typedef void (ZEnemyCallback)(ZEnemy*);
 
 typedef struct {
-    ZSprite sprite;
+    uint8_t sprite;
     ZEnemyCallback* ai;
     uint8_t w : 4;
     uint8_t h : 4;

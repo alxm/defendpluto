@@ -36,29 +36,19 @@
 #define Z_EXTERN_C_END
 #endif
 
+#include <stdlib.h>
+#include <stdbool.h>
+#include <stdint.h>
+
 #ifdef ARDUINO
-    #include <stdlib.h>
-    #include <stdbool.h>
-    #include <stdint.h>
     #include <Arduino.h>
     #if Z_PLATFORM_ARDUBOY
-        #ifdef __cplusplus
-            #include <Arduboy2.h>
-        #endif
-
         #define Z_PGM_READ_UINT8(Value) pgm_read_byte(Value)
         #define Z_PGM_READ_UINT16(Value) pgm_read_word(Value)
-    #elif Z_PLATFORM_GAMEBUINOMETA
-        #ifdef __cplusplus
-            #define DISPLAY_MODE DISPLAY_MODE_RGB565
-            #include <Gamebuino-Meta.h>
-        #endif
     #endif
     typedef uint8_t ZPoolOffset;
 #else
-    #include <a2x.h>
     #define PROGMEM
-
     typedef size_t ZPoolOffset;
 #endif
 
@@ -93,40 +83,24 @@ typedef enum {
 #define Z_ARRAY_LEN(A) (sizeof(A) / sizeof(A[0]))
 
 #if Z_PLATFORM_ARDUBOY
-    typedef struct {
-        const uint8_t* image;
-        const uint8_t* mask;
-        uint8_t numFrames;
-    } ZSprite;
-
-    #define z_sprite_load(Sprite, Id)                    \
-        z_platform__loadSprite(Sprite,                   \
-                               z_data_gfx_##Id##_buffer, \
-                               z_data_gfx_##Id##_frames);
-
-    extern void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Buffer, uint8_t NumFrames);
-#elif Z_PLATFORM_GAMEBUINOMETA
-    typedef struct {
-        void* image;
-        uint8_t numFrames;
-    } ZSprite;
-
-    #define z_sprite_load(Sprite, Id)                     \
-        z_platform__loadSprite(Sprite,                    \
+    #define z_sprite_load(Index, Id)                      \
+        z_platform__loadSprite(Index,                     \
                                z_data_gfx_##Id##_buffer,  \
                                z_data_gfx_##Id##_frames);
 
-    extern void z_platform__loadSprite(ZSprite* Sprite, const uint16_t* Buffer, uint8_t NumFrames);
+    extern void z_platform__loadSprite(uint8_t Sprite, const uint8_t* Buffer, uint8_t NumFrames);
+#elif Z_PLATFORM_GAMEBUINOMETA
+    #define z_sprite_load(Index, Id)                      \
+        z_platform__loadSprite(Index,                     \
+                               z_data_gfx_##Id##_buffer,  \
+                               z_data_gfx_##Id##_frames);
+
+    extern void z_platform__loadSprite(uint8_t Sprite, const uint16_t* Buffer, uint8_t NumFrames);
 #else
-    typedef struct {
-        ASpriteFrames* frames[Z_PALETTE_NUM];
-        uint8_t numFrames;
-    } ZSprite;
+    #define z_sprite_load(Index, Id)                      \
+        z_platform__loadSprite(Index, "gfx/" #Id ".png");
 
-    #define z_sprite_load(Sprite, Id)                      \
-        z_platform__loadSprite(Sprite, "gfx/" #Id ".png");
-
-    extern void z_platform__loadSprite(ZSprite* Sprite, const char* Path);
+    extern void z_platform__loadSprite(uint8_t Sprite, const char* Path);
 #endif
 
 extern void z_platform_setup(void);

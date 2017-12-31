@@ -16,6 +16,14 @@
 */
 
 #include "platform.h"
+
+#if Z_PLATFORM_ARDUBOY
+    #include <Arduboy2.h>
+#elif Z_PLATFORM_GAMEBUINOMETA
+    #define DISPLAY_MODE DISPLAY_MODE_RGB565
+    #include <Gamebuino-Meta.h>
+#endif
+
 #include "util_fps.h"
 #include "loop.h"
 

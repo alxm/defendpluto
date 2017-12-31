@@ -227,15 +227,6 @@ void z_player_draw(void)
     int16_t x = z_fix_fixtoi(z_player.x);
     int16_t y = i16(z_fix_fixtoi(z_player.y) + z_player.shootShift);
 
-    int16_t fx = i16(1
-                     - !!(z_player.frame & Z_BIT_LEFT)
-                     + !!(z_player.frame & Z_BIT_RIGHT));
-    int16_t fy = i16(1
-                     - !!(z_player.frame & Z_BIT_FORWARD)
-                     + !!(z_player.frame & Z_BIT_BACK));
-
-    ZSprite* sprite = &z_graphics.player[fy][fx];
-
     if(z_player.jetFlicker) {
         int16_t jy = i16(y + 2 + z_screen_getYShake());
 
@@ -247,10 +238,17 @@ void z_player_draw(void)
         z_draw_rectangle(i16(x + 1), jy, 2, 3, Z_COLOR_RED);
     }
 
-    z_sprite_blitCentered(sprite,
+    int16_t fx = i16(1
+                     - !!(z_player.frame & Z_BIT_LEFT)
+                     + !!(z_player.frame & Z_BIT_RIGHT));
+    int16_t fy = i16(1
+                     - !!(z_player.frame & Z_BIT_FORWARD)
+                     + !!(z_player.frame & Z_BIT_BACK));
+
+    z_sprite_blitCentered(Z_SPRITE_PLAYER,
                           i16(x + z_screen_getXShake()),
                           i16(y + z_screen_getYShake()),
-                          0);
+                          u8(fy * 3 + fx));
 }
 
 void z_player_takeDamage(uint8_t Damage)
@@ -282,7 +280,7 @@ static void drawHearts(int16_t X, int16_t Y)
                              ? z_player.health > i
                              : z_player.heartsBlink;
 
-        z_sprite_blit(&z_graphics.hearts, i16(X + i * 8), Y, heartFrame);
+        z_sprite_blit(Z_SPRITE_HEARTS, i16(X + i * 8), Y, heartFrame);
     }
 }
 
@@ -313,13 +311,13 @@ static void drawBar(int16_t X, int16_t Y, uint8_t Value, uint8_t Max)
 
 static void drawShield(int16_t X, int16_t Y)
 {
-    z_sprite_blit(&z_graphics.shield, X, Y, 0);
+    z_sprite_blit(Z_SPRITE_SHIELD, X, Y, 0);
     drawBar(i16(X + 6), i16(Y + 1), z_player.shield, Z_SHIELD_MAX);
 }
 
 static void drawEnergy(int16_t X, int16_t Y)
 {
-    z_sprite_blit(&z_graphics.energy, X, Y, 0);
+    z_sprite_blit(Z_SPRITE_ENERGY, X, Y, 0);
     drawBar(i16(X + 4), i16(Y + 2), z_player.energy, Z_ENERGY_MAX);
 }
 

@@ -18,6 +18,8 @@
 #include "platform.h"
 
 #if Z_PLATFORM_GAMEBUINOMETA
+#define DISPLAY_MODE DISPLAY_MODE_RGB565
+#include <Gamebuino-Meta.h>
 
 #include "util_font.h"
 #include "util_fps.h"
@@ -32,10 +34,16 @@ typedef struct {
     bool released : 1;
 } ZButton;
 
+typedef struct {
+    Image* image;
+    uint8_t numFrames;
+} ZSprite;
+
 static uint16_t g_frameCounter;
 static ZButton g_buttons[Z_BUTTON_NUM];
 static ZPalette g_paletteIndex;
 static Color g_palettes[Z_PALETTE_NUM][Z_COLOR_NUM];
+static ZSprite g_sprites[Z_SPRITE_NUM];
 
 void z_platform_setup(void)
 {
@@ -127,28 +135,30 @@ void z_draw_circle(int16_t X, int16_t Y, uint8_t Radius, uint8_t Color)
     gb.display.drawCircle(X, Y, Radius);
 }
 
-void z_platform__loadSprite(ZSprite* Sprite, const uint16_t* Buffer, uint8_t NumFrames)
+void z_platform__loadSprite(uint8_t Sprite, const uint16_t* Buffer, uint8_t NumFrames)
 {
-    Sprite->image = new Image(Buffer, NumFrames);
-    Sprite->numFrames = NumFrames;
+    g_sprites[Sprite].image = new Image(Buffer, NumFrames);
+    g_sprites[Sprite].numFrames = NumFrames;
 }
 
-void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
+void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
-    Image* image = (Image*)Sprite->image;
-
-    image->setFrame(Frame);
-    gb.display.drawImage(X, Y, *image);
+    g_sprites[Sprite].image->setFrame(Frame);
+    gb.display.drawImage(X, Y, *g_sprites[Sprite].image);
 }
 
-int16_t z_sprite_getWidth(ZSprite* Sprite)
+int16_t z_sprite_getWidth(uint8_t Sprite)
 {
-    return ((Image*)Sprite->image)->width();
+    return g_sprites[Sprite].image->width();
 }
 
-int16_t z_sprite_getHeight(ZSprite* Sprite)
+int16_t z_sprite_getHeight(uint8_t Sprite)
 {
-    return ((Image*)Sprite->image)->height();
+    return g_sprites[Sprite].image->height();
 }
 
+uint8_t z_sprite_getNumFrames(uint8_t Sprite)
+{
+    return g_sprites[Sprite].numFrames;
+}
 #endif // Z_PLATFORM_GAMEBUINOMETA

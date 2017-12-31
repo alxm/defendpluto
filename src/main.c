@@ -17,6 +17,7 @@
 
 #ifndef ARDUINO
 
+#include <a2x.h>
 #include "platform.h"
 #include "util_fix.h"
 #include "util_fps.h"

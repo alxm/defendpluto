@@ -27,10 +27,6 @@
 #include "obj_enemy.h"
 #include "obj_particle.h"
 #include "obj_player.h"
-#include "data_gfx_asteroid.h"
-#include "data_gfx_enemy00.h"
-#include "data_gfx_enemy01.h"
-#include "data_gfx_enemy02.h"
 
 static struct {
     bool hit;
@@ -44,19 +40,19 @@ ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
 void z_enemy_setup(void)
 {
-    #define enemy(Index, Id, Ai, Width, Height, Health, Damage, Speed) \
-        z_sprite_load(&z_enemy_data[Index].sprite, Id);                \
-        z_enemy_data[Index].ai = Ai;                                   \
-        z_enemy_data[Index].w = Width;                                 \
-        z_enemy_data[Index].h = Height;                                \
-        z_enemy_data[Index].health = Health;                           \
-        z_enemy_data[Index].damage = Damage;                           \
-        z_enemy_data[Index].speedShift = Speed;                        \
+    #define enemy(Index, Sprite, Ai, Width, Height, Health, Damage, Speed) \
+        z_enemy_data[Index].sprite = Sprite;                               \
+        z_enemy_data[Index].ai = Ai;                                       \
+        z_enemy_data[Index].w = Width;                                     \
+        z_enemy_data[Index].h = Height;                                    \
+        z_enemy_data[Index].health = Health;                               \
+        z_enemy_data[Index].damage = Damage;                               \
+        z_enemy_data[Index].speedShift = Speed;
 
-    enemy(Z_ENEMY_ASTEROID, asteroid, z_enemy_ai_asteroid, 8, 8, 3, 0, 2);
-    enemy(Z_ENEMY_SHIP0,    enemy00,  z_enemy_ai_ship0,    7, 5, 1, 2, 1);
-    enemy(Z_ENEMY_SHIP1,    enemy01,  z_enemy_ai_ship1,    7, 5, 1, 4, 1);
-    enemy(Z_ENEMY_SHIP2,    enemy02,  z_enemy_ai_ship2,    7, 6, 2, 6, 2);
+    enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, z_enemy_ai_asteroid, 8, 8, 3, 0, 2);
+    enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  z_enemy_ai_ship0,    7, 5, 1, 2, 1);
+    enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  z_enemy_ai_ship1,    7, 5, 1, 4, 1);
+    enemy(Z_ENEMY_SHIP2,    Z_SPRITE_ENEMY02,  z_enemy_ai_ship2,    7, 6, 2, 6, 2);
 }
 
 void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags)
@@ -82,13 +78,13 @@ bool z_enemy_tick(ZPoolObject* Enemy)
     ZFix cos = z_fix_cos(enemy->angle);
     ZFix sin = z_fix_sin(enemy->angle);
     ZFix speed = z_enemy_data[enemy->typeId].speedShift;
-    ZSprite* sprite = &z_enemy_data[enemy->typeId].sprite;
+    uint8_t sprite = z_enemy_data[enemy->typeId].sprite;
 
     enemy->x = zf(enemy->x + (cos >> speed));
     enemy->y = zf(enemy->y - (sin >> speed));
 
     Z_EVERY_DS(2) {
-        enemy->frame = u4((enemy->frame + 1) % sprite->numFrames);
+        enemy->frame = u4((enemy->frame + 1) % z_sprite_getNumFrames(sprite));
     }
 
     enemy->jetFlicker = !enemy->jetFlicker;
@@ -147,13 +143,12 @@ void z_enemy_draw(ZPoolObject* Enemy)
     ZEnemy* enemy = (ZEnemy*)Enemy;
     int16_t x = z_fix_fixtoi(enemy->x);
     int16_t y = z_fix_fixtoi(enemy->y);
-    ZSprite* sprite = &z_enemy_data[enemy->typeId].sprite;
 
     if(enemy->jetFlicker) {
         drawJets(enemy->typeId, x, y);
     }
 
-    z_sprite_blitCentered(sprite,
+    z_sprite_blitCentered(z_enemy_data[enemy->typeId].sprite,
                           i16(x + z_screen_getXShake()),
                           i16(y + z_screen_getYShake()),
                           enemy->frame);

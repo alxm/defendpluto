@@ -18,48 +18,47 @@
 #include "platform.h"
 #include "util_graphics.h"
 #include "util_screen.h"
-#include "data_gfx_player.h"
-#include "data_gfx_player_left.h"
-#include "data_gfx_player_right.h"
-#include "data_gfx_player_forward.h"
-#include "data_gfx_player_forward_left.h"
-#include "data_gfx_player_forward_right.h"
-#include "data_gfx_player_back.h"
-#include "data_gfx_player_back_left.h"
-#include "data_gfx_player_back_right.h"
+
+#include "data_gfx_asteroid.h"
 #include "data_gfx_bullets.h"
+#include "data_gfx_enemy00.h"
+#include "data_gfx_enemy01.h"
+#include "data_gfx_enemy02.h"
 #include "data_gfx_energy.h"
+#include "data_gfx_font_num.h"
+#include "data_gfx_font_alphanum.h"
+#include "data_gfx_font_alphanum_outline.h"
+#include "data_gfx_font_alphanum_outline_yellow.h"
 #include "data_gfx_hearts.h"
+#include "data_gfx_player.h"
 #include "data_gfx_shield.h"
 #include "data_gfx_title.h"
 #include "data_gfx_title80.h"
 
-ZGraphics z_graphics;
-
 void z_graphics_setup(void)
 {
-    z_sprite_load(&z_graphics.player[0][0], player_forward_left);
-    z_sprite_load(&z_graphics.player[0][1], player_forward);
-    z_sprite_load(&z_graphics.player[0][2], player_forward_right);
-    z_sprite_load(&z_graphics.player[1][0], player_left);
-    z_sprite_load(&z_graphics.player[1][1], player);
-    z_sprite_load(&z_graphics.player[1][2], player_right);
-    z_sprite_load(&z_graphics.player[2][0], player_back_left);
-    z_sprite_load(&z_graphics.player[2][1], player_back);
-    z_sprite_load(&z_graphics.player[2][2], player_back_right);
-    z_sprite_load(&z_graphics.bullets, bullets);
-    z_sprite_load(&z_graphics.energy, energy);
-    z_sprite_load(&z_graphics.hearts, hearts);
-    z_sprite_load(&z_graphics.shield, shield);
+    z_sprite_load(Z_SPRITE_ASTEROID, asteroid);
+    z_sprite_load(Z_SPRITE_BULLETS, bullets);
+    z_sprite_load(Z_SPRITE_ENEMY00, enemy00);
+    z_sprite_load(Z_SPRITE_ENEMY01, enemy01);
+    z_sprite_load(Z_SPRITE_ENEMY02, enemy02);
+    z_sprite_load(Z_SPRITE_ENERGY, energy);
+    z_sprite_load(Z_SPRITE_FONT_NUM, font_num);
+    z_sprite_load(Z_SPRITE_FONT_ALPHANUM, font_alphanum);
+    z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE, font_alphanum_outline);
+    z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW, font_alphanum_outline_yellow);
+    z_sprite_load(Z_SPRITE_HEARTS, hearts);
+    z_sprite_load(Z_SPRITE_PLAYER, player);
+    z_sprite_load(Z_SPRITE_SHIELD, shield);
 
     #if Z_PLATFORM_ARDUBOY
-        z_sprite_load(&z_graphics.title, title);
+        z_sprite_load(Z_SPRITE_TITLE, title);
     #else
-        z_sprite_load(&z_graphics.title, title80);
+        z_sprite_load(Z_SPRITE_TITLE, title80);
     #endif
 }
 
-void z_sprite_blitCentered(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
+void z_sprite_blitCentered(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
     z_sprite_blit(Sprite,
                   i16(X - z_sprite_getWidth(Sprite) / 2),

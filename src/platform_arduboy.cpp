@@ -18,12 +18,18 @@
 #include "platform.h"
 
 #if Z_PLATFORM_ARDUBOY
-
+#include <Arduboy2.h>
 #include <Sprites.h>
 #include "util_font.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
+
+typedef struct {
+    const uint8_t* image;
+    const uint8_t* mask;
+    uint8_t numFrames;
+} ZSprite;
 
 extern Arduboy2Base g_arduboy;
 
@@ -39,6 +45,8 @@ static struct {
     buttonFields(a)
     buttonFields(b)
 } g_buttons;
+
+static ZSprite g_sprites[Z_SPRITE_NUM];
 
 void z_platform_setup(void)
 {
@@ -166,30 +174,39 @@ void z_draw_circle(int16_t X, int16_t Y, uint8_t Radius, uint8_t Color)
     g_arduboy.drawCircle(X, Y, Radius, Color ? WHITE : BLACK);
 }
 
-void z_platform__loadSprite(ZSprite* Sprite, const uint8_t* Buffer, uint8_t NumFrames)
+void z_platform__loadSprite(uint8_t Sprite, const uint8_t* Buffer, uint8_t NumFrames)
 {
-    Sprite->image = Buffer;
-    Sprite->mask = Buffer
-                    + 2
-                    + NumFrames
-                        * z_sprite_getWidth(Sprite)
-                        * ((z_sprite_getHeight(Sprite) + 7) / 8);
-    Sprite->numFrames = NumFrames;
+    g_sprites[Sprite].image = Buffer;
+    g_sprites[Sprite].mask = Buffer
+                             + 2
+                             + NumFrames
+                                * z_sprite_getWidth(Sprite)
+                                * ((z_sprite_getHeight(Sprite) + 7) / 8);
+    g_sprites[Sprite].numFrames = NumFrames;
 }
 
-void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
+void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
-    Sprites::drawExternalMask(X, Y, Sprite->image, Sprite->mask, Frame, Frame);
+    Sprites::drawExternalMask(X,
+                              Y,
+                              g_sprites[Sprite].image,
+                              g_sprites[Sprite].mask,
+                              Frame,
+                              Frame);
 }
 
-int16_t z_sprite_getWidth(ZSprite* Sprite)
+int16_t z_sprite_getWidth(uint8_t Sprite)
 {
-    return pgm_read_byte(Sprite->image);
+    return pgm_read_byte(g_sprites[Sprite].image);
 }
 
-int16_t z_sprite_getHeight(ZSprite* Sprite)
+int16_t z_sprite_getHeight(uint8_t Sprite)
 {
-    return pgm_read_byte(Sprite->image + 1);
+    return pgm_read_byte(g_sprites[Sprite].image + 1);
 }
 
+uint8_t z_sprite_getNumFrames(uint8_t Sprite)
+{
+    return g_sprites[Sprite].numFrames;
+}
 #endif // Z_PLATFORM_ARDUBOY
