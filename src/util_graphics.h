@@ -50,8 +50,8 @@ extern void z_graphics_setup(void);
 
 extern void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame);
 extern void z_sprite_blitCentered(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame);
-extern int8_t z_sprite_getWidth(ZSprite* Sprite);
-extern int8_t z_sprite_getHeight(ZSprite* Sprite);
+extern int16_t z_sprite_getWidth(ZSprite* Sprite);
+extern int16_t z_sprite_getHeight(ZSprite* Sprite);
 
 extern void z_draw_fill(uint8_t Color);
 extern void z_draw_rectangle(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Color);

@@ -147,14 +147,14 @@ void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
     a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
 }
 
-int8_t z_sprite_getWidth(ZSprite* Sprite)
+int16_t z_sprite_getWidth(ZSprite* Sprite)
 {
-    return i8(a_sprite_getWidth(getCurrentSprite(Sprite, 0)));
+    return i16(a_sprite_getWidth(getCurrentSprite(Sprite, 0)));
 }
 
-int8_t z_sprite_getHeight(ZSprite* Sprite)
+int16_t z_sprite_getHeight(ZSprite* Sprite)
 {
-    return i8(a_sprite_getHeight(getCurrentSprite(Sprite, 0)));
+    return i16(a_sprite_getHeight(getCurrentSprite(Sprite, 0)));
 }
 
 #endif // ifndef ARDUINO

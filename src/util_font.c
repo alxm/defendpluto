@@ -62,7 +62,7 @@ void z_font_setup(void)
            | Z_FONT_FLAG_ALPHA_L);
 }
 
-static int16_t drawChar(char Char, int16_t X, int16_t Y, uint8_t Flags, ZSprite* Sprite, int8_t CharWidth)
+static int16_t drawChar(char Char, int16_t X, int16_t Y, uint8_t Flags, ZSprite* Sprite, int16_t CharWidth)
 {
     char frame = 0;
 
@@ -95,7 +95,7 @@ void z_font_text(const char* Text, int16_t X, int16_t Y, uint8_t Font)
 {
     uint8_t flags = g_fonts[Font].flags;
     ZSprite* sprite = &g_fonts[Font].sprites;
-    int8_t charWidth = z_sprite_getWidth(sprite);
+    int16_t charWidth = z_sprite_getWidth(sprite);
 
     for(char c = *Text; c != '\0'; c = *++Text) {
         X = drawChar(c, X, Y, flags, sprite, charWidth);
@@ -106,7 +106,7 @@ void z_font_textp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
 {
     uint8_t flags = g_fonts[Font].flags;
     ZSprite* sprite = &g_fonts[Font].sprites;
-    int8_t charWidth = z_sprite_getWidth(sprite);
+    int16_t charWidth = z_sprite_getWidth(sprite);
     const char* s = z_strings[StringId];
 
     for(char c = Z_PGM_READ_UINT8(s); c != '\0'; c = Z_PGM_READ_UINT8(++s)) {
@@ -116,12 +116,12 @@ void z_font_textp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
 
 void z_font_textCenterp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
 {
-    int8_t charWidth = z_sprite_getWidth(&g_fonts[Font].sprites);
+    int16_t charWidth = z_sprite_getWidth(&g_fonts[Font].sprites);
     const char* s = z_strings[StringId];
-    int8_t w = 0;
+    int16_t w = 0;
 
     for(char c = Z_PGM_READ_UINT8(s); c != '\0'; c = Z_PGM_READ_UINT8(++s)) {
-        w = i8(w + charWidth + 1);
+        w = i16(w + charWidth + 1);
     }
 
     z_font_textp(StringId, i16(X - w / 2), Y, Font);
@@ -131,8 +131,8 @@ void z_font_textWrapp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
 {
     uint8_t flags = g_fonts[Font].flags;
     ZSprite* sprite = &g_fonts[Font].sprites;
-    int8_t charWidth = z_sprite_getWidth(sprite);
-    int8_t charHeight = z_sprite_getHeight(sprite);
+    int16_t charWidth = z_sprite_getWidth(sprite);
+    int16_t charHeight = z_sprite_getHeight(sprite);
     const char* s = z_strings[StringId];
     int16_t lineWidth = 0;
     int16_t x = X;

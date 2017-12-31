@@ -141,14 +141,14 @@ void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
     gb.display.drawImage(X, Y, *image);
 }
 
-int8_t z_sprite_getWidth(ZSprite* Sprite)
+int16_t z_sprite_getWidth(ZSprite* Sprite)
 {
-    return i8(((Image*)Sprite->image)->width());
+    return ((Image*)Sprite->image)->width();
 }
 
-int8_t z_sprite_getHeight(ZSprite* Sprite)
+int16_t z_sprite_getHeight(ZSprite* Sprite)
 {
-    return i8(((Image*)Sprite->image)->height());
+    return ((Image*)Sprite->image)->height();
 }
 
 #endif // Z_PLATFORM_GAMEBUINOMETA

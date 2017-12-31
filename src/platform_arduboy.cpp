@@ -182,14 +182,14 @@ void z_sprite_blit(ZSprite* Sprite, int16_t X, int16_t Y, uint8_t Frame)
     Sprites::drawExternalMask(X, Y, Sprite->image, Sprite->mask, Frame, Frame);
 }
 
-int8_t z_sprite_getWidth(ZSprite* Sprite)
+int16_t z_sprite_getWidth(ZSprite* Sprite)
 {
-    return i8(pgm_read_byte(Sprite->image));
+    return pgm_read_byte(Sprite->image);
 }
 
-int8_t z_sprite_getHeight(ZSprite* Sprite)
+int16_t z_sprite_getHeight(ZSprite* Sprite)
 {
-    return i8(pgm_read_byte(Sprite->image + 1));
+    return pgm_read_byte(Sprite->image + 1);
 }
 
 #endif // Z_PLATFORM_ARDUBOY
