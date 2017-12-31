@@ -22,7 +22,7 @@ from PIL import Image
 
 class Palette:
     def __init__(self, PaletteName):
-        image = Image.open(PaletteName)
+        image = Image.open(PaletteName).convert('RGB')
         width, height = image.size
 
         if width < 3 or height < 3:
@@ -44,7 +44,7 @@ class Palette:
 
 class Sheet:
     def __init__(self, ImageName, Palette):
-        image = Image.open(ImageName)
+        image = Image.open(ImageName).convert('RGB')
 
         self.width, self.height = image.size
         self.pixels = image.load()
