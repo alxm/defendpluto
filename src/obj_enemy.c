@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,13 +28,13 @@
 #include "obj_particle.h"
 #include "obj_player.h"
 
-static struct {
+typedef struct {
     bool hit;
     bool allowMultiple;
     int16_t x, y;
     int8_t w, h;
     uint8_t damage;
-} g_coll;
+} ZCollisionContext;
 
 ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
@@ -158,27 +158,27 @@ void z_enemy_draw(ZPoolObject* Enemy)
 
 static bool checkCollision(ZPoolObject* Enemy, void* Context)
 {
-    Z_UNUSED(Context);
+    ZCollisionContext* context = Context;
 
-    if(!g_coll.allowMultiple && g_coll.hit) {
+    if(!context->allowMultiple && context->hit) {
         return true;
     }
 
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
-    if(z_collision_boxAndBox(g_coll.x,
-                             g_coll.y,
-                             g_coll.w,
-                             g_coll.h,
+    if(z_collision_boxAndBox(context->x,
+                             context->y,
+                             context->w,
+                             context->h,
                              z_fix_fixtoi(enemy->x),
                              z_fix_fixtoi(enemy->y),
                              z_enemy_data[enemy->typeId].w,
                              z_enemy_data[enemy->typeId].h)) {
 
-        g_coll.hit = true;
+        context->hit = true;
 
-        if(enemy->health > g_coll.damage) {
-            enemy->health = u8((enemy->health - g_coll.damage) & 3);
+        if(enemy->health > context->damage) {
+            enemy->health = u8((enemy->health - context->damage) & 3);
         } else {
             enemy->health = 0;
 
@@ -207,17 +207,13 @@ static bool checkCollision(ZPoolObject* Enemy, void* Context)
 
 bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage, bool AllowMultipleCollisions)
 {
-    g_coll.x = X;
-    g_coll.y = Y;
-    g_coll.w = W;
-    g_coll.h = H;
-    g_coll.hit = false;
-    g_coll.damage = Damage;
-    g_coll.allowMultiple = AllowMultipleCollisions;
+    ZCollisionContext context = {
+        false, AllowMultipleCollisions, X, Y, W, H, Damage
+    };
 
-    z_pool_tick(Z_POOL_ENEMY, checkCollision, NULL);
+    z_pool_tick(Z_POOL_ENEMY, checkCollision, &context);
 
-    return g_coll.hit;
+    return context.hit;
 }
 
 static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
