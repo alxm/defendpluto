@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@ typedef struct {
     bool heartsBlink : 1;
     uint8_t shootShift : 1;
     bool jetFlicker : 1;
-    uint8_t damage;
+    uint8_t damage : 3;
+    uint8_t invincibleTimerDs : 5;
 } ZPlayer;
 
 extern ZPlayer z_player;

@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,12 +41,13 @@
 #define Z_SHIELD_MAX 15
 #define Z_SHIELD_DAMAGE_COLLISION Z_SHIELD_MAX
 #define Z_SHIELD_DAMAGE_SHOOTING 3
-#define Z_SHIELD_BOOST_AFTER_LOST_HEART 8
 #define Z_SHIELD_REGEN_EVERY_DS 20
 
 #define Z_ENERGY_MAX 15
 #define Z_ENERGY_USE_SHOOTING 2
 #define Z_ENERGY_REGEN_EVERY_DS 10
+
+#define Z_INVINCIBLE_TIMER_DS 20
 
 ZPlayer z_player;
 
@@ -127,7 +128,7 @@ void z_player_init(int16_t X, int16_t Y)
     z_player.shootShift = 0;
     z_player.jetFlicker = false;
     z_player.damage = 1;
-
+    z_player.invincibleTimerDs = 0;
 }
 
 void z_player_tick(void)
@@ -220,6 +221,12 @@ void z_player_tick(void)
     } else Z_EVERY_DS(Z_SHIELD_REGEN_EVERY_DS) {
         boostShield(1);
     }
+
+    if(z_player.invincibleTimerDs > 0) {
+        Z_EVERY_DS(1) {
+            z_player.invincibleTimerDs--;
+        }
+    }
 }
 
 void z_player_draw(void)
@@ -249,17 +256,26 @@ void z_player_draw(void)
                           i16(x + z_screen_getXShake()),
                           i16(y + z_screen_getYShake()),
                           u8(fy * 3 + fx));
+
+    if(z_player.invincibleTimerDs > 0) {
+        if(z_player.jetFlicker) {
+            z_draw_circle(x, z_fix_fixtoi(z_player.y), 9, Z_COLOR_RED);
+        } else {
+            z_draw_circle(x, z_fix_fixtoi(z_player.y), 9, Z_COLOR_LIGHTBLUE2);
+        }
+    }
 }
 
 void z_player_takeDamage(uint8_t Damage)
 {
-    if(z_player.health < 0) {
+    if(z_player.health < 0 || z_player.invincibleTimerDs > 0) {
         return;
     }
 
     if(!useShield(Damage)) {
         if(--z_player.health >= 0) {
-            boostShield(Z_SHIELD_BOOST_AFTER_LOST_HEART);
+            boostShield(Z_SHIELD_MAX);
+            z_player.invincibleTimerDs = Z_INVINCIBLE_TIMER_DS;
         }
     }
 }
