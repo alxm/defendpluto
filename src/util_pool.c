@@ -138,7 +138,7 @@ bool z_pool_noActive(uint8_t Pool)
     return g_pools[Pool]->activeList == Z_OFFSET_NULL;
 }
 
-void z_pool_tick(uint8_t Pool, bool (*Callback)(ZPoolObject*))
+void z_pool_tick(uint8_t Pool, ZPoolTickCallback* Callback, void* Context)
 {
     ZPool* pool = g_pools[Pool];
     ZPoolObject* lastObj = NULL;
@@ -146,7 +146,7 @@ void z_pool_tick(uint8_t Pool, bool (*Callback)(ZPoolObject*))
     for(ZPoolOffset offset = pool->activeList; offset != Z_OFFSET_NULL; ) {
         ZPoolObject* obj = objectFromOffset(pool, offset);
 
-        if(Callback(obj)) {
+        if(Callback(obj, Context)) {
             lastObj = obj;
             offset = obj->nextOffset;
         } else {

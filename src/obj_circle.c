@@ -31,8 +31,10 @@ void z_circle_init(ZCircle* Circle, int16_t X, int16_t Y)
     Circle->radius = 0;
 }
 
-bool z_circle_tick(ZPoolObject* Circle)
+bool z_circle_tick(ZPoolObject* Circle, void* Context)
 {
+    Z_UNUSED(Context);
+
     ZCircle* circle = (ZCircle*)Circle;
 
     return circle->radius++ < Z_RADIUS_MAX;

@@ -31,8 +31,10 @@ void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)
     Particle->ttl = u4(z_random_uint8(16));
 }
 
-bool z_particle_tick(ZPoolObject* Particle)
+bool z_particle_tick(ZPoolObject* Particle, void* Context)
 {
+    Z_UNUSED(Context);
+
     ZParticle* particle = (ZParticle*)Particle;
     uint8_t angle = Z_U4_TO_ANGLE(particle->angle);
 

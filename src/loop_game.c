@@ -46,12 +46,12 @@ void z_loop_game_tick(void)
     z_vm_tick();
     z_player_tick();
     z_player_hudTick();
-    z_pool_tick(Z_POOL_STAR, z_star_tick);
-    z_pool_tick(Z_POOL_BULLETE, z_bullete_tick);
-    z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick);
-    z_pool_tick(Z_POOL_ENEMY, z_enemy_tick);
-    z_pool_tick(Z_POOL_CIRCLE, z_circle_tick);
-    z_pool_tick(Z_POOL_PARTICLE, z_particle_tick);
+    z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
+    z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL);
+    z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);
+    z_pool_tick(Z_POOL_ENEMY, z_enemy_tick, NULL);
+    z_pool_tick(Z_POOL_CIRCLE, z_circle_tick, NULL);
+    z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
     z_screen_tick();
     z_star_spawn();
 

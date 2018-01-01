@@ -35,7 +35,7 @@ void z_loop_over_init(void)
 
 void z_loop_over_tick(void)
 {
-    z_pool_tick(Z_POOL_STAR, z_star_tick);
+    z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
     z_star_spawn();
 
     Z_EVERY_DS(10) {

@@ -22,7 +22,7 @@ typedef struct {
 } ZStar;
 
 extern void z_star_init(ZStar* Star);
-extern bool z_star_tick(ZPoolObject* Star);
-extern void z_star_draw(ZPoolObject* Star);
+extern ZPoolTickCallback z_star_tick;
+extern ZPoolDrawCallback z_star_draw;
 
 extern void z_star_spawn(void);

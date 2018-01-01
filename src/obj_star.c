@@ -38,8 +38,10 @@ void z_star_init(ZStar* Star)
     Star->speed = u8(Z_STAR_MIN_SPEED + z_random_int16(Z_STAR_RND_SPEED));
 }
 
-bool z_star_tick(ZPoolObject* Star)
+bool z_star_tick(ZPoolObject* Star, void* Context)
 {
+    Z_UNUSED(Context);
+
     ZStar* star = (ZStar*)Star;
 
     star->y = zf(star->y + star->speed);

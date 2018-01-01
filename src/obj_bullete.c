@@ -35,8 +35,10 @@ void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraS
     Bullet->damage = bf(Damage, 3);
 }
 
-bool z_bullete_tick(ZPoolObject* Bullet)
+bool z_bullete_tick(ZPoolObject* Bullet, void* Context)
 {
+    Z_UNUSED(Context);
+
     ZBulletE* bullet = (ZBulletE*)Bullet;
 
     uint8_t angle = Z_U4_TO_ANGLE(bullet->angle);

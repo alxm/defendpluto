@@ -39,11 +39,14 @@ typedef struct {
     ZPoolOffset nextOffset;
 } ZPoolObject;
 
+typedef bool ZPoolTickCallback(ZPoolObject*, void*);
+typedef void ZPoolDrawCallback(ZPoolObject*);
+
 extern void z_pool_setup(void);
 extern void z_pool_reset(void);
 
 extern void* z_pool_alloc(uint8_t Pool);
 extern bool z_pool_noActive(uint8_t Pool);
 
-extern void z_pool_tick(uint8_t Pool, bool (*Callback)(ZPoolObject*));
+extern void z_pool_tick(uint8_t Pool, ZPoolTickCallback* Callback, void* Context);
 extern void z_pool_draw(uint8_t Pool, void (*Callback)(ZPoolObject*));

@@ -24,5 +24,5 @@ typedef struct {
 } ZBulletE;
 
 extern void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraSpeed, uint8_t Damage);
-extern bool z_bullete_tick(ZPoolObject* Bullet);
-extern void z_bullete_draw(ZPoolObject* Bullet);
+extern ZPoolTickCallback z_bullete_tick;
+extern ZPoolDrawCallback z_bullete_draw;

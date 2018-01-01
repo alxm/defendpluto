@@ -23,5 +23,5 @@ typedef struct {
 } ZParticle;
 
 extern void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y);
-extern bool z_particle_tick(ZPoolObject* Particle);
-extern void z_particle_draw(ZPoolObject* Particle);
+extern ZPoolTickCallback z_particle_tick;
+extern ZPoolDrawCallback z_particle_draw;

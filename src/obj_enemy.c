@@ -71,8 +71,10 @@ void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t A
     Enemy->health = z_enemy_data[TypeId].health;
 }
 
-bool z_enemy_tick(ZPoolObject* Enemy)
+bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
 {
+    Z_UNUSED(Context);
+
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
     ZFix cos = z_fix_cos(enemy->angle);
@@ -154,8 +156,10 @@ void z_enemy_draw(ZPoolObject* Enemy)
                           enemy->frame);
 }
 
-static bool checkCollision(ZPoolObject* Enemy)
+static bool checkCollision(ZPoolObject* Enemy, void* Context)
 {
+    Z_UNUSED(Context);
+
     if(!g_coll.allowMultiple && g_coll.hit) {
         return true;
     }
@@ -211,7 +215,7 @@ bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t D
     g_coll.damage = Damage;
     g_coll.allowMultiple = AllowMultipleCollisions;
 
-    z_pool_tick(Z_POOL_ENEMY, checkCollision);
+    z_pool_tick(Z_POOL_ENEMY, checkCollision, NULL);
 
     return g_coll.hit;
 }
