@@ -32,7 +32,7 @@
 #include "data_gfx_hearts.h"
 #include "data_gfx_player.h"
 #include "data_gfx_shield.h"
-#include "data_gfx_title.h"
+#include "data_gfx_title128.h"
 #include "data_gfx_title80.h"
 
 void z_graphics_setup(void)
@@ -52,7 +52,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_SHIELD, shield);
 
     #if Z_PLATFORM_ARDUBOY
-        z_sprite_load(Z_SPRITE_TITLE, title);
+        z_sprite_load(Z_SPRITE_TITLE, title128);
     #else
         z_sprite_load(Z_SPRITE_TITLE, title80);
     #endif
