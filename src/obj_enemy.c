@@ -85,8 +85,8 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
 
     z_enemy_data[type].ai(enemy);
 
-    if(z_collision_checkPlayer(z_fix_fixtoi(enemy->x),
-                               z_fix_fixtoi(enemy->y),
+    if(z_collision_checkPlayer(enemy->x,
+                               enemy->y,
                                z_enemy_data[type].w,
                                z_enemy_data[type].h,
                                Z_SHIELD_MAX)) {

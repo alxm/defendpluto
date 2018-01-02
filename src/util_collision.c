@@ -69,10 +69,10 @@ static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
     return enemy->health > 0;
 }
 
-bool z_collision_checkEnemyShips(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage)
+bool z_collision_checkEnemyShips(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
 {
     ZCollisionContext context = {
-        X, Y, W, H, Damage, false
+        z_fix_fixtoi(X), z_fix_fixtoi(Y), W, H, Damage, false
     };
 
     z_pool_tick(Z_POOL_ENEMY, enemyShipCollision, &context);
@@ -80,10 +80,10 @@ bool z_collision_checkEnemyShips(int16_t X, int16_t Y, int8_t W, int8_t H, uint8
     return context.hit;
 }
 
-bool z_collision_checkPlayer(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage)
+bool z_collision_checkPlayer(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
 {
-    bool hit = z_collision_boxAndBox(X,
-                                     Y,
+    bool hit = z_collision_boxAndBox(z_fix_fixtoi(X),
+                                     z_fix_fixtoi(Y),
                                      W,
                                      H,
                                      z_fix_fixtoi(z_player.x),
@@ -102,7 +102,7 @@ bool z_collision_checkPlayer(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t D
                 break;
             }
 
-            z_particle_init(p, z_fix_itofix(X), z_fix_itofix(Y));
+            z_particle_init(p, X, Y);
         }
     }
 

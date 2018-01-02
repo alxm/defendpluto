@@ -54,11 +54,7 @@ bool z_bullete_tick(ZPoolObject* Bullet, void* Context)
         return false;
     }
 
-    return !z_collision_checkPlayer(z_fix_fixtoi(bullet->x),
-                                    z_fix_fixtoi(bullet->y),
-                                    2,
-                                    3,
-                                    bullet->damage);
+    return !z_collision_checkPlayer(bullet->x, bullet->y, 2, 3, bullet->damage);
 }
 
 void z_bullete_draw(ZPoolObject* Bullet)

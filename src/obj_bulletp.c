@@ -44,8 +44,8 @@ bool z_bulletp_tick(ZPoolObject* Bullet, void* Context)
         return false;
     }
 
-    return !z_collision_checkEnemyShips(z_fix_fixtoi(bullet->x),
-                                        z_fix_fixtoi(bullet->y),
+    return !z_collision_checkEnemyShips(bullet->x,
+                                        bullet->y,
                                         2,
                                         4,
                                         bullet->damage);
