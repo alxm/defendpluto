@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_fix.h"
 #include "util_collision.h"
+#include "util_effects.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_pool.h"
@@ -203,13 +204,7 @@ void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage)
         Enemy->health = u2(Enemy->health - Damage);
     } else {
         Enemy->health = 0;
-
-        ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
-
-        if(c) {
-            z_circle_init(c, Enemy->x, Enemy->y);
-        }
-
+        z_effect_circles(Enemy->x, Enemy->y);
         z_screen_shake(Z_DS_TO_FRAMES(3));
     }
 }

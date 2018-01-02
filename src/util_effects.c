@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_fix.h"
 #include "util_pool.h"
+#include "obj_circle.h"
 #include "obj_particle.h"
 
 void z_effect_particles(ZFix X, ZFix Y, uint8_t Num)
@@ -30,5 +31,14 @@ void z_effect_particles(ZFix X, ZFix Y, uint8_t Num)
         }
 
         z_particle_init(p, X, Y);
+    }
+}
+
+void z_effect_circles(ZFix X, ZFix Y)
+{
+    ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
+
+    if(c) {
+        z_circle_init(c, X, Y);
     }
 }

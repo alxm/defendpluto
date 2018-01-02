@@ -16,3 +16,4 @@
 */
 
 extern void z_effect_particles(ZFix X, ZFix Y, uint8_t Num);
+extern void z_effect_circles(ZFix X, ZFix Y);

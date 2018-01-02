@@ -63,13 +63,8 @@ void z_loop_died_tick(void)
     z_screen_shake(1);
 
     if(z_random_uint8(4) == 0) {
-        ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
-
-        if(c) {
-            z_circle_init(c,
-                          zf(z_player.x + Z_FIX_ONE * (-1 + z_random_int8(3))),
-                          zf(z_player.y + Z_FIX_ONE * (-1 + z_random_int8(3))));
-        }
+        z_effect_circles(zf(z_player.x + Z_FIX_ONE * (-1 + z_random_int8(3))),
+                         zf(z_player.y + Z_FIX_ONE * (-1 + z_random_int8(3))));
     } else {
         z_effect_particles(z_player.x, z_player.y, 1);
     }
