@@ -65,10 +65,9 @@ void z_loop_died_tick(void)
         ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
 
         if(c) {
-            int16_t x = i16(z_fix_fixtoi(z_player.x) - 1 + z_random_int8(3));
-            int16_t y = i16(z_fix_fixtoi(z_player.y) - 1 + z_random_int8(3));
-
-            z_circle_init(c, x, y);
+            z_circle_init(c,
+                          zf(z_player.x + Z_FIX_ONE * (-1 + z_random_int8(3))),
+                          zf(z_player.y + Z_FIX_ONE * (-1 + z_random_int8(3))));
         }
     } else {
         ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);

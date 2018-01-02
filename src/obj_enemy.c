@@ -207,9 +207,7 @@ void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage)
         ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
 
         if(c) {
-            z_circle_init(c,
-                          z_fix_fixtoi(Enemy->x),
-                          z_fix_fixtoi(Enemy->y));
+            z_circle_init(c, Enemy->x, Enemy->y);
         }
 
         z_screen_shake(Z_DS_TO_FRAMES(3));

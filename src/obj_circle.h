@@ -21,6 +21,6 @@ typedef struct {
     uint8_t radius;
 } ZCircle;
 
-extern void z_circle_init(ZCircle* Circle, int16_t X, int16_t Y);
+extern void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y);
 extern ZPoolTickCallback z_circle_tick;
 extern ZPoolDrawCallback z_circle_draw;

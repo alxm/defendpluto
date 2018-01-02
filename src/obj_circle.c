@@ -24,10 +24,10 @@
 
 #define Z_RADIUS_MAX 4
 
-void z_circle_init(ZCircle* Circle, int16_t X, int16_t Y)
+void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y)
 {
-    Circle->x = X;
-    Circle->y = Y;
+    Circle->x = z_fix_fixtoi(X);
+    Circle->y = z_fix_fixtoi(Y);
     Circle->radius = 0;
 }
 
