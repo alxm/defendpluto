@@ -24,6 +24,7 @@
 #include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
+#include "obj_player.h"
 
 typedef struct {
     int16_t x, y;
@@ -93,4 +94,33 @@ bool z_collision_checkEnemyShips(int16_t X, int16_t Y, int8_t W, int8_t H, uint8
     z_pool_tick(Z_POOL_ENEMY, enemyShipCollision, &context);
 
     return context.hit;
+}
+
+bool z_collision_checkPlayer(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage)
+{
+    bool hit = z_collision_boxAndBox(X,
+                                     Y,
+                                     W,
+                                     H,
+                                     z_fix_fixtoi(z_player.x),
+                                     z_fix_fixtoi(z_player.y),
+                                     z_player.w,
+                                     z_player.h);
+
+    if(hit) {
+        z_player_takeDamage(Damage);
+        z_screen_shake(Z_DS_TO_FRAMES(1));
+
+        for(int8_t i = 4; i--; ) {
+            ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
+
+            if(p == NULL) {
+                break;
+            }
+
+            z_particle_init(p, z_fix_itofix(X), z_fix_itofix(Y));
+        }
+    }
+
+    return hit;
 }

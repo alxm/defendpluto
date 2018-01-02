@@ -54,31 +54,11 @@ bool z_bullete_tick(ZPoolObject* Bullet, void* Context)
         return false;
     }
 
-    bool hit = z_collision_boxAndBox(z_fix_fixtoi(bullet->x),
-                                     z_fix_fixtoi(bullet->y),
-                                     2,
-                                     3,
-                                     z_fix_fixtoi(z_player.x),
-                                     z_fix_fixtoi(z_player.y),
-                                     z_player.w,
-                                     z_player.h);
-
-    if(hit) {
-        z_player_takeDamage(bullet->damage);
-        z_screen_shake(Z_DS_TO_FRAMES(1));
-
-        for(int8_t i = 4; i--; ) {
-            ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
-
-            if(p == NULL) {
-                break;
-            }
-
-            z_particle_init(p, bullet->x, bullet->y);
-        }
-    }
-
-    return !hit;
+    return !z_collision_checkPlayer(z_fix_fixtoi(bullet->x),
+                                    z_fix_fixtoi(bullet->y),
+                                    2,
+                                    3,
+                                    bullet->damage);
 }
 
 void z_bullete_draw(ZPoolObject* Bullet)

@@ -16,6 +16,7 @@
 */
 
 extern bool z_collision_checkEnemyShips(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage, bool AllowMultipleCollisions);
+extern bool z_collision_checkPlayer(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage);
 
 static inline bool z_collision_pointInBox(int16_t X, int16_t Y, int16_t BoxX, int16_t BoxY, int8_t BoxW, int8_t BoxH)
 {
