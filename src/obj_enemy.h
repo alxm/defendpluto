@@ -104,8 +104,6 @@ extern void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, ui
 extern ZPoolTickCallback z_enemy_tick;
 extern ZPoolDrawCallback z_enemy_draw;
 
-extern bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage, bool AllowMultipleCollisions);
-
 extern void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId);
 
 extern ZEnemyCallback z_enemy_ai_asteroid;

@@ -16,6 +16,7 @@
 */
 
 #include "platform.h"
+#include "util_collision.h"
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_graphics.h"
@@ -205,12 +206,12 @@ void z_player_tick(void)
 
     z_player.jetFlicker = !z_player.jetFlicker;
 
-    bool hit = z_enemy_checkCollisions(z_fix_fixtoi(z_player.x),
-                                       z_fix_fixtoi(z_player.y),
-                                       z_player.w,
-                                       z_player.h,
-                                       Z_ENEMY_MAX_HEALTH,
-                                       true);
+    bool hit = z_collision_checkEnemyShips(z_fix_fixtoi(z_player.x),
+                                           z_fix_fixtoi(z_player.y),
+                                           z_player.w,
+                                           z_player.h,
+                                           Z_ENEMY_MAX_HEALTH,
+                                           true);
 
     if(hit) {
         z_player_takeDamage(Z_SHIELD_DAMAGE_COLLISION);

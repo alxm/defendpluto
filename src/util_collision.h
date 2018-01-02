@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
     You should have received a copy of the GNU General Public License
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+extern bool z_collision_checkEnemyShips(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage, bool AllowMultipleCollisions);
 
 static inline bool z_collision_pointInBox(int16_t X, int16_t Y, int16_t BoxX, int16_t BoxY, int8_t BoxW, int8_t BoxH)
 {

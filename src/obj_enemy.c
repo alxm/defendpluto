@@ -16,25 +16,14 @@
 */
 
 #include "platform.h"
-#include "util_collision.h"
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "obj_bullete.h"
-#include "obj_circle.h"
 #include "obj_enemy.h"
-#include "obj_particle.h"
 #include "obj_player.h"
-
-typedef struct {
-    bool hit;
-    bool allowMultiple;
-    int16_t x, y;
-    int8_t w, h;
-    uint8_t damage;
-} ZCollisionContext;
 
 ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
@@ -154,66 +143,6 @@ void z_enemy_draw(ZPoolObject* Enemy)
                           i16(x + z_screen_getXShake()),
                           i16(y + z_screen_getYShake()),
                           enemy->frame);
-}
-
-static bool checkCollision(ZPoolObject* Enemy, void* Context)
-{
-    ZCollisionContext* context = Context;
-
-    if(!context->allowMultiple && context->hit) {
-        return true;
-    }
-
-    ZEnemy* enemy = (ZEnemy*)Enemy;
-
-    if(z_collision_boxAndBox(context->x,
-                             context->y,
-                             context->w,
-                             context->h,
-                             z_fix_fixtoi(enemy->x),
-                             z_fix_fixtoi(enemy->y),
-                             z_enemy_data[enemy->typeId].w,
-                             z_enemy_data[enemy->typeId].h)) {
-
-        context->hit = true;
-
-        if(enemy->health > context->damage) {
-            enemy->health = u8((enemy->health - context->damage) & 3);
-        } else {
-            enemy->health = 0;
-
-            ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
-
-            if(c) {
-                z_circle_init(c, z_fix_fixtoi(enemy->x), z_fix_fixtoi(enemy->y));
-            }
-
-            z_screen_shake(Z_DS_TO_FRAMES(3));
-        }
-
-        for(int8_t i = 4; i--; ) {
-            ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
-
-            if(p == NULL) {
-                break;
-            }
-
-            z_particle_init(p, enemy->x, enemy->y);
-        }
-    }
-
-    return enemy->health > 0;
-}
-
-bool z_enemy_checkCollisions(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage, bool AllowMultipleCollisions)
-{
-    ZCollisionContext context = {
-        false, AllowMultipleCollisions, X, Y, W, H, Damage
-    };
-
-    z_pool_tick(Z_POOL_ENEMY, checkCollision, &context);
-
-    return context.hit;
 }
 
 static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
