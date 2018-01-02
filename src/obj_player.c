@@ -215,7 +215,9 @@ void z_player_tick(void)
 
     if(hit) {
         z_player_takeDamage(Z_SHIELD_DAMAGE_COLLISION);
-    } else Z_EVERY_DS(Z_SHIELD_REGEN_EVERY_DS) {
+    }
+
+    Z_EVERY_DS(Z_SHIELD_REGEN_EVERY_DS) {
         boostShield(1);
     }
 

@@ -45,8 +45,8 @@ void z_loop_game_init(void)
 void z_loop_game_tick(void)
 {
     z_vm_tick();
-    z_player_tick();
     z_hud_tick();
+    z_player_tick();
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
     z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL);
     z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);
