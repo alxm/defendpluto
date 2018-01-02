@@ -18,7 +18,6 @@
 #include "platform.h"
 
 #if Z_PLATFORM_GAMEBUINOMETA
-#define DISPLAY_MODE DISPLAY_MODE_RGB565
 #include <Gamebuino-Meta.h>
 
 #include "util_font.h"
