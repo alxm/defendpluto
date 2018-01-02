@@ -29,8 +29,6 @@
 #include "obj_particle.h"
 #include "obj_player.h"
 
-#define Z_HEALTH_MAX 3
-
 #define Z_SHOOT_EVERY_DS 3
 
 #define Z_SPEED_SCALE_DIV 2
@@ -38,12 +36,10 @@
 #define Z_SPEED_ACCEL (Z_FIX_ONE / 8 / Z_SPEED_SCALE_DIV)
 #define Z_SPEED_DECEL (Z_FIX_ONE / 16 / Z_SPEED_SCALE_DIV)
 
-#define Z_SHIELD_MAX 15
 #define Z_SHIELD_DAMAGE_COLLISION Z_SHIELD_MAX
 #define Z_SHIELD_DAMAGE_SHOOTING 3
 #define Z_SHIELD_REGEN_EVERY_DS 20
 
-#define Z_ENERGY_MAX 15
 #define Z_ENERGY_USE_SHOOTING 2
 #define Z_ENERGY_REGEN_EVERY_DS 10
 
@@ -278,68 +274,4 @@ void z_player_takeDamage(uint8_t Damage)
             z_player.invincibleTimerDs = Z_INVINCIBLE_TIMER_DS;
         }
     }
-}
-
-void z_player_hudTick(void)
-{
-    if(z_player.health <= 0) {
-        Z_EVERY_DS(3) {
-            z_player.heartsBlink ^= 1;
-        }
-    }
-}
-
-static void drawHearts(int16_t X, int16_t Y)
-{
-    for(int8_t i = 0; i < Z_HEALTH_MAX; i++) {
-        uint8_t heartFrame = z_player.health > 0
-                             ? z_player.health > i
-                             : z_player.heartsBlink;
-
-        z_sprite_blit(Z_SPRITE_HEARTS, i16(X + i * 8), Y, heartFrame);
-    }
-}
-
-static void drawBar(int16_t X, int16_t Y, uint8_t Value, uint8_t Max)
-{
-    int8_t height = 1;
-    int8_t maxWidth = 15;
-    int8_t width = i8(maxWidth * Value / Max);
-
-    z_draw_rectangle(X,
-                     Y,
-                     i8(maxWidth + 4),
-                     i8(height + 4),
-                     Z_COLOR_BLUE);
-
-    z_draw_rectangle(i16(X + 1),
-                     i16(Y + 1),
-                     i8(maxWidth + 2),
-                     i8(height + 2),
-                     Z_COLOR_RED);
-
-    z_draw_rectangle(i16(X + 2 + width),
-                     i16(Y + 2),
-                     i8(maxWidth - width),
-                     height,
-                     Z_COLOR_BLUE);
-}
-
-static void drawShield(int16_t X, int16_t Y)
-{
-    z_sprite_blit(Z_SPRITE_SHIELD, X, Y, 0);
-    drawBar(i16(X + 6), i16(Y + 1), z_player.shield, Z_SHIELD_MAX);
-}
-
-static void drawEnergy(int16_t X, int16_t Y)
-{
-    z_sprite_blit(Z_SPRITE_ENERGY, X, Y, 0);
-    drawBar(i16(X + 4), i16(Y + 2), z_player.energy, Z_ENERGY_MAX);
-}
-
-void z_player_hudDraw(void)
-{
-    drawHearts(2, 2);
-    drawShield(28, 2);
-    drawEnergy(54, 1);
 }

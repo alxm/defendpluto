@@ -20,6 +20,7 @@
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_graphics.h"
+#include "util_hud.h"
 #include "util_input.h"
 #include "util_pool.h"
 #include "util_random.h"
@@ -45,7 +46,7 @@ void z_loop_game_tick(void)
 {
     z_vm_tick();
     z_player_tick();
-    z_player_hudTick();
+    z_hud_tick();
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
     z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL);
     z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);
@@ -70,5 +71,5 @@ void z_loop_game_draw(void)
     z_pool_draw(Z_POOL_CIRCLE, z_circle_draw);
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
     z_player_draw();
-    z_player_hudDraw();
+    z_hud_draw();
 }
