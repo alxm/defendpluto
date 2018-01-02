@@ -21,6 +21,7 @@
 #include "loop_game.h"
 #include "loop_over.h"
 #include "loop_title.h"
+#include "util_fix.h"
 #include "util_font.h"
 #include "util_graphics.h"
 #include "util_pool.h"

@@ -24,8 +24,8 @@
     #include <Gamebuino-Meta.h>
 #endif
 
-#include "util_fps.h"
 #include "loop.h"
+#include "util_fps.h"
 
 #if Z_PLATFORM_ARDUBOY
     Arduboy2Base g_arduboy;

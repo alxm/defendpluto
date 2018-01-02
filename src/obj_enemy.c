@@ -16,8 +16,8 @@
 */
 
 #include "platform.h"
-#include "util_collision.h"
 #include "util_fix.h"
+#include "util_collision.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_pool.h"

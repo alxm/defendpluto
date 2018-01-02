@@ -19,10 +19,10 @@
 
 #include <a2x.h>
 #include "platform.h"
+#include "loop.h"
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_screen.h"
-#include "loop.h"
 
 #define STRINGIFY_EXPAND(X) #X
 #define STRINGIFY(X) STRINGIFY_EXPAND(X)

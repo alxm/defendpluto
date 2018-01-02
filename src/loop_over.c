@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "loop.h"
 #include "util_font.h"
+#include "util_fix.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
