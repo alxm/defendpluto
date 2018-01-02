@@ -61,6 +61,7 @@ typedef int16_t ZFix;
 
 #define i8(X) (int8_t)(X)
 #define i16(X) (int16_t)(X)
+#define u2(X) ((uint8_t)(X) & 0x3u)
 #define u4(X) ((uint8_t)(X) & 0xfu)
 #define u8(X) (uint8_t)(X)
 #define u16(X) (uint16_t)(X)

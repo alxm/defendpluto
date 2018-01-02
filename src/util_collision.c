@@ -21,7 +21,6 @@
 #include "util_fps.h"
 #include "util_pool.h"
 #include "util_screen.h"
-#include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_particle.h"
 #include "obj_player.h"
@@ -30,7 +29,6 @@ typedef struct {
     int16_t x, y;
     int8_t w, h;
     uint8_t damage;
-    bool allowMultiple;
     bool hit;
 } ZCollisionContext;
 
@@ -38,7 +36,7 @@ static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
 {
     ZCollisionContext* context = Context;
 
-    if(!context->allowMultiple && context->hit) {
+    if(context->hit) {
         return true;
     }
 
@@ -55,22 +53,6 @@ static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
 
         context->hit = true;
 
-        if(enemy->health > context->damage) {
-            enemy->health = u8((enemy->health - context->damage) & 3);
-        } else {
-            enemy->health = 0;
-
-            ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
-
-            if(c) {
-                z_circle_init(c,
-                              z_fix_fixtoi(enemy->x),
-                              z_fix_fixtoi(enemy->y));
-            }
-
-            z_screen_shake(Z_DS_TO_FRAMES(3));
-        }
-
         for(int8_t i = 4; i--; ) {
             ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
 
@@ -80,15 +62,17 @@ static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
 
             z_particle_init(p, enemy->x, enemy->y);
         }
+
+        z_enemy_takeDamage(enemy, context->damage);
     }
 
     return enemy->health > 0;
 }
 
-bool z_collision_checkEnemyShips(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage, bool AllowMultipleCollisions)
+bool z_collision_checkEnemyShips(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Damage)
 {
     ZCollisionContext context = {
-        X, Y, W, H, Damage, AllowMultipleCollisions, false
+        X, Y, W, H, Damage, false
     };
 
     z_pool_tick(Z_POOL_ENEMY, enemyShipCollision, &context);

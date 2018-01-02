@@ -37,8 +37,6 @@
 #define Z_SPEED_ACCEL (Z_FIX_ONE / 8 / Z_SPEED_SCALE_DIV)
 #define Z_SPEED_DECEL (Z_FIX_ONE / 16 / Z_SPEED_SCALE_DIV)
 
-#define Z_SHIELD_DAMAGE_COLLISION Z_SHIELD_MAX
-#define Z_SHIELD_DAMAGE_SHOOTING 3
 #define Z_SHIELD_REGEN_EVERY_DS 20
 
 #define Z_ENERGY_USE_SHOOTING 2
@@ -205,17 +203,6 @@ void z_player_tick(void)
                              z_fix_itofix(Z_HEIGHT - 1));
 
     z_player.jetFlicker = !z_player.jetFlicker;
-
-    bool hit = z_collision_checkEnemyShips(z_fix_fixtoi(z_player.x),
-                                           z_fix_fixtoi(z_player.y),
-                                           z_player.w,
-                                           z_player.h,
-                                           Z_ENEMY_MAX_HEALTH,
-                                           true);
-
-    if(hit) {
-        z_player_takeDamage(Z_SHIELD_DAMAGE_COLLISION);
-    }
 
     Z_EVERY_DS(Z_SHIELD_REGEN_EVERY_DS) {
         boostShield(1);

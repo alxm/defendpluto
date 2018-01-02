@@ -16,12 +16,14 @@
 */
 
 #include "platform.h"
+#include "util_collision.h"
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "obj_bullete.h"
+#include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_player.h"
 
@@ -66,10 +68,11 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
 
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
+    uint8_t type = enemy->typeId;
     ZFix cos = z_fix_cos(enemy->angle);
     ZFix sin = z_fix_sin(enemy->angle);
-    ZFix speed = z_enemy_data[enemy->typeId].speedShift;
-    uint8_t sprite = z_enemy_data[enemy->typeId].sprite;
+    ZFix speed = z_enemy_data[type].speedShift;
+    uint8_t sprite = z_enemy_data[type].sprite;
 
     enemy->x = zf(enemy->x + (cos >> speed));
     enemy->y = zf(enemy->y - (sin >> speed));
@@ -80,9 +83,19 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
 
     enemy->jetFlicker = !enemy->jetFlicker;
 
-    z_enemy_data[enemy->typeId].ai(enemy);
+    z_enemy_data[type].ai(enemy);
 
-    return z_fix_fixtoi(enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
+    if(z_collision_checkPlayer(z_fix_fixtoi(enemy->x),
+                               z_fix_fixtoi(enemy->y),
+                               z_enemy_data[type].w,
+                               z_enemy_data[type].h,
+                               Z_SHIELD_MAX)) {
+
+        z_enemy_takeDamage(enemy, UINT8_MAX);
+    }
+
+    return enemy->health > 0
+        && z_fix_fixtoi(enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
 }
 
 static void drawJets(uint8_t EnemyId, int16_t X, int16_t Y)
@@ -181,5 +194,24 @@ void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId)
                   z_fix_atan(Enemy->x, Enemy->y, z_player.x, z_player.y),
                   false);
         } break;
+    }
+}
+
+void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage)
+{
+    if(Enemy->health > Damage) {
+        Enemy->health = u2(Enemy->health - Damage);
+    } else {
+        Enemy->health = 0;
+
+        ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
+
+        if(c) {
+            z_circle_init(c,
+                          z_fix_fixtoi(Enemy->x),
+                          z_fix_fixtoi(Enemy->y));
+        }
+
+        z_screen_shake(Z_DS_TO_FRAMES(3));
     }
 }

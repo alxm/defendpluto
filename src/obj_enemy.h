@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -105,6 +105,7 @@ extern ZPoolTickCallback z_enemy_tick;
 extern ZPoolDrawCallback z_enemy_draw;
 
 extern void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId);
+extern void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage);
 
 extern ZEnemyCallback z_enemy_ai_asteroid;
 extern ZEnemyCallback z_enemy_ai_ship0;

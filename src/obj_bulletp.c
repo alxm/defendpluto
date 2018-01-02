@@ -48,8 +48,7 @@ bool z_bulletp_tick(ZPoolObject* Bullet, void* Context)
                                         z_fix_fixtoi(bullet->y),
                                         2,
                                         4,
-                                        bullet->damage,
-                                        false);
+                                        bullet->damage);
 }
 
 void z_bulletp_draw(ZPoolObject* Bullet)
