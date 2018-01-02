@@ -27,7 +27,6 @@
 #include "obj_bulletp.h"
 #include "obj_circle.h"
 #include "obj_enemy.h"
-#include "obj_particle.h"
 #include "obj_player.h"
 
 #define Z_SHOOT_EVERY_DS 3

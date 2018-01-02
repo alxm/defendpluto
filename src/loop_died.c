@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "loop.h"
 #include "util_fix.h"
+#include "util_effects.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_hud.h"
@@ -70,11 +71,7 @@ void z_loop_died_tick(void)
                           zf(z_player.y + Z_FIX_ONE * (-1 + z_random_int8(3))));
         }
     } else {
-        ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
-
-        if(p) {
-            z_particle_init(p, z_player.x, z_player.y);
-        }
+        z_effect_particles(z_player.x, z_player.y, 1);
     }
 }
 
