@@ -32,6 +32,7 @@ static bool g_blink;
 void z_loop_title_init(void)
 {
     g_blink = true;
+    z_button_release(Z_BUTTON_A);
 }
 
 void z_loop_title_tick(void)
