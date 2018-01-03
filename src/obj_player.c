@@ -48,6 +48,7 @@ ZPlayer z_player;
 static bool hasEnergy(uint8_t Amount)
 {
     #if Z_DEBUG_INFINITE_ENERGY
+        Z_UNUSED(Amount);
         return true;
     #else
         return z_player.energy >= Amount;
