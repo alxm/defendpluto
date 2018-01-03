@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,13 +42,16 @@
 
 #ifdef ARDUINO
     #include <Arduino.h>
-    #if Z_PLATFORM_ARDUBOY
-        #define Z_PGM_READ_UINT8(Value) pgm_read_byte(Value)
-        #define Z_PGM_READ_UINT16(Value) pgm_read_word(Value)
-    #endif
+#endif
+
+#if Z_PLATFORM_ARDUBOY
+    #define Z_PGM_READ_UINT8(Value) pgm_read_byte(Value)
+    #define Z_PGM_READ_UINT16(Value) pgm_read_word(Value)
     typedef uint8_t ZPoolOffset;
 #else
     #define PROGMEM
+    #define Z_PGM_READ_UINT8(Value) (*(Value))
+    #define Z_PGM_READ_UINT16(Value) (*(Value))
     typedef size_t ZPoolOffset;
 #endif
 
