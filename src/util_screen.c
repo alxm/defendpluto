@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 */
 
 #include "platform.h"
+#include "util_fps.h"
 #include "util_random.h"
 #include "util_screen.h"
 
@@ -42,7 +43,7 @@ void z_screen_tick(void)
     }
 }
 
-void z_screen_shake(uint8_t Frames)
+void z_screen_shake(uint8_t Ds)
 {
-    g_shakeFrames = Frames;
+    g_shakeFrames = Z_DS_TO_FRAMES(Ds);
 }

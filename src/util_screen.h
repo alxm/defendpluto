@@ -33,7 +33,7 @@ extern ZScreen z_screen;
 extern void z_screen_reset(void);
 extern void z_screen_tick(void);
 
-extern void z_screen_shake(uint8_t Frames);
+extern void z_screen_shake(uint8_t Ds);
 
 static inline int8_t z_screen_getXShake(void)
 {

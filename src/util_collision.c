@@ -19,7 +19,6 @@
 #include "util_fix.h"
 #include "util_effects.h"
 #include "util_collision.h"
-#include "util_fps.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "obj_enemy.h"
@@ -83,7 +82,7 @@ bool z_collision_checkPlayer(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
 
     if(hit) {
         z_player_takeDamage(Damage);
-        z_screen_shake(Z_DS_TO_FRAMES(1));
+        z_screen_shake(1);
         z_effect_particles(X, Y, 4);
     }
 

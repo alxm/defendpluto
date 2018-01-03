@@ -205,6 +205,6 @@ void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage)
     } else {
         Enemy->health = 0;
         z_effect_circles(Enemy->x, Enemy->y);
-        z_screen_shake(Z_DS_TO_FRAMES(3));
+        z_screen_shake(3);
     }
 }
