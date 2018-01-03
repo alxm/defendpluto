@@ -24,7 +24,7 @@
 #include "obj_player.h"
 #include "obj_star.h"
 
-#define Z_STARS_BORDER   16
+#define Z_STARS_BORDER   (Z_WIDTH / 8)
 #define Z_STAR_MIN_SPEED (Z_FIX_ONE / 8)
 #define Z_STAR_AVG_SPEED (Z_FIX_ONE / 2)
 #define Z_STAR_RND_SPEED ((Z_STAR_AVG_SPEED - Z_STAR_MIN_SPEED) * 2)
