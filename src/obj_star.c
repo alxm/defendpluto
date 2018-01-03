@@ -42,10 +42,7 @@ void z_star_setup(void)
 {
     for(int8_t i = Z_POOL_NUM_STAR; i--; ) {
         ZStar* star = z_pool_alloc(Z_POOL_STAR);
-
-        if(star != NULL) {
-            z_star_init(star, z_fix_itofix(z_random_int8(Z_HEIGHT)));
-        }
+        z_star_init(star, z_fix_itofix(z_random_int8(Z_HEIGHT)));
     }
 }
 
