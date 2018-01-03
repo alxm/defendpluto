@@ -5,6 +5,61 @@
 var x1
 var x2
 var y
+var i
+var t
+
+;
+; Asteroid field
+;
+
+spawn 50 -1 asteroid
+wait 30
+spawn 60 -1 asteroid
+wait 15
+spawn 55 -1 asteroid
+wait 40
+spawn 20 -1 asteroid
+wait 20
+spawn 70 -1 asteroid
+wait 30
+
+set x1 15
+set t 5
+loop 4
+    spawn x1 -1 asteroid
+    inc x1 15
+    wait t
+    inc t 1
+end
+
+wait 12
+
+set x1 95
+set i -15
+loop 4
+    spawn x1 -1 asteroid
+    inc x1 i
+    inc i -5
+    wait 7
+end
+
+spawn 80 -1 asteroid
+wait 5
+spawn 65 -1 asteroid
+wait 5
+spawn 10 -1 asteroid
+spawn 18 -2 asteroid
+spawn 40 -4 asteroid
+
+waitclear
+
+;
+; A few enemies
+;
+
+over
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 set y -1
 
