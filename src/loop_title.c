@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_str.h"
+#include "obj_player.h"
 #include "obj_star.h"
 
 static bool g_blink;
@@ -32,13 +33,13 @@ static bool g_blink;
 void z_loop_title_init(void)
 {
     g_blink = true;
+    z_player_init();
     z_button_release(Z_BUTTON_A);
 }
 
 void z_loop_title_tick(void)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
-    z_star_spawn();
 
     Z_EVERY_DS(10) {
         g_blink = !g_blink;

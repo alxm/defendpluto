@@ -51,7 +51,6 @@ void z_loop_died_tick(void)
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick, NULL);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
     z_screen_tick();
-    z_star_spawn();
 
     Z_EVERY_DS(10) {
         if(z_player.health-- < -2) {

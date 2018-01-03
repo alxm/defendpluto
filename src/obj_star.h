@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,8 +21,7 @@ typedef struct {
     uint8_t speed;
 } ZStar;
 
-extern void z_star_init(ZStar* Star);
+extern void z_star_setup(void);
+
 extern ZPoolTickCallback z_star_tick;
 extern ZPoolDrawCallback z_star_draw;
-
-extern void z_star_spawn(void);

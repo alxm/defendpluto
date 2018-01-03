@@ -106,10 +106,10 @@ static void boostShield(uint8_t Boost)
     }
 }
 
-void z_player_init(int16_t X, int16_t Y)
+void z_player_init(void)
 {
-    z_player.x = z_fix_itofix(X);
-    z_player.y = z_fix_itofix(Y);
+    z_player.x = z_fix_itofix(Z_WIDTH / 2);
+    z_player.y = z_fix_itofix(Z_HEIGHT * 2 / 3);
     z_player.dx = 0;
     z_player.dy = 0;
     z_player.w = 10;

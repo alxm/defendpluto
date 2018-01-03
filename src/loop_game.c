@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ void z_loop_game_init(void)
     z_pool_reset();
     z_screen_reset();
     z_vm_reset();
-    z_player_init(Z_WIDTH / 2, Z_HEIGHT * 2 / 3);
+    z_player_init();
 }
 
 void z_loop_game_tick(void)
@@ -54,7 +54,6 @@ void z_loop_game_tick(void)
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick, NULL);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
     z_screen_tick();
-    z_star_spawn();
 
     if(z_player.health < 0) {
         z_loop_setState(Z_STATE_DIED);

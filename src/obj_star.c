@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,12 +30,23 @@
 #define Z_STAR_RND_SPEED ((Z_STAR_AVG_SPEED - Z_STAR_MIN_SPEED) * 2)
 #define Z_STAR_MAX_SPEED (Z_STAR_MIN_SPEED + Z_STAR_RND_SPEED)
 
-void z_star_init(ZStar* Star)
+static void z_star_init(ZStar* Star, int16_t Y)
 {
     Star->x = z_fix_itofix(
         i16(Z_STARS_BORDER + z_random_int8(Z_WIDTH - 2 * Z_STARS_BORDER)));
-    Star->y = 0;
+    Star->y = Y;
     Star->speed = u8(Z_STAR_MIN_SPEED + z_random_int16(Z_STAR_RND_SPEED));
+}
+
+void z_star_setup(void)
+{
+    for(int8_t i = Z_POOL_NUM_STAR; i--; ) {
+        ZStar* star = z_pool_alloc(Z_POOL_STAR);
+
+        if(star != NULL) {
+            z_star_init(star, z_fix_itofix(z_random_int8(Z_HEIGHT)));
+        }
+    }
 }
 
 bool z_star_tick(ZPoolObject* Star, void* Context)
@@ -46,7 +57,11 @@ bool z_star_tick(ZPoolObject* Star, void* Context)
 
     star->y = zf(star->y + star->speed);
 
-    return z_fix_fixtoi(star->y) < Z_HEIGHT;
+    if(z_fix_fixtoi(star->y) >= Z_HEIGHT) {
+        z_star_init(star, 0);
+    }
+
+    return true;
 }
 
 void z_star_draw(ZPoolObject* Star)
@@ -61,17 +76,4 @@ void z_star_draw(ZPoolObject* Star)
                     * centerOffset / (Z_WIDTH / 2));
 
     z_draw_pixel(x, y, Z_COLOR_LIGHTBLUE + (star->speed >= Z_STAR_AVG_SPEED));
-}
-
-void z_star_spawn(void)
-{
-    if(z_random_int8(
-        (Z_FIX_ONE / Z_STAR_AVG_SPEED) * Z_HEIGHT / Z_POOL_NUM_STAR) == 0) {
-
-        ZStar* star = z_pool_alloc(Z_POOL_STAR);
-
-        if(star != NULL) {
-            z_star_init(star);
-        }
-    }
 }

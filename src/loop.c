@@ -28,6 +28,7 @@
 #include "util_str.h"
 #include "util_vm.h"
 #include "obj_enemy.h"
+#include "obj_star.h"
 
 typedef struct {
     ZStateCallback* init;
@@ -63,12 +64,13 @@ static uint8_t g_state;
 void z_loop_setup(void)
 {
     z_platform_setup();
-    z_enemy_setup();
     z_font_setup();
     z_graphics_setup();
-    z_pool_setup();
     z_str_setup();
+    z_pool_setup();
     z_vm_setup();
+    z_enemy_setup();
+    z_star_setup();
 
     z_loop_setState(Z_STATE_TITLE);
 }
