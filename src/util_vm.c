@@ -145,7 +145,7 @@ static bool op_flip(uint8_t Flags)
     uint8_t var_id;
     Z_READ_ARGU8(var_id, 0, 0);
 
-    g_vm.vars[var_id] ^= 1;
+    g_vm.vars[var_id] = !g_vm.vars[var_id];
 
     return true;
 }
