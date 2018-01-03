@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ typedef struct {
     uint8_t numFrames;
 } ZSprite;
 
-static uint16_t g_frameCounter;
 static ZButton g_buttons[Z_BUTTON_NUM];
 static ZPalette g_paletteIndex;
 static Color g_palettes[Z_PALETTE_NUM][Z_COLOR_NUM];
@@ -46,8 +45,6 @@ static ZSprite g_sprites[Z_SPRITE_NUM];
 
 void z_platform_setup(void)
 {
-    g_frameCounter = 0;
-
     g_buttons[Z_BUTTON_UP].index = BUTTON_UP;
     g_buttons[Z_BUTTON_DOWN].index = BUTTON_DOWN;
     g_buttons[Z_BUTTON_LEFT].index = BUTTON_LEFT;
@@ -69,8 +66,6 @@ void z_platform_setup(void)
 
 void z_platform_tick(void)
 {
-    g_frameCounter++;
-
     for(uint8_t b = 0; b < Z_BUTTON_NUM; b++) {
         bool pressed = gb.buttons.repeat(g_buttons[b].index, 1);
 
@@ -91,12 +86,12 @@ void z_platform_draw(void)
 
 uint16_t z_fps_getCounter(void)
 {
-    return g_frameCounter;
+    return (uint16_t)gb.frameCount;
 }
 
 bool z_fps_isNthFrame(uint8_t N)
 {
-    return (g_frameCounter % N) == 0;
+    return (gb.frameCount % N) == 0;
 }
 
 bool z_button_pressed(uint8_t Button)
