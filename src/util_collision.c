@@ -28,8 +28,8 @@
 typedef struct {
     int16_t x, y;
     int8_t w, h;
-    uint8_t damage;
-    bool hit;
+    uint8_t damage : 3;
+    bool hit : 1;
 } ZCollisionContext;
 
 static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
@@ -62,7 +62,7 @@ static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
 bool z_collision_checkEnemyShips(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
 {
     ZCollisionContext context = {
-        z_fix_fixtoi(X), z_fix_fixtoi(Y), W, H, Damage, false
+        z_fix_fixtoi(X), z_fix_fixtoi(Y), W, H, uN(Damage, 3), false
     };
 
     z_pool_tick(Z_POOL_ENEMY, enemyShipCollision, &context);

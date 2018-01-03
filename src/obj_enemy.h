@@ -52,7 +52,7 @@ typedef struct {
     struct {
         uint8_t counter;
     } attack;
-    uint8_t health;
+    uint8_t health : 2;
 } ZEnemy;
 
 typedef void (ZEnemyCallback)(ZEnemy*);

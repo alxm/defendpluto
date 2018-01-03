@@ -66,9 +66,9 @@
 #define u4(X) ((uint8_t)(X) & 0xfu)
 #define u8(X) (uint8_t)(X)
 #define u16(X) (uint16_t)(X)
+#define uN(X, Bits) (uint8_t)((X) & ((1 << (Bits)) - 1))
 #define zf(X) (ZFix)(X)
 #define zpo(X) (ZPoolOffset)(X)
-#define bf(X, Bits) u8((X) & ((1 << (Bits)) - 1))
 
 Z_EXTERN_C_START
 
