@@ -167,7 +167,7 @@ class OpWait(Op):
         # ds
         # 25
         #
-        ds = Compiler.checkArg(Bytecode, Args, 0, 0, 50)
+        ds = Compiler.checkArg(Bytecode, Args, 0, 0, 255)
 
         Bytecode.append(ds)
 

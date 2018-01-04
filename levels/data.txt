@@ -1,27 +1,34 @@
 ;
-; Level 0
+; Declare variables
 ;
 
 var x1
 var x2
-var y
+var y1
+var y2
 var i
 var t
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; Level 1
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;
 ; Asteroid field
 ;
 
 spawn 50 -1 asteroid
-wait 30
+wait 60
 spawn 60 -1 asteroid
-wait 15
-spawn 55 -1 asteroid
-wait 40
-spawn 20 -1 asteroid
-wait 20
-spawn 70 -1 asteroid
 wait 30
+spawn 55 -1 asteroid
+wait 80
+spawn 20 -1 asteroid
+wait 40
+spawn 70 -1 asteroid
+wait 60
 
 set x1 15
 set t 5
@@ -29,7 +36,7 @@ loop 4
     spawn x1 -1 asteroid
     inc x1 15
     wait t
-    inc t 1
+    inc t 2
 end
 
 wait 12
@@ -40,38 +47,111 @@ loop 4
     spawn x1 -1 asteroid
     inc x1 i
     inc i -5
-    wait 7
+    wait 15
 end
 
 spawn 80 -1 asteroid
-wait 5
+wait 10
 spawn 65 -1 asteroid
-wait 5
+wait 10
 spawn 10 -1 asteroid
-spawn 18 -2 asteroid
-spawn 40 -4 asteroid
+spawn 18 -4 asteroid
+spawn 40 -8 asteroid
 
 waitclear
 
 ;
-; A few enemies
+; A few passive enemies appear
 ;
 
+set x1 30
+set x2 80
+set y1 -1
+
+loop 2
+    spawn x1 y1 enemy0
+    spawn x2 y2 enemy0
+    inc x1 8
+    inc x2 -4
+    inc y1 -4
+    inc y2 -3
+end
+
+waitclear
+
+;
+; Now they attack
+;
+
+spawn 30 -1 enemy0 0 1
+spawn 70 -3 enemy0 0 1
+
+waitclear
+
+spawn 30 -1 enemy0 0 1
+spawn 50 -4 enemy0 0 1
+spawn 70 -3 enemy0 0 1
+
+wait 40
+
+set x1 10
+set x2 90
+
+loop 2
+    spawn x1 -1 enemy0 0 1
+    spawn x2 -1 enemy0 0 1
+    wait 10
+    inc x1 10
+    inc x2 -10
+end
+
+wait 30
+
+spawn 30 -1 enemy0 0 1
+spawn 40 -1 enemy0 0 1
+
+wait 40
+
+spawn 60 -1 asteroid
+spawn 70 -5 asteroid
+
+wait 30
+
+spawn 45 -1 enemy0 0 1
+
+;
+; More asteroids...
+;
+
+set x1 20
+set y1 -1
+
+loop 3
+    spawn x1 y1 asteroid
+    inc x1 30
+    inc y1 -2
+end
+
+;
+; La Fin
+;
+
+waitclear
 over
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-set y -1
+set y1 -1
 
 loop 3
     set x1 15
 
     loop 4
-        spawn x1 y enemy2 2
+        spawn x1 y1 enemy2 2
         inc x1 20
     end
 
-    inc y -2
+    inc y1 -2
 end
 
 waitclear
@@ -84,7 +164,7 @@ loop 2
 
     loop 3
         spawn x1 -1 asteroid
-        wait 15
+        wait 10
         inc x1 10
     end
 
@@ -123,12 +203,12 @@ end
 
 wait 15
 
-set y 30
+set y1 30
 loop 4
-    spawn -1 y enemy1 0 1
-    spawn 101 y enemy1 1 1
+    spawn -1 y1 enemy1 0 1
+    spawn 101 y1 enemy1 1 1
     wait 5
-    inc y -10
+    inc y1 -10
 end
 
 waitclear
