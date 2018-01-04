@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,19 +36,28 @@ typedef enum {
 } ZFrameBits;
 
 typedef enum {
+    // Enemies
     Z_SPRITE_ASTEROID,
-    Z_SPRITE_BULLETS,
     Z_SPRITE_ENEMY00,
     Z_SPRITE_ENEMY01,
     Z_SPRITE_ENEMY02,
-    Z_SPRITE_ENERGY,
+
+    // Fonts
     Z_SPRITE_FONT_NUM,
     Z_SPRITE_FONT_ALPHANUM,
     Z_SPRITE_FONT_ALPHANUM_OUTLINE,
     Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW,
+
+    // Icons
+    Z_SPRITE_ENERGY,
     Z_SPRITE_HEARTS,
-    Z_SPRITE_PLAYER,
     Z_SPRITE_SHIELD,
+
+    // Player ship
+    Z_SPRITE_PLAYER,
+
+    // Misc
+    Z_SPRITE_BULLETS,
     Z_SPRITE_TITLE,
     Z_SPRITE_NUM
 } ZSpriteId;

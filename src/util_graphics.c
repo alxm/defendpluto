@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,19 +38,22 @@
 void z_graphics_setup(void)
 {
     z_sprite_load(Z_SPRITE_ASTEROID, asteroid);
-    z_sprite_load(Z_SPRITE_BULLETS, bullets);
     z_sprite_load(Z_SPRITE_ENEMY00, enemy00);
     z_sprite_load(Z_SPRITE_ENEMY01, enemy01);
     z_sprite_load(Z_SPRITE_ENEMY02, enemy02);
-    z_sprite_load(Z_SPRITE_ENERGY, energy);
+
     z_sprite_load(Z_SPRITE_FONT_NUM, font_num);
     z_sprite_load(Z_SPRITE_FONT_ALPHANUM, font_alphanum);
     z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE, font_alphanum_outline);
     z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW, font_alphanum_outline_yellow);
+
+    z_sprite_load(Z_SPRITE_ENERGY, energy);
     z_sprite_load(Z_SPRITE_HEARTS, hearts);
-    z_sprite_load(Z_SPRITE_PLAYER, player);
     z_sprite_load(Z_SPRITE_SHIELD, shield);
 
+    z_sprite_load(Z_SPRITE_PLAYER, player);
+
+    z_sprite_load(Z_SPRITE_BULLETS, bullets);
     #if Z_PLATFORM_ARDUBOY
         z_sprite_load(Z_SPRITE_TITLE, title128);
     #else

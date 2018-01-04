@@ -32,19 +32,20 @@ ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
 void z_enemy_setup(void)
 {
-    #define enemy(Index, Sprite, Ai, Width, Height, Health, Damage, Speed) \
-        z_enemy_data[Index].sprite = Sprite;                               \
-        z_enemy_data[Index].ai = Ai;                                       \
-        z_enemy_data[Index].w = Width;                                     \
-        z_enemy_data[Index].h = Height;                                    \
-        z_enemy_data[Index].health = Health;                               \
-        z_enemy_data[Index].damage = Damage;                               \
-        z_enemy_data[Index].speedShift = Speed;
+    #define enemy(Index, Sprite, Ai, Width, Height, Health, Damage, Speed, AttackDs) \
+        z_enemy_data[Index].ai = Ai;                                                 \
+        z_enemy_data[Index].w = Width;                                               \
+        z_enemy_data[Index].h = Height;                                              \
+        z_enemy_data[Index].health = Health;                                         \
+        z_enemy_data[Index].damage = Damage;                                         \
+        z_enemy_data[Index].speedShift = Speed;                                      \
+        z_enemy_data[Index].attackPeriodDs = AttackDs;                               \
+        z_enemy_data[Index].sprite = Sprite;
 
-    enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, z_enemy_ai_asteroid, 8, 8, 3, 0, 2);
-    enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  z_enemy_ai_ship0,    7, 5, 1, 2, 1);
-    enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  z_enemy_ai_ship1,    7, 5, 1, 4, 1);
-    enemy(Z_ENEMY_SHIP2,    Z_SPRITE_ENEMY02,  z_enemy_ai_ship2,    7, 6, 2, 6, 2);
+    enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, z_enemy_ai_asteroid, 8, 8, 3, 0, 3, 0);
+    enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  z_enemy_ai_ship0,    7, 5, 1, 2, 2, 30);
+    enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  z_enemy_ai_ship1,    7, 5, 1, 4, 2, 30);
+    enemy(Z_ENEMY_SHIP2,    Z_SPRITE_ENEMY02,  z_enemy_ai_ship2,    7, 6, 2, 6, 2, 30);
 }
 
 void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags)
@@ -59,7 +60,7 @@ void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t A
     Enemy->ai.flags = u4(AiFlags);
     Enemy->fly.state = 0;
     Enemy->fly.counter = 0;
-    Enemy->attack.counter = 0;
+    Enemy->attack.counter = u8(z_enemy_data[TypeId].attackPeriodDs / 2);
     Enemy->health = z_enemy_data[TypeId].health;
 }
 
@@ -180,7 +181,8 @@ void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId)
     }
 
     if(Enemy->attack.counter-- == 0) {
-        Enemy->attack.counter = Z_DS_TO_FRAMES(8);
+        Enemy->attack.counter =
+            Z_DS_TO_FRAMES(z_enemy_data[Enemy->typeId].attackPeriodDs);
     } else {
         return;
     }
