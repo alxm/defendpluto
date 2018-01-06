@@ -22,7 +22,6 @@ var t
 spawn 50 -1 asteroid down
 wait 30
 spawn 60 -1 asteroid down
-;wait 12
 spawn 55 -2 asteroid down
 wait 20
 spawn 20 -1 asteroid down
@@ -61,7 +60,7 @@ spawn 40 -8 asteroid down
 spawn 70 -3 asteroid down
 spawn 75 -4 asteroid down
 spawn 80 -7 asteroid down
-waitclear
+clear
 
 ;
 ; A few passive enemies appear
@@ -78,7 +77,7 @@ loop 2
     inc y1 -4
     inc y2 -3
 end
-waitclear
+clear
 
 ;
 ; Now they attack
@@ -134,11 +133,11 @@ spawn 25 -2 asteroid down
 spawn 45 -3 asteroid down
 spawn 54 -5 asteroid down
 spawn 88 -3 asteroid down
-waitclear
+clear
 
 spawn 48 -1 asteroid down
 spawn 55 -3 asteroid down
-waitclear
+clear
 
 ;
 ; La Fin

@@ -36,7 +36,7 @@ typedef enum {
     Z_OP_ITER,
     Z_OP_ENDI,
     Z_OP_WAIT,
-    Z_OP_WAITCLEAR,
+    Z_OP_CLEAR,
     Z_OP_SPAWN,
     Z_OP_NUM
 } ZOpType;
@@ -251,14 +251,14 @@ static bool op_wait(uint8_t Flags)
     return ds == 0;
 }
 
-static bool op_waitclear(uint8_t Flags)
+static bool op_clear(uint8_t Flags)
 {
     Z_UNUSED(Flags);
 
     /*
      * 8b
-     * waitclear
-     * waitclear
+     * clear
+     * clear
      */
     return z_pool_noActive(Z_POOL_ENEMY);
 }
@@ -322,7 +322,7 @@ void z_vm_setup(void)
     setOp(Z_OP_ITER, op_iter, 1);
     setOp(Z_OP_ENDI, op_endi, 0);
     setOp(Z_OP_WAIT, op_wait, 1);
-    setOp(Z_OP_WAITCLEAR, op_waitclear, 0);
+    setOp(Z_OP_CLEAR, op_clear, 0);
     setOp(Z_OP_SPAWN, op_spawn, 4);
 
     z_vm_reset();

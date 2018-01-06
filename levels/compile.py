@@ -251,7 +251,7 @@ class CompilerTool:
             'iter': OpIter(),
             'endi': OpEndI(),
             'wait': OpWait(),
-            'waitclear': Op(),
+            'clear': Op(),
             'spawn': OpSpawn(),
 
             # Must always be last, doesn't get compiled
