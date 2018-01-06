@@ -239,6 +239,11 @@ static bool op_wait(uint8_t Flags)
      * wait flags ds
      * wait       25
      */
+    if(z_pool_noActive(Z_POOL_ENEMY)) {
+        g_vm.waitCounter = 0;
+        return true;
+    }
+
     if(g_vm.waitCounter > 0) {
         return --g_vm.waitCounter == 0;
     }
