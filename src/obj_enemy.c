@@ -84,7 +84,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
 
     uint8_t type = enemy->typeId;
     uint8_t sprite = z_enemy_data[type].sprite;
-    bool move = false;
+    bool move = true;
 
     switch(enemy->flyId) {
         case Z_FLY_STILL: {
@@ -92,7 +92,6 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
         } break;
 
         case Z_FLY_DOWN: {
-            move = true;
             enemy->angle = Z_ANGLE_270;
         } break;
 
