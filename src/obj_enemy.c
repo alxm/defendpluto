@@ -41,10 +41,10 @@ void z_enemy_setup(void)
         z_enemy_data[Index].attackPeriodDs = AttackDs;                           \
         z_enemy_data[Index].sprite = Sprite;
 
-    enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, 8, 8, 3, 0, 2, 10);
-    enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  7, 5, 1, 2, 1, 30);
-    enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  7, 5, 1, 4, 2, 30);
-    enemy(Z_ENEMY_SHIP2,    Z_SPRITE_ENEMY02,  7, 6, 2, 6, 1, 30);
+    enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, 8, 8, 3, 0, 2, 0);
+    enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  7, 5, 1, 2, 1, 20);
+    enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  7, 5, 1, 4, 2, 15);
+    enemy(Z_ENEMY_SHIP2,    Z_SPRITE_ENEMY02,  7, 6, 2, 6, 1, 15);
 }
 
 void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t FlyId, uint8_t AttackId)
