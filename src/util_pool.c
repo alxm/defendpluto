@@ -106,6 +106,19 @@ void* z_pool_alloc(uint8_t Pool)
     ZPool* pool = g_pools[Pool];
 
     if(pool->freeList == Z_OFFSET_NULL) {
+        #if A_PLATFORM_SYSTEM_DESKTOP
+            static uint32_t fails[Z_POOL_NUM];
+            static const char* names[Z_POOL_NUM] = {
+                "Z_POOL_STAR",
+                "Z_POOL_BULLETE",
+                "Z_POOL_BULLETP",
+                "Z_POOL_ENEMY",
+                "Z_POOL_CIRCLE",
+                "Z_POOL_PARTICLE",
+            };
+
+            printf("Can't allocate from %s (%d)\n", names[Pool], ++fails[Pool]);
+        #endif
         return NULL;
     }
 

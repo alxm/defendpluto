@@ -36,6 +36,7 @@
 #define Z_EXTERN_C_END
 #endif
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
