@@ -232,6 +232,7 @@ class CompilerTool:
             'fly': {
                 'still': 0,
                 'down': 1,
+                'follow': 2,
             },
 
             'attack': {

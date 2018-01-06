@@ -83,20 +83,44 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
     uint8_t type = enemy->typeId;
-    ZFix cos = z_fix_cos(enemy->angle);
-    ZFix sin = z_fix_sin(enemy->angle);
-    ZFix speed = z_enemy_data[type].speedShift;
     uint8_t sprite = z_enemy_data[type].sprite;
+    bool move = false;
 
     switch(enemy->flyId) {
         case Z_FLY_STILL: {
-            // Do nothing
+            move = false;
         } break;
 
         case Z_FLY_DOWN: {
-            enemy->x = zf(enemy->x + (cos >> speed));
-            enemy->y = zf(enemy->y - (sin >> speed));
+            move = true;
+            enemy->angle = Z_ANGLE_270;
         } break;
+
+        case Z_FLY_FOLLOW: {
+            if(enemy->flyCounter-- == 0) {
+                enemy->flyCounter = Z_DS_TO_FRAMES(5);
+
+                int16_t eX = z_fix_fixtoi(enemy->x);
+                int16_t pX = z_fix_fixtoi(z_player.x);
+
+                if(eX < pX) {
+                    enemy->angle = Z_ANGLE_292;
+                } else if(eX > pX) {
+                    enemy->angle = Z_ANGLE_247;
+                } else {
+                    enemy->angle = Z_ANGLE_270;
+                }
+            }
+        } break;
+    }
+
+    if(move) {
+        ZFix cos = z_fix_cos(enemy->angle);
+        ZFix sin = z_fix_sin(enemy->angle);
+        ZFix speed = z_enemy_data[type].speedShift;
+
+        enemy->x = zf(enemy->x + (cos >> speed));
+        enemy->y = zf(enemy->y - (sin >> speed));
     }
 
     if(enemy->y >= 0 && enemy->attackCounter-- == 0) {

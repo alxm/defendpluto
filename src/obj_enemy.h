@@ -28,6 +28,7 @@ typedef enum {
     Z_FLY_INVALID = -1,
     Z_FLY_STILL,
     Z_FLY_DOWN,
+    Z_FLY_FOLLOW,
     Z_FLY_NUM
 } ZFlyId;
 
