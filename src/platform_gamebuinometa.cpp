@@ -82,8 +82,8 @@ void z_platform_tick(void)
 void z_platform_draw(void)
 {
     #if Z_DEBUG_STATS
-        z_font_int(gb.getCpuLoad(), 2, 12, Z_FONT_FACE_NUMBERS);
-        z_font_int(gb.getFreeRam(), 2, 20, Z_FONT_FACE_NUMBERS);
+        z_font_int(gb.getCpuLoad(), 1, 48, Z_FONT_FACE_NUMBERS);
+        z_font_int(gb.getFreeRam(), 1, 56, Z_FONT_FACE_NUMBERS);
     #endif
 }
 

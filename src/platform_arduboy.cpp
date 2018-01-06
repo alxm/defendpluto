@@ -98,8 +98,8 @@ void z_platform_draw(void)
             unusedBytes++;
         }
 
-        z_font_int(g_arduboy.cpuLoad(), 112, 2, Z_FONT_FACE_NUMBERS);
-        z_font_int(unusedBytes, 112, 10, Z_FONT_FACE_NUMBERS);
+        z_font_int(g_arduboy.cpuLoad(), 1, 48, Z_FONT_FACE_NUMBERS);
+        z_font_int(unusedBytes, 1, 56, Z_FONT_FACE_NUMBERS);
     #endif
 }
 
