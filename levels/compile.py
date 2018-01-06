@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -179,20 +179,20 @@ class OpSpawn(Op):
 
     def custom_compile(self, Compiler, Args, Bytecode):
         #
-        # 8b      8b      4b      4b       8b
-        # x_coord y_coord type_id ai_state ai_flags
-        # 64      -8      enemy0  1        0
+        # 8b      8b      4b      4b     4b
+        # x_coord y_coord type_id fly_id attack_id
+        # 40      -1      enemy0  down   target
         #
         x_coord = Compiler.checkArg(Bytecode, Args, 0, -128, 127)
         y_coord = Compiler.checkArg(Bytecode, Args, 1, -128, 127)
-        type_id = Compiler.getEnemyId(Args[2])
-        ai_state = Compiler.checkArg(Bytecode, Args, 3, 0, 0xf, True)
-        ai_flags = Compiler.checkArg(Bytecode, Args, 4, 0, 0xff, True)
+        type_id = Compiler.getIdValue('enemy', Args, 2)
+        fly_id = Compiler.getIdValue('fly', Args, 3)
+        attack_id = Compiler.getIdValue('attack', Args, 4)
 
         Bytecode.append(x_coord)
         Bytecode.append(y_coord)
-        Bytecode.append((type_id << 4) | ai_state)
-        Bytecode.append(ai_flags)
+        Bytecode.append((type_id << 4) | fly_id)
+        Bytecode.append((attack_id << 4) | 0)
 
         return Bytecode
 
@@ -221,15 +221,24 @@ class CompilerTool:
         self.__lineNumber = 0
         self.__varIds = {}
 
-        self.__enemyIds = {
-            'asteroid': 0,
-            'enemy0': 1,
-            'enemy1': 2,
-            'enemy2': 3,
-        }
+        self.__ids = {
+            'enemy': {
+                'asteroid': 0,
+                'enemy0': 1,
+                'enemy1': 2,
+                'enemy2': 3,
+            },
 
-        self.__dropIds = {
-            'none': 0,
+            'fly': {
+                'still': 0,
+                'down': 1,
+            },
+
+            'attack': {
+                'none': 0,
+                'front': 1,
+                'target': 2,
+            },
         }
 
         self.__ops = {
@@ -254,6 +263,18 @@ class CompilerTool:
                 .format(self.__lineNumber + 1, Text),
               file = sys.stderr)
         sys.exit(1)
+
+    def getIdValue(self, Category, Args, Index):
+        if Index >= len(Args):
+            return 0
+
+        ids = self.__ids[Category]
+        name = Args[Index]
+
+        if name not in ids:
+            self.error('Unknown id {}.{}'.format(Category, name))
+
+        return ids[name]
 
     def checkArg(self, Bytecode, Args, Index, Min, Max, Hex = False):
         if Index >= len(Args):
@@ -294,18 +315,6 @@ class CompilerTool:
 
         self.__varIds[Name] = self.__nextVarId
         self.__nextVarId += 1
-
-    def getEnemyId(self, Name):
-        if Name not in self.__enemyIds:
-            self.error('Unknown enemy {}'.format(Name))
-
-        return self.__enemyIds[Name]
-
-    def getDropId(self, Name):
-        if Name not in self.__dropIds:
-            self.error('Unknown drop {}'.format(Name))
-
-        return self.__dropIds[Name]
 
     def getOp(self, Name):
         if Name not in self.__ops:

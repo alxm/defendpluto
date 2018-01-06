@@ -32,36 +32,48 @@ ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
 void z_enemy_setup(void)
 {
-    #define enemy(Index, Sprite, Ai, Width, Height, Health, Damage, Speed, AttackDs) \
-        z_enemy_data[Index].ai = Ai;                                                 \
-        z_enemy_data[Index].w = Width;                                               \
-        z_enemy_data[Index].h = Height;                                              \
-        z_enemy_data[Index].health = Health;                                         \
-        z_enemy_data[Index].damage = Damage;                                         \
-        z_enemy_data[Index].speedShift = Speed;                                      \
-        z_enemy_data[Index].attackPeriodDs = AttackDs;                               \
+    #define enemy(Index, Sprite, Width, Height, Health, Damage, Speed, AttackDs) \
+        z_enemy_data[Index].w = Width;                                           \
+        z_enemy_data[Index].h = Height;                                          \
+        z_enemy_data[Index].health = Health;                                     \
+        z_enemy_data[Index].damage = Damage;                                     \
+        z_enemy_data[Index].speedShift = Speed;                                  \
+        z_enemy_data[Index].attackPeriodDs = AttackDs;                           \
         z_enemy_data[Index].sprite = Sprite;
 
-    enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, z_enemy_ai_asteroid, 8, 8, 3, 0, 3, 0);
-    enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  z_enemy_ai_ship0,    7, 5, 1, 2, 2, 30);
-    enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  z_enemy_ai_ship1,    7, 5, 1, 4, 2, 30);
-    enemy(Z_ENEMY_SHIP2,    Z_SPRITE_ENEMY02,  z_enemy_ai_ship2,    7, 6, 2, 6, 2, 30);
+    enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, 8, 8, 3, 0, 2, 10);
+    enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  7, 5, 1, 2, 1, 30);
+    enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  7, 5, 1, 4, 2, 30);
+    enemy(Z_ENEMY_SHIP2,    Z_SPRITE_ENEMY02,  7, 6, 2, 6, 1, 30);
 }
 
-void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags)
+void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t FlyId, uint8_t AttackId)
 {
     Enemy->x = z_fix_itofix(X);
     Enemy->y = z_fix_itofix(Y);
     Enemy->angle = Z_ANGLE_270;
     Enemy->jetFlicker = false;
-    Enemy->typeId = u4(TypeId);
     Enemy->frame = 0;
-    Enemy->ai.state = u4(AiState);
-    Enemy->ai.flags = u4(AiFlags);
-    Enemy->fly.state = 0;
-    Enemy->fly.counter = 0;
-    Enemy->attack.counter = u8(z_enemy_data[TypeId].attackPeriodDs / 2);
+    Enemy->typeId = u4(TypeId);
+    Enemy->flyId = u4(FlyId);
+    Enemy->attackId = u4(AttackId);
+    Enemy->flyCounter = 0;
+    Enemy->attackCounter = z_enemy_data[TypeId].attackPeriodDs;
     Enemy->health = z_enemy_data[TypeId].health;
+}
+
+static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
+{
+    ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
+
+    if(b) {
+        z_bullete_init(b,
+                       zf(Enemy->x + z_fix_itofix(z_screen_getXShake())),
+                       Enemy->y,
+                       Angle,
+                       ExtraSpeed,
+                       z_enemy_data[Enemy->typeId].damage);
+    }
 }
 
 bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
@@ -76,16 +88,39 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
     ZFix speed = z_enemy_data[type].speedShift;
     uint8_t sprite = z_enemy_data[type].sprite;
 
-    enemy->x = zf(enemy->x + (cos >> speed));
-    enemy->y = zf(enemy->y - (sin >> speed));
+    switch(enemy->flyId) {
+        case Z_FLY_STILL: {
+            // Do nothing
+        } break;
+
+        case Z_FLY_DOWN: {
+            enemy->x = zf(enemy->x + (cos >> speed));
+            enemy->y = zf(enemy->y - (sin >> speed));
+        } break;
+    }
+
+    if(enemy->y >= 0 && enemy->attackCounter-- == 0) {
+        enemy->attackCounter =
+            Z_DS_TO_FRAMES(z_enemy_data[enemy->typeId].attackPeriodDs);
+
+        switch(enemy->attackId) {
+            case Z_ATTACK_FRONT: {
+                shoot(enemy, enemy->angle, false);
+            } break;
+
+            case Z_ATTACK_TARGET: {
+                shoot(enemy,
+                      z_fix_atan(enemy->x, enemy->y, z_player.x, z_player.y),
+                      false);
+            } break;
+        }
+    }
 
     Z_EVERY_DS(2) {
         enemy->frame = u4((enemy->frame + 1) % z_sprite_getNumFrames(sprite));
     }
 
     enemy->jetFlicker = !enemy->jetFlicker;
-
-    z_enemy_data[type].ai(enemy);
 
     if(z_collision_checkPlayer(enemy->x,
                                enemy->y,
@@ -158,46 +193,6 @@ void z_enemy_draw(ZPoolObject* Enemy)
                           i16(x + z_screen_getXShake()),
                           i16(y + z_screen_getYShake()),
                           enemy->frame);
-}
-
-static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
-{
-    ZBulletE* b = z_pool_alloc(Z_POOL_BULLETE);
-
-    if(b) {
-        z_bullete_init(b,
-                       zf(Enemy->x + z_fix_itofix(z_screen_getXShake())),
-                       Enemy->y,
-                       Angle,
-                       ExtraSpeed,
-                       z_enemy_data[Enemy->typeId].damage);
-    }
-}
-
-void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId)
-{
-    if(Enemy->y < 0) {
-        return;
-    }
-
-    if(Enemy->attack.counter-- == 0) {
-        Enemy->attack.counter =
-            Z_DS_TO_FRAMES(z_enemy_data[Enemy->typeId].attackPeriodDs);
-    } else {
-        return;
-    }
-
-    switch(AttackId) {
-        case Z_ATTACK_STRAIGHT: {
-            shoot(Enemy, Enemy->angle, false);
-        } break;
-
-        case Z_ATTACK_TARGET: {
-            shoot(Enemy,
-                  z_fix_atan(Enemy->x, Enemy->y, z_player.x, z_player.y),
-                  false);
-        } break;
-    }
 }
 
 void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage)

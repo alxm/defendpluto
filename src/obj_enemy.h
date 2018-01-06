@@ -25,9 +25,16 @@ typedef enum {
 } ZEnemyId;
 
 typedef enum {
+    Z_FLY_INVALID = -1,
+    Z_FLY_STILL,
+    Z_FLY_DOWN,
+    Z_FLY_NUM
+} ZFlyId;
+
+typedef enum {
     Z_ATTACK_INVALID = -1,
     Z_ATTACK_NONE,
-    Z_ATTACK_STRAIGHT,
+    Z_ATTACK_FRONT,
     Z_ATTACK_TARGET,
     Z_ATTACK_NUM
 } ZAttackId;
@@ -39,26 +46,16 @@ typedef struct {
     ZFix x, y;
     uint8_t angle : 7;
     bool jetFlicker : 1;
-    uint8_t typeId : 4;
     uint8_t frame : 4;
-    struct {
-        uint8_t state : 4;
-        uint8_t flags : 4;
-    } ai;
-    struct {
-        uint8_t state : 4;
-        uint8_t counter;
-    } fly;
-    struct {
-        uint8_t counter;
-    } attack;
+    uint8_t typeId : 4;
+    uint8_t flyId : 4;
+    uint8_t attackId : 4;
+    uint8_t flyCounter;
+    uint8_t attackCounter;
     uint8_t health : 2;
 } ZEnemy;
 
-typedef void (ZEnemyCallback)(ZEnemy*);
-
 typedef struct {
-    ZEnemyCallback* ai;
     uint8_t w : 4;
     uint8_t h : 4;
     uint8_t health : 2;
@@ -101,14 +98,8 @@ extern ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
 extern void z_enemy_setup(void);
 
-extern void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t AiState, uint8_t AiFlags);
+extern void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t FlyId, uint8_t AttackId);
 extern ZPoolTickCallback z_enemy_tick;
 extern ZPoolDrawCallback z_enemy_draw;
 
-extern void z_enemy_attack(ZEnemy* Enemy, uint8_t AttackId);
 extern void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage);
-
-extern ZEnemyCallback z_enemy_ai_asteroid;
-extern ZEnemyCallback z_enemy_ai_ship0;
-extern ZEnemyCallback z_enemy_ai_ship1;
-extern ZEnemyCallback z_enemy_ai_ship2;

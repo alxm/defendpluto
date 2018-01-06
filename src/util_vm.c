@@ -266,17 +266,17 @@ static bool op_waitclear(uint8_t Flags)
 static bool op_spawn(uint8_t Flags)
 {
     /*
-     * 8b    8b    8b      8b      4b      4b       8b
-     * spawn flags x_coord y_coord type_id ai_state ai_flags
-     * spawn       64      -8      enemy0  1        0
+     * 8b    8b    8b      8b      4b      4b     4b
+     * spawn flags x_coord y_coord type_id fly_id attack_id
+     * spawn       40      -1      enemy0  down   target
      */
     int16_t x, y;
-    uint8_t type_id, ai_state, ai_flags;
+    uint8_t type_id, fly_id, attack_id;
     Z_READ_ARGI8(x, 0, 0);
     Z_READ_ARGI8(y, 1, 1);
     Z_READ_ARGU4H(type_id, 2, 2);
-    Z_READ_ARGU4L(ai_state, 3, 2);
-    Z_READ_ARGU8(ai_flags, 4, 3);
+    Z_READ_ARGU4L(fly_id, 3, 2);
+    Z_READ_ARGU4H(attack_id, 4, 3);
 
     ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
 
@@ -303,7 +303,7 @@ static bool op_spawn(uint8_t Flags)
         y = i16((Z_HEIGHT - 1) * y / 100);
     }
 
-    z_enemy_init(e, x, y, type_id, ai_state, ai_flags & 0xf);
+    z_enemy_init(e, x, y, type_id, fly_id, attack_id);
 
     return true;
 }
