@@ -130,9 +130,14 @@ end
 wait 40
 
 spawn 25 -2 asteroid down
+spawn 33 -1 enemy0 follow front
+spawn 40 -3 enemy0 follow front
 spawn 45 -3 asteroid down
 spawn 54 -5 asteroid down
+spawn 60 -2 enemy0 follow target
 spawn 88 -3 asteroid down
+wait 50
+spawn 33 -1 enemy0 follow front
 clear
 
 spawn 48 -1 asteroid down
