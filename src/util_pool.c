@@ -106,7 +106,7 @@ void* z_pool_alloc(uint8_t Pool)
     ZPool* pool = g_pools[Pool];
 
     if(pool->freeList == Z_OFFSET_NULL) {
-        #if A_PLATFORM_SYSTEM_DESKTOP
+        #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
             static uint32_t fails[Z_POOL_NUM];
             static const char* names[Z_POOL_NUM] = {
                 "Z_POOL_STAR",
