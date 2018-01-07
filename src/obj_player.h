@@ -19,6 +19,14 @@
 #define Z_SHIELD_MAX 15
 #define Z_ENERGY_MAX 15
 
+typedef enum {
+    Z_POINTS_INVALID = -1,
+    Z_POINTS_ENEMY_HIT = 10,
+    Z_POINTS_ENEMY_DESTROYED = 50,
+    Z_POINTS_ENEMY_SMASHED = 25,
+    Z_POINTS_NUM
+} ZScorePoints;
+
 typedef struct {
     ZFix x, y;
     int8_t dx, dy;
@@ -34,6 +42,8 @@ typedef struct {
     bool jetFlicker : 1;
     uint8_t damage : 3;
     uint8_t invincibleTimerDs : 5;
+    uint16_t score;
+    uint16_t scoreShow;
 } ZPlayer;
 
 extern ZPlayer z_player;
@@ -43,3 +53,4 @@ extern void z_player_tick(void);
 extern void z_player_draw(void);
 
 extern void z_player_takeDamage(uint8_t Damage);
+extern void z_player_scorePoints(uint8_t Points);

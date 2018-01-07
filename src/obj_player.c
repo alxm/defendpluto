@@ -124,6 +124,8 @@ void z_player_init(void)
     z_player.jetFlicker = false;
     z_player.damage = 1;
     z_player.invincibleTimerDs = 0;
+    z_player.score = 0;
+    z_player.scoreShow = 0;
 }
 
 void z_player_tick(void)
@@ -264,4 +266,9 @@ void z_player_takeDamage(uint8_t Damage)
             z_player.invincibleTimerDs = Z_INVINCIBLE_TIMER_DS;
         }
     }
+}
+
+void z_player_scorePoints(uint8_t Points)
+{
+    z_player.score = u16(z_player.score + Points);
 }

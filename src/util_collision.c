@@ -53,6 +53,12 @@ static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
         context->hit = true;
         z_effect_particles(enemy->x, enemy->y, 4);
         z_enemy_takeDamage(enemy, context->damage);
+
+        if(enemy->health > 0) {
+            z_player_scorePoints(Z_POINTS_ENEMY_HIT);
+        } else {
+            z_player_scorePoints(Z_POINTS_ENEMY_DESTROYED);
+        }
     }
 
     return enemy->health > 0;

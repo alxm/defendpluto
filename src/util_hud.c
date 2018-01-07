@@ -17,8 +17,10 @@
 
 #include "platform.h"
 #include "util_fix.h"
+#include "util_font.h"
 #include "util_fps.h"
 #include "util_graphics.h"
+#include "util_screen.h"
 #include "obj_player.h"
 
 void z_hud_tick(void)
@@ -26,6 +28,13 @@ void z_hud_tick(void)
     if(z_player.health <= 0) {
         Z_EVERY_DS(3) {
             z_player.heartsBlink ^= 1;
+        }
+    }
+
+    Z_EVERY_DS(1) {
+        if(z_player.scoreShow < z_player.score) {
+            z_player.scoreShow =
+                u16((z_player.score - z_player.scoreShow) / 2 + 1);
         }
     }
 }
@@ -78,9 +87,19 @@ static void drawEnergy(int16_t X, int16_t Y)
     drawBar(i16(X + 4), i16(Y + 2), z_player.energy, Z_ENERGY_MAX);
 }
 
+static void drawScore(int16_t X, int16_t Y)
+{
+    z_font_int((int16_t)z_player.scoreShow,
+               X,
+               Y,
+               Z_FONT_FACE_LCD,
+               Z_FONT_ALIGN_R);
+}
+
 void z_hud_draw(void)
 {
     drawHearts(2, 2);
     drawShield(28, 2);
     drawEnergy(54, 1);
+    drawScore(Z_WIDTH - 2, Z_HEIGHT - 9);
 }

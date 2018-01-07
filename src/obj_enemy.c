@@ -152,6 +152,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
                                Z_SHIELD_MAX)) {
 
         z_enemy_takeDamage(enemy, UINT8_MAX);
+        z_player_scorePoints(Z_POINTS_ENEMY_SMASHED);
     }
 
     return enemy->health > 0
