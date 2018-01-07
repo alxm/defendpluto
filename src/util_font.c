@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,23 +40,23 @@ void z_font_setup(void)
         g_fonts[Index].sprites = Sprite;   \
         g_fonts[Index].flags = Flags;
 
-    loadFont(Z_FONT_FACE_NUMBERS,
+    loadFont(Z_FONT_FACE_LCD,
              Z_SPRITE_FONT_NUM,
              Z_FONT_FLAG_NUMERIC);
 
-    loadFont(Z_FONT_FACE_ALPHANUM,
+    loadFont(Z_FONT_FACE_RED,
              Z_SPRITE_FONT_ALPHANUM,
              Z_FONT_FLAG_NUMERIC
            | Z_FONT_FLAG_ALPHA_U
            | Z_FONT_FLAG_ALPHA_L);
 
-    loadFont(Z_FONT_FACE_ALPHANUM_OUTLINE_RED,
+    loadFont(Z_FONT_FACE_REDO,
              Z_SPRITE_FONT_ALPHANUM_OUTLINE,
              Z_FONT_FLAG_NUMERIC
            | Z_FONT_FLAG_ALPHA_U
            | Z_FONT_FLAG_ALPHA_L);
 
-    loadFont(Z_FONT_FACE_ALPHANUM_OUTLINE_YELLOW,
+    loadFont(Z_FONT_FACE_YELLOWO,
              Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW,
              Z_FONT_FLAG_NUMERIC
            | Z_FONT_FLAG_ALPHA_U
@@ -92,49 +92,37 @@ static int16_t drawChar(char Char, int16_t X, int16_t Y, uint8_t Flags, uint8_t 
     return i16(X + CharWidth + 1);
 }
 
-void z_font_text(const char* Text, int16_t X, int16_t Y, uint8_t Font)
+void z_font_text(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font, uint8_t Align)
 {
     uint8_t flags = g_fonts[Font].flags;
     uint8_t sprite = g_fonts[Font].sprites;
     int16_t charWidth = z_sprite_getWidth(sprite);
+    const char* s = z_strings[StringId].text;
 
-    for(char c = *Text; c != '\0'; c = *++Text) {
-        X = drawChar(c, X, Y, flags, sprite, charWidth);
+    switch(Align) {
+        case Z_FONT_ALIGN_C: {
+            int16_t w = i16(z_strings[StringId].len * (charWidth + 1) - 1);
+            X = i16(X - w / 2);
+        } break;
+
+        case Z_FONT_ALIGN_R: {
+            int16_t w = i16(z_strings[StringId].len * (charWidth + 1) - 1);
+            X = i16(X - w);
+        } break;
     }
-}
-
-void z_font_textp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
-{
-    uint8_t flags = g_fonts[Font].flags;
-    uint8_t sprite = g_fonts[Font].sprites;
-    int16_t charWidth = z_sprite_getWidth(sprite);
-    const char* s = z_strings[StringId];
 
     for(char c = Z_PGM_READ_UINT8(s); c != '\0'; c = Z_PGM_READ_UINT8(++s)) {
         X = drawChar(c, X, Y, flags, sprite, charWidth);
     }
 }
 
-void z_font_textCenterp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
-{
-    int16_t charWidth = z_sprite_getWidth(g_fonts[Font].sprites);
-    const char* s = z_strings[StringId];
-    int16_t w = 0;
-
-    for(char c = Z_PGM_READ_UINT8(s); c != '\0'; c = Z_PGM_READ_UINT8(++s)) {
-        w = i16(w + charWidth + 1);
-    }
-
-    z_font_textp(StringId, i16(X - w / 2), Y, Font);
-}
-
-void z_font_textWrapp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
+void z_font_textWrap(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
 {
     uint8_t flags = g_fonts[Font].flags;
     uint8_t sprite = g_fonts[Font].sprites;
     int16_t charWidth = z_sprite_getWidth(sprite);
     int16_t charHeight = z_sprite_getHeight(sprite);
-    const char* s = z_strings[StringId];
+    const char* s = z_strings[StringId].text;
     int16_t lineWidth = 0;
     int16_t x = X;
 
@@ -172,19 +160,41 @@ void z_font_textWrapp(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
     }
 }
 
-void z_font_int(int16_t Number, int16_t X, int16_t Y, uint8_t Font)
+void z_font_int(int16_t Number, int16_t X, int16_t Y, uint8_t Font, uint8_t Align)
 {
     #define Z_BUFFER_SIZE 6
     char buffer[Z_BUFFER_SIZE];
     int8_t index = Z_BUFFER_SIZE;
-    int16_t n = Number < 0 ? 0 : Number;
+
+    if(Number < 0) {
+        Number = 0;
+    }
 
     buffer[--index] = '\0';
 
     do {
-        buffer[--index] = (char)(48 + (n % 10));
-        n /= 10;
-    } while(n > 0);
+        buffer[--index] = (char)(48 + (Number % 10));
+        Number /= 10;
+    } while(Number > 0);
 
-    z_font_text(buffer + index, X, Y, Font);
+    const char* text = buffer + index;
+    uint8_t flags = g_fonts[Font].flags;
+    uint8_t sprite = g_fonts[Font].sprites;
+    int16_t charWidth = z_sprite_getWidth(sprite);
+
+    switch(Align) {
+        case Z_FONT_ALIGN_C: {
+            int16_t w = i16((Z_BUFFER_SIZE - 1 - index) * (charWidth + 1) - 1);
+            X = i16(X - w / 2);
+        } break;
+
+        case Z_FONT_ALIGN_R: {
+            int16_t w = i16((Z_BUFFER_SIZE - 1 - index) * (charWidth + 1) - 1);
+            X = i16(X - w);
+        } break;
+    }
+
+    for(char c = *text; c != '\0'; c = *++text) {
+        X = drawChar(c, X, Y, flags, sprite, charWidth);
+    }
 }

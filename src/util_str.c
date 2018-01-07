@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,12 +18,14 @@
 #include "platform.h"
 #include "util_str.h"
 
-const char* z_strings[Z_STR_NUM];
+ZString z_strings[Z_STR_NUM];
 
-#define SET_STR(Index, Text)                \
-{                                           \
-    PROGMEM static const char str[] = Text; \
-    z_strings[Index] = str;                 \
+#define SET_STR(Index, Text)                 \
+{                                            \
+    PROGMEM static const char str[] = Text;  \
+                                             \
+    z_strings[Index].text = str;             \
+    z_strings[Index].len = sizeof(Text) - 1; \
 }
 
 void z_str_setup(void)

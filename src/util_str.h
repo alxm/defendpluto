@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,6 +22,11 @@ typedef enum {
     Z_STR_NUM
 } ZStringId;
 
-extern const char* z_strings[Z_STR_NUM];
+typedef struct {
+    const char* text;
+    uint16_t len;
+} ZString;
+
+extern ZString z_strings[Z_STR_NUM];
 
 extern void z_str_setup(void);
