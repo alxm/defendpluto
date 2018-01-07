@@ -34,7 +34,8 @@ void z_hud_tick(void)
     Z_EVERY_DS(1) {
         if(z_player.scoreShow < z_player.score) {
             z_player.scoreShow =
-                u16((z_player.score - z_player.scoreShow) / 2 + 1);
+                u16(z_player.scoreShow
+                    + (z_player.score - z_player.scoreShow) / 2 + 1);
         }
     }
 }
@@ -89,8 +90,12 @@ static void drawEnergy(int16_t X, int16_t Y)
 
 static void drawScore(int16_t X, int16_t Y)
 {
+    int16_t credsX = i16(X - z_sprite_getWidth(Z_SPRITE_CREDS));
+
+    z_sprite_blit(Z_SPRITE_CREDS, credsX, i16(Y + 1), 0);
+
     z_font_int((int16_t)z_player.scoreShow,
-               X,
+               i16(credsX - 1),
                Y,
                Z_FONT_FACE_LCD,
                Z_FONT_ALIGN_R);

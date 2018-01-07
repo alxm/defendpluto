@@ -21,6 +21,7 @@
 
 #include "data_gfx_asteroid.h"
 #include "data_gfx_bullets.h"
+#include "data_gfx_creds.h"
 #include "data_gfx_enemy00.h"
 #include "data_gfx_enemy01.h"
 #include "data_gfx_enemy02.h"
@@ -47,6 +48,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE, font_alphanum_outline);
     z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW, font_alphanum_outline_yellow);
 
+    z_sprite_load(Z_SPRITE_CREDS, creds);
     z_sprite_load(Z_SPRITE_ENERGY, energy);
     z_sprite_load(Z_SPRITE_HEARTS, hearts);
     z_sprite_load(Z_SPRITE_SHIELD, shield);

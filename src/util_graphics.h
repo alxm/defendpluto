@@ -49,6 +49,7 @@ typedef enum {
     Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW,
 
     // Icons
+    Z_SPRITE_CREDS,
     Z_SPRITE_ENERGY,
     Z_SPRITE_HEARTS,
     Z_SPRITE_SHIELD,
