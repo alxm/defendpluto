@@ -19,6 +19,11 @@
 #define Z_SHIELD_MAX 15
 #define Z_ENERGY_MAX 15
 
+#define Z_PLAYER_W_NORMAL 10
+#define Z_PLAYER_H_NORMAL 4
+#define Z_PLAYER_W_SHIELD 16
+#define Z_PLAYER_H_SHIELD 16
+
 typedef enum {
     Z_POINTS_INVALID = -1,
     Z_POINTS_ENEMY_HIT = 10,
@@ -30,8 +35,6 @@ typedef enum {
 typedef struct {
     ZFix x, y;
     int8_t dx, dy;
-    uint8_t w : 4;
-    uint8_t h : 4;
     uint8_t frame : 4;
     uint8_t energy : 4;
     uint8_t shield : 4;

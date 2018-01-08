@@ -31,6 +31,17 @@ typedef struct {
     bool hit : 1;
 } ZCollisionContext;
 
+static bool boxAndBox(int16_t X1, int16_t Y1, int8_t W1, int8_t H1, int16_t X2, int16_t Y2, int8_t W2, int8_t H2)
+{
+    X1 = i16(X1 - W1 / 2);
+    Y1 = i16(Y1 - H1 / 2);
+
+    X2 = i16(X2 - W2 / 2);
+    Y2 = i16(Y2 - H2 / 2);
+
+    return !(Y1 >= Y2 + H2 || Y2 >= Y1 + H1 || X1 >= X2 + W2 || X2 >= X1 + W1);
+}
+
 static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
 {
     ZCollisionContext* context = Context;
@@ -41,14 +52,14 @@ static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
 
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
-    if(z_collision_boxAndBox(context->x,
-                             context->y,
-                             context->w,
-                             context->h,
-                             z_fix_fixtoi(enemy->x),
-                             z_fix_fixtoi(enemy->y),
-                             z_enemy_data[enemy->typeId].w,
-                             z_enemy_data[enemy->typeId].h)) {
+    if(boxAndBox(context->x,
+                 context->y,
+                 context->w,
+                 context->h,
+                 z_fix_fixtoi(enemy->x),
+                 z_fix_fixtoi(enemy->y),
+                 z_enemy_data[enemy->typeId].w,
+                 z_enemy_data[enemy->typeId].h)) {
 
         context->hit = true;
         z_effect_particles(enemy->x, enemy->y, 4);
@@ -77,14 +88,22 @@ bool z_collision_checkEnemyShips(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Dam
 
 bool z_collision_checkPlayer(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
 {
-    bool hit = z_collision_boxAndBox(z_fix_fixtoi(X),
-                                     z_fix_fixtoi(Y),
-                                     W,
-                                     H,
-                                     z_fix_fixtoi(z_player.x),
-                                     z_fix_fixtoi(z_player.y),
-                                     z_player.w,
-                                     z_player.h);
+    int8_t playerW = Z_PLAYER_W_NORMAL;
+    int8_t playerH = Z_PLAYER_H_NORMAL;
+
+    if(z_player.invincibleTimerDs > 0) {
+        playerW = Z_PLAYER_W_SHIELD;
+        playerH = Z_PLAYER_H_SHIELD;
+    }
+
+    bool hit = boxAndBox(z_fix_fixtoi(X),
+                         z_fix_fixtoi(Y),
+                         W,
+                         H,
+                         z_fix_fixtoi(z_player.x),
+                         z_fix_fixtoi(z_player.y),
+                         playerW,
+                         playerH);
 
     if(hit) {
         z_player_takeDamage(Damage);

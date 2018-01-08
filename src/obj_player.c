@@ -111,8 +111,6 @@ void z_player_init(void)
 {
     z_player.dx = 0;
     z_player.dy = 0;
-    z_player.w = 10;
-    z_player.h = 4;
     z_player.frame = 0;
     z_player.energy = Z_ENERGY_MAX;
     z_player.shield = Z_SHIELD_MAX;
