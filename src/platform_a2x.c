@@ -94,7 +94,7 @@ void z_draw_fill(uint8_t Color)
     a_draw_fill();
 }
 
-void z_draw_rectangle(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Color)
+void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
 {
     a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
     a_draw_rectangle(X, Y, W, H);
@@ -106,7 +106,7 @@ void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
     a_draw_pixel(X, Y);
 }
 
-void z_draw_circle(int16_t X, int16_t Y, uint8_t Radius, uint8_t Color)
+void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
 {
     a_pixel_push();
 

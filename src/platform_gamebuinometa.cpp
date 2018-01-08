@@ -114,7 +114,7 @@ void z_draw_fill(uint8_t Color)
     gb.display.fill();
 }
 
-void z_draw_rectangle(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Color)
+void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
 {
     gb.display.setColor(g_palettes[g_paletteIndex][Color]);
     gb.display.fillRect(X, Y, W, H);
@@ -126,7 +126,7 @@ void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
     gb.display.drawPixel(X, Y);
 }
 
-void z_draw_circle(int16_t X, int16_t Y, uint8_t Radius, uint8_t Color)
+void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
 {
     gb.display.setColor(g_palettes[g_paletteIndex][Color]);
     gb.display.drawCircle(X, Y, Radius);

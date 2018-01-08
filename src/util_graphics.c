@@ -73,10 +73,10 @@ void z_sprite_blitCentered(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
 
 void z_draw_hline(int16_t X1, int16_t X2, int16_t Y, uint8_t Color)
 {
-    z_draw_rectangle(X1, Y, i8(X2 - X1 + 1), 1, Color);
+    z_draw_rectangle(X1, Y, i16(X2 - X1 + 1), 1, Color);
 }
 
 void z_draw_vline(int16_t X, int16_t Y1, int16_t Y2, uint8_t Color)
 {
-    z_draw_rectangle(X, Y1, 1, i8(Y2 - Y1 + 1), Color);
+    z_draw_rectangle(X, Y1, 1, i16(Y2 - Y1 + 1), Color);
 }

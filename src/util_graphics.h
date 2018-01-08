@@ -72,9 +72,9 @@ extern int16_t z_sprite_getHeight(uint8_t Sprite);
 extern uint8_t z_sprite_getNumFrames(uint8_t Sprite);
 
 extern void z_draw_fill(uint8_t Color);
-extern void z_draw_rectangle(int16_t X, int16_t Y, int8_t W, int8_t H, uint8_t Color);
+extern void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color);
 extern void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color);
-extern void z_draw_circle(int16_t X, int16_t Y, uint8_t Radius, uint8_t Color);
+extern void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color);
 extern void z_draw_hline(int16_t X1, int16_t X2, int16_t Y, uint8_t Color);
 extern void z_draw_vline(int16_t X, int16_t Y1, int16_t Y2, uint8_t Color);
 

@@ -46,6 +46,6 @@ void z_circle_draw(ZPoolObject* Circle)
     int16_t x = i16(circle->x + z_screen_getXShake());
     int16_t y = i16(circle->y + z_screen_getYShake());
 
-    z_draw_circle(x, y, u8(circle->radius), Z_COLOR_RED);
+    z_draw_circle(x, y, circle->radius, Z_COLOR_RED);
     z_draw_circle(x, y, u8(circle->radius * 2), Z_COLOR_RED);
 }
