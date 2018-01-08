@@ -52,5 +52,6 @@ extern void z_player_init(void);
 extern void z_player_tick(void);
 extern void z_player_draw(void);
 
+extern void z_player_resetPosition(void);
 extern void z_player_takeDamage(uint8_t Damage);
 extern void z_player_scorePoints(uint8_t Points);

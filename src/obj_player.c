@@ -109,8 +109,6 @@ static void boostShield(uint8_t Boost)
 
 void z_player_init(void)
 {
-    z_player.x = z_fix_itofix(Z_WIDTH / 2);
-    z_player.y = z_fix_itofix(Z_HEIGHT * 2 / 3);
     z_player.dx = 0;
     z_player.dy = 0;
     z_player.w = 10;
@@ -126,6 +124,8 @@ void z_player_init(void)
     z_player.invincibleTimerDs = 0;
     z_player.score = 0;
     z_player.scoreShow = 0;
+
+    z_player_resetPosition();
 }
 
 void z_player_tick(void)
@@ -252,6 +252,12 @@ void z_player_draw(void)
             z_draw_circle(x, z_fix_fixtoi(z_player.y), 9, Z_COLOR_LIGHTBLUE2);
         }
     }
+}
+
+void z_player_resetPosition(void)
+{
+    z_player.x = z_fix_itofix(Z_WIDTH / 2);
+    z_player.y = z_fix_itofix(Z_HEIGHT / 2);
 }
 
 void z_player_takeDamage(uint8_t Damage)
