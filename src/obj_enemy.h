@@ -66,35 +66,6 @@ typedef struct {
     uint8_t sprite : 3;
 } ZEnemyData;
 
-#define Z_AI switch(Enemy->ai.state)
-#define Z_AI_DONE() Enemy->ai.state = 0xf;
-#define Z_AI_GO(State) Enemy->ai.state = (State);
-#define Z_AI_FLAG(Bit) if(Enemy->ai.flags & (1 << (Bit)))
-
-#define Z_AI_STATE(State)                 \
-    case (State):                         \
-        for(uint8_t z__u = 0; ; z__u = 1) \
-            if(z__u == 1) {               \
-                return;                   \
-            } else
-
-#define Z_FLY switch(Enemy->fly.state)
-#define Z_FLY_GO(State) Enemy->fly.state = (State);
-#define Z_FLY_STATE(State) Z_AI_STATE(State)
-
-#define Z_FLY_COUNTER_SET(Ds)                \
-    Enemy->fly.counter = Z_DS_TO_FRAMES(Ds);
-
-#define Z_FLY_EVERY_DS(Ds)                               \
-    for(uint8_t z__u = 0; z__u < 2; z__u++)              \
-        if(z__u == 0) {                                  \
-            if(Enemy->fly.counter-- == 0) {              \
-                Enemy->fly.counter = Z_DS_TO_FRAMES(Ds); \
-            } else {                                     \
-                break;                                   \
-            }                                            \
-        } else
-
 extern ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
 extern void z_enemy_setup(void);
