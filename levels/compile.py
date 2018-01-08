@@ -254,6 +254,7 @@ class CompilerTool:
             'wait': OpWait(),
             'clear': Op(),
             'spawn': OpSpawn(),
+            'done': Op(),
 
             # Must always be last, doesn't get compiled
             'var': OpVar(),

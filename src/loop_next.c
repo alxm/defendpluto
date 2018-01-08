@@ -1,5 +1,5 @@
 /*
-    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,45 +22,51 @@
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
-#include "util_pool.h"
 #include "util_screen.h"
 #include "util_str.h"
 #include "obj_player.h"
-#include "obj_star.h"
 
 static bool g_blink;
 
-void z_loop_title_init(void)
+void z_loop_next_init(void)
 {
     g_blink = true;
     z_player_resetPosition();
     z_button_release(Z_BUTTON_A);
 }
 
-void z_loop_title_tick(void)
+void z_loop_next_tick(void)
 {
-    z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
-
     Z_EVERY_DS(10) {
         g_blink = !g_blink;
     }
 
     if(z_button_pressed(Z_BUTTON_A)) {
         z_button_release(Z_BUTTON_A);
-        z_loop_setState(Z_STATE_NEW);
+        z_loop_setState(Z_STATE_GAME);
     }
 }
 
-void z_loop_title_draw(void)
+void z_loop_next_draw(void)
 {
-    z_draw_fill(Z_COLOR_BLUE);
-    z_pool_draw(Z_POOL_STAR, z_star_draw);
-    z_sprite_blit(Z_SPRITE_TITLE, 0, 0, 0);
+    z_screen_draw();
+
+    z_font_text(Z_STR_LEVEL_CLEARED_1,
+                Z_WIDTH / 2,
+                6,
+                Z_FONT_FACE_YELLOWO,
+                Z_FONT_ALIGN_C);
+
+    z_font_text(Z_STR_LEVEL_CLEARED_2,
+                Z_WIDTH / 2,
+                16,
+                Z_FONT_FACE_YELLOWO,
+                Z_FONT_ALIGN_C);
 
     if(g_blink) {
         z_font_text(Z_STR_PRESS_A,
                     Z_WIDTH / 2,
-                    50,
+                    45,
                     Z_FONT_FACE_REDO,
                     Z_FONT_ALIGN_C);
     }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,13 +35,9 @@
 #include "obj_player.h"
 #include "obj_star.h"
 
-void z_loop_died_init(void)
-{
-    //
-}
-
 void z_loop_died_tick(void)
 {
+    z_screen_tick();
     z_vm_tick();
     z_hud_tick();
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
@@ -50,7 +46,6 @@ void z_loop_died_tick(void)
     z_pool_tick(Z_POOL_ENEMY, z_enemy_tick, NULL);
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick, NULL);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
-    z_screen_tick();
 
     Z_EVERY_DS(10) {
         if(z_player.health-- < -2) {
@@ -79,4 +74,5 @@ void z_loop_died_draw(void)
     z_pool_draw(Z_POOL_CIRCLE, z_circle_draw);
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
     z_hud_draw();
+    z_screen_draw();
 }

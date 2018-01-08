@@ -34,16 +34,9 @@
 #include "obj_player.h"
 #include "obj_star.h"
 
-void z_loop_game_init(void)
-{
-    z_pool_reset();
-    z_screen_reset();
-    z_vm_reset();
-    z_player_init();
-}
-
 void z_loop_game_tick(void)
 {
+    z_screen_tick();
     z_vm_tick();
     z_hud_tick();
     z_player_tick();
@@ -53,7 +46,6 @@ void z_loop_game_tick(void)
     z_pool_tick(Z_POOL_ENEMY, z_enemy_tick, NULL);
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick, NULL);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
-    z_screen_tick();
 
     if(z_player.health < 0) {
         z_loop_setState(Z_STATE_DIED);
@@ -71,4 +63,5 @@ void z_loop_game_draw(void)
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
     z_player_draw();
     z_hud_draw();
+    z_screen_draw();
 }

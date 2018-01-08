@@ -16,6 +16,7 @@
 */
 
 #include "platform.h"
+#include "loop.h"
 #include "util_fix.h"
 #include "util_fps.h"
 #include "util_graphics.h"
@@ -38,6 +39,7 @@ typedef enum {
     Z_OP_WAIT,
     Z_OP_CLEAR,
     Z_OP_SPAWN,
+    Z_OP_DONE,
     Z_OP_NUM
 } ZOpType;
 
@@ -313,6 +315,43 @@ static bool op_spawn(uint8_t Flags)
     return true;
 }
 
+static bool op_done(uint8_t Flags)
+{
+    Z_UNUSED(Flags);
+
+    /*
+     * 8b
+     * done
+     * done
+     */
+    switch(g_vm.waitCounter) {
+        case 0: {
+            z_screen_setDoors(true);
+            g_vm.waitCounter = 1;
+        } break;
+
+        case 1: {
+            if(!z_screen_areDoorsMoving()) {
+                z_loop_setState(Z_STATE_NEXT);
+                g_vm.waitCounter = 2;
+            }
+        } break;
+
+        case 2: {
+            z_screen_setDoors(false);
+            g_vm.waitCounter = 3;
+        } break;
+
+        case 3: {
+            if(!z_screen_areDoorsMoving()) {
+                g_vm.waitCounter = 0;
+            }
+        } break;
+    }
+
+    return g_vm.waitCounter == 0;
+}
+
 void z_vm_setup(void)
 {
     #define setOp(Index, Function, ArgBytes)                                   \
@@ -329,6 +368,7 @@ void z_vm_setup(void)
     setOp(Z_OP_WAIT, op_wait, 1);
     setOp(Z_OP_CLEAR, op_clear, 0);
     setOp(Z_OP_SPAWN, op_spawn, 4);
+    setOp(Z_OP_DONE, op_done, 0);
 
     z_vm_reset();
 }

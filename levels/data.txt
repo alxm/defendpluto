@@ -62,6 +62,8 @@ spawn 75 -4 asteroid down
 spawn 80 -7 asteroid down
 clear
 
+done
+
 ;
 ; A few passive enemies appear
 ;
@@ -113,7 +115,9 @@ spawn 70 -5 asteroid down
 wait 30
 
 spawn 45 -1 enemy0 follow front
-wait 10
+clear
+
+done
 
 ;
 ; The last asteroids
@@ -148,4 +152,5 @@ clear
 ; La Fin
 ;
 
+done
 over

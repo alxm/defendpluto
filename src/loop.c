@@ -19,6 +19,8 @@
 #include "loop.h"
 #include "loop_died.h"
 #include "loop_game.h"
+#include "loop_new.h"
+#include "loop_next.h"
 #include "loop_over.h"
 #include "loop_title.h"
 #include "util_fix.h"
@@ -38,14 +40,24 @@ typedef struct {
 
 static ZState g_states[Z_STATE_NUM] = {
     {
-        z_loop_died_init,
+        NULL,
         z_loop_died_tick,
         z_loop_died_draw
     },
     {
-        z_loop_game_init,
+        NULL,
         z_loop_game_tick,
         z_loop_game_draw
+    },
+    {
+        z_loop_new_init,
+        NULL,
+        NULL
+    },
+    {
+        z_loop_next_init,
+        z_loop_next_tick,
+        z_loop_next_draw
     },
     {
         z_loop_over_init,
@@ -78,17 +90,26 @@ void z_loop_setup(void)
 void z_loop_tick(void)
 {
     z_platform_tick();
-    g_states[g_state].tick();
+
+    if(g_states[g_state].tick) {
+        g_states[g_state].tick();
+    }
 }
 
 void z_loop_draw(void)
 {
-    g_states[g_state].draw();
+    if(g_states[g_state].draw) {
+        g_states[g_state].draw();
+    }
+
     z_platform_draw();
 }
 
 void z_loop_setState(uint8_t State)
 {
     g_state = State;
-    g_states[g_state].init();
+
+    if(g_states[g_state].init) {
+        g_states[g_state].init();
+    }
 }

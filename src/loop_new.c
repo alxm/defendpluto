@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,5 +15,20 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern ZStateCallback z_loop_died_tick;
-extern ZStateCallback z_loop_died_draw;
+#include "platform.h"
+#include "loop.h"
+#include "util_fix.h"
+#include "util_pool.h"
+#include "util_screen.h"
+#include "util_vm.h"
+#include "obj_player.h"
+
+void z_loop_new_init(void)
+{
+    z_pool_reset();
+    z_screen_reset();
+    z_vm_reset();
+    z_player_init();
+
+    z_loop_setState(Z_STATE_GAME);
+}
