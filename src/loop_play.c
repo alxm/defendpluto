@@ -34,7 +34,7 @@
 #include "obj_player.h"
 #include "obj_star.h"
 
-void z_loop_game_tick(void)
+void z_loop_play_tick(void)
 {
     z_screen_tick();
     z_vm_tick();
@@ -52,7 +52,7 @@ void z_loop_game_tick(void)
     }
 }
 
-void z_loop_game_draw(void)
+void z_loop_play_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);

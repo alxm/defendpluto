@@ -20,10 +20,10 @@ Z_EXTERN_C_START
 typedef enum {
     Z_STATE_INVALID = -1,
     Z_STATE_DIED,
-    Z_STATE_GAME,
     Z_STATE_NEW,
     Z_STATE_NEXT,
     Z_STATE_OVER,
+    Z_STATE_PLAY,
     Z_STATE_TITLE,
     Z_STATE_NUM
 } ZStateId;

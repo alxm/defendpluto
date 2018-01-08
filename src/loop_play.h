@@ -15,5 +15,5 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern ZStateCallback z_loop_game_tick;
-extern ZStateCallback z_loop_game_draw;
+extern ZStateCallback z_loop_play_tick;
+extern ZStateCallback z_loop_play_draw;

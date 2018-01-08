@@ -18,10 +18,10 @@
 #include "platform.h"
 #include "loop.h"
 #include "loop_died.h"
-#include "loop_game.h"
 #include "loop_new.h"
 #include "loop_next.h"
 #include "loop_over.h"
+#include "loop_play.h"
 #include "loop_title.h"
 #include "util_fix.h"
 #include "util_font.h"
@@ -45,11 +45,6 @@ static ZState g_states[Z_STATE_NUM] = {
         z_loop_died_draw
     },
     {
-        NULL,
-        z_loop_game_tick,
-        z_loop_game_draw
-    },
-    {
         z_loop_new_init,
         NULL,
         NULL
@@ -63,6 +58,11 @@ static ZState g_states[Z_STATE_NUM] = {
         z_loop_over_init,
         z_loop_over_tick,
         z_loop_over_draw
+    },
+    {
+        NULL,
+        z_loop_play_tick,
+        z_loop_play_draw
     },
     {
         z_loop_title_init,
