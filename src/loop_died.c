@@ -54,13 +54,16 @@ void z_loop_died_tick(void)
         }
     }
 
-    z_screen_shake(1);
+    Z_EVERY_DS(1) {
+        z_screen_shake(2);
 
-    if(z_random_uint8(4) == 0) {
-        z_effect_circles(zf(z_player.x + Z_FIX_ONE * (-1 + z_random_int8(3))),
-                         zf(z_player.y + Z_FIX_ONE * (-1 + z_random_int8(3))));
-    } else {
-        z_effect_particles(z_player.x, z_player.y, 1);
+        if(z_random_uint8(4) == 0) {
+            z_effect_circles(
+                zf(z_player.x + Z_FIX_ONE * (-1 + z_random_int8(3))),
+                zf(z_player.y + Z_FIX_ONE * (-1 + z_random_int8(3))));
+        } else {
+            z_effect_particles(z_player.x, z_player.y, 1);
+        }
     }
 }
 

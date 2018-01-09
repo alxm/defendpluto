@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 
 #include "platform.h"
 #include "util_fix.h"
+#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_random.h"
@@ -27,8 +28,9 @@ void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)
 {
     Particle->x = X;
     Particle->y = Y;
-    Particle->angle = Z_ANGLE_TO_U4(z_random_uint8(Z_ANGLES_NUM));
-    Particle->ttl = u4(z_random_uint8(16));
+    Particle->angle = Z_ANGLE_WRAP(z_random_uint8(Z_ANGLES_NUM));
+    Particle->splitNum = uN(z_random_uint8(4), 2);
+    Particle->ticks = 0;
 }
 
 bool z_particle_tick(ZPoolObject* Particle, void* Context)
@@ -36,20 +38,34 @@ bool z_particle_tick(ZPoolObject* Particle, void* Context)
     Z_UNUSED(Context);
 
     ZParticle* particle = (ZParticle*)Particle;
-    uint8_t angle = Z_U4_TO_ANGLE(particle->angle);
 
-    particle->x = zf(particle->x + z_fix_cos(angle));
-    particle->y = zf(particle->y - z_fix_sin(angle));
+    particle->ticks++;
 
-    return particle->ttl--;
+    return particle->ticks < Z_FPS / 4
+        || (particle->ticks < Z_FPS && z_random_int8(4) != 0);
 }
 
 void z_particle_draw(ZPoolObject* Particle)
 {
     ZParticle* particle = (ZParticle*)Particle;
 
-    int16_t x = i16(z_fix_fixtoi(particle->x) + z_screen_getXShake());
-    int16_t y = i16(z_fix_fixtoi(particle->y) + z_screen_getYShake());
+    uint8_t splitNum = u8(1 + particle->splitNum);
+    uint8_t angle = particle->angle;
 
-    z_draw_pixel(x, y, Z_COLOR_YELLOW);
+    static const uint8_t incs[4] = {
+        Z_ANGLE_112, Z_ANGLE_090, Z_ANGLE_067, Z_ANGLE_090
+    };
+
+    for(uint8_t i = 0; i < splitNum; i++) {
+        int16_t x = i16(
+            z_fix_fixtoi(zf(particle->x + z_fix_cos(angle) * particle->ticks))
+                + z_screen_getXShake());
+        int16_t y = i16(
+            z_fix_fixtoi(zf(particle->y - z_fix_sin(angle) * particle->ticks))
+                + z_screen_getYShake());
+
+        z_draw_pixel(x, y, Z_COLOR_YELLOW);
+
+        angle = Z_ANGLE_WRAP(angle + incs[i]);
+    }
 }

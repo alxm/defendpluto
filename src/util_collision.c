@@ -62,7 +62,7 @@ static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
                  z_enemy_data[enemy->typeId].h)) {
 
         context->hit = true;
-        z_effect_particles(enemy->x, enemy->y, 4);
+        z_effect_particles(enemy->x, enemy->y, 2);
         z_enemy_takeDamage(enemy, context->damage);
 
         if(enemy->health > 0) {
@@ -108,7 +108,7 @@ bool z_collision_checkPlayer(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
     if(hit) {
         z_player_takeDamage(Damage);
         z_screen_shake(1);
-        z_effect_particles(X, Y, 4);
+        z_effect_particles(X, Y, 1);
     }
 
     return hit;

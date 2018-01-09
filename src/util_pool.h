@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ typedef enum {
 #define Z_POOL_NUM_BULLETP 3
 #define Z_POOL_NUM_CIRCLE 2
 #define Z_POOL_NUM_ENEMY 16
-#define Z_POOL_NUM_PARTICLE 8
+#define Z_POOL_NUM_PARTICLE 4
 #define Z_POOL_NUM_STAR 16
 
 typedef struct ZPool ZPool;
