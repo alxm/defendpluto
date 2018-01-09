@@ -234,6 +234,14 @@ static bool op_endi(uint8_t Flags)
     return true;
 }
 
+static bool nothingHappening(void)
+{
+    return z_pool_noActive(Z_POOL_BULLETE)
+        && z_pool_noActive(Z_POOL_CIRCLE)
+        && z_pool_noActive(Z_POOL_ENEMY)
+        && z_pool_noActive(Z_POOL_PARTICLE);
+}
+
 static bool op_wait(uint8_t Flags)
 {
     /*
@@ -241,7 +249,7 @@ static bool op_wait(uint8_t Flags)
      * wait flags ds
      * wait       25
      */
-    if(z_pool_noActive(Z_POOL_ENEMY)) {
+    if(nothingHappening()) {
         g_vm.waitCounter = 0;
         return true;
     }
@@ -267,7 +275,7 @@ static bool op_clear(uint8_t Flags)
      * clear
      * clear
      */
-    return z_pool_noActive(Z_POOL_ENEMY);
+    return nothingHappening();
 }
 
 static bool op_spawn(uint8_t Flags)
