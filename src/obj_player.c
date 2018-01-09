@@ -109,8 +109,6 @@ static void boostShield(uint8_t Boost)
 
 void z_player_init(void)
 {
-    z_player.dx = 0;
-    z_player.dy = 0;
     z_player.frame = 0;
     z_player.energy = Z_ENERGY_MAX;
     z_player.shield = Z_SHIELD_MAX;
@@ -254,6 +252,8 @@ void z_player_draw(void)
 
 void z_player_resetPosition(void)
 {
+    z_player.dx = 0;
+    z_player.dy = 0;
     z_player.x = z_fix_itofix(Z_WIDTH / 2);
     z_player.y = z_fix_itofix(Z_HEIGHT / 2);
 }
