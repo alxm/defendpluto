@@ -43,14 +43,12 @@ void z_loop_next_tick(void)
 
     if(z_button_pressed(Z_BUTTON_A)) {
         z_button_release(Z_BUTTON_A);
-        z_loop_setState(Z_STATE_PLAY);
+        z_loop_setState(Z_STATE_DOORS_OPEN);
     }
 }
 
 void z_loop_next_draw(void)
 {
-    z_screen_draw();
-
     z_font_text(Z_STR_LEVEL_CLEARED_1,
                 Z_WIDTH / 2,
                 6,

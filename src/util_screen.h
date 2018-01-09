@@ -32,12 +32,8 @@ extern ZScreen z_screen;
 
 extern void z_screen_reset(void);
 extern void z_screen_tick(void);
-extern void z_screen_draw(void);
 
 extern void z_screen_shake(uint8_t Ds);
-
-extern bool z_screen_areDoorsMoving(void);
-extern void z_screen_setDoors(bool Close);
 
 static inline int8_t z_screen_getXShake(void)
 {

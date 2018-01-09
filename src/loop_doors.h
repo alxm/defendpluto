@@ -1,5 +1,5 @@
 /*
-    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,35 +15,8 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
-#include "util_fps.h"
-#include "util_random.h"
-#include "util_screen.h"
-
-ZScreen z_screen;
-static uint8_t g_shakeFrames;
-
-void z_screen_reset(void)
-{
-    z_screen.xShake = 1;
-    z_screen.yShake = 1;
-
-    g_shakeFrames = 0;
-}
-
-void z_screen_tick(void)
-{
-    if(g_shakeFrames) {
-        g_shakeFrames--;
-        z_screen.xShake = u4(z_random_uint8(3));
-        z_screen.yShake = u4(z_random_uint8(3));
-    } else {
-        z_screen.xShake = 1;
-        z_screen.yShake = 1;
-    }
-}
-
-void z_screen_shake(uint8_t Ds)
-{
-    g_shakeFrames = Z_DS_TO_FRAMES(Ds);
-}
+extern ZStateCallback z_loop_doors_close_init;
+extern ZStateCallback z_loop_doors_open_init;
+extern ZStateCallback z_loop_doors_close_tick;
+extern ZStateCallback z_loop_doors_open_tick;
+extern ZStateCallback z_loop_doors_draw;

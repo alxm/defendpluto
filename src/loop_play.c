@@ -18,12 +18,9 @@
 #include "platform.h"
 #include "loop.h"
 #include "util_fix.h"
-#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_hud.h"
-#include "util_input.h"
 #include "util_pool.h"
-#include "util_random.h"
 #include "util_screen.h"
 #include "util_vm.h"
 #include "obj_bullete.h"
@@ -63,5 +60,4 @@ void z_loop_play_draw(void)
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
     z_player_draw();
     z_hud_draw();
-    z_screen_draw();
 }

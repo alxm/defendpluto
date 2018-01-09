@@ -77,5 +77,4 @@ void z_loop_died_draw(void)
     z_pool_draw(Z_POOL_CIRCLE, z_circle_draw);
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
     z_hud_draw();
-    z_screen_draw();
 }

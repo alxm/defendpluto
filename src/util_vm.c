@@ -332,29 +332,11 @@ static bool op_done(uint8_t Flags)
      * done
      * done
      */
-    switch(g_vm.waitCounter) {
-        case 0: {
-            z_screen_setDoors(true);
-            g_vm.waitCounter = 1;
-        } break;
-
-        case 1: {
-            if(!z_screen_areDoorsMoving()) {
-                z_loop_setState(Z_STATE_NEXT);
-                g_vm.waitCounter = 2;
-            }
-        } break;
-
-        case 2: {
-            z_screen_setDoors(false);
-            g_vm.waitCounter = 3;
-        } break;
-
-        case 3: {
-            if(!z_screen_areDoorsMoving()) {
-                g_vm.waitCounter = 0;
-            }
-        } break;
+    if(g_vm.waitCounter == 0) {
+        z_loop_setState(Z_STATE_DOORS_CLOSE);
+        g_vm.waitCounter = 1;
+    } else {
+        g_vm.waitCounter = 0;
     }
 
     return g_vm.waitCounter == 0;

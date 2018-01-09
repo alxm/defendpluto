@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "loop.h"
 #include "loop_died.h"
+#include "loop_doors.h"
 #include "loop_new.h"
 #include "loop_next.h"
 #include "loop_over.h"
@@ -43,6 +44,16 @@ static ZState g_states[Z_STATE_NUM] = {
         NULL,
         z_loop_died_tick,
         z_loop_died_draw
+    },
+    {
+        z_loop_doors_close_init,
+        z_loop_doors_close_tick,
+        z_loop_doors_draw
+    },
+    {
+        z_loop_doors_open_init,
+        z_loop_doors_open_tick,
+        z_loop_doors_draw
     },
     {
         z_loop_new_init,
