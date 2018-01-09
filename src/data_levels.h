@@ -2,8 +2,9 @@
 
 #define Z_LEVELS_VARS_NUM 6
 #define Z_LEVELS_NESTED_LOOPS_MAX 1
+#define Z_LEVELS_BYTES_SIZE 412
 
-PROGMEM static const uint8_t z_data_levels[] = {
+PROGMEM static const uint8_t z_data_levels[Z_LEVELS_BYTES_SIZE] = {
     0x0a,0x00,0x32,0xff,0x01,0x00,
     0x08,0x00,0x1e,
     0x0a,0x00,0x3c,0xff,0x01,0x00,
