@@ -36,7 +36,7 @@ void z_loop_play_tick(void)
     z_screen_tick();
     z_vm_tick();
     z_hud_tick();
-    z_player_tick();
+    z_player_tick(true);
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
     z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL);
     z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);

@@ -44,6 +44,7 @@ static void sharedTick(void)
 {
     z_screen_tick();
     z_hud_tick();
+    z_player_tick(false);
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 }
 

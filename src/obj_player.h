@@ -52,7 +52,7 @@ typedef struct {
 extern ZPlayer z_player;
 
 extern void z_player_init(void);
-extern void z_player_tick(void);
+extern void z_player_tick(bool CheckInput);
 extern void z_player_draw(void);
 
 extern void z_player_resetPosition(void);

@@ -124,11 +124,13 @@ void z_player_init(void)
     z_player_resetPosition();
 }
 
-void z_player_tick(void)
+void z_player_tick(bool CheckInput)
 {
     int8_t maxSpeed = Z_SPEED_MAX;
 
-    if(z_button_pressed(Z_BUTTON_A) && hasEnergy(Z_ENERGY_USE_SHOOTING)) {
+    if(CheckInput && z_button_pressed(Z_BUTTON_A)
+        && hasEnergy(Z_ENERGY_USE_SHOOTING)) {
+
         maxSpeed = Z_SPEED_MAX / 2;
 
         Z_EVERY_DS(1) {
@@ -161,10 +163,10 @@ void z_player_tick(void)
 
     z_player.frame = Z_BIT_RESTING;
 
-    if(z_button_pressed(Z_BUTTON_UP)) {
+    if(CheckInput && z_button_pressed(Z_BUTTON_UP)) {
         z_player.frame |= Z_BIT_FORWARD;
         z_player.dy = i8(z_player.dy - Z_SPEED_ACCEL);
-    } else if(z_button_pressed(Z_BUTTON_DOWN)) {
+    } else if(CheckInput && z_button_pressed(Z_BUTTON_DOWN)) {
         z_player.frame |= Z_BIT_BACK;
         z_player.dy = i8(z_player.dy + Z_SPEED_ACCEL);
     } else {
@@ -175,10 +177,10 @@ void z_player_tick(void)
         }
     }
 
-    if(z_button_pressed(Z_BUTTON_LEFT)) {
+    if(CheckInput && z_button_pressed(Z_BUTTON_LEFT)) {
         z_player.frame |= Z_BIT_LEFT;
         z_player.dx = i8(z_player.dx - Z_SPEED_ACCEL);
-    } else if(z_button_pressed(Z_BUTTON_RIGHT)) {
+    } else if(CheckInput && z_button_pressed(Z_BUTTON_RIGHT)) {
         z_player.frame |= Z_BIT_RIGHT;
         z_player.dx = i8(z_player.dx + Z_SPEED_ACCEL);
     } else {
