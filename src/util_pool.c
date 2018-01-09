@@ -150,6 +150,16 @@ static ZPoolOffset z_pool_release(ZPool* Pool, void* Object, ZPoolOffset ObjectO
     return nextObjectOffset;
 }
 
+void z_pool_clear(uint8_t Pool)
+{
+    ZPool* pool = g_pools[Pool];
+
+    for(ZPoolOffset offset = pool->activeList; offset != Z_OFFSET_NULL; ) {
+        ZPoolObject* obj = objectFromOffset(pool, offset);
+        offset = z_pool_release(pool, obj, offset, NULL);
+    }
+}
+
 bool z_pool_noActive(uint8_t Pool)
 {
     return g_pools[Pool]->activeList == Z_OFFSET_NULL;
