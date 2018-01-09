@@ -22,6 +22,7 @@
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
+#include "util_pool.h"
 #include "util_screen.h"
 #include "util_str.h"
 #include "obj_player.h"
@@ -32,6 +33,7 @@ void z_loop_next_init(void)
 {
     g_blink = true;
     z_player_resetPosition();
+    z_pool_clear(Z_POOL_BULLETP);
     z_button_release(Z_BUTTON_A);
 }
 

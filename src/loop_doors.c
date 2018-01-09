@@ -22,6 +22,7 @@
 #include "util_hud.h"
 #include "util_pool.h"
 #include "util_screen.h"
+#include "obj_bulletp.h"
 #include "obj_player.h"
 #include "obj_star.h"
 
@@ -46,6 +47,7 @@ static void sharedTick(void)
     z_hud_tick();
     z_player_tick(false);
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
+    z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);
 }
 
 void z_loop_doors_close_tick(void)
@@ -74,6 +76,7 @@ void z_loop_doors_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
+    z_pool_draw(Z_POOL_BULLETP, z_bulletp_draw);
     z_player_draw();
     z_hud_draw();
 
