@@ -50,7 +50,7 @@ void z_loop_died_tick(void)
     Z_EVERY_DS(10) {
         if(z_player.health-- < -2) {
             z_button_release(Z_BUTTON_A);
-            z_loop_setState(Z_STATE_OVER);
+            z_loop_setState(Z_STATE_DOORS_CLOSE);
         }
     }
 

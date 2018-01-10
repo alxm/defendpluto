@@ -57,9 +57,19 @@ void z_loop_doors_close_tick(void)
     g_height = u8(g_height + Z_SLIDE_CLOSE_INC);
 
     if(g_height > Z_HEIGHT / 2) {
-        z_loop_setState(z_loop_getLastState() == Z_STATE_TITLE
-                            ? Z_STATE_NEW
-                            : Z_STATE_NEXT);
+        switch(z_loop_getLastState()) {
+            case Z_STATE_TITLE: {
+                z_loop_setState(Z_STATE_NEW);
+            } break;
+
+            case Z_STATE_PLAY: {
+                z_loop_setState(Z_STATE_NEXT);
+            } break;
+
+            case Z_STATE_DIED: {
+                z_loop_setState(Z_STATE_OVER);
+            } break;
+        }
     }
 }
 

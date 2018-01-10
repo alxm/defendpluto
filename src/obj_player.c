@@ -126,6 +126,10 @@ void z_player_init(void)
 
 void z_player_tick(bool CheckInput)
 {
+    if(z_player.health < 0) {
+        return;
+    }
+
     int8_t maxSpeed = Z_SPEED_MAX;
 
     if(CheckInput && z_button_pressed(Z_BUTTON_A)
@@ -217,6 +221,10 @@ void z_player_tick(bool CheckInput)
 
 void z_player_draw(void)
 {
+    if(z_player.health < 0) {
+        return;
+    }
+
     int16_t x = z_fix_fixtoi(z_player.x);
     int16_t y = i16(z_fix_fixtoi(z_player.y) + z_player.shootShift);
 
