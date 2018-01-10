@@ -16,9 +16,11 @@
 */
 
 #include "platform.h"
+#include "util_font.h"
 #include "util_fps.h"
 #include "util_random.h"
 #include "util_screen.h"
+#include "util_str.h"
 
 ZScreen z_screen;
 static uint8_t g_shakeFrames;
@@ -46,4 +48,11 @@ void z_screen_tick(void)
 void z_screen_shake(uint8_t Ds)
 {
     g_shakeFrames = Z_DS_TO_FRAMES(Ds);
+}
+
+void z_screen_drawPressA(int16_t X, int16_t Y, uint8_t Font, uint8_t Align)
+{
+    if(z_fps_getCounter() & 0x28) {
+        z_font_text(Z_STR_PRESS_A, X, Y, Font, Align);
+    }
 }

@@ -19,7 +19,6 @@
 #include "loop.h"
 #include "util_fix.h"
 #include "util_font.h"
-#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
 #include "util_pool.h"
@@ -28,11 +27,8 @@
 #include "obj_player.h"
 #include "obj_star.h"
 
-static bool g_blink;
-
 void z_loop_title_init(void)
 {
-    g_blink = true;
     z_player_resetPosition();
     z_button_release(Z_BUTTON_A);
 }
@@ -40,10 +36,6 @@ void z_loop_title_init(void)
 void z_loop_title_tick(void)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
-
-    Z_EVERY_DS(10) {
-        g_blink = !g_blink;
-    }
 
     if(z_button_pressedOnce(Z_BUTTON_A)) {
         z_loop_setState(Z_STATE_DOORS_CLOSE);
@@ -55,12 +47,5 @@ void z_loop_title_draw(void)
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
     z_sprite_blit(Z_SPRITE_TITLE, 0, 0, 0);
-
-    if(g_blink) {
-        z_font_text(Z_STR_PRESS_A,
-                    Z_WIDTH / 2,
-                    50,
-                    Z_FONT_FACE_REDO,
-                    Z_FONT_ALIGN_C);
-    }
+    z_screen_drawPressA(Z_WIDTH / 2, 50, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
 }

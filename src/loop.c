@@ -68,7 +68,7 @@ static ZState g_states[Z_STATE_NUM] = {
         z_loop_next_draw
     },
     {
-        z_loop_over_init,
+        NULL,
         z_loop_over_tick,
         z_loop_over_draw
     },

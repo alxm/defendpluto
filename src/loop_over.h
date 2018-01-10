@@ -15,6 +15,5 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern ZStateCallback z_loop_over_init;
 extern ZStateCallback z_loop_over_tick;
 extern ZStateCallback z_loop_over_draw;

@@ -44,3 +44,5 @@ static inline int8_t z_screen_getYShake(void)
 {
     return i8(-1 + z_screen.yShake);
 }
+
+extern void z_screen_drawPressA(int16_t X, int16_t Y, uint8_t Font, uint8_t Align);
