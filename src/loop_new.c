@@ -25,8 +25,8 @@
 
 void z_loop_new_init(void)
 {
-    z_pool_reset();
     z_screen_reset();
+    z_pool_reset();
     z_vm_reset();
     z_player_init();
 

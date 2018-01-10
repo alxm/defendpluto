@@ -28,6 +28,7 @@
 #include "util_font.h"
 #include "util_graphics.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "util_str.h"
 #include "util_vm.h"
 #include "obj_enemy.h"
@@ -87,6 +88,7 @@ static uint8_t g_state;
 void z_loop_setup(void)
 {
     z_platform_setup();
+    z_screen_reset();
     z_font_setup();
     z_graphics_setup();
     z_str_setup();
