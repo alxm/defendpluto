@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_fix.h"
 #include "util_collision.h"
+#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
@@ -62,5 +63,5 @@ void z_bulletp_draw(ZPoolObject* Bullet)
                      i16(y - 2 + z_screen_getYShake()),
                      2,
                      4,
-                     Z_COLOR_RED);
+                     z_fps_getCounter() & 4 ? Z_COLOR_RED : Z_COLOR_YELLOW);
 }
