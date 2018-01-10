@@ -69,6 +69,10 @@ void z_loop_doors_close_tick(void)
             case Z_STATE_DIED: {
                 z_loop_setState(Z_STATE_OVER);
             } break;
+
+            case Z_STATE_OVER: {
+                z_loop_setState(Z_STATE_TITLE);
+            } break;
         }
     }
 }
@@ -89,10 +93,15 @@ void z_loop_doors_draw(void)
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
 
-    if(z_loop_getLastState() != Z_STATE_TITLE) {
-        z_pool_draw(Z_POOL_BULLETP, z_bulletp_draw);
-        z_player_draw();
-        z_hud_draw();
+    switch(z_loop_getLastState()) {
+        case Z_STATE_DIED:
+        case Z_STATE_NEW:
+        case Z_STATE_NEXT:
+        case Z_STATE_PLAY: {
+            z_pool_draw(Z_POOL_BULLETP, z_bulletp_draw);
+            z_player_draw();
+            z_hud_draw();
+        } break;
     }
 
     z_draw_rectangle(0, 0, Z_WIDTH, i16(g_height - 1), Z_COLOR_BLUE);

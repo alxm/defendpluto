@@ -44,7 +44,7 @@ void z_loop_over_tick(void)
 
     if(z_button_pressed(Z_BUTTON_A)) {
         z_button_release(Z_BUTTON_A);
-        z_loop_setState(Z_STATE_TITLE);
+        z_loop_setState(Z_STATE_DOORS_CLOSE);
     }
 }
 
