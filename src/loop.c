@@ -83,10 +83,13 @@ static ZState g_states[Z_STATE_NUM] = {
     },
 };
 
-static uint8_t g_state;
+static int8_t g_state, g_lastState;
 
 void z_loop_setup(void)
 {
+    g_state = Z_STATE_INVALID;
+    g_lastState = Z_STATE_INVALID;
+
     z_platform_setup();
     z_screen_reset();
     z_font_setup();
@@ -118,8 +121,14 @@ void z_loop_draw(void)
     z_platform_draw();
 }
 
-void z_loop_setState(uint8_t State)
+int8_t z_loop_getLastState(void)
 {
+    return g_lastState;
+}
+
+void z_loop_setState(int8_t State)
+{
+    g_lastState = g_state;
     g_state = State;
 
     if(g_states[g_state].init) {

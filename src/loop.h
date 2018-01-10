@@ -36,6 +36,7 @@ extern void z_loop_setup(void);
 extern void z_loop_tick(void);
 extern void z_loop_draw(void);
 
-extern void z_loop_setState(uint8_t State);
+extern int8_t z_loop_getLastState(void);
+extern void z_loop_setState(int8_t State);
 
 Z_EXTERN_C_END

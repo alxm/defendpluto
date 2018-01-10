@@ -30,5 +30,5 @@ void z_loop_new_init(void)
     z_vm_reset();
     z_player_init();
 
-    z_loop_setState(Z_STATE_PLAY);
+    z_loop_setState(Z_STATE_DOORS_OPEN);
 }

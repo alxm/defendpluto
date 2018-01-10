@@ -57,7 +57,9 @@ void z_loop_doors_close_tick(void)
     g_height = u8(g_height + Z_SLIDE_CLOSE_INC);
 
     if(g_height > Z_HEIGHT / 2) {
-        z_loop_setState(Z_STATE_NEXT);
+        z_loop_setState(z_loop_getLastState() == Z_STATE_TITLE
+                            ? Z_STATE_NEW
+                            : Z_STATE_NEXT);
     }
 }
 
@@ -76,9 +78,12 @@ void z_loop_doors_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
-    z_pool_draw(Z_POOL_BULLETP, z_bulletp_draw);
-    z_player_draw();
-    z_hud_draw();
+
+    if(z_loop_getLastState() != Z_STATE_TITLE) {
+        z_pool_draw(Z_POOL_BULLETP, z_bulletp_draw);
+        z_player_draw();
+        z_hud_draw();
+    }
 
     z_draw_rectangle(0, 0, Z_WIDTH, i16(g_height - 1), Z_COLOR_BLUE);
     z_draw_hline(0, Z_WIDTH - 1, i16(g_height - 1), Z_COLOR_YELLOW);
