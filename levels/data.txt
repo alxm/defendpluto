@@ -20,7 +20,7 @@ var t
 ;
 
 spawn 50 -1 asteroid down
-wait 30
+wait 10
 spawn 60 -1 asteroid down
 spawn 55 -2 asteroid down
 wait 20
@@ -60,7 +60,6 @@ spawn 40 -8 asteroid down
 spawn 70 -3 asteroid down
 spawn 75 -4 asteroid down
 spawn 80 -7 asteroid down
-clear
 
 done
 
@@ -115,7 +114,6 @@ spawn 70 -5 asteroid down
 wait 30
 
 spawn 45 -1 enemy0 follow front
-clear
 
 done
 
@@ -146,7 +144,6 @@ clear
 
 spawn 48 -1 asteroid down
 spawn 55 -3 asteroid down
-clear
 
 ;
 ; La Fin

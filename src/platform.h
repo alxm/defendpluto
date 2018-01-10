@@ -45,6 +45,8 @@
     #include <Arduino.h>
 #endif
 
+Z_EXTERN_C_START
+
 #if Z_PLATFORM_ARDUBOY
     #define Z_PGM_READ_UINT8(Value) pgm_read_byte(Value)
     #define Z_PGM_READ_UINT16(Value) pgm_read_word(Value)
@@ -70,8 +72,6 @@
 #define uN(X, Bits) (uint8_t)((X) & ((1 << (Bits)) - 1))
 #define zf(X) (ZFix)(X)
 #define zpo(X) (ZPoolOffset)(X)
-
-Z_EXTERN_C_START
 
 typedef enum {
     Z_PALETTE_INVALID = -1,

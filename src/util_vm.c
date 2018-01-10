@@ -332,11 +332,12 @@ static bool op_done(uint8_t Flags)
      * done
      * done
      */
-    if(g_vm.waitCounter == 0) {
+    if(!nothingHappening()) {
+        return false;
+    } else if(g_vm.waitCounter == 0) {
+        g_vm.waitCounter = Z_DS_TO_FRAMES(12);
+    } else if(--g_vm.waitCounter == 1) {
         z_loop_setState(Z_STATE_DOORS_CLOSE);
-        g_vm.waitCounter = 1;
-    } else {
-        g_vm.waitCounter = 0;
     }
 
     return g_vm.waitCounter == 0;
