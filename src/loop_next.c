@@ -26,6 +26,7 @@
 #include "util_screen.h"
 #include "util_str.h"
 #include "obj_player.h"
+#include "obj_star.h"
 
 static bool g_blink;
 
@@ -39,6 +40,8 @@ void z_loop_next_init(void)
 
 void z_loop_next_tick(void)
 {
+    z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
+
     Z_EVERY_DS(10) {
         g_blink = !g_blink;
     }
@@ -51,22 +54,27 @@ void z_loop_next_tick(void)
 
 void z_loop_next_draw(void)
 {
+    z_draw_fill(Z_COLOR_BLUE);
+    z_pool_draw(Z_POOL_STAR, z_star_draw);
+
+    z_sprite_blitCentered(Z_SPRITE_DEFENDPLUTO, Z_WIDTH / 2, 12, 0);
+
     z_font_text(Z_STR_LEVEL_CLEARED_1,
                 Z_WIDTH / 2,
-                6,
+                23,
                 Z_FONT_FACE_YELLOWO,
                 Z_FONT_ALIGN_C);
 
     z_font_text(Z_STR_LEVEL_CLEARED_2,
                 Z_WIDTH / 2,
-                16,
+                32,
                 Z_FONT_FACE_YELLOWO,
                 Z_FONT_ALIGN_C);
 
     if(g_blink) {
         z_font_text(Z_STR_PRESS_A,
                     Z_WIDTH / 2,
-                    45,
+                    50,
                     Z_FONT_FACE_REDO,
                     Z_FONT_ALIGN_C);
     }

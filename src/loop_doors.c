@@ -33,12 +33,12 @@ uint8_t g_height;
 
 void z_loop_doors_close_init(void)
 {
-    g_height = Z_SLIDE_CLOSE_INC;
+    g_height = 0;
 }
 
 void z_loop_doors_open_init(void)
 {
-    g_height = Z_HEIGHT / 2 - Z_SLIDE_OPEN_INC;
+    g_height = Z_HEIGHT / 2;
 }
 
 static void sharedTick(void)
@@ -80,35 +80,13 @@ void z_loop_doors_draw(void)
     z_player_draw();
     z_hud_draw();
 
-    #define Z_OVERLAP 3
+    z_draw_rectangle(0, 0, Z_WIDTH, i16(g_height - 1), Z_COLOR_BLUE);
+    z_draw_hline(0, Z_WIDTH - 1, i16(g_height - 1), Z_COLOR_YELLOW);
 
-    #define Z_SOLID Z_COLOR_LIGHTBLUE2
-    #define Z_TRIM_1 Z_COLOR_LIGHTBLUE
-    #define Z_TRIM_2 Z_COLOR_BLUE
-
-    // Bottom
-    z_draw_vline(0, i16(Z_HEIGHT - g_height), Z_HEIGHT - 1, Z_TRIM_1);
-    z_draw_vline(1, i16(Z_HEIGHT - g_height + 3), Z_HEIGHT - 1, Z_TRIM_2);
-    z_draw_vline(Z_WIDTH - 2, i16(Z_HEIGHT - g_height + 3), Z_HEIGHT - 1, Z_TRIM_2);
-    z_draw_vline(Z_WIDTH - 1, i16(Z_HEIGHT - g_height), Z_HEIGHT - 1, Z_TRIM_1);
-
-    z_draw_hline(1, Z_WIDTH - 2, i16(Z_HEIGHT - g_height), Z_TRIM_1);
-    z_draw_hline(1, Z_WIDTH - 2, i16(Z_HEIGHT - g_height + 1), Z_TRIM_2);
-    z_draw_hline(1, Z_WIDTH - 2, i16(Z_HEIGHT - g_height + 2), Z_TRIM_1);
-    z_draw_hline(1, Z_WIDTH - 2, i16(Z_HEIGHT - g_height + 3), Z_TRIM_2);
-
-    z_draw_rectangle(2, i16(Z_HEIGHT - g_height + 4), Z_WIDTH - 4, i8(g_height - 4), Z_SOLID);
-
-    // Top
-    z_draw_vline(0, 0, i16(g_height - 1 + Z_OVERLAP), Z_TRIM_1);
-    z_draw_vline(1, 0, i16(g_height - 4 + Z_OVERLAP), Z_TRIM_2);
-    z_draw_vline(Z_WIDTH - 2, 0, i16(g_height - 4 + Z_OVERLAP), Z_TRIM_2);
-    z_draw_vline(Z_WIDTH - 1, 0, i16(g_height - 1 + Z_OVERLAP), Z_TRIM_1);
-
-    z_draw_hline(1, Z_WIDTH - 2, i16(g_height - 4 + Z_OVERLAP), Z_TRIM_2);
-    z_draw_hline(1, Z_WIDTH - 2, i16(g_height - 3 + Z_OVERLAP), Z_TRIM_1);
-    z_draw_hline(1, Z_WIDTH - 2, i16(g_height - 2 + Z_OVERLAP), Z_TRIM_2);
-    z_draw_hline(1, Z_WIDTH - 2, i16(g_height - 1 + Z_OVERLAP), Z_TRIM_1);
-
-    z_draw_rectangle(2, 0, Z_WIDTH - 4, i8(g_height - 4 + Z_OVERLAP), Z_SOLID);
+    z_draw_hline(0, Z_WIDTH - 1, i16(Z_HEIGHT - g_height), Z_COLOR_YELLOW);
+    z_draw_rectangle(0,
+                     i16(Z_HEIGHT - g_height + 1),
+                     Z_WIDTH,
+                     i16(g_height - 1),
+                     Z_COLOR_BLUE);
 }

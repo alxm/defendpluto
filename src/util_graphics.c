@@ -22,6 +22,7 @@
 #include "data_gfx_asteroid.h"
 #include "data_gfx_bullets.h"
 #include "data_gfx_creds.h"
+#include "data_gfx_defendpluto.h"
 #include "data_gfx_enemy00.h"
 #include "data_gfx_enemy01.h"
 #include "data_gfx_enemy02.h"
@@ -56,6 +57,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_PLAYER, player);
 
     z_sprite_load(Z_SPRITE_BULLETS, bullets);
+    z_sprite_load(Z_SPRITE_DEFENDPLUTO, defendpluto);
     #if Z_PLATFORM_ARDUBOY
         z_sprite_load(Z_SPRITE_TITLE, title128);
     #else
