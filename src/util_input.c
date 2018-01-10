@@ -1,5 +1,5 @@
 /*
-    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,23 +15,23 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-Z_EXTERN_C_START
+#include "platform.h"
+#include "util_input.h"
 
-typedef enum {
-    Z_BUTTON_INVALID = -1,
-    Z_BUTTON_UP,
-    Z_BUTTON_DOWN,
-    Z_BUTTON_LEFT,
-    Z_BUTTON_RIGHT,
-    Z_BUTTON_A,
-    Z_BUTTON_B,
-    Z_BUTTON_NUM
-} ZButtonId;
+void z_input_reset(void)
+{
+    for(uint8_t b = 0; b < Z_BUTTON_NUM; b++) {
+        z_button_release(b);
+    }
+}
 
-extern void z_input_reset(void);
+bool z_button_pressedOnce(uint8_t Button)
+{
+    bool pressed = z_button_pressed(Button);
 
-extern bool z_button_pressed(uint8_t Button);
-extern void z_button_release(uint8_t Button);
-extern bool z_button_pressedOnce(uint8_t Button);
+    if(pressed) {
+        z_button_release(Button);
+    }
 
-Z_EXTERN_C_END
+    return pressed;
+}

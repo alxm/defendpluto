@@ -27,6 +27,7 @@
 #include "util_fix.h"
 #include "util_font.h"
 #include "util_graphics.h"
+#include "util_input.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_str.h"
@@ -91,6 +92,7 @@ void z_loop_setup(void)
     g_lastState = Z_STATE_INVALID;
 
     z_platform_setup();
+    z_input_reset();
     z_screen_reset();
     z_font_setup();
     z_graphics_setup();

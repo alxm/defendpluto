@@ -46,8 +46,7 @@ void z_loop_next_tick(void)
         g_blink = !g_blink;
     }
 
-    if(z_button_pressed(Z_BUTTON_A)) {
-        z_button_release(Z_BUTTON_A);
+    if(z_button_pressedOnce(Z_BUTTON_A)) {
         z_loop_setState(Z_STATE_DOORS_OPEN);
     }
 }
