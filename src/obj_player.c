@@ -247,7 +247,7 @@ void z_player_draw(void)
         if(z_player.jetFlicker) {
             z_draw_circle(x, z_fix_fixtoi(z_player.y), 9, Z_COLOR_RED);
         } else {
-            z_draw_circle(x, z_fix_fixtoi(z_player.y), 9, Z_COLOR_LIGHTBLUE2);
+            z_draw_circle(x, z_fix_fixtoi(z_player.y), 9, Z_COLOR_GRAY);
         }
     }
 }

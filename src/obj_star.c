@@ -72,5 +72,5 @@ void z_star_draw(ZPoolObject* Star)
     x = i16(x - (Z_STARS_BORDER * star->speed / Z_STAR_MAX_SPEED)
                     * centerOffset / (Z_WIDTH / 2));
 
-    z_draw_pixel(x, y, Z_COLOR_LIGHTBLUE + (star->speed >= Z_STAR_AVG_SPEED));
+    z_draw_pixel(x, y, Z_COLOR_PURPLE + (star->speed >= Z_STAR_AVG_SPEED));
 }
