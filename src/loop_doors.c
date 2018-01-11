@@ -29,7 +29,7 @@
 #define Z_SLIDE_CLOSE_INC 2
 #define Z_SLIDE_OPEN_INC  1
 
-uint8_t g_height;
+static uint8_t g_height;
 
 void z_loop_doors_close_init(void)
 {
@@ -77,6 +77,17 @@ void z_loop_doors_close_tick(void)
     }
 }
 
+void z_loop_doors_intro_tick(void)
+{
+    z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
+
+    if(g_height < Z_SLIDE_OPEN_INC) {
+        z_loop_setState(Z_STATE_TITLE);
+    } else {
+        g_height = u8(g_height - Z_SLIDE_OPEN_INC);
+    }
+}
+
 void z_loop_doors_open_tick(void)
 {
     sharedTick();
@@ -113,4 +124,21 @@ void z_loop_doors_draw(void)
                      Z_WIDTH,
                      i16(g_height - 1),
                      Z_COLOR_BLUE);
+}
+
+void z_loop_doors_intro_draw(void)
+{
+    z_draw_fill(Z_COLOR_BLUE);
+    z_pool_draw(Z_POOL_STAR, z_star_draw);
+    z_sprite_blit(Z_SPRITE_TITLE, 0, 0, 0);
+
+    z_draw_rectangle(0, 0, Z_WIDTH, i16(g_height - 1), Z_COLOR_ALXM_BG);
+    z_draw_hline(0, Z_WIDTH - 1, i16(g_height - 1), Z_COLOR_YELLOW);
+
+    z_draw_hline(0, Z_WIDTH - 1, i16(Z_HEIGHT - g_height), Z_COLOR_YELLOW);
+    z_draw_rectangle(0,
+                     i16(Z_HEIGHT - g_height + 1),
+                     Z_WIDTH,
+                     i16(g_height - 1),
+                     Z_COLOR_ALXM_BG);
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -154,24 +154,29 @@ void z_button_release(uint8_t Button)
     #undef buttonCase
 }
 
+static inline uint8_t getColor(uint8_t Color)
+{
+    return Color < Z_COLOR_PURPLE ? BLACK : WHITE;
+}
+
 void z_draw_fill(uint8_t Color)
 {
-    g_arduboy.fillScreen(Color ? WHITE : BLACK);
+    g_arduboy.fillScreen(getColor(Color));
 }
 
 void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
 {
-    g_arduboy.fillRect(X, Y, (uint8_t)W, (uint8_t)H, Color ? WHITE : BLACK);
+    g_arduboy.fillRect(X, Y, (uint8_t)W, (uint8_t)H, getColor(Color));
 }
 
 void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
 {
-    g_arduboy.drawPixel(X, Y, Color ? WHITE : BLACK);
+    g_arduboy.drawPixel(X, Y, getColor(Color));
 }
 
 void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
 {
-    g_arduboy.drawCircle(X, Y, (uint8_t)Radius, Color ? WHITE : BLACK);
+    g_arduboy.drawCircle(X, Y, (uint8_t)Radius, getColor(Color));
 }
 
 void z_platform__loadSprite(uint8_t Sprite, const uint8_t* Buffer, uint8_t NumFrames)

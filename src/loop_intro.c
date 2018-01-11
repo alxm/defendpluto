@@ -1,0 +1,87 @@
+/*
+    Copyright 2018 Alex Margarit <alex@alxm.org>
+
+    Defend Pluto is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Defend Pluto is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "platform.h"
+#include "loop.h"
+#include "util_fps.h"
+#include "util_graphics.h"
+#include "util_screen.h"
+
+static uint8_t g_stage;
+static int16_t g_height;
+
+#define Z_LOGO_WAIT_DS 12
+
+void z_loop_intro_init(void)
+{
+    g_stage = 0;
+    g_height = z_sprite_getHeight(Z_SPRITE_ALXM);
+
+    z_draw_fill(Z_COLOR_ALXM_BG);
+}
+
+void z_loop_intro_tick(void)
+{
+    Z_EVERY_DS(1) {
+        switch(g_stage) {
+            case 0: {
+                if(--g_height == 0) {
+                    g_stage = 1;
+                }
+            } break;
+
+            case 1: {
+                if(++g_height == Z_LOGO_WAIT_DS) {
+                    g_stage = 2;
+                    g_height = 0;
+                }
+            } break;
+
+            case 2: {
+                if(++g_height > z_sprite_getHeight(Z_SPRITE_ALXM)) {
+                    z_loop_setState(Z_STATE_DOORS_INTRO);
+                }
+            } break;
+        }
+    }
+}
+
+void z_loop_intro_draw(void)
+{
+    int16_t spriteW = z_sprite_getWidth(Z_SPRITE_ALXM);
+    int16_t spriteH = z_sprite_getHeight(Z_SPRITE_ALXM);
+
+    z_sprite_blitCentered(Z_SPRITE_ALXM, Z_WIDTH / 2, Z_HEIGHT / 2, 0);
+
+    switch(g_stage) {
+        case 0: {
+            z_draw_rectangle(i16(Z_WIDTH / 2 - spriteW / 2),
+                             i16(Z_HEIGHT / 2 - spriteH / 2),
+                             spriteW,
+                             g_height,
+                             Z_COLOR_ALXM_BG);
+        } break;
+
+        case 2: {
+            z_draw_rectangle(i16(Z_WIDTH / 2 - spriteW / 2),
+                             i16(Z_HEIGHT / 2 + (spriteH + 1) / 2 - g_height),
+                             spriteW,
+                             g_height,
+                             Z_COLOR_ALXM_BG);
+        } break;
+    }
+}

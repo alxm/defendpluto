@@ -19,11 +19,20 @@ Z_EXTERN_C_START
 
 typedef enum {
     Z_COLOR_INVALID = -1,
+    Z_COLOR_ALXM_BG,
     Z_COLOR_BLUE,
     Z_COLOR_PURPLE,
     Z_COLOR_GRAY,
     Z_COLOR_RED,
     Z_COLOR_YELLOW,
+    Z_COLOR_ALXM_Y1,
+    Z_COLOR_ALXM_Y2,
+    Z_COLOR_ALXM_G1,
+    Z_COLOR_ALXM_G2,
+    Z_COLOR_ALXM_B1,
+    Z_COLOR_ALXM_B2,
+    Z_COLOR_ALXM_R1,
+    Z_COLOR_ALXM_R2,
     Z_COLOR_NUM
 } ZColor;
 
@@ -58,6 +67,7 @@ typedef enum {
     Z_SPRITE_PLAYER,
 
     // Misc
+    Z_SPRITE_ALXM,
     Z_SPRITE_BULLETS,
     Z_SPRITE_DEFENDPLUTO,
     Z_SPRITE_TITLE,
