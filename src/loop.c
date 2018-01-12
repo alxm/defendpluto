@@ -34,6 +34,7 @@
 #include "util_str.h"
 #include "util_vm.h"
 #include "obj_enemy.h"
+#include "obj_player.h"
 #include "obj_star.h"
 
 typedef struct {
@@ -112,6 +113,7 @@ void z_loop_setup(void)
     z_vm_setup();
     z_enemy_setup();
     z_star_setup();
+    z_player_resetPosition();
 
     z_loop_setState(Z_STATE_INTRO);
 }
