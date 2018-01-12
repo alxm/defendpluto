@@ -47,7 +47,7 @@ void z_loop_next_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
-    z_sprite_blitCentered(Z_SPRITE_DEFENDPLUTO, Z_WIDTH / 2, 12, 0);
+    z_sprite_blit(Z_SPRITE_DEFENDPLUTO, 9, 8, 0);
 
     z_font_text(Z_STR_LEVEL_CLEARED_1,
                 Z_WIDTH / 2,
@@ -61,5 +61,5 @@ void z_loop_next_draw(void)
                 Z_FONT_FACE_YELLOWO,
                 Z_FONT_ALIGN_C);
 
-    z_screen_drawPressA(Z_WIDTH / 2, 50, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
+    z_screen_drawPressA(Z_WIDTH / 2, 48, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
 }
