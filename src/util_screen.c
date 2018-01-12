@@ -52,7 +52,7 @@ void z_screen_shake(uint8_t Ds)
 
 void z_screen_drawPressA(int16_t X, int16_t Y, uint8_t Font, uint8_t Align)
 {
-    if(z_fps_getCounter() & 0x28) {
+    if(z_fps_getCounter() & 0x30) {
         z_font_text(Z_STR_PRESS_A, X, Y, Font, Align);
     }
 }
