@@ -34,12 +34,14 @@ typedef struct {
 
 ZFont g_fonts[Z_FONT_FACE_NUM];
 
+static void loadFont(uint8_t Index, uint8_t Sprite, uint8_t Flags)
+{
+    g_fonts[Index].sprites = Sprite;
+    g_fonts[Index].flags = Flags;
+}
+
 void z_font_setup(void)
 {
-    #define loadFont(Index, Sprite, Flags) \
-        g_fonts[Index].sprites = Sprite;   \
-        g_fonts[Index].flags = Flags;
-
     loadFont(Z_FONT_FACE_LCD,
              Z_SPRITE_FONT_NUM,
              Z_FONT_FLAG_NUMERIC);
@@ -162,9 +164,9 @@ void z_font_textWrap(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
 
 void z_font_int(int16_t Number, int16_t X, int16_t Y, uint8_t Font, uint8_t Align)
 {
-    #define Z_BUFFER_SIZE 6
-    char buffer[Z_BUFFER_SIZE];
-    int8_t index = Z_BUFFER_SIZE;
+    const int8_t bufferSize = 6;
+    char buffer[bufferSize];
+    int8_t index = bufferSize;
 
     if(Number < 0) {
         Number = 0;
@@ -184,12 +186,12 @@ void z_font_int(int16_t Number, int16_t X, int16_t Y, uint8_t Font, uint8_t Alig
 
     switch(Align) {
         case Z_FONT_ALIGN_C: {
-            int16_t w = i16((Z_BUFFER_SIZE - 1 - index) * (charWidth + 1) - 1);
+            int16_t w = i16((bufferSize - 1 - index) * (charWidth + 1) - 1);
             X = i16(X - w / 2);
         } break;
 
         case Z_FONT_ALIGN_R: {
-            int16_t w = i16((Z_BUFFER_SIZE - 1 - index) * (charWidth + 1) - 1);
+            int16_t w = i16((bufferSize - 1 - index) * (charWidth + 1) - 1);
             X = i16(X - w);
         } break;
     }
