@@ -48,19 +48,50 @@
 Z_EXTERN_C_START
 
 #if Z_PLATFORM_ARDUBOY
-    #define Z_PGM_READ_UINT8(Value) pgm_read_byte(Value)
-    #define Z_PGM_READ_UINT16(Value) pgm_read_word(Value)
     typedef uint8_t ZPoolOffset;
+
+    static inline char z_pgm_readChar(const char* Address)
+    {
+        return pgm_read_byte(Address);
+    }
+
+    static inline uint8_t z_pgm_readU8(const uint8_t* Address)
+    {
+        return pgm_read_byte(Address);
+    }
+
+    static inline int16_t z_pgm_readI16(const int16_t* Address)
+    {
+        return pgm_read_word(Address);
+    }
+
+    static inline uint16_t z_pgm_readU16(const uint16_t* Address)
+    {
+        return pgm_read_word(Address);
+    }
 #else
     #define PROGMEM
-    #define Z_PGM_READ_UINT8(Value) (*(Value))
-    #define Z_PGM_READ_UINT16(Value) (*(Value))
     typedef size_t ZPoolOffset;
-#endif
 
-#ifndef Z_PGM_READ_UINT8
-    #define Z_PGM_READ_UINT8(Value) (*(Value))
-    #define Z_PGM_READ_UINT16(Value) (*(Value))
+    static inline char z_pgm_readChar(const char* Address)
+    {
+        return *Address;
+    }
+
+    static inline uint8_t z_pgm_readU8(const uint8_t* Address)
+    {
+        return *Address;
+    }
+
+    static inline int16_t z_pgm_readI16(const int16_t* Address)
+    {
+        return *Address;
+    }
+
+    static inline uint16_t z_pgm_readU16(const uint16_t* Address)
+    {
+        return *Address;
+    }
 #endif
 
 #define i8(X) (int8_t)(X)

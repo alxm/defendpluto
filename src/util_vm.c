@@ -66,7 +66,7 @@ static struct {
 
 static inline uint8_t vm_read(uint8_t Offset)
 {
-    return Z_PGM_READ_UINT8(z_data_levels + g_vm.pc + Offset);
+    return z_pgm_readU8(z_data_levels + g_vm.pc + Offset);
 }
 
 static inline uint8_t vm_readOp(void)

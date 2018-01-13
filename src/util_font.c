@@ -113,7 +113,7 @@ void z_font_text(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font, uint8_t A
         } break;
     }
 
-    for(char c = Z_PGM_READ_UINT8(s); c != '\0'; c = Z_PGM_READ_UINT8(++s)) {
+    for(char c = z_pgm_readChar(s); c != '\0'; c = z_pgm_readChar(++s)) {
         X = drawChar(c, X, Y, flags, sprite, charWidth);
     }
 }
@@ -128,7 +128,7 @@ void z_font_textWrap(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
     int16_t lineWidth = 0;
     int16_t x = X;
 
-    for(char c = Z_PGM_READ_UINT8(s); c != '\0'; c = Z_PGM_READ_UINT8(++s)) {
+    for(char c = z_pgm_readChar(s); c != '\0'; c = z_pgm_readChar(++s)) {
         if(c == ' ') {
             x = i16(x + charWidth + 1);
             lineWidth = i16(lineWidth + charWidth + 1);
@@ -139,7 +139,7 @@ void z_font_textWrap(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
         const char* s2 = s;
         int16_t wordWidth = 0;
 
-        for( ; c2 != ' ' && c2 != '\0'; c2 = Z_PGM_READ_UINT8(++s2)) {
+        for( ; c2 != ' ' && c2 != '\0'; c2 = z_pgm_readChar(++s2)) {
             wordWidth = i16(wordWidth + charWidth + 1);
         }
 
@@ -154,7 +154,7 @@ void z_font_textWrap(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
         c2 = c;
         s2 = s;
 
-        for( ; c2 != ' ' && c2 != '\0'; c2 = Z_PGM_READ_UINT8(++s2)) {
+        for( ; c2 != ' ' && c2 != '\0'; c2 = z_pgm_readChar(++s2)) {
             x = drawChar(c2, x, Y, flags, sprite, charWidth);
         }
 

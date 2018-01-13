@@ -72,12 +72,12 @@ static inline ZFix z_fix_div(ZFix X, ZFix Y)
 
 static inline ZFix z_fix_sin(uint8_t Angle)
 {
-    return Z_PGM_READ_UINT16(z_fix__sin + Angle);
+    return z_pgm_readI16(z_fix__sin + Angle);
 }
 
 static inline ZFix z_fix_cos(uint8_t Angle)
 {
-    return Z_PGM_READ_UINT16(
+    return z_pgm_readI16(
         z_fix__sin + Z_ANGLE_WRAP(Angle + Z_ANGLES_NUM / 4));
 }
 
