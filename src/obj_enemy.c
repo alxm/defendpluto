@@ -100,7 +100,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
 
         case Z_FLY_FOLLOW: {
             if(enemy->flyCounter-- == 0) {
-                enemy->flyCounter = Z_DS_TO_FRAMES(5);
+                enemy->flyCounter = z_fps_dsToTicks(5);
 
                 int16_t eX = z_fix_fixtoi(enemy->x);
                 int16_t pX = z_fix_fixtoi(z_player.x);
@@ -127,7 +127,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
 
     if(enemy->y >= 0 && enemy->attackCounter-- == 0) {
         enemy->attackCounter =
-            Z_DS_TO_FRAMES(z_enemy_data[enemy->typeId].attackPeriodDs);
+            z_fps_dsToTicks(z_enemy_data[enemy->typeId].attackPeriodDs);
 
         switch(enemy->attackId) {
             case Z_ATTACK_FRONT: {

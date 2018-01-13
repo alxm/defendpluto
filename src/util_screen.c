@@ -47,7 +47,7 @@ void z_screen_tick(void)
 
 void z_screen_shake(uint8_t Ds)
 {
-    g_shakeFrames = Z_DS_TO_FRAMES(Ds);
+    g_shakeFrames = z_fps_dsToTicks(Ds);
 }
 
 void z_screen_drawPressA(int16_t X, int16_t Y, uint8_t Font, uint8_t Align)

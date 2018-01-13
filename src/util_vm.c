@@ -290,7 +290,7 @@ static bool op_wait(uint8_t Flags)
     }
 
     uint8_t ds = vm_readArgU8(Flags, 0, 0);
-    g_vm.waitCounter = Z_DS_TO_FRAMES(ds);
+    g_vm.waitCounter = z_fps_dsToTicks(ds);
 
     return ds == 0;
 }
@@ -362,7 +362,7 @@ static bool op_done(uint8_t Flags)
     if(!nothingHappening()) {
         return false;
     } else if(g_vm.waitCounter == 0) {
-        g_vm.waitCounter = Z_DS_TO_FRAMES(12);
+        g_vm.waitCounter = z_fps_dsToTicks(12);
     } else if(--g_vm.waitCounter == 1) {
         z_loop_setState(Z_STATE_DOORS_CLOSE);
     }

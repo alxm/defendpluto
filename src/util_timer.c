@@ -48,7 +48,7 @@ void z_timer_start(uint8_t Timer, uint8_t Ds)
     ZTimer* timer = &g_timers[Timer];
 
     timer->base = u8(z_fps_getCounter());
-    timer->period = uN(Z_DS_TO_FRAMES(Ds), 7);
+    timer->period = uN(z_fps_dsToTicks(Ds), 7);
     timer->expired = false;
 }
 

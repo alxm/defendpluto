@@ -25,7 +25,7 @@
 #include "obj_particle.h"
 #include "obj_star.h"
 
-#define Z_OFFSET_NULL ((ZPoolOffset)-1)
+static const ZPoolOffset Z_OFFSET_NULL = (ZPoolOffset)-1;
 
 struct ZPool {
     ZPoolOffset freeList;

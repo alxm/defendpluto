@@ -34,10 +34,10 @@ void setup()
 {
     #if Z_PLATFORM_ARDUBOY
         g_arduboy.begin();
-        g_arduboy.setFrameRate(Z_FPS);
+        g_arduboy.setFrameRate(z_fps_rate);
     #elif Z_PLATFORM_GAMEBUINOMETA
         gb.begin();
-        gb.setFrameRate(Z_FPS);
+        gb.setFrameRate(z_fps_rate);
     #endif
 
     z_loop_setup();

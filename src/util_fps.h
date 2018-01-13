@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,11 +17,14 @@
 
 Z_EXTERN_C_START
 
-#define Z_FPS 30
+static const uint8_t z_fps_rate = 30;
 
 extern uint16_t z_fps_getCounter(void);
 extern bool z_fps_isNthFrame(uint8_t N);
 
-#define Z_DS_TO_FRAMES(Ds) u8(Z_FPS * (Ds) / 10)
+static inline uint8_t z_fps_dsToTicks(uint8_t Ds)
+{
+    return u8(z_fps_rate * Ds / 10);
+}
 
 Z_EXTERN_C_END

@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,9 +24,6 @@
 #include "util_fps.h"
 #include "util_screen.h"
 
-#define STRINGIFY_EXPAND(X) #X
-#define STRINGIFY(X) STRINGIFY_EXPAND(X)
-
 static const char* intToString(int X)
 {
     static char buffer[4];
@@ -43,8 +40,8 @@ A_SETUP
     a_settings_set("app.output.on", "yes");
     a_settings_set("video.width", intToString(z_screen_w));
     a_settings_set("video.height", intToString(z_screen_h));
-    a_settings_set("fps.tick", STRINGIFY(Z_FPS));
-    a_settings_set("fps.draw", STRINGIFY(Z_FPS));
+    a_settings_set("fps.tick", intToString(z_fps_rate));
+    a_settings_set("fps.draw", intToString(z_fps_rate));
 }
 
 A_STATE(run)

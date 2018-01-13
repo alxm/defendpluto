@@ -41,8 +41,8 @@ bool z_particle_tick(ZPoolObject* Particle, void* Context)
 
     particle->ticks++;
 
-    return particle->ticks < Z_FPS / 4
-        || (particle->ticks < Z_FPS && z_random_int8(4) != 0);
+    return particle->ticks < z_fps_rate / 4
+        || (particle->ticks < z_fps_rate && z_random_int8(4) != 0);
 }
 
 void z_particle_draw(ZPoolObject* Particle)
