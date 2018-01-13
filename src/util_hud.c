@@ -100,7 +100,7 @@ static void drawScore(int16_t X, int16_t Y)
 
     z_sprite_blit(Z_SPRITE_CREDS, credsX, i16(Y + 1), 0);
 
-    z_font_int((int16_t)z_player.scoreShow,
+    z_font_int(i16(z_player.scoreShow),
                i16(credsX - 1),
                Y,
                Z_FONT_FACE_LCD,

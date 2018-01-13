@@ -172,7 +172,7 @@ def main(PaletteName, ImageName, UniqueName):
 
     if PaletteName == ImageName:
         contents += """
-#define Z_COLORS_WHITESTART {whiteStart}
+static const uint8_t z_colors_whiteStart = {whiteStart};
 """
 
     contents += """

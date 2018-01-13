@@ -88,7 +88,7 @@ void z_platform_draw(void)
 
 uint16_t z_fps_getCounter(void)
 {
-    return (uint16_t)gb.frameCount;
+    return u16(gb.frameCount);
 }
 
 bool z_fps_isNthFrame(uint8_t N)

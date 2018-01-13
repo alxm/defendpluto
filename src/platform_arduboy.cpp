@@ -157,7 +157,7 @@ void z_button_release(uint8_t Button)
 
 static inline uint8_t getColor(uint8_t Color)
 {
-    return Color < Z_COLORS_WHITESTART ? BLACK : WHITE;
+    return Color < z_colors_whiteStart ? BLACK : WHITE;
 }
 
 void z_draw_fill(uint8_t Color)
@@ -167,7 +167,7 @@ void z_draw_fill(uint8_t Color)
 
 void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
 {
-    g_arduboy.fillRect(X, Y, (uint8_t)W, (uint8_t)H, getColor(Color));
+    g_arduboy.fillRect(X, Y, u8(W), u8(H), getColor(Color));
 }
 
 void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
@@ -177,7 +177,7 @@ void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
 
 void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
 {
-    g_arduboy.drawCircle(X, Y, (uint8_t)Radius, getColor(Color));
+    g_arduboy.drawCircle(X, Y, u8(Radius), getColor(Color));
 }
 
 void z_platform__loadSprite(uint8_t Sprite, const uint8_t* Buffer, uint8_t NumFrames)
