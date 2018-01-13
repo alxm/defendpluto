@@ -31,17 +31,19 @@ class Palette:
             sys.exit(1)
 
         pixels = image.load()
-        white = []
+
+        self.white = []
+        self.whiteStart = 0
+        self.transparent = pixels[0, 0]
+        self.limit = pixels[0, 1]
 
         for x in range(0, width):
             r, g, b = pixels[x, 0]
 
             if r == 255 and g == 255 and b == 255:
-                white.append(pixels[x, 1])
-
-        self.white = white
-        self.transparent = pixels[0, 0]
-        self.limit = pixels[0, 1]
+                self.white.append(pixels[x, 1])
+            else:
+                self.whiteStart = x
 
 class Sheet:
     def __init__(self, ImageName, Palette):
@@ -166,7 +168,14 @@ def main(PaletteName, ImageName, UniqueName):
 */
 
 #if Z_PLATFORM_ARDUBOY
+"""
 
+    if PaletteName == ImageName:
+        contents += """
+#define Z_COLORS_WHITESTART {whiteStart}
+"""
+
+    contents += """
 static const uint8_t z_data_gfx_{name}_frames = {numFrames};
 
 PROGMEM static const uint8_t z_data_gfx_{name}_buffer[] = {{
@@ -187,17 +196,17 @@ static const uint16_t z_data_gfx_{name}_buffer[] = {{
     // Image frames{metaSpriteBytes}
 }};
 
-#endif\
-""".format(name = UniqueName,
-           dimBytes = formatBytes8 (dimBytes),
-           numFrames = numFrames,
-           arduboySpriteBytes = formatBytes8(arduboySpriteBytes),
-           arduboyMaskBytes = formatBytes8(arduboyMaskBytes),
-           metaSpriteBytes = formatBytes16(metaSpriteBytes),
-           year = time.strftime('%Y'),
-           path = ImageName)
+#endif"""
 
-    print(contents)
+    print(contents.format(year = time.strftime('%Y'),
+                          path = ImageName,
+                          whiteStart = palette.whiteStart,
+                          name = UniqueName,
+                          numFrames = numFrames,
+                          dimBytes = formatBytes8(dimBytes),
+                          arduboySpriteBytes = formatBytes8(arduboySpriteBytes),
+                          arduboyMaskBytes = formatBytes8(arduboyMaskBytes),
+                          metaSpriteBytes = formatBytes16(metaSpriteBytes)))
 
 if __name__ == '__main__':
     if len(sys.argv) != 4:

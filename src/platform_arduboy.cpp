@@ -24,6 +24,7 @@
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
+#include "data_gfx_palette.h"
 
 typedef struct {
     const uint8_t* image;
@@ -156,7 +157,7 @@ void z_button_release(uint8_t Button)
 
 static inline uint8_t getColor(uint8_t Color)
 {
-    return Color < Z_COLOR_PURPLE ? BLACK : WHITE;
+    return Color < Z_COLORS_WHITESTART ? BLACK : WHITE;
 }
 
 void z_draw_fill(uint8_t Color)

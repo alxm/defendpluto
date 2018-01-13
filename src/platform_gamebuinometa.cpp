@@ -24,7 +24,6 @@
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
-#include "util_random.h"
 #include "data_gfx_palette.h"
 
 typedef struct {
