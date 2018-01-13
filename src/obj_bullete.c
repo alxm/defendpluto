@@ -46,8 +46,8 @@ bool z_bullete_tick(ZPoolObject* Bullet, void* Context)
     bullet->x = zf(bullet->x + cos * (1 + bullet->speed));
     bullet->y = zf(bullet->y - sin * (1 + bullet->speed));
 
-    if(bullet->x < 0 || bullet->x >= z_screen_w * Z_FIX_ONE
-        || bullet->y < 0 || bullet->y >= z_screen_h * Z_FIX_ONE) {
+    if(bullet->x < 0 || bullet->x >= Z_SCREEN_W * Z_FIX_ONE
+        || bullet->y < 0 || bullet->y >= Z_SCREEN_H * Z_FIX_ONE) {
 
         return false;
     }

@@ -6,7 +6,7 @@
 
 #if Z_PLATFORM_ARDUBOY
 
-static const uint8_t z_colors_whiteStart = 2;
+static const uint8_t Z_COLORS_WHITE_START = 2;
 
 static const uint8_t z_data_gfx_palette_frames = 1;
 

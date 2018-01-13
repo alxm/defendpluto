@@ -112,5 +112,5 @@ void z_hud_draw(void)
     drawHearts(2, 2);
     drawShield(28, 2);
     drawEnergy(54, 1);
-    drawScore(i16(z_screen_w - 2), i16(z_screen_h - 9));
+    drawScore(i16(Z_SCREEN_W - 2), i16(Z_SCREEN_H - 9));
 }

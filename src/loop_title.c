@@ -47,6 +47,6 @@ void z_loop_title_draw(void)
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
     z_sprite_blit(Z_SPRITE_TITLE, 0, 13, 0);
-    z_draw_rectangle(0, 50, z_screen_w, 14, Z_COLOR_BLUE);
-    z_screen_drawPressA(z_screen_w / 2, 50, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
+    z_draw_rectangle(0, 50, Z_SCREEN_W, 14, Z_COLOR_BLUE);
+    z_screen_drawPressA(Z_SCREEN_W / 2, 50, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
 }

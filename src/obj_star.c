@@ -24,7 +24,7 @@
 #include "obj_player.h"
 #include "obj_star.h"
 
-#define Z_STARS_BORDER   (z_screen_w / 8)
+#define Z_STARS_BORDER   (Z_SCREEN_W / 8)
 #define Z_STAR_MIN_SPEED (Z_FIX_ONE / 8)
 #define Z_STAR_AVG_SPEED (Z_FIX_ONE / 2)
 #define Z_STAR_RND_SPEED ((Z_STAR_AVG_SPEED - Z_STAR_MIN_SPEED) * 2)
@@ -34,7 +34,7 @@ static void z_star_init(ZStar* Star, int16_t Y)
 {
     Star->x = z_fix_itofix(
         i16(Z_STARS_BORDER
-                + z_random_int8(i8(z_screen_w - 2 * Z_STARS_BORDER))));
+                + z_random_int8(i8(Z_SCREEN_W - 2 * Z_STARS_BORDER))));
     Star->y = Y;
     Star->speed = u8(Z_STAR_MIN_SPEED + z_random_int16(Z_STAR_RND_SPEED));
 }
@@ -43,7 +43,7 @@ void z_star_setup(void)
 {
     for(int8_t i = Z_POOL_NUM_STAR; i--; ) {
         ZStar* star = z_pool_alloc(Z_POOL_STAR);
-        z_star_init(star, z_fix_itofix(z_random_int8(i8(z_screen_h))));
+        z_star_init(star, z_fix_itofix(z_random_int16(Z_SCREEN_H)));
     }
 }
 
@@ -55,7 +55,7 @@ bool z_star_tick(ZPoolObject* Star, void* Context)
 
     star->y = zf(star->y + star->speed);
 
-    if(z_fix_fixtoi(star->y) >= z_screen_h) {
+    if(z_fix_fixtoi(star->y) >= Z_SCREEN_H) {
         z_star_init(star, 0);
     }
 
@@ -69,9 +69,9 @@ void z_star_draw(ZPoolObject* Star)
     int16_t x = i16(z_fix_fixtoi(star->x) + z_screen_getXShake());
     int16_t y = i16(z_fix_fixtoi(star->y) + z_screen_getYShake());
 
-    int16_t centerOffset = i16(z_fix_fixtoi(z_player.x) - z_screen_w / 2);
+    int16_t centerOffset = i16(z_fix_fixtoi(z_player.x) - Z_SCREEN_W / 2);
     x = i16(x - (Z_STARS_BORDER * star->speed / Z_STAR_MAX_SPEED)
-                    * centerOffset / (z_screen_w / 2));
+                    * centerOffset / (Z_SCREEN_W / 2));
 
     z_draw_pixel(x, y, Z_COLOR_PURPLE + (star->speed >= Z_STAR_AVG_SPEED));
 }

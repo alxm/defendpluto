@@ -16,11 +16,11 @@
 */
 
 #if Z_PLATFORM_ARDUBOY
-    static const int16_t z_screen_w = 128;
-    static const int16_t z_screen_h = 64;
+    static const int16_t Z_SCREEN_W = 128;
+    static const int16_t Z_SCREEN_H = 64;
 #else
-    static const int16_t z_screen_w = 80;
-    static const int16_t z_screen_h = 64;
+    static const int16_t Z_SCREEN_W = 80;
+    static const int16_t Z_SCREEN_H = 64;
 #endif
 
 typedef struct {

@@ -66,20 +66,20 @@ void z_loop_intro_draw(void)
     int16_t spriteW = z_sprite_getWidth(Z_SPRITE_ALXM);
     int16_t spriteH = z_sprite_getHeight(Z_SPRITE_ALXM);
 
-    z_sprite_blitCentered(Z_SPRITE_ALXM, z_screen_w / 2, z_screen_h / 2, 0);
+    z_sprite_blitCentered(Z_SPRITE_ALXM, Z_SCREEN_W / 2, Z_SCREEN_H / 2, 0);
 
     switch(g_stage) {
         case 0: {
-            z_draw_rectangle(i16(z_screen_w / 2 - spriteW / 2),
-                             i16(z_screen_h / 2 - spriteH / 2),
+            z_draw_rectangle(i16(Z_SCREEN_W / 2 - spriteW / 2),
+                             i16(Z_SCREEN_H / 2 - spriteH / 2),
                              spriteW,
                              g_height,
                              Z_COLOR_ALXM_BG);
         } break;
 
         case 2: {
-            z_draw_rectangle(i16(z_screen_w / 2 - spriteW / 2),
-                             i16(z_screen_h / 2 + (spriteH + 1) / 2 - g_height),
+            z_draw_rectangle(i16(Z_SCREEN_W / 2 - spriteW / 2),
+                             i16(Z_SCREEN_H / 2 + (spriteH + 1) / 2 - g_height),
                              spriteW,
                              g_height,
                              Z_COLOR_ALXM_BG);

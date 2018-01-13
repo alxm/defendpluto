@@ -157,7 +157,7 @@ void z_button_release(uint8_t Button)
 
 static inline uint8_t getColor(uint8_t Color)
 {
-    return Color < z_colors_whiteStart ? BLACK : WHITE;
+    return Color < Z_COLORS_WHITE_START ? BLACK : WHITE;
 }
 
 void z_draw_fill(uint8_t Color)

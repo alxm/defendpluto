@@ -332,17 +332,17 @@ static bool op_spawn(uint8_t Flags)
     if(x < 0) {
         x = i16(x * spriteWidth + spriteWidth / 2);
     } else if(x > 100) {
-        x = i16(z_screen_w + (x - 100) * spriteWidth - spriteWidth / 2);
+        x = i16(Z_SCREEN_W + (x - 100) * spriteWidth - spriteWidth / 2);
     } else {
-        x = i16((z_screen_w - 1) * x / 100);
+        x = i16((Z_SCREEN_W - 1) * x / 100);
     }
 
     if(y < 0) {
         y = i16(y * spriteHeight + spriteHeight / 2);
     } else if(y > 100) {
-        y = i16(z_screen_h + (y - 100) * spriteHeight - spriteHeight / 2);
+        y = i16(Z_SCREEN_H + (y - 100) * spriteHeight - spriteHeight / 2);
     } else {
-        y = i16((z_screen_h - 1) * y / 100);
+        y = i16((Z_SCREEN_H - 1) * y / 100);
     }
 
     z_enemy_init(e, x, y, type_id, fly_id, attack_id);
