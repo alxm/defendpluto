@@ -43,8 +43,10 @@ typedef enum {
     Z_OP_NUM
 } ZOpType;
 
+typedef bool (ZOpCallback)(uint8_t Flags);
+
 typedef struct {
-    bool (*callback)(uint8_t Flags);
+    ZOpCallback* callback;
     uint8_t bytes;
 } ZOp;
 
@@ -62,32 +64,69 @@ static struct {
     int8_t vars[Z_LEVELS_VARS_NUM];
 } g_vm;
 
-#define Z__READ(Offset) Z_PGM_READ_UINT8(z_data_levels + g_vm.pc + Offset)
+static inline uint8_t vm_read(uint8_t Offset)
+{
+    return Z_PGM_READ_UINT8(z_data_levels + g_vm.pc + Offset);
+}
 
-#define Z__CHECKVAR(Type, CVar, ArgIndex) \
-    if(Flags & (1 << ArgIndex)) {         \
-        CVar = (Type)g_vm.vars[CVar];     \
+static inline uint8_t vm_readOp(void)
+{
+    return vm_read(0);
+}
+
+static inline uint8_t vm_readFlags(void)
+{
+    return vm_read(1);
+}
+
+static inline uint8_t vm_readArg(uint8_t ByteIndex)
+{
+    return vm_read(u8(2 + ByteIndex));
+}
+
+static int8_t vm_readArgI8(uint8_t Flags, uint8_t ArgIndex, uint8_t ByteIndex)
+{
+    int8_t value = i8(vm_readArg(ByteIndex));
+
+    if(Flags & (1 << ArgIndex)) {
+        value = g_vm.vars[value];
     }
 
-#define Z_READ_OP()           Z__READ(0)
-#define Z_READ_FLAGS()        Z__READ(1)
-#define Z_READ_ARG(ByteIndex) Z__READ(2 + ByteIndex)
+    return value;
+}
 
-#define Z_READ_ARGI8(CVar, ArgIndex, ByteIndex) \
-    CVar = i8(Z_READ_ARG(ByteIndex));           \
-    Z__CHECKVAR(int8_t, CVar, ArgIndex)
+static uint8_t vm_readArgU8(uint8_t Flags, uint8_t ArgIndex, uint8_t ByteIndex)
+{
+    uint8_t value = vm_readArg(ByteIndex);
 
-#define Z_READ_ARGU8(CVar, ArgIndex, ByteIndex) \
-    CVar = u8(Z_READ_ARG(ByteIndex));           \
-    Z__CHECKVAR(uint8_t, CVar, ArgIndex)
+    if(Flags & (1 << ArgIndex)) {
+        value = u8(g_vm.vars[value]);
+    }
 
-#define Z_READ_ARGU4H(CVar, ArgIndex, ByteIndex) \
-    CVar = Z_READ_ARG(ByteIndex) >> 4;           \
-    Z__CHECKVAR(uint8_t, CVar, ArgIndex)
+    return value;
+}
 
-#define Z_READ_ARGU4L(CVar, ArgIndex, ByteIndex) \
-    CVar = Z_READ_ARG(ByteIndex) & 0xf;          \
-    Z__CHECKVAR(uint8_t, CVar, ArgIndex)
+static uint8_t vm_readArgU4H(uint8_t Flags, uint8_t ArgIndex, uint8_t ByteIndex)
+{
+    uint8_t value = vm_readArg(ByteIndex) >> 4;
+
+    if(Flags & (1 << ArgIndex)) {
+        value = u8(g_vm.vars[value]);
+    }
+
+    return value;
+}
+
+static uint8_t vm_readArgU4L(uint8_t Flags, uint8_t ArgIndex, uint8_t ByteIndex)
+{
+    uint8_t value = vm_readArg(ByteIndex) & 0xf;
+
+    if(Flags & (1 << ArgIndex)) {
+        value = u8(g_vm.vars[value]);
+    }
+
+    return value;
+}
 
 static bool op_over(uint8_t Flags)
 {
@@ -110,10 +149,8 @@ static bool op_set(uint8_t Flags)
      * set flags var_id value
      * set       x      32
      */
-    uint8_t var_id;
-    int8_t value;
-    Z_READ_ARGU8(var_id, 0, 0);
-    Z_READ_ARGI8(value, 1, 1);
+    uint8_t var_id = vm_readArgU8(Flags, 0, 0);
+    int8_t value = vm_readArgI8(Flags, 1, 1);
 
     g_vm.vars[var_id] = value;
 
@@ -127,10 +164,8 @@ static bool op_inc(uint8_t Flags)
      * inc flags var_id value
      * inc       x      16
      */
-    uint8_t var_id;
-    int8_t value;
-    Z_READ_ARGU8(var_id, 0, 0);
-    Z_READ_ARGI8(value, 1, 1);
+    uint8_t var_id = vm_readArgU8(Flags, 0, 0);
+    int8_t value = vm_readArgI8(Flags, 1, 1);
 
     g_vm.vars[var_id] = i8(g_vm.vars[var_id] + value);
 
@@ -144,9 +179,7 @@ static bool op_flip(uint8_t Flags)
      * flip flags var_id
      * flip       x
      */
-    uint8_t var_id;
-    Z_READ_ARGU8(var_id, 0, 0);
-
+    uint8_t var_id = vm_readArgU8(Flags, 0, 0);
     g_vm.vars[var_id] = !g_vm.vars[var_id];
 
     return true;
@@ -159,13 +192,12 @@ static bool op_loop(uint8_t Flags)
      * loop flags num_times
      * loop       10
      */
-    uint8_t num_times;
-    Z_READ_ARGU8(num_times, 0, 0);
+    uint8_t num_times = vm_readArgU8(Flags, 0, 0);
 
     if(num_times == 0) {
         for(uint8_t op = Z_OP_LOOP, loopCount = 1; loopCount > 0; ) {
             g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
-            op = Z_READ_OP();
+            op = vm_readOp();
 
             if(op == Z_OP_LOOP) {
                 loopCount++;
@@ -210,11 +242,10 @@ static bool op_iter(uint8_t Flags)
      * iter flags iteration
      * iter       0
      */
-    uint8_t iteration;
-    Z_READ_ARGU8(iteration, 0, 0);
+    uint8_t iteration = vm_readArgU8(Flags, 0, 0);
 
     if(g_vm.loopStack[g_vm.loopIndex].counter != iteration) {
-        for(uint8_t op = Z_OP_ITER; op != Z_OP_ENDI; op = Z_READ_OP()) {
+        for(uint8_t op = Z_OP_ITER; op != Z_OP_ENDI; op = vm_readOp()) {
             g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
         }
     }
@@ -258,9 +289,7 @@ static bool op_wait(uint8_t Flags)
         return --g_vm.waitCounter == 0;
     }
 
-    uint8_t ds;
-    Z_READ_ARGU8(ds, 0, 0);
-
+    uint8_t ds = vm_readArgU8(Flags, 0, 0);
     g_vm.waitCounter = Z_DS_TO_FRAMES(ds);
 
     return ds == 0;
@@ -285,13 +314,11 @@ static bool op_spawn(uint8_t Flags)
      * spawn flags x_coord y_coord type_id fly_id attack_id
      * spawn       40      -1      enemy0  down   target
      */
-    int16_t x, y;
-    uint8_t type_id, fly_id, attack_id;
-    Z_READ_ARGI8(x, 0, 0);
-    Z_READ_ARGI8(y, 1, 1);
-    Z_READ_ARGU4H(type_id, 2, 2);
-    Z_READ_ARGU4L(fly_id, 3, 2);
-    Z_READ_ARGU4H(attack_id, 4, 3);
+    int16_t x = vm_readArgI8(Flags, 0, 0);
+    int16_t y = vm_readArgI8(Flags, 1, 1);
+    uint8_t type_id = vm_readArgU4H(Flags, 2, 2);
+    uint8_t fly_id = vm_readArgU4L(Flags, 3, 2);
+    uint8_t attack_id = vm_readArgU4H(Flags, 4, 3);
 
     ZEnemy* e = z_pool_alloc(Z_POOL_ENEMY);
 
@@ -343,11 +370,13 @@ static bool op_done(uint8_t Flags)
     return g_vm.waitCounter == 0;
 }
 
+static void setOp(uint8_t Index, ZOpCallback* Function, uint8_t ArgBytes)
+{
+    g_ops[Index] = (ZOp){Function, u8(1 + (ArgBytes > 0 ? 1 + ArgBytes : 0))};
+}
+
 void z_vm_setup(void)
 {
-    #define setOp(Index, Function, ArgBytes)                                   \
-        g_ops[Index] = (ZOp){Function, 1 + (ArgBytes > 0 ? 1 + ArgBytes : 0)};
-
     setOp(Z_OP_OVER, op_over, 0);
     setOp(Z_OP_SET, op_set, 2);
     setOp(Z_OP_INC, op_inc, 2);
@@ -378,15 +407,15 @@ void z_vm_reset(void)
 void z_vm_tick(void)
 {
     while(true) {
-        uint8_t op = Z_READ_OP();
+        uint8_t op = vm_readOp();
         uint8_t flags = 0;
 
         if(g_ops[op].bytes > 1) {
-            flags = Z_READ_FLAGS();
+            flags = vm_readFlags();
         }
 
         if(g_ops[op].callback(flags)) {
-            op = Z_READ_OP();
+            op = vm_readOp();
             g_vm.pc = u16(g_vm.pc + g_ops[op].bytes);
         } else {
             break;
