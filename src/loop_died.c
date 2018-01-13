@@ -19,13 +19,13 @@
 #include "loop.h"
 #include "util_fix.h"
 #include "util_effects.h"
-#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_hud.h"
 #include "util_input.h"
 #include "util_pool.h"
 #include "util_random.h"
 #include "util_screen.h"
+#include "util_timer.h"
 #include "util_vm.h"
 #include "obj_bullete.h"
 #include "obj_bulletp.h"
@@ -34,6 +34,12 @@
 #include "obj_particle.h"
 #include "obj_player.h"
 #include "obj_star.h"
+
+void z_loop_died_init(void)
+{
+    z_timer_start(Z_TIMER_G1, 20);
+    z_timer_start(Z_TIMER_G2, 1);
+}
 
 void z_loop_died_tick(void)
 {
@@ -47,14 +53,12 @@ void z_loop_died_tick(void)
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick, NULL);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
 
-    Z_EVERY_DS(10) {
-        if(z_player.health-- < -2) {
-            z_button_release(Z_BUTTON_A);
-            z_loop_setState(Z_STATE_DOORS_CLOSE);
-        }
+    if(z_timer_expired(Z_TIMER_G1)) {
+        z_button_release(Z_BUTTON_A);
+        z_loop_setState(Z_STATE_DOORS_CLOSE);
     }
 
-    Z_EVERY_DS(1) {
+    if(z_timer_expired(Z_TIMER_G2)) {
         z_screen_shake(2);
 
         if(z_random_uint8(4) == 0) {

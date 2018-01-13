@@ -23,6 +23,7 @@
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
+#include "util_timer.h"
 #include "obj_bullete.h"
 #include "obj_circle.h"
 #include "obj_enemy.h"
@@ -45,6 +46,8 @@ void z_enemy_setup(void)
     enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  7, 5, 1, 2, 1, 20);
     enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  7, 5, 1, 4, 2, 15);
     enemy(Z_ENEMY_SHIP2,    Z_SPRITE_ENEMY02,  7, 6, 2, 6, 1, 15);
+
+    z_timer_start(Z_TIMER_ENEMY_FRAME, 2);
 }
 
 void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t FlyId, uint8_t AttackId)
@@ -139,7 +142,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
         }
     }
 
-    Z_EVERY_DS(2) {
+    if(z_timer_expired(Z_TIMER_ENEMY_FRAME)) {
         enemy->frame = u4((enemy->frame + 1) % z_sprite_getNumFrames(sprite));
     }
 

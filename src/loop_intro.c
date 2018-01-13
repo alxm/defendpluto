@@ -17,9 +17,9 @@
 
 #include "platform.h"
 #include "loop.h"
-#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_screen.h"
+#include "util_timer.h"
 
 static uint8_t g_stage;
 static int16_t g_height;
@@ -32,11 +32,12 @@ void z_loop_intro_init(void)
     g_height = z_sprite_getHeight(Z_SPRITE_ALXM);
 
     z_draw_fill(Z_COLOR_ALXM_BG);
+    z_timer_start(Z_TIMER_G1, 1);
 }
 
 void z_loop_intro_tick(void)
 {
-    Z_EVERY_DS(1) {
+    if(z_timer_expired(Z_TIMER_G1)) {
         switch(g_stage) {
             case 0: {
                 if(--g_height == 0) {

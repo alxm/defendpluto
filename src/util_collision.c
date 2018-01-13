@@ -91,7 +91,7 @@ bool z_collision_checkPlayer(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
     int8_t playerW = Z_PLAYER_W_NORMAL;
     int8_t playerH = Z_PLAYER_H_NORMAL;
 
-    if(z_player.invincibleTimerDs > 0) {
+    if(z_player.invincible) {
         playerW = Z_PLAYER_W_SHIELD;
         playerH = Z_PLAYER_H_SHIELD;
     }

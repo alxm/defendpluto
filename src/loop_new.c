@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "loop.h"
 #include "util_fix.h"
+#include "util_hud.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_vm.h"
@@ -29,6 +30,7 @@ void z_loop_new_init(void)
     z_pool_reset();
     z_vm_reset();
     z_player_init();
+    z_hud_reset();
 
     z_loop_setState(Z_STATE_DOORS_OPEN);
 }

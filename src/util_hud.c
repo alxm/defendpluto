@@ -18,20 +18,26 @@
 #include "platform.h"
 #include "util_fix.h"
 #include "util_font.h"
-#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_screen.h"
+#include "util_timer.h"
 #include "obj_player.h"
+
+void z_hud_reset(void)
+{
+    z_timer_start(Z_TIMER_HUD_HEARTS, 3);
+    z_timer_start(Z_TIMER_HUD_SCORE, 1);
+}
 
 void z_hud_tick(void)
 {
     if(z_player.health <= 0) {
-        Z_EVERY_DS(3) {
+        if(z_timer_expired(Z_TIMER_HUD_HEARTS)) {
             z_player.heartsBlink ^= 1;
         }
     }
 
-    Z_EVERY_DS(1) {
+    if(z_timer_expired(Z_TIMER_HUD_SCORE)) {
         if(z_player.scoreShow < z_player.score) {
             z_player.scoreShow =
                 u16(z_player.scoreShow

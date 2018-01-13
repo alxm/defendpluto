@@ -24,12 +24,14 @@
 #include "util_pool.h"
 #include "util_random.h"
 #include "util_screen.h"
+#include "util_timer.h"
 #include "obj_bulletp.h"
 #include "obj_circle.h"
 #include "obj_enemy.h"
 #include "obj_player.h"
 
 #define Z_SHOOT_EVERY_DS 3
+#define Z_SHOOT_SHIFT_DS 1
 
 #define Z_SPEED_SCALE_DIV 2
 #define Z_SPEED_MAX (Z_FIX_ONE / Z_SPEED_SCALE_DIV)
@@ -117,11 +119,15 @@ void z_player_init(void)
     z_player.shootShift = 0;
     z_player.jetFlicker = false;
     z_player.damage = 1;
-    z_player.invincibleTimerDs = 0;
+    z_player.invincible = false;
     z_player.score = 0;
     z_player.scoreShow = 0;
 
     z_player_resetPosition();
+
+    z_timer_start(Z_TIMER_PLAYER_REGEN_ENERGY, Z_ENERGY_REGEN_EVERY_DS);
+    z_timer_start(Z_TIMER_PLAYER_REGEN_SHIELD, Z_SHIELD_REGEN_EVERY_DS);
+    z_timer_start(Z_TIMER_PLAYER_SHOOT, Z_SHOOT_SHIFT_DS);
 }
 
 void z_player_tick(bool CheckInput)
@@ -137,7 +143,7 @@ void z_player_tick(bool CheckInput)
 
         maxSpeed = Z_SPEED_MAX / 2;
 
-        Z_EVERY_DS(1) {
+        if(z_timer_expired(Z_TIMER_PLAYER_SHOOT)) {
             z_player.shootShift ^= 1;
         }
 
@@ -160,7 +166,7 @@ void z_player_tick(bool CheckInput)
         z_player.shootShift = 0;
         z_player.lastShotCounter = 0;
 
-        Z_EVERY_DS(Z_ENERGY_REGEN_EVERY_DS) {
+        if(z_timer_expired(Z_TIMER_PLAYER_REGEN_ENERGY)) {
             boostEnergy(1);
         }
     }
@@ -208,14 +214,12 @@ void z_player_tick(bool CheckInput)
 
     z_player.jetFlicker = !z_player.jetFlicker;
 
-    Z_EVERY_DS(Z_SHIELD_REGEN_EVERY_DS) {
+    if(z_timer_expired(Z_TIMER_PLAYER_REGEN_SHIELD)) {
         boostShield(1);
     }
 
-    if(z_player.invincibleTimerDs > 0) {
-        Z_EVERY_DS(1) {
-            z_player.invincibleTimerDs--;
-        }
+    if(z_player.invincible && z_timer_expired(Z_TIMER_PLAYER_INVINCIBLE)) {
+        z_player.invincible = false;
     }
 }
 
@@ -251,7 +255,7 @@ void z_player_draw(void)
                           i16(y + z_screen_getYShake()),
                           u8(fy * 3 + fx));
 
-    if(z_player.invincibleTimerDs > 0) {
+    if(z_player.invincible) {
         if(z_player.jetFlicker) {
             z_draw_circle(x, z_fix_fixtoi(z_player.y), 9, Z_COLOR_RED);
         } else {
@@ -270,14 +274,15 @@ void z_player_resetPosition(void)
 
 void z_player_takeDamage(uint8_t Damage)
 {
-    if(z_player.health < 0 || z_player.invincibleTimerDs > 0) {
+    if(z_player.health < 0 || z_player.invincible) {
         return;
     }
 
     if(!useShield(Damage)) {
         if(--z_player.health >= 0) {
             boostShield(Z_SHIELD_MAX);
-            z_player.invincibleTimerDs = Z_INVINCIBLE_TIMER_DS;
+            z_player.invincible = true;
+            z_timer_start(Z_TIMER_PLAYER_INVINCIBLE, Z_INVINCIBLE_TIMER_DS);
         }
     }
 }

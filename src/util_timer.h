@@ -1,5 +1,5 @@
 /*
-    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,7 +15,21 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern void z_hud_reset(void);
+typedef enum {
+    Z_TIMER_INVALID = -1,
+    Z_TIMER_ENEMY_FRAME,
+    Z_TIMER_HUD_HEARTS,
+    Z_TIMER_HUD_SCORE,
+    Z_TIMER_PLAYER_INVINCIBLE,
+    Z_TIMER_PLAYER_REGEN_ENERGY,
+    Z_TIMER_PLAYER_REGEN_SHIELD,
+    Z_TIMER_PLAYER_SHOOT,
+    Z_TIMER_G1,
+    Z_TIMER_G2,
+    Z_TIMER_NUM
+} ZTimerId;
 
-extern void z_hud_tick(void);
-extern void z_hud_draw(void);
+extern void z_timer_tick(void);
+
+extern void z_timer_start(uint8_t Timer, uint8_t Ds);
+extern bool z_timer_expired(uint8_t Timer);

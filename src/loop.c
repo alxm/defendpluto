@@ -32,6 +32,7 @@
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_str.h"
+#include "util_timer.h"
 #include "util_vm.h"
 #include "obj_enemy.h"
 #include "obj_player.h"
@@ -45,7 +46,7 @@ typedef struct {
 
 static ZState g_states[Z_STATE_NUM] = {
     {
-        NULL,
+        z_loop_died_init,
         z_loop_died_tick,
         z_loop_died_draw
     },
@@ -121,6 +122,7 @@ void z_loop_setup(void)
 void z_loop_tick(void)
 {
     z_platform_tick();
+    z_timer_tick();
 
     if(g_states[g_state].tick) {
         g_states[g_state].tick();

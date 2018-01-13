@@ -44,7 +44,7 @@ typedef struct {
     uint8_t shootShift : 1;
     bool jetFlicker : 1;
     uint8_t damage : 3;
-    uint8_t invincibleTimerDs : 5;
+    bool invincible : 1;
     uint16_t score;
     uint16_t scoreShow;
 } ZPlayer;
