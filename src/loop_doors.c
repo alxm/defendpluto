@@ -38,7 +38,7 @@ void z_loop_doors_close_init(void)
 
 void z_loop_doors_open_init(void)
 {
-    g_height = Z_HEIGHT / 2;
+    g_height = u8(z_screen_h / 2);
 }
 
 static void sharedTick(void)
@@ -56,7 +56,7 @@ void z_loop_doors_close_tick(void)
 
     g_height = u8(g_height + Z_SLIDE_CLOSE_INC);
 
-    if(g_height > Z_HEIGHT / 2) {
+    if(g_height > z_screen_h / 2) {
         switch(z_loop_getLastState()) {
             case Z_STATE_TITLE: {
                 z_loop_setState(Z_STATE_NEW);
@@ -115,13 +115,16 @@ void z_loop_doors_draw(void)
         } break;
     }
 
-    z_draw_rectangle(0, 0, Z_WIDTH, i16(g_height - 1), Z_COLOR_BLUE);
-    z_draw_hline(0, Z_WIDTH - 1, i16(g_height - 1), Z_COLOR_YELLOW);
+    z_draw_rectangle(0, 0, z_screen_w, i16(g_height - 1), Z_COLOR_BLUE);
+    z_draw_hline(0, i16(z_screen_w - 1), i16(g_height - 1), Z_COLOR_YELLOW);
 
-    z_draw_hline(0, Z_WIDTH - 1, i16(Z_HEIGHT - g_height), Z_COLOR_YELLOW);
+    z_draw_hline(0,
+                 i16(z_screen_w - 1),
+                 i16(z_screen_h - g_height),
+                 Z_COLOR_YELLOW);
     z_draw_rectangle(0,
-                     i16(Z_HEIGHT - g_height + 1),
-                     Z_WIDTH,
+                     i16(z_screen_h - g_height + 1),
+                     z_screen_w,
                      i16(g_height - 1),
                      Z_COLOR_BLUE);
 }
@@ -131,15 +134,18 @@ void z_loop_doors_intro_draw(void)
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
     z_sprite_blit(Z_SPRITE_TITLE, 0, 13, 0);
-    z_draw_rectangle(0, 50, Z_WIDTH, 14, Z_COLOR_BLUE);
+    z_draw_rectangle(0, 50, z_screen_w, 14, Z_COLOR_BLUE);
 
-    z_draw_rectangle(0, 0, Z_WIDTH, i16(g_height - 1), Z_COLOR_ALXM_BG);
-    z_draw_hline(0, Z_WIDTH - 1, i16(g_height - 1), Z_COLOR_YELLOW);
+    z_draw_rectangle(0, 0, z_screen_w, i16(g_height - 1), Z_COLOR_ALXM_BG);
+    z_draw_hline(0, i16(z_screen_w - 1), i16(g_height - 1), Z_COLOR_YELLOW);
 
-    z_draw_hline(0, Z_WIDTH - 1, i16(Z_HEIGHT - g_height), Z_COLOR_YELLOW);
+    z_draw_hline(0,
+                 i16(z_screen_w - 1),
+                 i16(z_screen_h - g_height),
+                 Z_COLOR_YELLOW);
     z_draw_rectangle(0,
-                     i16(Z_HEIGHT - g_height + 1),
-                     Z_WIDTH,
+                     i16(z_screen_h - g_height + 1),
+                     z_screen_w,
                      i16(g_height - 1),
                      Z_COLOR_ALXM_BG);
 }

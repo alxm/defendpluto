@@ -50,16 +50,16 @@ void z_loop_next_draw(void)
     z_sprite_blit(Z_SPRITE_DEFENDPLUTO, 9, 8, 0);
 
     z_font_text(Z_STR_LEVEL_CLEARED_1,
-                Z_WIDTH / 2,
+                z_screen_w / 2,
                 23,
                 Z_FONT_FACE_YELLOWO,
                 Z_FONT_ALIGN_C);
 
     z_font_text(Z_STR_LEVEL_CLEARED_2,
-                Z_WIDTH / 2,
+                z_screen_w / 2,
                 32,
                 Z_FONT_FACE_YELLOWO,
                 Z_FONT_ALIGN_C);
 
-    z_screen_drawPressA(Z_WIDTH / 2, 48, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
+    z_screen_drawPressA(z_screen_w / 2, 48, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
 }

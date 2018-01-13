@@ -141,7 +141,7 @@ void z_font_textWrap(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
             wordWidth = i16(wordWidth + charWidth + 1);
         }
 
-        if(lineWidth > 0 && X + lineWidth + wordWidth >= Z_WIDTH - X) {
+        if(lineWidth > 0 && X + lineWidth + wordWidth >= z_screen_w - X) {
             x = X;
             Y = i16(Y + charHeight + 1);
             lineWidth = wordWidth;

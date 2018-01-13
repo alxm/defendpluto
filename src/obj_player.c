@@ -208,11 +208,11 @@ void z_player_tick(bool CheckInput)
 
     z_player.x = z_fix_clamp(zf(z_player.x + z_player.dx * Z_SPEED_SCALE_DIV),
                              0,
-                             z_fix_itofix(Z_WIDTH - 1));
+                             z_fix_itofix(i16(z_screen_w - 1)));
 
     z_player.y = z_fix_clamp(zf(z_player.y + z_player.dy * Z_SPEED_SCALE_DIV),
                              0,
-                             z_fix_itofix(Z_HEIGHT - 1));
+                             z_fix_itofix(i16(z_screen_h - 1)));
 
     z_player.jetFlicker = !z_player.jetFlicker;
 
@@ -270,8 +270,8 @@ void z_player_resetPosition(void)
 {
     z_player.dx = 0;
     z_player.dy = 0;
-    z_player.x = z_fix_itofix(Z_WIDTH / 2);
-    z_player.y = z_fix_itofix(Z_HEIGHT / 2);
+    z_player.x = z_fix_itofix(z_screen_w / 2);
+    z_player.y = z_fix_itofix(z_screen_h / 2);
 }
 
 void z_player_takeDamage(uint8_t Damage)

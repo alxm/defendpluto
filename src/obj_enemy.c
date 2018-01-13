@@ -159,7 +159,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
     }
 
     return enemy->health > 0
-        && z_fix_fixtoi(enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_HEIGHT;
+        && z_fix_fixtoi(enemy->y) - z_sprite_getHeight(sprite) / 2 < z_screen_h;
 }
 
 static void drawJets(uint8_t EnemyId, int16_t X, int16_t Y)

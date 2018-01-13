@@ -27,15 +27,24 @@
 #define STRINGIFY_EXPAND(X) #X
 #define STRINGIFY(X) STRINGIFY_EXPAND(X)
 
+static const char* intToString(int X)
+{
+    static char buffer[4];
+    snprintf(buffer, sizeof(buffer), "%d", X);
+
+    return buffer;
+}
+
 A_SETUP
 {
     a_settings_set("app.title", "Defend Pluto");
     a_settings_set("app.version", "1.0");
     a_settings_set("app.author", "alxm");
     a_settings_set("app.output.on", "yes");
-    a_settings_set("video.width", STRINGIFY(Z_WIDTH));
-    a_settings_set("video.height", STRINGIFY(Z_HEIGHT));
-    a_settings_set("video.fps", STRINGIFY(Z_FPS));
+    a_settings_set("video.width", intToString(z_screen_w));
+    a_settings_set("video.height", intToString(z_screen_h));
+    a_settings_set("fps.tick", STRINGIFY(Z_FPS));
+    a_settings_set("fps.draw", STRINGIFY(Z_FPS));
 }
 
 A_STATE(run)
