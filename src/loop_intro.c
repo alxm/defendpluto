@@ -24,7 +24,7 @@
 static uint8_t g_stage;
 static int16_t g_height;
 
-#define Z_LOGO_WAIT_DS 12
+static const uint8_t Z_LOGO_WAIT_DS = 12;
 
 void z_loop_intro_init(void)
 {

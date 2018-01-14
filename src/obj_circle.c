@@ -22,7 +22,7 @@
 #include "util_screen.h"
 #include "obj_circle.h"
 
-#define Z_RADIUS_MAX 4
+static const uint8_t Z_CIRCLE_RADIUS_MAX = 4;
 
 void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y)
 {
@@ -37,7 +37,7 @@ bool z_circle_tick(ZPoolObject* Circle, void* Context)
 
     ZCircle* circle = (ZCircle*)Circle;
 
-    return circle->radius++ < Z_RADIUS_MAX;
+    return circle->radius++ < Z_CIRCLE_RADIUS_MAX;
 }
 
 void z_circle_draw(ZPoolObject* Circle)

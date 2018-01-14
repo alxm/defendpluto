@@ -26,8 +26,8 @@
 #include "obj_player.h"
 #include "obj_star.h"
 
-#define Z_SLIDE_CLOSE_INC 2
-#define Z_SLIDE_OPEN_INC  1
+static const uint8_t Z_SLIDE_CLOSE_INC = 2;
+static const uint8_t Z_SLIDE_OPEN_INC = 1;
 
 static uint8_t g_height;
 

@@ -40,8 +40,6 @@ typedef enum {
     Z_ATTACK_NUM
 } ZAttackId;
 
-#define Z_ENEMY_MAX_HEALTH 3
-
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;

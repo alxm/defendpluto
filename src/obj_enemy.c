@@ -31,17 +31,19 @@
 
 ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
+static void enemy(uint8_t Index, uint8_t Sprite, uint8_t Width, uint8_t Height, uint8_t Health, uint8_t Damage, uint8_t SpeedShift, uint8_t AttackDs)
+{
+    z_enemy_data[Index].w = u4(Width);
+    z_enemy_data[Index].h = u4(Height);
+    z_enemy_data[Index].health = u2(Health);
+    z_enemy_data[Index].damage = uN(Damage, 3);
+    z_enemy_data[Index].speedShift = uN(SpeedShift, 3);
+    z_enemy_data[Index].attackPeriodDs = uN(AttackDs, 5);
+    z_enemy_data[Index].sprite = uN(Sprite, 3);
+}
+
 void z_enemy_setup(void)
 {
-    #define enemy(Index, Sprite, Width, Height, Health, Damage, Speed, AttackDs) \
-        z_enemy_data[Index].w = Width;                                           \
-        z_enemy_data[Index].h = Height;                                          \
-        z_enemy_data[Index].health = Health;                                     \
-        z_enemy_data[Index].damage = Damage;                                     \
-        z_enemy_data[Index].speedShift = Speed;                                  \
-        z_enemy_data[Index].attackPeriodDs = AttackDs;                           \
-        z_enemy_data[Index].sprite = Sprite;
-
     enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, 8, 8, 3, 0, 2, 0);
     enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  7, 5, 1, 2, 1, 20);
     enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  7, 5, 1, 4, 2, 15);
