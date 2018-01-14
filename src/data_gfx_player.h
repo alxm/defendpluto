@@ -10,7 +10,7 @@ static const uint8_t z_data_gfx_player_frames = 9;
 
 PROGMEM static const uint8_t z_data_gfx_player_buffer[] = {
     // Frame dimension
-    0x0e,0x10,
+    14, 16,
 
     // Image frames
     0x00,0x00,0x80,0x80,0xf8,0x80,0x80,0xf8,0x80,0x00,0x80,0x00,0x00,0x00,0x0e,0x04,
@@ -55,7 +55,13 @@ static const uint8_t z_data_gfx_player_frames = 9;
 
 static const uint16_t z_data_gfx_player_buffer[] = {
     // Frame dimension
-    0x0e,0x10,
+    14, 16,
+
+    // Number of frames, looping
+    9, 0,
+
+    // Transparent color, color mode
+    0xf81f, 0,
 
     // Image frames
     0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,

@@ -10,7 +10,7 @@ static const uint8_t z_data_gfx_energy_frames = 1;
 
 PROGMEM static const uint8_t z_data_gfx_energy_buffer[] = {
     // Frame dimension
-    0x05,0x09,
+    5, 9,
 
     // Image frames
     0x00,0x88,0x54,0x22,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -25,7 +25,13 @@ static const uint8_t z_data_gfx_energy_frames = 1;
 
 static const uint16_t z_data_gfx_energy_buffer[] = {
     // Frame dimension
-    0x05,0x09,
+    5, 9,
+
+    // Number of frames, looping
+    1, 0,
+
+    // Transparent color, color mode
+    0xf81f, 0,
 
     // Image frames
     0xf81f,0xf81f,0xf81f,0x10a4,0xf81f,0xf81f,0xf81f,0x10a4,0xd988,0x10a4,

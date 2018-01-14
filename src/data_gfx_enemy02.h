@@ -10,7 +10,7 @@ static const uint8_t z_data_gfx_enemy02_frames = 1;
 
 PROGMEM static const uint8_t z_data_gfx_enemy02_buffer[] = {
     // Frame dimension
-    0x07,0x08,
+    7, 8,
 
     // Image frames
     0x78,0x1e,0x0e,0x3c,0x0e,0x1e,0x78,
@@ -25,7 +25,13 @@ static const uint8_t z_data_gfx_enemy02_frames = 1;
 
 static const uint16_t z_data_gfx_enemy02_buffer[] = {
     // Frame dimension
-    0x07,0x08,
+    7, 8,
+
+    // Number of frames, looping
+    1, 0,
+
+    // Transparent color, color mode
+    0xf81f, 0,
 
     // Image frames
     0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xb68d,0xb68d,

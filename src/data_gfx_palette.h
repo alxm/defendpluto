@@ -12,7 +12,7 @@ static const uint8_t z_data_gfx_palette_frames = 1;
 
 PROGMEM static const uint8_t z_data_gfx_palette_buffer[] = {
     // Frame dimension
-    0x0f,0x04,
+    15, 4,
 
     // Image frames
     0x00,0x00,0x00,0x02,0x02,0x02,0x02,0x0e,0x0e,0x0e,0x0e,0x0e,0x0e,0x0e,0x0e,
@@ -23,11 +23,19 @@ PROGMEM static const uint8_t z_data_gfx_palette_buffer[] = {
 
 #elif Z_PLATFORM_GAMEBUINOMETA
 
+#define Z_GAMEBUINO_IMAGE_HEADER_LEN 6
+
 static const uint8_t z_data_gfx_palette_frames = 1;
 
 static const uint16_t z_data_gfx_palette_buffer[] = {
     // Frame dimension
-    0x0f,0x04,
+    15, 4,
+
+    // Number of frames, looping
+    1, 0,
+
+    // Transparent color, color mode
+    0xf81f, 0,
 
     // Image frames
     0xf81f,0x0000,0x0000,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,0xffff,

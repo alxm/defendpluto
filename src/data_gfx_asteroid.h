@@ -10,7 +10,7 @@ static const uint8_t z_data_gfx_asteroid_frames = 10;
 
 PROGMEM static const uint8_t z_data_gfx_asteroid_buffer[] = {
     // Frame dimension
-    0x08,0x08,
+    8, 8,
 
     // Image frames
     0x34,0x7e,0xbf,0xef,0xfe,0xfe,0x7e,0x3c,0x3c,0x7a,0xff,0xdf,0xf7,0x7f,0x7e,0x3c,
@@ -33,7 +33,13 @@ static const uint8_t z_data_gfx_asteroid_frames = 10;
 
 static const uint16_t z_data_gfx_asteroid_buffer[] = {
     // Frame dimension
-    0x08,0x08,
+    8, 8,
+
+    // Number of frames, looping
+    10, 0,
+
+    // Transparent color, color mode
+    0xf81f, 0,
 
     // Image frames
     0xf81f,0xf81f,0xb68d,0xb68d,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xb68d,

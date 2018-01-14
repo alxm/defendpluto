@@ -10,7 +10,7 @@ static const uint8_t z_data_gfx_font_alphanum_frames = 63;
 
 PROGMEM static const uint8_t z_data_gfx_font_alphanum_buffer[] = {
     // Frame dimension
-    0x05,0x08,
+    5, 8,
 
     // Image frames
     0x00,0x00,0x00,0x00,0x00,0x3e,0x51,0x49,0x45,0x3e,0x00,0x42,0x7f,0x40,0x00,0x62,
@@ -63,7 +63,13 @@ static const uint8_t z_data_gfx_font_alphanum_frames = 63;
 
 static const uint16_t z_data_gfx_font_alphanum_buffer[] = {
     // Frame dimension
-    0x05,0x08,
+    5, 8,
+
+    // Number of frames, looping
+    63, 0,
+
+    // Transparent color, color mode
+    0xf81f, 0,
 
     // Image frames
     0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,

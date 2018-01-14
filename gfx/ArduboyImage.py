@@ -55,6 +55,11 @@ class Sheet:
         self.frameWidth = 0
         self.frameHeight = 0
 
+        self.transparentColor = 0
+
+        if Palette.transparent in image.getdata():
+            self.transparentColor = self.rgb888ToRgb565(Palette.transparent)
+
         for x in range(0, self.width):
             if self.pixels[x, 0] == Palette.limit:
                 foundGap = False
@@ -82,6 +87,11 @@ class Sheet:
                     break
 
             self.frameHeight += 1
+
+    def rgb888ToRgb565(self, Pixel):
+        r, g, b = Pixel
+
+        return ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3)
 
 class Frame:
     def __init__(self, Palette, Sheet, X, Y):
@@ -114,16 +124,13 @@ class Frame:
         #
         for y in range(Y, Y + Sheet.frameHeight):
             for x in range(X, X + Sheet.frameWidth):
-                r, g, b = Sheet.pixels[x, y]
-                packed = ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3)
-
+                packed = Sheet.rgb888ToRgb565(Sheet.pixels[x, y])
                 self.metaSpriteBytes.append(packed)
 
 def main(PaletteName, ImageName, UniqueName):
     palette = Palette(PaletteName)
     sheet = Sheet(ImageName, palette)
 
-    dimBytes = [sheet.frameWidth, sheet.frameHeight]
     arduboySpriteBytes = []
     arduboyMaskBytes = []
     metaSpriteBytes = []
@@ -179,7 +186,8 @@ static const uint8_t Z_COLORS_WHITE_START = {whiteStart};
 static const uint8_t z_data_gfx_{name}_frames = {numFrames};
 
 PROGMEM static const uint8_t z_data_gfx_{name}_buffer[] = {{
-    // Frame dimension{dimBytes}
+    // Frame dimension
+    {width}, {height},
 
     // Image frames{arduboySpriteBytes}
 
@@ -187,11 +195,25 @@ PROGMEM static const uint8_t z_data_gfx_{name}_buffer[] = {{
 }};
 
 #elif Z_PLATFORM_GAMEBUINOMETA
+"""
 
+    if PaletteName == ImageName:
+        contents += """
+#define Z_GAMEBUINO_IMAGE_HEADER_LEN 6
+"""
+
+    contents += """
 static const uint8_t z_data_gfx_{name}_frames = {numFrames};
 
 static const uint16_t z_data_gfx_{name}_buffer[] = {{
-    // Frame dimension{dimBytes}
+    // Frame dimension
+    {width}, {height},
+
+    // Number of frames, looping
+    {numFrames}, 0,
+
+    // Transparent color, color mode
+    0x{transparentColor:0>4x}, 0,
 
     // Image frames{metaSpriteBytes}
 }};
@@ -203,7 +225,9 @@ static const uint16_t z_data_gfx_{name}_buffer[] = {{
                           whiteStart = palette.whiteStart,
                           name = UniqueName,
                           numFrames = numFrames,
-                          dimBytes = formatBytes8(dimBytes),
+                          width = sheet.frameWidth,
+                          height = sheet.frameHeight,
+                          transparentColor = sheet.transparentColor,
                           arduboySpriteBytes = formatBytes8(arduboySpriteBytes),
                           arduboyMaskBytes = formatBytes8(arduboyMaskBytes),
                           metaSpriteBytes = formatBytes16(metaSpriteBytes)))

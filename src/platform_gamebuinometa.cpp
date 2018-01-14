@@ -58,7 +58,8 @@ void z_platform_setup(void)
     for(int p = 0; p < Z_PALETTE_NUM; p++) {
         for(int c = 0; c < Z_COLOR_NUM; c++) {
             g_palettes[p][c] =
-                (Color)z_data_gfx_palette_buffer[2 + p * palWidth + 1 + c];
+                (Color)z_data_gfx_palette_buffer[Z_GAMEBUINO_IMAGE_HEADER_LEN
+                                                    + p * palWidth + 1 + c];
         }
     }
 }
@@ -133,7 +134,7 @@ void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
 
 void z_platform__loadSprite(uint8_t Sprite, const uint16_t* Buffer, uint8_t NumFrames)
 {
-    g_sprites[Sprite].image = new Image(Buffer, NumFrames);
+    g_sprites[Sprite].image = new Image(Buffer);
     g_sprites[Sprite].numFrames = NumFrames;
 }
 

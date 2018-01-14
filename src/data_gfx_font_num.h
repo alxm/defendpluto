@@ -10,7 +10,7 @@ static const uint8_t z_data_gfx_font_num_frames = 11;
 
 PROGMEM static const uint8_t z_data_gfx_font_num_buffer[] = {
     // Frame dimension
-    0x04,0x07,
+    4, 7,
 
     // Image frames
     0x00,0x00,0x00,0x00,0x36,0x41,0x41,0x36,0x00,0x00,0x00,0x36,0x30,0x49,0x49,0x06,
@@ -29,7 +29,13 @@ static const uint8_t z_data_gfx_font_num_frames = 11;
 
 static const uint16_t z_data_gfx_font_num_buffer[] = {
     // Frame dimension
-    0x04,0x07,
+    4, 7,
+
+    // Number of frames, looping
+    11, 0,
+
+    // Transparent color, color mode
+    0xf81f, 0,
 
     // Image frames
     0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,

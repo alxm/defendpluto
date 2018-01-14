@@ -10,7 +10,7 @@ static const uint8_t z_data_gfx_hearts_frames = 2;
 
 PROGMEM static const uint8_t z_data_gfx_hearts_buffer[] = {
     // Frame dimension
-    0x09,0x08,
+    9, 8,
 
     // Image frames
     0x00,0x0c,0x12,0x22,0x44,0x22,0x12,0x0c,0x00,0x00,0x0c,0x1e,0x3e,0x7c,0x3e,0x1e,
@@ -27,7 +27,13 @@ static const uint8_t z_data_gfx_hearts_frames = 2;
 
 static const uint16_t z_data_gfx_hearts_buffer[] = {
     // Frame dimension
-    0x09,0x08,
+    9, 8,
+
+    // Number of frames, looping
+    2, 0,
+
+    // Transparent color, color mode
+    0xf81f, 0,
 
     // Image frames
     0xf81f,0xf81f,0x10a4,0x10a4,0xf81f,0x10a4,0x10a4,0xf81f,0xf81f,0xf81f,

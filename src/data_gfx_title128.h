@@ -10,7 +10,7 @@ static const uint8_t z_data_gfx_title128_frames = 1;
 
 PROGMEM static const uint8_t z_data_gfx_title128_buffer[] = {
     // Frame dimension
-    0x80,0x33,
+    128, 51,
 
     // Image frames
     0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -135,7 +135,13 @@ static const uint8_t z_data_gfx_title128_frames = 1;
 
 static const uint16_t z_data_gfx_title128_buffer[] = {
     // Frame dimension
-    0x80,0x33,
+    128, 51,
+
+    // Number of frames, looping
+    1, 0,
+
+    // Transparent color, color mode
+    0xf81f, 0,
 
     // Image frames
     0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,0xf81f,

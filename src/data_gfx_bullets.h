@@ -10,7 +10,7 @@ static const uint8_t z_data_gfx_bullets_frames = 8;
 
 PROGMEM static const uint8_t z_data_gfx_bullets_buffer[] = {
     // Frame dimension
-    0x03,0x03,
+    3, 3,
 
     // Image frames
     0x03,0x03,0x03,0x06,0x07,0x03,0x07,0x07,0x00,0x03,0x07,0x06,0x03,0x03,0x03,0x06,
@@ -27,7 +27,13 @@ static const uint8_t z_data_gfx_bullets_frames = 8;
 
 static const uint16_t z_data_gfx_bullets_buffer[] = {
     // Frame dimension
-    0x03,0x03,
+    3, 3,
+
+    // Number of frames, looping
+    8, 0,
+
+    // Transparent color, color mode
+    0xf81f, 0,
 
     // Image frames
     0xd988,0xd988,0xd988,0xd988,0xd988,0xd988,0xf81f,0xf81f,0xf81f,0xf81f,

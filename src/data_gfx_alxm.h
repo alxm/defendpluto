@@ -10,7 +10,7 @@ static const uint8_t z_data_gfx_alxm_frames = 1;
 
 PROGMEM static const uint8_t z_data_gfx_alxm_buffer[] = {
     // Frame dimension
-    0x37,0x05,
+    55, 5,
 
     // Image frames
     0x01,0x07,0x1f,0x1f,0x1f,0x1f,0x1f,0x1f,0x1e,0x18,0x00,0x1d,0x15,0x15,0x15,0x1f,
@@ -31,7 +31,13 @@ static const uint8_t z_data_gfx_alxm_frames = 1;
 
 static const uint16_t z_data_gfx_alxm_buffer[] = {
     // Frame dimension
-    0x37,0x05,
+    55, 5,
+
+    // Number of frames, looping
+    1, 0,
+
+    // Transparent color, color mode
+    0x0000, 0,
 
     // Image frames
     0xaee9,0xaee9,0x4e75,0x4e75,0x4cfd,0x4cfd,0xce79,0xce79,0x1861,0x1861,
