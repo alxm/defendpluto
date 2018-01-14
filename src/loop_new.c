@@ -32,5 +32,5 @@ void z_loop_new_init(void)
     z_player_init();
     z_hud_reset();
 
-    z_loop_setState(Z_STATE_DOORS_OPEN);
+    z_loop_setState(Z_STATE_SWIPE_SHOW);
 }

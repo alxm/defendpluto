@@ -364,7 +364,7 @@ static bool op_done(uint8_t Flags)
     } else if(g_vm.waitCounter == 0) {
         g_vm.waitCounter = z_fps_dsToTicks(12);
     } else if(--g_vm.waitCounter == 1) {
-        z_loop_setState(Z_STATE_DOORS_CLOSE);
+        z_loop_setState(Z_STATE_SWIPE_HIDE);
     }
 
     return g_vm.waitCounter == 0;

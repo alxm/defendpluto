@@ -15,10 +15,10 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern ZStateCallback z_loop_doors_close_init;
-extern ZStateCallback z_loop_doors_open_init;
-extern ZStateCallback z_loop_doors_close_tick;
-extern ZStateCallback z_loop_doors_intro_tick;
-extern ZStateCallback z_loop_doors_open_tick;
-extern ZStateCallback z_loop_doors_draw;
-extern ZStateCallback z_loop_doors_intro_draw;
+extern ZStateCallback z_loop_swipe_hide_init;
+extern ZStateCallback z_loop_swipe_show_init;
+extern ZStateCallback z_loop_swipe_hide_tick;
+extern ZStateCallback z_loop_swipe_intro_tick;
+extern ZStateCallback z_loop_swipe_show_tick;
+extern ZStateCallback z_loop_swipe_draw;
+extern ZStateCallback z_loop_swipe_intro_draw;

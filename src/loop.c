@@ -18,12 +18,12 @@
 #include "platform.h"
 #include "loop.h"
 #include "loop_died.h"
-#include "loop_doors.h"
 #include "loop_intro.h"
 #include "loop_new.h"
 #include "loop_next.h"
 #include "loop_over.h"
 #include "loop_play.h"
+#include "loop_swipe.h"
 #include "loop_title.h"
 #include "util_fix.h"
 #include "util_font.h"
@@ -51,21 +51,6 @@ static ZState g_states[Z_STATE_NUM] = {
         z_loop_died_draw
     },
     {
-        z_loop_doors_close_init,
-        z_loop_doors_close_tick,
-        z_loop_doors_draw
-    },
-    {
-        z_loop_doors_open_init,
-        z_loop_doors_intro_tick,
-        z_loop_doors_intro_draw
-    },
-    {
-        z_loop_doors_open_init,
-        z_loop_doors_open_tick,
-        z_loop_doors_draw
-    },
-    {
         z_loop_intro_init,
         z_loop_intro_tick,
         z_loop_intro_draw
@@ -89,6 +74,21 @@ static ZState g_states[Z_STATE_NUM] = {
         NULL,
         z_loop_play_tick,
         z_loop_play_draw
+    },
+    {
+        z_loop_swipe_hide_init,
+        z_loop_swipe_hide_tick,
+        z_loop_swipe_draw
+    },
+    {
+        z_loop_swipe_show_init,
+        z_loop_swipe_intro_tick,
+        z_loop_swipe_intro_draw
+    },
+    {
+        z_loop_swipe_show_init,
+        z_loop_swipe_show_tick,
+        z_loop_swipe_draw
     },
     {
         z_loop_title_init,

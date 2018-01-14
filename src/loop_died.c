@@ -55,7 +55,7 @@ void z_loop_died_tick(void)
 
     if(z_timer_expired(Z_TIMER_G1)) {
         z_button_release(Z_BUTTON_A);
-        z_loop_setState(Z_STATE_DOORS_CLOSE);
+        z_loop_setState(Z_STATE_SWIPE_HIDE);
     }
 
     if(z_timer_expired(Z_TIMER_G2)) {

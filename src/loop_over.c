@@ -31,7 +31,7 @@ void z_loop_over_tick(void)
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
     if(z_button_pressedOnce(Z_BUTTON_A)) {
-        z_loop_setState(Z_STATE_DOORS_CLOSE);
+        z_loop_setState(Z_STATE_SWIPE_HIDE);
     }
 }
 

@@ -31,12 +31,12 @@ static const uint8_t Z_SLIDE_OPEN_INC = 1;
 
 static uint8_t g_height;
 
-void z_loop_doors_close_init(void)
+void z_loop_swipe_hide_init(void)
 {
     g_height = 0;
 }
 
-void z_loop_doors_open_init(void)
+void z_loop_swipe_show_init(void)
 {
     g_height = u8(Z_SCREEN_H / 2);
 }
@@ -50,7 +50,7 @@ static void sharedTick(void)
     z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);
 }
 
-void z_loop_doors_close_tick(void)
+void z_loop_swipe_hide_tick(void)
 {
     sharedTick();
 
@@ -77,7 +77,7 @@ void z_loop_doors_close_tick(void)
     }
 }
 
-void z_loop_doors_intro_tick(void)
+void z_loop_swipe_intro_tick(void)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
@@ -88,7 +88,7 @@ void z_loop_doors_intro_tick(void)
     }
 }
 
-void z_loop_doors_open_tick(void)
+void z_loop_swipe_show_tick(void)
 {
     sharedTick();
 
@@ -99,7 +99,7 @@ void z_loop_doors_open_tick(void)
     }
 }
 
-void z_loop_doors_draw(void)
+void z_loop_swipe_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
@@ -129,7 +129,7 @@ void z_loop_doors_draw(void)
                      Z_COLOR_BLUE);
 }
 
-void z_loop_doors_intro_draw(void)
+void z_loop_swipe_intro_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);

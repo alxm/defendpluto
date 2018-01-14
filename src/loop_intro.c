@@ -54,7 +54,7 @@ void z_loop_intro_tick(void)
 
             case 2: {
                 if(++g_height > z_sprite_getHeight(Z_SPRITE_ALXM)) {
-                    z_loop_setState(Z_STATE_DOORS_INTRO);
+                    z_loop_setState(Z_STATE_SWIPE_INTRO);
                 }
             } break;
         }
