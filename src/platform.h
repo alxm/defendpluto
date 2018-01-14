@@ -97,11 +97,18 @@ Z_EXTERN_C_START
 #define i4(X) ((int8_t)(X) & 0x7)
 #define i8(X) (int8_t)(X)
 #define i16(X) (int16_t)(X)
-#define u2(X) ((uint8_t)(X) & 0x3u)
-#define u4(X) ((uint8_t)(X) & 0xfu)
+
+#define uN(X, Bits) (uint8_t)((X) & ((1 << (Bits)) - 1))
+#define u1(X) uN(X, 1)
+#define u2(X) uN(X, 2)
+#define u3(X) uN(X, 3)
+#define u4(X) uN(X, 4)
+#define u5(X) uN(X, 5)
+#define u6(X) uN(X, 6)
+#define u7(X) uN(X, 7)
 #define u8(X) (uint8_t)(X)
 #define u16(X) (uint16_t)(X)
-#define uN(X, Bits) (uint8_t)((X) & ((1 << (Bits)) - 1))
+
 #define zf(X) (ZFix)(X)
 #define zpo(X) (ZPoolOffset)(X)
 

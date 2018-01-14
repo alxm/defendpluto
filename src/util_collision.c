@@ -78,7 +78,7 @@ static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
 bool z_collision_checkEnemyShips(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
 {
     ZCollisionContext context = {
-        z_fix_fixtoi(X), z_fix_fixtoi(Y), W, H, uN(Damage, 3), false
+        z_fix_fixtoi(X), z_fix_fixtoi(Y), W, H, u3(Damage), false
     };
 
     z_pool_tick(Z_POOL_ENEMY, enemyShipCollision, &context);

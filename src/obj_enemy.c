@@ -36,10 +36,10 @@ static void enemy(uint8_t Index, uint8_t Sprite, uint8_t Width, uint8_t Height, 
     z_enemy_data[Index].w = u4(Width);
     z_enemy_data[Index].h = u4(Height);
     z_enemy_data[Index].health = u2(Health);
-    z_enemy_data[Index].damage = uN(Damage, 3);
-    z_enemy_data[Index].speedShift = uN(SpeedShift, 3);
-    z_enemy_data[Index].attackPeriodDs = uN(AttackDs, 5);
-    z_enemy_data[Index].sprite = uN(Sprite, 3);
+    z_enemy_data[Index].damage = u3(Damage);
+    z_enemy_data[Index].speedShift = u3(SpeedShift);
+    z_enemy_data[Index].attackPeriodDs = u5(AttackDs);
+    z_enemy_data[Index].sprite = u3(Sprite);
 }
 
 void z_enemy_setup(void)
