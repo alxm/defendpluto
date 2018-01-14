@@ -24,19 +24,20 @@
 #include "obj_player.h"
 #include "obj_star.h"
 
-#define Z_STARS_BORDER   (Z_SCREEN_W / 8)
-#define Z_STAR_MIN_SPEED (Z_FIX_ONE / 8)
-#define Z_STAR_AVG_SPEED (Z_FIX_ONE / 2)
-#define Z_STAR_RND_SPEED ((Z_STAR_AVG_SPEED - Z_STAR_MIN_SPEED) * 2)
-#define Z_STAR_MAX_SPEED (Z_STAR_MIN_SPEED + Z_STAR_RND_SPEED)
+static const int16_t Z_STAR_BORDER_RATIO = 8;
+static const int16_t Z_STAR_SPEED_MIN = Z_FIX_ONE / 8;
+static const int16_t Z_STAR_SPEED_MAX = Z_FIX_ONE - Z_FIX_ONE / 8;
 
 static void z_star_init(ZStar* Star, int16_t Y)
 {
     Star->x = z_fix_itofix(
-        i16(Z_STARS_BORDER
-                + z_random_int8(i8(Z_SCREEN_W - 2 * Z_STARS_BORDER))));
+        i16(Z_SCREEN_W / Z_STAR_BORDER_RATIO
+                + z_random_int8(
+                    i8(Z_SCREEN_W - 2 * Z_SCREEN_W / Z_STAR_BORDER_RATIO))));
+
     Star->y = Y;
-    Star->speed = u8(Z_STAR_MIN_SPEED + z_random_int16(Z_STAR_RND_SPEED));
+    Star->speed = u8(Z_STAR_SPEED_MIN
+                + z_random_int16(i16(Z_STAR_SPEED_MAX - Z_STAR_SPEED_MIN)));
 }
 
 void z_star_setup(void)
@@ -68,10 +69,12 @@ void z_star_draw(ZPoolObject* Star)
 
     int16_t x = i16(z_fix_fixtoi(star->x) + z_screen_getXShake());
     int16_t y = i16(z_fix_fixtoi(star->y) + z_screen_getYShake());
-
     int16_t centerOffset = i16(z_fix_fixtoi(z_player.x) - Z_SCREEN_W / 2);
-    x = i16(x - (Z_STARS_BORDER * star->speed / Z_STAR_MAX_SPEED)
-                    * centerOffset / (Z_SCREEN_W / 2));
+    uint8_t avgSpeed = u8((Z_STAR_SPEED_MIN + Z_STAR_SPEED_MAX) / 2);
 
-    z_draw_pixel(x, y, Z_COLOR_PURPLE + (star->speed >= Z_STAR_AVG_SPEED));
+    x = i16(x
+        - (Z_SCREEN_W / Z_STAR_BORDER_RATIO * star->speed / Z_STAR_SPEED_MAX)
+            * centerOffset / (Z_SCREEN_W / 2));
+
+    z_draw_pixel(x, y, Z_COLOR_PURPLE + (star->speed >= avgSpeed));
 }
