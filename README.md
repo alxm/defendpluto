@@ -60,15 +60,15 @@ A block inside a loop block, that only runs during the specified loop iteration 
 
 #### wait
 
-Stop running the script for a specified number of deciseconds `[0, 50]`.
+Delay the script by a specified number of deciseconds `[0, 255]` or until all active enemies are gone, whichever happens first.
 
     wait 10 ; Block for 1 second
 
-#### waitclear
+#### clear
 
 Stop running the script until all active enemies are gone.
 
-    waitclear
+    clear
 
 #### spawn
 
@@ -82,6 +82,10 @@ Spawn a game entity at the specified coordinates `[-128, 127]`, with the specifi
 
     ; Place an enemy starting in AI state 1 with AI flags 0x4
     spawn 50 50 enemy 0x1 0x4
+
+#### done
+
+Go to the Level Cleared screen.
 
 ## License
 
