@@ -15,14 +15,14 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define Z_HEALTH_MAX 3
-#define Z_SHIELD_MAX 15
-#define Z_ENERGY_MAX 15
+static const int8_t Z_PLAYER_MAX_HEALTH = 3;
+static const uint8_t Z_PLAYER_MAX_SHIELD = 15;
+static const uint8_t Z_PLAYER_MAX_ENERGY = 15;
 
-#define Z_PLAYER_W_NORMAL 10
-#define Z_PLAYER_H_NORMAL 4
-#define Z_PLAYER_W_SHIELD 16
-#define Z_PLAYER_H_SHIELD 16
+static const int8_t Z_PLAYER_W_NORMAL = 10;
+static const int8_t Z_PLAYER_H_NORMAL = 4;
+static const int8_t Z_PLAYER_W_SHIELD = 16;
+static const int8_t Z_PLAYER_H_SHIELD = 16;
 
 typedef enum {
     Z_POINTS_INVALID = -1,
@@ -34,7 +34,7 @@ typedef enum {
 
 typedef struct {
     ZFix x, y;
-    int8_t dx, dy;
+    int16_t dx, dy;
     uint8_t frame : 4;
     uint8_t energy : 4;
     uint8_t shield : 4;

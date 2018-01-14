@@ -48,7 +48,7 @@ void z_hud_tick(void)
 
 static void drawHearts(int16_t X, int16_t Y)
 {
-    for(int8_t i = 0; i < Z_HEALTH_MAX; i++) {
+    for(int8_t i = 0; i < Z_PLAYER_MAX_HEALTH; i++) {
         uint8_t heartFrame = z_player.health > 0
                              ? z_player.health > i
                              : z_player.heartsBlink;
@@ -85,13 +85,13 @@ static void drawBar(int16_t X, int16_t Y, uint8_t Value, uint8_t Max)
 static void drawShield(int16_t X, int16_t Y)
 {
     z_sprite_blit(Z_SPRITE_SHIELD, X, Y, 0);
-    drawBar(i16(X + 6), i16(Y + 1), z_player.shield, Z_SHIELD_MAX);
+    drawBar(i16(X + 6), i16(Y + 1), z_player.shield, Z_PLAYER_MAX_SHIELD);
 }
 
 static void drawEnergy(int16_t X, int16_t Y)
 {
     z_sprite_blit(Z_SPRITE_ENERGY, X, Y, 0);
-    drawBar(i16(X + 4), i16(Y + 2), z_player.energy, Z_ENERGY_MAX);
+    drawBar(i16(X + 4), i16(Y + 2), z_player.energy, Z_PLAYER_MAX_ENERGY);
 }
 
 static void drawScore(int16_t X, int16_t Y)

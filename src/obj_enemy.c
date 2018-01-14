@@ -152,7 +152,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
                                enemy->y,
                                z_enemy_data[type].w,
                                z_enemy_data[type].h,
-                               Z_SHIELD_MAX)) {
+                               Z_PLAYER_MAX_SHIELD)) {
 
         z_enemy_takeDamage(enemy, UINT8_MAX);
         z_player_scorePoints(Z_POINTS_ENEMY_SMASHED);
