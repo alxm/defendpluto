@@ -27,6 +27,8 @@
 static const int16_t Z_STAR_BORDER_RATIO = 8;
 static const int16_t Z_STAR_SPEED_MIN = Z_FIX_ONE / 8;
 static const int16_t Z_STAR_SPEED_MAX = Z_FIX_ONE - Z_FIX_ONE / 8;
+static const uint8_t Z_STAR_MULT_MIN = 4;
+static const uint8_t Z_STAR_MULT_MAX = 8;
 
 static void z_star_init(ZStar* Star, int16_t Y)
 {
@@ -36,8 +38,15 @@ static void z_star_init(ZStar* Star, int16_t Y)
                     i8(Z_SCREEN_W - 2 * Z_SCREEN_W / Z_STAR_BORDER_RATIO))));
 
     Star->y = Y;
-    Star->speed = u8(Z_STAR_SPEED_MIN
+    Star->superSpeed = z_random_uint8(Z_POOL_NUM_STAR / 2) == 0;
+
+    if(Star->superSpeed) {
+        Star->speed = u7(Z_STAR_MULT_MIN
+                + z_random_uint8(u8(Z_STAR_MULT_MAX - Z_STAR_MULT_MIN)));
+    } else {
+        Star->speed = u7(Z_STAR_SPEED_MIN
                 + z_random_int16(i16(Z_STAR_SPEED_MAX - Z_STAR_SPEED_MIN)));
+    }
 }
 
 void z_star_setup(void)
@@ -54,7 +63,11 @@ bool z_star_tick(ZPoolObject* Star, void* Context)
 
     ZStar* star = (ZStar*)Star;
 
-    star->y = zf(star->y + star->speed);
+    if(star->superSpeed) {
+        star->y = zf(star->y + star->speed * Z_FIX_ONE);
+    } else {
+        star->y = zf(star->y + star->speed);
+    }
 
     if(z_fix_fixtoi(star->y) >= Z_SCREEN_H) {
         z_star_init(star, 0);
@@ -76,5 +89,9 @@ void z_star_draw(ZPoolObject* Star)
         - (Z_SCREEN_W / Z_STAR_BORDER_RATIO * star->speed / Z_STAR_SPEED_MAX)
             * centerOffset / (Z_SCREEN_W / 2));
 
-    z_draw_pixel(x, y, Z_COLOR_PURPLE + (star->speed >= avgSpeed));
+    if(star->superSpeed) {
+        z_draw_rectangle(x, i16(y - 1), 1, 3, Z_COLOR_GRAY);
+    } else {
+        z_draw_pixel(x, y, Z_COLOR_PURPLE + (star->speed >= avgSpeed));
+    }
 }

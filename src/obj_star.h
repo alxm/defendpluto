@@ -18,7 +18,8 @@
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;
-    uint8_t speed;
+    bool superSpeed : 1;
+    uint8_t speed : 7;
 } ZStar;
 
 extern void z_star_setup(void);
