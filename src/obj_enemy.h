@@ -29,6 +29,8 @@ typedef enum {
     Z_FLY_STILL,
     Z_FLY_DOWN,
     Z_FLY_FOLLOW,
+    Z_FLY_CIRCLE_ABS,
+    Z_FLY_CIRCLE_REL,
     Z_FLY_NUM
 } ZFlyId;
 
@@ -51,6 +53,8 @@ typedef struct {
     uint8_t attackId : 4;
     uint8_t flyCounter;
     uint8_t attackCounter;
+    uint8_t flyState : 4;
+    uint8_t attackState : 4;
     uint8_t health : 2;
 } ZEnemy;
 

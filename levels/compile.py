@@ -234,6 +234,8 @@ class CompilerTool:
                 'still': 0,
                 'down': 1,
                 'follow': 2,
+                'circleAbs': 3,
+                'circleRel': 4,
             },
 
             'attack': {
