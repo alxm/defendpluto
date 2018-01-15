@@ -285,7 +285,18 @@ class CompilerTool:
 
         arg = Args[Index]
 
-        if arg in self.__varIds:
+        try:
+            value = int(arg, 16 if Hex else 10)
+
+            if value < Min or value > Max:
+                self.error('Value {} is out of range [{}, {}]'
+                            .format(value, Min, Max))
+
+            return value
+        except ValueError:
+            if arg not in self.__varIds:
+                self.error('Arg {} is neither a var nor an int'.format(arg))
+
             if Index >= 8:
                 self.error('Only the first 8 arguments may be variables')
 
@@ -297,14 +308,7 @@ class CompilerTool:
                             .format(arg, varId, Min, Max))
 
             return varId
-        else:
-            value = int(arg, 16 if Hex else 10)
 
-            if value < Min or value > Max:
-                self.error('Value {} is out of range [{}, {}]'
-                            .format(value, Min, Max))
-
-            return value
 
     def getVarId(self, Name):
         if Name not in self.__varIds:
