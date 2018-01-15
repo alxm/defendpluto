@@ -271,7 +271,7 @@ void z_player_draw(void)
     }
 
     if(z_player.shootShift) {
-        z_effect_light(x, y, Z_LIGHT_PLAYER_SHOOTING);
+        z_effect_light(z_player.x, z_player.y, Z_LIGHT_PLAYER_SHOOTING);
     }
 }
 

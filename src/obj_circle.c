@@ -50,5 +50,5 @@ void z_circle_draw(ZPoolObject* Circle)
     z_draw_circle(x, y, circle->radius, Z_COLOR_RED);
     z_draw_circle(x, y, u8(circle->radius * 2), Z_COLOR_RED);
 
-    z_effect_light(x, y, Z_LIGHT_EXPLOSION);
+    z_effect_light(circle->x, circle->y, Z_LIGHT_EXPLOSION);
 }

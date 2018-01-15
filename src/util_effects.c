@@ -46,11 +46,14 @@ void z_effect_circles(ZFix X, ZFix Y)
     }
 }
 
-void z_effect_light(int16_t X, int16_t Y, uint8_t LightId)
+void z_effect_light(ZFix X, ZFix Y, uint8_t LightId)
 {
     #if Z_PLATFORM_GAMEBUINOMETA
-        X = i16(2 * z_int16_clamp(X, 0, i16(Z_SCREEN_W - 1)) / Z_SCREEN_W);
-        Y = i16(4 * z_int16_clamp(Y, 0, i16(Z_SCREEN_H - 1)) / Z_SCREEN_H);
+        int16_t x = z_fix_fixtoi(X);
+        int16_t y = z_fix_fixtoi(Y);
+
+        x = i16(2 * z_int16_clamp(x, 0, i16(Z_SCREEN_W - 1)) / Z_SCREEN_W);
+        y = i16(4 * z_int16_clamp(y, 0, i16(Z_SCREEN_H - 1)) / Z_SCREEN_H);
 
         uint8_t color = 0;
 
@@ -64,7 +67,7 @@ void z_effect_light(int16_t X, int16_t Y, uint8_t LightId)
             } break;
         }
 
-        z_lights_put(X, Y, color);
+        z_lights_put(x, y, color);
     #else
         Z_UNUSED(X);
         Z_UNUSED(Y);

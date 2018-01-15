@@ -24,4 +24,4 @@ typedef enum {
 
 extern void z_effect_particles(ZFix X, ZFix Y, uint8_t Num);
 extern void z_effect_circles(ZFix X, ZFix Y);
-extern void z_effect_light(int16_t X, int16_t Y, uint8_t LightId);
+extern void z_effect_light(ZFix X, ZFix Y, uint8_t LightId);
