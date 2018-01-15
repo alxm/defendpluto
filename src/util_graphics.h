@@ -71,6 +71,7 @@ typedef enum {
     Z_SPRITE_BULLETS,
     Z_SPRITE_DEFENDPLUTO,
     Z_SPRITE_TITLE,
+    Z_SPRITE_VERSION_BETA,
     Z_SPRITE_NUM
 } ZSpriteId;
 

@@ -17,6 +17,7 @@
 
 #include "platform.h"
 #include "loop.h"
+#include "loop_title.h"
 #include "util_fix.h"
 #include "util_graphics.h"
 #include "util_hud.h"
@@ -131,13 +132,7 @@ void z_loop_swipe_draw(void)
 
 void z_loop_swipe_intro_draw(void)
 {
-    z_draw_fill(Z_COLOR_BLUE);
-    z_pool_draw(Z_POOL_STAR, z_star_draw);
-    z_sprite_blit(Z_SPRITE_TITLE, 0, 13, 0);
-
-    #if !Z_PLATFORM_ARDUBOY
-        z_draw_rectangle(0, 50, Z_SCREEN_W, 14, Z_COLOR_BLUE);
-    #endif
+    z_loop_title_drawTitleScreen();
 
     z_draw_rectangle(0, 0, Z_SCREEN_W, i16(g_height - 1), Z_COLOR_ALXM_BG);
     z_draw_hline(0, i16(Z_SCREEN_W - 1), i16(g_height - 1), Z_COLOR_YELLOW);

@@ -42,7 +42,7 @@ void z_loop_title_tick(void)
     }
 }
 
-void z_loop_title_draw(void)
+void z_loop_title_drawTitleScreen(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
@@ -52,5 +52,11 @@ void z_loop_title_draw(void)
         z_draw_rectangle(0, 50, Z_SCREEN_W, 14, Z_COLOR_BLUE);
     #endif
 
+    z_sprite_blit(Z_SPRITE_VERSION_BETA, 74, 1, 0);
+}
+
+void z_loop_title_draw(void)
+{
+    z_loop_title_drawTitleScreen();
     z_screen_drawPressA(Z_SCREEN_W / 2, 50, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
 }
