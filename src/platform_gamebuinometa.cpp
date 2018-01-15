@@ -42,6 +42,18 @@ static ZPalette g_paletteIndex;
 static Color g_palettes[Z_PALETTE_NUM][Z_COLOR_NUM];
 static ZSprite g_sprites[Z_SPRITE_NUM];
 
+static void z_lights_reset(void)
+{
+    gb.lights.setColor((Color)0);
+    gb.lights.fill();
+}
+
+void z_lights_put(int16_t X, int16_t Y, uint8_t Color)
+{
+    gb.lights.setColor(g_palettes[g_paletteIndex][Color]);
+    gb.lights.drawPixel(X, Y);
+}
+
 void z_platform_setup(void)
 {
     g_buttons[Z_BUTTON_UP].index = BUTTON_UP;
@@ -77,6 +89,8 @@ void z_platform_tick(void)
             g_buttons[b].pressed = pressed;
         }
     }
+
+    z_lights_reset();
 }
 
 void z_platform_draw(void)
@@ -158,4 +172,5 @@ uint8_t z_sprite_getNumFrames(uint8_t Sprite)
 {
     return g_sprites[Sprite].numFrames;
 }
+
 #endif // Z_PLATFORM_GAMEBUINOMETA

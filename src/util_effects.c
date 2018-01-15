@@ -17,7 +17,10 @@
 
 #include "platform.h"
 #include "util_fix.h"
+#include "util_effects.h"
+#include "util_graphics.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "obj_circle.h"
 #include "obj_particle.h"
 
@@ -41,4 +44,30 @@ void z_effect_circles(ZFix X, ZFix Y)
     if(c) {
         z_circle_init(c, X, Y);
     }
+}
+
+void z_effect_light(int16_t X, int16_t Y, uint8_t LightId)
+{
+    #if Z_PLATFORM_GAMEBUINOMETA
+        X = i16(2 * z_int16_clamp(X, 0, i16(Z_SCREEN_W - 1)) / Z_SCREEN_W);
+        Y = i16(4 * z_int16_clamp(Y, 0, i16(Z_SCREEN_H - 1)) / Z_SCREEN_H);
+
+        uint8_t color = 0;
+
+        switch(LightId) {
+            case Z_LIGHT_EXPLOSION: {
+                color = Z_COLOR_RED;
+            } break;
+
+            case Z_LIGHT_PLAYER_SHOOTING: {
+                color = Z_COLOR_YELLOW;
+            } break;
+        }
+
+        z_lights_put(X, Y, color);
+    #else
+        Z_UNUSED(X);
+        Z_UNUSED(Y);
+        Z_UNUSED(LightId);
+    #endif
 }

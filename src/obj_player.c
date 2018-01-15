@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_fix.h"
 #include "util_collision.h"
+#include "util_effects.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
@@ -267,6 +268,10 @@ void z_player_draw(void)
         } else {
             z_draw_circle(x, z_fix_fixtoi(z_player.y), 9, Z_COLOR_GRAY);
         }
+    }
+
+    if(z_player.shootShift) {
+        z_effect_light(x, y, Z_LIGHT_PLAYER_SHOOTING);
     }
 }
 

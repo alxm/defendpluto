@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 
 #include "platform.h"
 #include "util_fix.h"
+#include "util_effects.h"
 #include "util_graphics.h"
 #include "util_pool.h"
 #include "util_screen.h"
@@ -48,4 +49,6 @@ void z_circle_draw(ZPoolObject* Circle)
 
     z_draw_circle(x, y, circle->radius, Z_COLOR_RED);
     z_draw_circle(x, y, u8(circle->radius * 2), Z_COLOR_RED);
+
+    z_effect_light(x, y, Z_LIGHT_EXPLOSION);
 }

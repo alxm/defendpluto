@@ -149,4 +149,6 @@ extern void z_platform_setup(void);
 extern void z_platform_tick(void);
 extern void z_platform_draw(void);
 
+extern void z_lights_put(int16_t X, int16_t Y, uint8_t Color);
+
 Z_EXTERN_C_END
