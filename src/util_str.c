@@ -32,6 +32,8 @@ void z_str_setup(void)
 {
     SET_STR(Z_STR_PRESS_A, "Press A");
     SET_STR(Z_STR_END, "Pluto fell to the Proxima Centauri invaders");
+    SET_STR(Z_STR_WIN, "You saved Pluto from the Proxima Centauri invaders");
+    SET_STR(Z_STR_THANKS, "Thanks for playing the first beta version");
     SET_STR(Z_STR_LEVEL_CLEARED_1, "LEVEL");
     SET_STR(Z_STR_LEVEL_CLEARED_2, "CLEARED");
 }

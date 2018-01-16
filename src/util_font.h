@@ -22,6 +22,7 @@ typedef enum {
     Z_FONT_FACE_LCD,
     Z_FONT_FACE_RED,
     Z_FONT_FACE_REDO,
+    Z_FONT_FACE_YELLOW,
     Z_FONT_FACE_YELLOWO,
     Z_FONT_FACE_NUM
 } ZFontFace;

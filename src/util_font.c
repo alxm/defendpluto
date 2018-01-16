@@ -58,6 +58,12 @@ void z_font_setup(void)
            | Z_FONT_FLAG_ALPHA_U
            | Z_FONT_FLAG_ALPHA_L);
 
+    loadFont(Z_FONT_FACE_YELLOW,
+             Z_SPRITE_FONT_ALPHANUM_YELLOW,
+             Z_FONT_FLAG_NUMERIC
+           | Z_FONT_FLAG_ALPHA_U
+           | Z_FONT_FLAG_ALPHA_L);
+
     loadFont(Z_FONT_FACE_YELLOWO,
              Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW,
              Z_FONT_FLAG_NUMERIC

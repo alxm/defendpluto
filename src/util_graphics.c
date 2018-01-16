@@ -29,6 +29,7 @@
 #include "data_gfx_energy.h"
 #include "data_gfx_font_num.h"
 #include "data_gfx_font_alphanum.h"
+#include "data_gfx_font_alphanum_yellow.h"
 #include "data_gfx_font_alphanum_outline.h"
 #include "data_gfx_font_alphanum_outline_yellow.h"
 #include "data_gfx_hearts.h"
@@ -49,6 +50,7 @@ void z_graphics_setup(void)
 
     z_sprite_load(Z_SPRITE_FONT_NUM, font_num);
     z_sprite_load(Z_SPRITE_FONT_ALPHANUM, font_alphanum);
+    z_sprite_load(Z_SPRITE_FONT_ALPHANUM_YELLOW, font_alphanum_yellow);
     z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE, font_alphanum_outline);
     z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW, font_alphanum_outline_yellow);
 

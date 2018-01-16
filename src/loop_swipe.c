@@ -64,14 +64,19 @@ void z_loop_swipe_hide_tick(void)
             } break;
 
             case Z_STATE_PLAY: {
-                z_loop_setState(Z_STATE_NEXT);
+                if(z_player.level > 0) {
+                    z_loop_setState(Z_STATE_NEXT);
+                } else {
+                    z_loop_setState(Z_STATE_WIN);
+                }
             } break;
 
             case Z_STATE_DIED: {
                 z_loop_setState(Z_STATE_OVER);
             } break;
 
-            case Z_STATE_OVER: {
+            case Z_STATE_OVER:
+            case Z_STATE_WIN: {
                 z_loop_setState(Z_STATE_TITLE);
             } break;
         }

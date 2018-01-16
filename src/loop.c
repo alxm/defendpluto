@@ -25,6 +25,7 @@
 #include "loop_play.h"
 #include "loop_swipe.h"
 #include "loop_title.h"
+#include "loop_win.h"
 #include "util_fix.h"
 #include "util_font.h"
 #include "util_graphics.h"
@@ -94,6 +95,11 @@ static ZState g_states[Z_STATE_NUM] = {
         z_loop_title_init,
         z_loop_title_tick,
         z_loop_title_draw
+    },
+    {
+        z_loop_win_init,
+        z_loop_win_tick,
+        z_loop_win_draw
     },
 };
 

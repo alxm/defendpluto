@@ -24,6 +24,7 @@
 #include "util_screen.h"
 #include "util_vm.h"
 #include "obj_enemy.h"
+#include "obj_player.h"
 #include "data_levels.h"
 
 typedef enum {
@@ -137,7 +138,8 @@ static bool op_over(uint8_t Flags)
      * over
      * over
      */
-    z_vm_reset();
+    z_player.level = 0;
+    z_loop_setState(Z_STATE_SWIPE_HIDE);
 
     return false;
 }
