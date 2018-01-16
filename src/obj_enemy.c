@@ -196,6 +196,37 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
                 } break;
             }
         } break;
+
+        case Z_FLY_ZIGZAG: {
+            switch(enemy->flyState) {
+                case 0: {
+                    if(++enemy->flyCounter == 40) {
+                        enemy->flyCounter = 0;
+                        enemy->flyState = 2;
+                    }
+
+                    enemy->angle = Z_ANGLE_327;
+                } break;
+
+                case 1: {
+                    if(++enemy->flyCounter == 80) {
+                        enemy->flyCounter = 0;
+                        enemy->flyState = 2;
+                    }
+
+                    enemy->angle = Z_ANGLE_327;
+                } break;
+
+                case 2: {
+                    if(++enemy->flyCounter == 80) {
+                        enemy->flyCounter = 0;
+                        enemy->flyState = 1;
+                    }
+
+                    enemy->angle = Z_ANGLE_202;
+                } break;
+            }
+        } break;
     }
 
     if(move) {

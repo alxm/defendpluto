@@ -238,6 +238,7 @@ class CompilerTool:
                 'circleRel': 4,
                 'squareAbs': 5,
                 'squareRel': 6,
+                'zigzag': 7,
             },
 
             'attack': {
