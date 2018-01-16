@@ -20,6 +20,7 @@
 #include "util_font.h"
 #include "util_fix.h"
 #include "util_graphics.h"
+#include "util_hud.h"
 #include "util_input.h"
 #include "util_pool.h"
 #include "util_screen.h"
@@ -28,6 +29,7 @@
 
 void z_loop_pause_tick(void)
 {
+    z_hud_tick();
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
     if(z_button_pressedOnce(Z_BUTTON_MENU)) {
@@ -39,6 +41,8 @@ void z_loop_pause_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
+    z_hud_draw();
+
     z_sprite_blitCentered(Z_SPRITE_DEFENDPLUTO, Z_SCREEN_W / 2, 27, 0);
 
     z_font_text(Z_STR_PAUSE,
