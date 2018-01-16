@@ -40,6 +40,7 @@ void z_loop_next_tick(void)
 
     if(z_button_pressedOnce(Z_BUTTON_A)) {
         z_loop_setState(Z_STATE_SWIPE_SHOW);
+        z_player.level++;
     }
 }
 

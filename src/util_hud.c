@@ -94,14 +94,27 @@ static void drawEnergy(int16_t X, int16_t Y)
     drawBar(i16(X + 4), i16(Y + 2), z_player.energy, Z_PLAYER_MAX_ENERGY);
 }
 
+static void drawLevel(int16_t X, int16_t Y)
+{
+    int16_t x = i16(X - z_sprite_getWidth(Z_SPRITE_ICON_LEVEL));
+
+    z_sprite_blit(Z_SPRITE_ICON_LEVEL, x, i16(Y + 1), 0);
+
+    z_font_int(z_player.level,
+               i16(x - 1),
+               Y,
+               Z_FONT_FACE_LCD,
+               Z_FONT_ALIGN_R);
+}
+
 static void drawScore(int16_t X, int16_t Y)
 {
-    int16_t credsX = i16(X - z_sprite_getWidth(Z_SPRITE_CREDS));
+    int16_t x = i16(X - z_sprite_getWidth(Z_SPRITE_ICON_CREDS));
 
-    z_sprite_blit(Z_SPRITE_CREDS, credsX, i16(Y + 1), 0);
+    z_sprite_blit(Z_SPRITE_ICON_CREDS, x, i16(Y + 1), 0);
 
     z_font_int(i16(z_player.scoreShow),
-               i16(credsX - 1),
+               i16(x - 1),
                Y,
                Z_FONT_FACE_LCD,
                Z_FONT_ALIGN_R);
@@ -112,5 +125,6 @@ void z_hud_draw(void)
     drawHearts(2, 2);
     drawShield(28, 2);
     drawEnergy(54, 1);
+    drawLevel(i16(Z_SCREEN_W - 2), i16(Z_SCREEN_H - 17));
     drawScore(i16(Z_SCREEN_W - 2), i16(Z_SCREEN_H - 9));
 }

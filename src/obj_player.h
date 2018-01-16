@@ -47,6 +47,7 @@ typedef struct {
     bool invincible : 1;
     uint16_t score;
     uint16_t scoreShow;
+    uint8_t level;
 } ZPlayer;
 
 extern ZPlayer z_player;

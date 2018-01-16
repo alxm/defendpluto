@@ -122,6 +122,7 @@ void z_player_init(void)
     z_player.invincible = false;
     z_player.score = 0;
     z_player.scoreShow = 0;
+    z_player.level = 1;
 
     z_player_resetPosition();
 

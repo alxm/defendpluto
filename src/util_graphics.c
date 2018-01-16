@@ -22,7 +22,6 @@
 #include "data_gfx_alxm.h"
 #include "data_gfx_asteroid.h"
 #include "data_gfx_bullets.h"
-#include "data_gfx_creds.h"
 #include "data_gfx_defendpluto.h"
 #include "data_gfx_enemy00.h"
 #include "data_gfx_enemy01.h"
@@ -33,6 +32,8 @@
 #include "data_gfx_font_alphanum_outline.h"
 #include "data_gfx_font_alphanum_outline_yellow.h"
 #include "data_gfx_hearts.h"
+#include "data_gfx_icon_creds.h"
+#include "data_gfx_icon_level.h"
 #include "data_gfx_player.h"
 #include "data_gfx_shield.h"
 #include "data_gfx_title128.h"
@@ -51,7 +52,8 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE, font_alphanum_outline);
     z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW, font_alphanum_outline_yellow);
 
-    z_sprite_load(Z_SPRITE_CREDS, creds);
+    z_sprite_load(Z_SPRITE_ICON_CREDS, icon_creds);
+    z_sprite_load(Z_SPRITE_ICON_LEVEL, icon_level);
     z_sprite_load(Z_SPRITE_ENERGY, energy);
     z_sprite_load(Z_SPRITE_HEARTS, hearts);
     z_sprite_load(Z_SPRITE_SHIELD, shield);
