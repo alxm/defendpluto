@@ -44,9 +44,9 @@ static void enemy(uint8_t Index, uint8_t Sprite, uint8_t Width, uint8_t Height, 
 
 void z_enemy_setup(void)
 {
-    enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, 8, 8, 3, 0, 2, 0);
+    enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, 8, 8, 3, 0, 1, 0);
     enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  7, 5, 1, 2, 1, 20);
-    enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  7, 5, 1, 4, 2, 15);
+    enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  7, 5, 1, 4, 0, 15);
     enemy(Z_ENEMY_SHIP2,    Z_SPRITE_ENEMY02,  7, 6, 2, 6, 1, 15);
 
     z_timer_start(Z_TIMER_ENEMY_FRAME, 2);

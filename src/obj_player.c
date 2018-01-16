@@ -34,7 +34,7 @@
 static const uint8_t Z_PLAYER_SHOOT_EVERY_DS = 3;
 static const uint8_t Z_PLAYER_SHOOT_SHIFT_DS = 1;
 
-static const int16_t Z_PLAYER_SPEED_MAX = Z_FIX_ONE;
+static const int16_t Z_PLAYER_SPEED_MAX = Z_FIX_ONE * 3 / 4;
 static const int16_t Z_PLAYER_SPEED_ACCEL = Z_FIX_ONE / 8;
 static const int16_t Z_PLAYER_SPEED_DECEL = Z_FIX_ONE / 16;
 
