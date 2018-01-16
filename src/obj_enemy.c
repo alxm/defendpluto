@@ -98,10 +98,6 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
             move = false;
         } break;
 
-        case Z_FLY_DOWN: {
-            enemy->angle = Z_ANGLE_270;
-        } break;
-
         case Z_FLY_FOLLOW: {
             if(enemy->flyCounter-- == 0) {
                 enemy->flyCounter = z_fps_dsToTicks(5);
@@ -126,12 +122,11 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
                         enemy->flyCounter = 0;
                         enemy->flyState = 1;
                     }
-
-                    enemy->angle = Z_ANGLE_270;
                 } break;
 
                 case 1: {
-                    if(z_fps_isNthFrame(2)) {
+                    if(++enemy->flyCounter == 2) {
+                        enemy->flyCounter = 0;
                         enemy->angle = Z_ANGLE_WRAP(enemy->angle
                                                     + Z_ANGLES_NUM / 128);
                     }
@@ -145,12 +140,11 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
                     if(z_fix_fixtoi(enemy->y) > Z_SCREEN_H / 2) {
                         enemy->flyState = 1;
                     }
-
-                    enemy->angle = Z_ANGLE_270;
                 } break;
 
                 case 1: {
-                    if(z_fps_isNthFrame(2)) {
+                    if(++enemy->flyCounter == 2) {
+                        enemy->flyCounter = 0;
                         enemy->angle = Z_ANGLE_WRAP(enemy->angle
                                                     + Z_ANGLES_NUM / 128);
                     }
@@ -165,8 +159,6 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
                         enemy->flyCounter = 0;
                         enemy->flyState = 1;
                     }
-
-                    enemy->angle = Z_ANGLE_270;
                 } break;
 
                 case 1: {
@@ -184,8 +176,6 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
                     if(z_fix_fixtoi(enemy->y) > Z_SCREEN_H / 2) {
                         enemy->flyState = 1;
                     }
-
-                    enemy->angle = Z_ANGLE_270;
                 } break;
 
                 case 1: {
