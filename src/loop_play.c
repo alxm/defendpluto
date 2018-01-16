@@ -20,6 +20,7 @@
 #include "util_fix.h"
 #include "util_graphics.h"
 #include "util_hud.h"
+#include "util_input.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_vm.h"
@@ -46,6 +47,10 @@ void z_loop_play_tick(void)
 
     if(z_player.health < 0) {
         z_loop_setState(Z_STATE_DIED);
+    }
+
+    if(z_button_pressedOnce(Z_BUTTON_MENU)) {
+        z_loop_setState(Z_STATE_PAUSE);
     }
 }
 

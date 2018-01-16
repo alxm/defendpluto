@@ -25,6 +25,7 @@ typedef enum {
     Z_BUTTON_RIGHT,
     Z_BUTTON_A,
     Z_BUTTON_B,
+    Z_BUTTON_MENU,
     Z_BUTTON_NUM
 } ZButtonId;
 

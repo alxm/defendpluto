@@ -62,6 +62,7 @@ void z_platform_setup(void)
     g_buttons[Z_BUTTON_RIGHT].index = BUTTON_RIGHT;
     g_buttons[Z_BUTTON_A].index = BUTTON_A;
     g_buttons[Z_BUTTON_B].index = BUTTON_B;
+    g_buttons[Z_BUTTON_MENU].index = BUTTON_MENU;
 
     g_paletteIndex = Z_PALETTE_DEFAULT;
 

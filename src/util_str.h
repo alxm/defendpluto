@@ -17,6 +17,7 @@
 
 typedef enum {
     Z_STR_INVALID = -1,
+    Z_STR_PAUSE,
     Z_STR_PRESS_A,
     Z_STR_END,
     Z_STR_WIN,

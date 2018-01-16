@@ -22,6 +22,7 @@
 #include "loop_new.h"
 #include "loop_next.h"
 #include "loop_over.h"
+#include "loop_pause.h"
 #include "loop_play.h"
 #include "loop_swipe.h"
 #include "loop_title.h"
@@ -70,6 +71,11 @@ static ZState g_states[Z_STATE_NUM] = {
         NULL,
         z_loop_over_tick,
         z_loop_over_draw
+    },
+    {
+        NULL,
+        z_loop_pause_tick,
+        z_loop_pause_draw
     },
     {
         NULL,

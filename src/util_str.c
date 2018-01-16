@@ -30,6 +30,7 @@ ZString z_strings[Z_STR_NUM];
 
 void z_str_setup(void)
 {
+    SET_STR(Z_STR_PAUSE, "PAUSED");
     SET_STR(Z_STR_PRESS_A, "Press A");
     SET_STR(Z_STR_END, "Pluto fell to the Proxima Centauri invaders");
     SET_STR(Z_STR_WIN, "You saved Pluto from the Proxima Centauri invaders");
