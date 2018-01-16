@@ -31,6 +31,8 @@ typedef enum {
     Z_FLY_FOLLOW,
     Z_FLY_CIRCLE_ABS,
     Z_FLY_CIRCLE_REL,
+    Z_FLY_SQUARE_ABS,
+    Z_FLY_SQUARE_REL,
     Z_FLY_NUM
 } ZFlyId;
 

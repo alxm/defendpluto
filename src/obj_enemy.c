@@ -123,6 +123,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
             switch(enemy->flyState) {
                 case 0: {
                     if(++enemy->flyCounter == 150) {
+                        enemy->flyCounter = 0;
                         enemy->flyState = 1;
                     }
 
@@ -152,6 +153,45 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
                     if(z_fps_isNthFrame(2)) {
                         enemy->angle = Z_ANGLE_WRAP(enemy->angle
                                                     + Z_ANGLES_NUM / 128);
+                    }
+                } break;
+            }
+        } break;
+
+        case Z_FLY_SQUARE_ABS: {
+            switch(enemy->flyState) {
+                case 0: {
+                    if(++enemy->flyCounter == 150) {
+                        enemy->flyCounter = 0;
+                        enemy->flyState = 1;
+                    }
+
+                    enemy->angle = Z_ANGLE_270;
+                } break;
+
+                case 1: {
+                    if(++enemy->flyCounter == 50) {
+                        enemy->flyCounter = 0;
+                        enemy->angle = Z_ANGLE_WRAP(enemy->angle + Z_ANGLE_090);
+                    }
+                } break;
+            }
+        } break;
+
+        case Z_FLY_SQUARE_REL: {
+            switch(enemy->flyState) {
+                case 0: {
+                    if(z_fix_fixtoi(enemy->y) > Z_SCREEN_H / 2) {
+                        enemy->flyState = 1;
+                    }
+
+                    enemy->angle = Z_ANGLE_270;
+                } break;
+
+                case 1: {
+                    if(++enemy->flyCounter == 100) {
+                        enemy->flyCounter = 0;
+                        enemy->angle = Z_ANGLE_WRAP(enemy->angle + Z_ANGLE_090);
                     }
                 } break;
             }
