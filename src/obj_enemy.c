@@ -48,6 +48,7 @@ void z_enemy_setup(void)
     enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  7, 5, 1, 2, 1, 20);
     enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  7, 5, 1, 4, 0, 15);
     enemy(Z_ENEMY_SHIP2,    Z_SPRITE_ENEMY02,  7, 6, 2, 6, 1, 15);
+    enemy(Z_ENEMY_SHIP3,    Z_SPRITE_ENEMY00,  7, 5, 3, 3, 1, 10);
 
     z_timer_start(Z_TIMER_ENEMY_FRAME, 2);
 }
@@ -234,7 +235,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
 
         switch(enemy->attackId) {
             case Z_ATTACK_FRONT: {
-                shoot(enemy, enemy->angle, false);
+                shoot(enemy, Z_ANGLE_270, false);
             } break;
 
             case Z_ATTACK_TARGET: {

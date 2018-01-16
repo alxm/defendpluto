@@ -21,6 +21,7 @@ typedef enum {
     Z_ENEMY_SHIP0,
     Z_ENEMY_SHIP1,
     Z_ENEMY_SHIP2,
+    Z_ENEMY_SHIP3,
     Z_ENEMY_NUM
 } ZEnemyId;
 

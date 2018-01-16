@@ -228,6 +228,7 @@ class CompilerTool:
                 'enemy0': 1,
                 'enemy1': 2,
                 'enemy2': 3,
+                'enemy3': 4,
             },
 
             'fly': {

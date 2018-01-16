@@ -122,7 +122,7 @@ done
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
-; 3. The last enemies and asteroids
+; 3. A few more enemies and asteroids
 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -177,6 +177,35 @@ end
 
 spawn 80 -1 asteroid down
 spawn 60 -2 asteroid down
+
+done
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; 5. Formations
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+set y1 -1
+loop 8
+    spawn 30 y1 enemy3 circleRel front
+    inc y1 -2
+end
+
+spawn 10 -1 enemy1 follow target
+spawn 20 -2 enemy1 follow target
+spawn 90 -2 enemy1 follow target
+
+wait 50
+
+set x1 15
+set t 5
+loop 4
+    spawn x1 -1 asteroid down
+    inc x1 15
+    wait t
+    inc t 2
+end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
