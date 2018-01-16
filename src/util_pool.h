@@ -26,11 +26,11 @@ typedef enum {
     Z_POOL_NUM
 } ZPoolType;
 
-#define Z_POOL_NUM_BULLETE 8
-#define Z_POOL_NUM_BULLETP 3
+#define Z_POOL_NUM_BULLETE 16
+#define Z_POOL_NUM_BULLETP 4
 #define Z_POOL_NUM_CIRCLE 2
 #define Z_POOL_NUM_ENEMY 16
-#define Z_POOL_NUM_PARTICLE 4
+#define Z_POOL_NUM_PARTICLE 6
 #define Z_POOL_NUM_STAR 16
 
 typedef struct ZPool ZPool;
