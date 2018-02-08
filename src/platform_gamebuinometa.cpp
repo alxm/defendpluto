@@ -33,7 +33,7 @@ typedef struct {
 } ZButton;
 
 typedef struct {
-    Image* image;
+    Image image;
     uint8_t numFrames;
 } ZSprite;
 
@@ -149,24 +149,24 @@ void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
 
 void z_platform__loadSprite(uint8_t Sprite, const uint16_t* Buffer, uint8_t NumFrames)
 {
-    g_sprites[Sprite].image = new Image(Buffer);
+    g_sprites[Sprite].image.init(Buffer);
     g_sprites[Sprite].numFrames = NumFrames;
 }
 
 void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
-    g_sprites[Sprite].image->setFrame(Frame);
-    gb.display.drawImage(X, Y, *g_sprites[Sprite].image);
+    g_sprites[Sprite].image.setFrame(Frame);
+    gb.display.drawImage(X, Y, g_sprites[Sprite].image);
 }
 
 int16_t z_sprite_getWidth(uint8_t Sprite)
 {
-    return g_sprites[Sprite].image->width();
+    return g_sprites[Sprite].image.width();
 }
 
 int16_t z_sprite_getHeight(uint8_t Sprite)
 {
-    return g_sprites[Sprite].image->height();
+    return g_sprites[Sprite].image.height();
 }
 
 uint8_t z_sprite_getNumFrames(uint8_t Sprite)
