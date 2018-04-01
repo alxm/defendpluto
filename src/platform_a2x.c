@@ -121,8 +121,7 @@ void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
 void z_platform__loadSprite(uint8_t Sprite, const char* Path)
 {
     ZSprite* sprite = &g_sprites[Sprite];
-    ASprite* sheet = a_sprite_newFromFile(Path);
-    ASpriteFrames* frames = a_spriteframes_new(sheet, 0, 0, 0);
+    ASpriteFrames* frames = a_spriteframes_newFromFile(Path, 0);
 
     for(ZPalette p = 0; p < Z_PALETTE_NUM; p++) {
         if(p == Z_PALETTE_DEFAULT) {
@@ -142,8 +141,6 @@ void z_platform__loadSprite(uint8_t Sprite, const char* Path)
     }
 
     sprite->numFrames = u8(a_spriteframes_getNum(frames));
-
-    a_sprite_free(sheet);
 }
 
 static ASprite* getCurrentSprite(uint8_t Sprite, uint8_t Frame)
