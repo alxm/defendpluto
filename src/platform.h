@@ -15,12 +15,16 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifdef A2X
+    #define Z_PLATFORM_A2X 1
+#endif
+
 #ifdef ARDUINO_AVR_LEONARDO
     #define Z_PLATFORM_ARDUBOY 1
 #endif
 
 #ifdef ARDUINO_SAMD_ZERO
-    #define Z_PLATFORM_GAMEBUINOMETA 1
+    #define Z_PLATFORM_META 1
 #endif
 
 #define Z_DEBUG_GENERATE_LUT 0
@@ -40,36 +44,19 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <limits.h>
 
-#ifdef ARDUINO
-    #include <Arduino.h>
+#if Z_PLATFORM_A2X
+    #include "platform_a2x.h"
+#elif Z_PLATFORM_ARDUBOY
+    #include "platform_arduboy.h"
+#elif Z_PLATFORM_META
+    #include "platform_meta.h"
 #endif
 
 Z_EXTERN_C_START
 
-#if Z_PLATFORM_ARDUBOY
-    typedef uint8_t ZPoolOffset;
-
-    static inline char z_pgm_readChar(const char* Address)
-    {
-        return pgm_read_byte(Address);
-    }
-
-    static inline uint8_t z_pgm_readU8(const uint8_t* Address)
-    {
-        return pgm_read_byte(Address);
-    }
-
-    static inline int16_t z_pgm_readI16(const int16_t* Address)
-    {
-        return pgm_read_word(Address);
-    }
-
-    static inline uint16_t z_pgm_readU16(const uint16_t* Address)
-    {
-        return pgm_read_word(Address);
-    }
-#else
+#if !Z_PLATFORM_ARDUBOY
     #define PROGMEM
     typedef size_t ZPoolOffset;
 
@@ -112,43 +99,7 @@ Z_EXTERN_C_START
 #define zf(X) (ZFix)(X)
 #define zpo(X) (ZPoolOffset)(X)
 
-typedef enum {
-    Z_PALETTE_INVALID = -1,
-    Z_PALETTE_ARDUBOY,
-    Z_PALETTE_DEFAULT,
-    Z_PALETTE_X1,
-    Z_PALETTE_X2,
-    Z_PALETTE_NUM
-} ZPalette;
-
 #define Z_UNUSED(X) (X = X)
 #define Z_ARRAY_LEN(A) (sizeof(A) / sizeof(A[0]))
-
-#if Z_PLATFORM_ARDUBOY
-    #define z_sprite_load(Index, Id)                      \
-        z_platform__loadSprite(Index,                     \
-                               z_data_gfx_##Id##_buffer,  \
-                               z_data_gfx_##Id##_frames);
-
-    extern void z_platform__loadSprite(uint8_t Sprite, const uint8_t* Buffer, uint8_t NumFrames);
-#elif Z_PLATFORM_GAMEBUINOMETA
-    #define z_sprite_load(Index, Id)                      \
-        z_platform__loadSprite(Index,                     \
-                               z_data_gfx_##Id##_buffer,  \
-                               z_data_gfx_##Id##_frames);
-
-    extern void z_platform__loadSprite(uint8_t Sprite, const uint16_t* Buffer, uint8_t NumFrames);
-#else
-    #define z_sprite_load(Index, Id)                      \
-        z_platform__loadSprite(Index, "gfx/" #Id ".png");
-
-    extern void z_platform__loadSprite(uint8_t Sprite, const char* Path);
-#endif
-
-extern void z_platform_setup(void);
-extern void z_platform_tick(void);
-extern void z_platform_draw(void);
-
-extern void z_lights_put(int16_t X, int16_t Y, uint8_t Color);
 
 Z_EXTERN_C_END

@@ -49,7 +49,7 @@ PROGMEM static const uint8_t z_data_gfx_player_buffer[] = {
     0x04,0x07,0x06,0x1e,0x1f,0x0e,0x0e,0x1f,0x1e,0x07,0x04,0x0e,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_player_frames = 9;
 

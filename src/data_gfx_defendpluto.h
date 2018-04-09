@@ -25,7 +25,7 @@ PROGMEM static const uint8_t z_data_gfx_defendpluto_buffer[] = {
     0xc0,0xff,0xff,0x00,0x03,0xff,0xff,0x03,0x00,0xff,0xff,0xc3,0xff,0xff,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_defendpluto_frames = 1;
 

@@ -15,6 +15,8 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 Z_EXTERN_C_START
 
 typedef enum {
@@ -31,8 +33,8 @@ typedef enum {
 
 extern void z_input_reset(void);
 
-extern bool z_button_pressed(uint8_t Button);
-extern void z_button_release(uint8_t Button);
-extern bool z_button_pressedOnce(uint8_t Button);
+extern bool z_button_pressed(ZButtonId Button);
+extern void z_button_release(ZButtonId Button);
+extern bool z_button_pressedOnce(ZButtonId Button);
 
 Z_EXTERN_C_END

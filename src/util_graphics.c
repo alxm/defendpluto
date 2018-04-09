@@ -17,7 +17,6 @@
 
 #include "platform.h"
 #include "util_graphics.h"
-#include "util_screen.h"
 
 #include "data_gfx_alxm.h"
 #include "data_gfx_asteroid.h"

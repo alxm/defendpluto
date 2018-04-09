@@ -16,13 +16,13 @@
 */
 
 #include "platform.h"
-#include "util_fix.h"
-#include "util_effects.h"
 #include "util_collision.h"
-#include "util_pool.h"
-#include "util_screen.h"
+
 #include "obj_enemy.h"
 #include "obj_player.h"
+#include "util_effects.h"
+#include "util_pool.h"
+#include "util_screen.h"
 
 typedef struct {
     int16_t x, y;

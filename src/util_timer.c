@@ -16,8 +16,9 @@
 */
 
 #include "platform.h"
-#include "util_fps.h"
 #include "util_timer.h"
+
+#include "util_fps.h"
 
 typedef struct {
     uint8_t base;

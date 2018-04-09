@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,138 +15,161 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ARDUINO
-#include <a2x.h>
-
 #include "platform.h"
-#include "util_graphics.h"
+
+#include "loop.h"
+#include "util_fps.h"
 #include "util_input.h"
 
-typedef struct {
-    ASpriteFrames* frames[Z_PALETTE_NUM];
-    uint8_t numFrames;
-} ZSprite;
-
+#if Z_PLATFORM_A2X
 static AInputButton* g_buttons[Z_BUTTON_NUM];
-static ZPalette g_paletteIndex;
-static AInputButton* g_paletteSwitch;
-static APixel g_palettes[Z_PALETTE_NUM][Z_COLOR_NUM];
-static ZSprite g_sprites[Z_SPRITE_NUM];
+static ASpriteFrames* g_sprites[Z_SPRITE_NUM];
+static ZPixel g_colors[Z_COLOR_NUM];
 
-void z_platform_setup(void)
+A_SETUP
 {
-    g_buttons[Z_BUTTON_UP] = a_button_new("key.up gamepad.b.up");
-    g_buttons[Z_BUTTON_DOWN] = a_button_new("key.down gamepad.b.down");
-    g_buttons[Z_BUTTON_LEFT] = a_button_new("key.left gamepad.b.left");
-    g_buttons[Z_BUTTON_RIGHT] = a_button_new("key.right gamepad.b.right");
-    g_buttons[Z_BUTTON_A] = a_button_new("key.z gamepad.b.a");
-    g_buttons[Z_BUTTON_B] = a_button_new("key.x gamepad.b.b");
-    g_buttons[Z_BUTTON_MENU] = a_button_new("key.enter gamepad.b.start");
+    a_settings_set("app.title", "Defend Pluto");
+    a_settings_set("app.version", "Beta 1");
+    a_settings_set("app.author", "alxm");
+    a_settings_set("app.output.on", "yes");
+    a_settings_set("app.output.verbose", "yes");
+    a_settings_set("video.width", A_STRINGIFY(Z_SCREEN_W));
+    a_settings_set("video.height", A_STRINGIFY(Z_SCREEN_H));
+    a_settings_set("fps.tick", A_STRINGIFY(Z_FPS));
+    a_settings_set("fps.draw", A_STRINGIFY(Z_FPS));
+}
 
-    g_paletteIndex = Z_PALETTE_DEFAULT;
-    g_paletteSwitch = a_button_new("key.c gamepad.b.select");
+A_STATE(run)
+{
+    A_STATE_INIT
+    {
+        g_buttons[Z_BUTTON_UP] = a_button_new("key.up gamepad.b.up");
+        g_buttons[Z_BUTTON_DOWN] = a_button_new("key.down gamepad.b.down");
+        g_buttons[Z_BUTTON_LEFT] = a_button_new("key.left gamepad.b.left");
+        g_buttons[Z_BUTTON_RIGHT] = a_button_new("key.right gamepad.b.right");
+        g_buttons[Z_BUTTON_A] = a_button_new("key.z gamepad.b.a");
+        g_buttons[Z_BUTTON_B] = a_button_new("key.x gamepad.b.b");
+        g_buttons[Z_BUTTON_MENU] = a_button_new("key.enter gamepad.b.start");
 
-    ASprite* pal = a_sprite_newFromFile("gfx/palette.png");
+        ASprite* pal = a_sprite_newFromFile("gfx/palette.png");
 
-    for(ZPalette p = 0; p < Z_PALETTE_NUM; p++) {
         for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
-            g_palettes[p][c] = a_sprite_getPixel(pal, 1 + c, p);
+            g_colors[c] = a_sprite_getPixel(pal, 1 + c, 1);
         }
+
+        a_sprite_free(pal);
+
+        z_loop_setup();
     }
 
-    a_sprite_free(pal);
-}
+    A_STATE_TICK
+    {
+        z_loop_tick();
+    }
 
-void z_platform_tick(void)
-{
-    if(a_button_getPressedOnce(g_paletteSwitch)) {
-        g_paletteIndex = (g_paletteIndex + 1) % Z_PALETTE_NUM;
+    A_STATE_DRAW
+    {
+        z_loop_draw();
     }
 }
 
-void z_platform_draw(void)
+A_MAIN
 {
-    //
+    #if Z_DEBUG_GENERATE_LUT
+        {
+            uint8_t angle = 0;
+            ZFix lastRatio = 0;
+
+            printf("PROGMEM static const uint8_t g_atanAngles[Z_FIX_ONE] = {");
+
+            for(ZFix refRatio = 0; refRatio < Z_FIX_ONE; refRatio++) {
+                if(refRatio % 16 == 0) {
+                    printf("\n    ");
+                }
+
+                ZFix ratio = zf(a_fix_div(a_fix_sin(angle), a_fix_cos(angle))
+                                    / (A_FIX_ONE / Z_FIX_ONE));
+
+                while(ratio < refRatio) {
+                    angle++;
+                    lastRatio = ratio;
+                    ratio = zf(a_fix_div(a_fix_sin(angle), a_fix_cos(angle))
+                                    / (A_FIX_ONE / Z_FIX_ONE));
+                }
+
+                ZFix diff1 = zf(refRatio - lastRatio);
+                ZFix diff2 = zf(ratio - refRatio);
+
+                if(diff2 <= diff1) {
+                    printf("%d, ",
+                           angle / (A_MATH_ANGLES_NUM / Z_ANGLES_NUM));
+                } else {
+                    printf("%d, ",
+                           (unsigned)
+                            (angle - 1) / (A_MATH_ANGLES_NUM / Z_ANGLES_NUM));
+                }
+            }
+
+            printf("\n};\n");
+        }
+
+        printf("\n");
+
+        {
+            printf("PROGMEM const ZFix z_fix__sin[Z_ANGLES_NUM] = {");
+
+            for(unsigned a = 0;
+                a < A_MATH_ANGLES_NUM;
+                a += A_MATH_ANGLES_NUM / Z_ANGLES_NUM) {
+
+                if(a % 16 == 0) {
+                    printf("\n    ");
+                }
+
+                printf("%d, ", a_fix_sin(a) / (A_FIX_ONE / Z_FIX_ONE));
+            }
+
+            printf("\n};\n");
+        }
+    #else
+        a_state_new("run", run, "", "");
+        a_state_push("run");
+    #endif
 }
 
-uint16_t z_fps_getCounter(void)
-{
-    return u16(a_fps_getCounter());
-}
-
-bool z_fps_isNthFrame(uint8_t N)
-{
-    return a_fps_isNthFrame(N);
-}
-
-bool z_button_pressed(uint8_t Button)
+bool z_button_pressed(ZButtonId Button)
 {
     return a_button_getPressed(g_buttons[Button]);
 }
 
-void z_button_release(uint8_t Button)
+void z_button_release(ZButtonId Button)
 {
     a_button_release(g_buttons[Button]);
 }
 
-void z_draw_fill(uint8_t Color)
+ZPixel* z_screen_getPixels(void)
 {
-    a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
-    a_draw_fill();
+    return a_screen_getPixels();
 }
 
-void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
+void z_platform__loadSprite(ZSpriteId Sprite, const char* Path)
 {
-    a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
-    a_draw_rectangle(X, Y, W, H);
+    g_sprites[Sprite] = a_spriteframes_newFromFile(Path, 0);
 }
 
-void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
+ZPixel z_sprite_getTransparentColor(void)
 {
-    a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
-    a_draw_pixel(X, Y);
-}
-
-void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
-{
-    a_pixel_push();
-
-    a_pixel_setPixel(g_palettes[g_paletteIndex][Color]);
-    a_pixel_setFillDraw(false);
-    a_draw_circle(X, Y, Radius);
-
-    a_pixel_pop();
-}
-
-void z_platform__loadSprite(uint8_t Sprite, const char* Path)
-{
-    ZSprite* sprite = &g_sprites[Sprite];
-    ASpriteFrames* frames = a_spriteframes_newFromFile(Path, 0);
-
-    for(ZPalette p = 0; p < Z_PALETTE_NUM; p++) {
-        if(p == Z_PALETTE_DEFAULT) {
-            sprite->frames[p] = frames;
-            continue;
-        }
-
-        sprite->frames[p] = a_spriteframes_dup(frames, true);
-        AList* sprites = a_spriteframes_getSprites(sprite->frames[p]);
-
-        A_LIST_ITERATE(sprites, ASprite*, s) {
-            a_sprite_swapColors(s,
-                                g_palettes[Z_PALETTE_DEFAULT],
-                                g_palettes[p],
-                                Z_COLOR_NUM);
-        }
-    }
-
-    sprite->numFrames = u8(a_spriteframes_getNum(frames));
+    return a_sprite_getColorKey();
 }
 
 static ASprite* getCurrentSprite(uint8_t Sprite, uint8_t Frame)
 {
-    return a_spriteframes_getByIndex(g_sprites[Sprite].frames[g_paletteIndex],
-                                     Frame);
+    return a_spriteframes_getByIndex(g_sprites[Sprite], Frame);
+}
+
+ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame)
+{
+    return a_sprite_getPixels(getCurrentSprite(Sprite, Frame));
 }
 
 void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
@@ -166,6 +189,45 @@ int16_t z_sprite_getHeight(uint8_t Sprite)
 
 uint8_t z_sprite_getNumFrames(uint8_t Sprite)
 {
-    return g_sprites[Sprite].numFrames;
+    return u8(a_spriteframes_getNum(g_sprites[Sprite]));
 }
-#endif // ifndef ARDUINO
+
+void z_draw_fill(uint8_t Color)
+{
+    a_pixel_setPixel(g_colors[Color]);
+    a_draw_fill();
+}
+
+void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
+{
+    a_pixel_setPixel(g_colors[Color]);
+    a_draw_rectangle(X, Y, W, H);
+}
+
+void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
+{
+    a_pixel_setPixel(g_colors[Color]);
+    a_draw_pixel(X, Y);
+}
+
+void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
+{
+    a_pixel_push();
+
+    a_pixel_setPixel(g_colors[Color]);
+    a_pixel_setFillDraw(false);
+    a_draw_circle(X, Y, Radius);
+
+    a_pixel_pop();
+}
+
+uint16_t z_fps_getCounter(void)
+{
+    return u16(a_fps_getCounter());
+}
+
+bool z_fps_isNthFrame(uint8_t N)
+{
+    return a_fps_isNthFrame(N);
+}
+#endif // Z_PLATFORM_A2X

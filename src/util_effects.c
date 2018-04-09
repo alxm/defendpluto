@@ -16,11 +16,8 @@
 */
 
 #include "platform.h"
-#include "util_fix.h"
 #include "util_effects.h"
-#include "util_graphics.h"
-#include "util_pool.h"
-#include "util_screen.h"
+
 #include "obj_circle.h"
 #include "obj_particle.h"
 

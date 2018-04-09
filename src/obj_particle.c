@@ -16,13 +16,11 @@
 */
 
 #include "platform.h"
-#include "util_fix.h"
+#include "obj_particle.h"
+
 #include "util_fps.h"
-#include "util_graphics.h"
-#include "util_pool.h"
 #include "util_random.h"
 #include "util_screen.h"
-#include "obj_particle.h"
 
 void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)
 {
@@ -41,8 +39,8 @@ bool z_particle_tick(ZPoolObject* Particle, void* Context)
 
     particle->ticks++;
 
-    return particle->ticks < Z_FPS_RATE / 4
-        || (particle->ticks < Z_FPS_RATE && z_random_int8(4) != 0);
+    return particle->ticks < Z_FPS / 4
+        || (particle->ticks < Z_FPS && z_random_int8(4) != 0);
 }
 
 void z_particle_draw(ZPoolObject* Particle)

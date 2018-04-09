@@ -15,6 +15,10 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
+#include "loop.h"
+
 extern ZStateCallback z_loop_next_init;
 extern ZStateCallback z_loop_next_tick;
 extern ZStateCallback z_loop_next_draw;

@@ -17,15 +17,12 @@
 
 #include "platform.h"
 
-#if Z_PLATFORM_GAMEBUINOMETA
-#include <Gamebuino-Meta.h>
-
-#include "util_font.h"
-#include "util_fps.h"
-#include "util_graphics.h"
-#include "util_input.h"
 #include "data_gfx_palette.h"
+#include "loop.h"
+#include "util_fps.h"
+#include "util_input.h"
 
+#if Z_PLATFORM_META
 typedef struct {
     Button index;
     bool pressed : 1;
@@ -38,24 +35,14 @@ typedef struct {
 } ZSprite;
 
 static ZButton g_buttons[Z_BUTTON_NUM];
-static ZPalette g_paletteIndex;
-static Color g_palettes[Z_PALETTE_NUM][Z_COLOR_NUM];
 static ZSprite g_sprites[Z_SPRITE_NUM];
+static Color g_colors[Z_COLOR_NUM];
 
-static void z_lights_reset(void)
+void setup(void)
 {
-    gb.lights.setColor((Color)0);
-    gb.lights.fill();
-}
+    gb.begin();
+    gb.setFrameRate(Z_FPS);
 
-void z_lights_put(int16_t X, int16_t Y, uint8_t Color)
-{
-    gb.lights.setColor(g_palettes[g_paletteIndex][Color]);
-    gb.lights.drawPixel(X, Y);
-}
-
-void z_platform_setup(void)
-{
     g_buttons[Z_BUTTON_UP].index = BUTTON_UP;
     g_buttons[Z_BUTTON_DOWN].index = BUTTON_DOWN;
     g_buttons[Z_BUTTON_LEFT].index = BUTTON_LEFT;
@@ -64,21 +51,23 @@ void z_platform_setup(void)
     g_buttons[Z_BUTTON_B].index = BUTTON_B;
     g_buttons[Z_BUTTON_MENU].index = BUTTON_MENU;
 
-    g_paletteIndex = Z_PALETTE_DEFAULT;
-
     const uint16_t palWidth = z_data_gfx_palette_buffer[0];
 
-    for(int p = 0; p < Z_PALETTE_NUM; p++) {
-        for(int c = 0; c < Z_COLOR_NUM; c++) {
-            g_palettes[p][c] =
-                (Color)z_data_gfx_palette_buffer[Z_GAMEBUINO_IMAGE_HEADER_LEN
-                                                    + p * palWidth + 1 + c];
-        }
+    for(int c = 0; c < Z_COLOR_NUM; c++) {
+        g_colors[c] =
+            (Color)z_data_gfx_palette_buffer[
+                Z_GAMEBUINO_IMAGE_HEADER_LEN + 1 * palWidth + 1 + c];
     }
+
+    z_loop_setup();
 }
 
-void z_platform_tick(void)
+void loop(void)
 {
+    if(!gb.update()) {
+        return;
+    }
+
     for(uint8_t b = 0; b < Z_BUTTON_NUM; b++) {
         bool pressed = gb.buttons.repeat(g_buttons[b].index, 1);
 
@@ -91,66 +80,54 @@ void z_platform_tick(void)
         }
     }
 
-    z_lights_reset();
-}
+    z_loop_tick();
+    z_loop_draw();
 
-void z_platform_draw(void)
-{
     #if Z_DEBUG_STATS
-        z_font_int(gb.getCpuLoad(), 1, 48, Z_FONT_FACE_LCD, Z_FONT_ALIGN_L);
-        z_font_int(gb.getFreeRam(), 1, 56, Z_FONT_FACE_LCD, Z_FONT_ALIGN_L);
+        gb.display.setCursor(2, 2);
+        gb.display.print(gb.getCpuLoad(), DEC);
+        gb.display.setCursor(2, 8);
+        gb.display.print(gb.getFreeRam(), DEC);
     #endif
 }
 
-uint16_t z_fps_getCounter(void)
-{
-    return u16(gb.frameCount);
-}
-
-bool z_fps_isNthFrame(uint8_t N)
-{
-    return (gb.frameCount % N) == 0;
-}
-
-bool z_button_pressed(uint8_t Button)
+bool z_button_pressed(ZButtonId Button)
 {
     return g_buttons[Button].pressed;
 }
 
-void z_button_release(uint8_t Button)
+void z_button_release(ZButtonId Button)
 {
     g_buttons[Button].pressed = false;
     g_buttons[Button].released = true;
 }
 
-void z_draw_fill(uint8_t Color)
+ZPixel* z_screen_getPixels(void)
 {
-    gb.display.setColor(g_palettes[g_paletteIndex][Color]);
-    gb.display.fill();
+    return gb.display._buffer;
 }
 
-void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
+void z_lights_put(int16_t X, int16_t Y, uint8_t Color)
 {
-    gb.display.setColor(g_palettes[g_paletteIndex][Color]);
-    gb.display.fillRect(X, Y, W, H);
+    gb.lights.setColor(g_colors[Color]);
+    gb.lights.drawPixel(X, Y);
 }
 
-void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
-{
-    gb.display.setColor(g_palettes[g_paletteIndex][Color]);
-    gb.display.drawPixel(X, Y);
-}
-
-void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
-{
-    gb.display.setColor(g_palettes[g_paletteIndex][Color]);
-    gb.display.drawCircle(X, Y, Radius);
-}
-
-void z_platform__loadSprite(uint8_t Sprite, const uint16_t* Buffer, uint8_t NumFrames)
+void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer, uint8_t NumFrames)
 {
     g_sprites[Sprite].image.init(Buffer);
     g_sprites[Sprite].numFrames = NumFrames;
+}
+
+ZPixel z_sprite_getTransparentColor(void)
+{
+    return 0xf81f;
+}
+
+ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame)
+{
+    g_sprites[Sprite].image.setFrame(Frame);
+    return g_sprites[Sprite].image._buffer;
 }
 
 void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
@@ -174,4 +151,37 @@ uint8_t z_sprite_getNumFrames(uint8_t Sprite)
     return g_sprites[Sprite].numFrames;
 }
 
-#endif // Z_PLATFORM_GAMEBUINOMETA
+void z_draw_fill(uint8_t Color)
+{
+    gb.display.setColor(g_colors[Color]);
+    gb.display.fill();
+}
+
+void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
+{
+    gb.display.setColor(g_colors[Color]);
+    gb.display.fillRect(X, Y, W, H);
+}
+
+void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
+{
+    gb.display.setColor(g_colors[Color]);
+    gb.display.drawPixel(X, Y);
+}
+
+void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
+{
+    gb.display.setColor(g_colors[Color]);
+    gb.display.drawCircle(X, Y, Radius);
+}
+
+uint16_t z_fps_getCounter(void)
+{
+    return u16(gb.frameCount);
+}
+
+bool z_fps_isNthFrame(uint8_t N)
+{
+    return (gb.frameCount % N) == 0;
+}
+#endif // Z_PLATFORM_META

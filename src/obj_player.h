@@ -15,6 +15,10 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
+#include "util_fix.h"
+
 static const int8_t Z_PLAYER_MAX_HEALTH = 3;
 static const uint8_t Z_PLAYER_MAX_SHIELD = 15;
 static const uint8_t Z_PLAYER_MAX_ENERGY = 15;

@@ -15,6 +15,8 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 extern void z_hud_reset(void);
 
 extern void z_hud_tick(void);

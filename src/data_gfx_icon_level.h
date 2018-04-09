@@ -19,7 +19,7 @@ PROGMEM static const uint8_t z_data_gfx_icon_level_buffer[] = {
     0x1f,0x1f,0x1f,0x1e,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_icon_level_frames = 1;
 

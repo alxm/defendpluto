@@ -16,13 +16,10 @@
 */
 
 #include "platform.h"
-#include "util_fix.h"
-#include "util_collision.h"
-#include "util_graphics.h"
-#include "util_pool.h"
-#include "util_screen.h"
 #include "obj_bullete.h"
+
 #include "obj_player.h"
+#include "util_collision.h"
 
 void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraSpeed, uint8_t Damage)
 {

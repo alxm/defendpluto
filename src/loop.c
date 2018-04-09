@@ -17,6 +17,7 @@
 
 #include "platform.h"
 #include "loop.h"
+
 #include "loop_died.h"
 #include "loop_intro.h"
 #include "loop_new.h"
@@ -27,18 +28,16 @@
 #include "loop_swipe.h"
 #include "loop_title.h"
 #include "loop_win.h"
-#include "util_fix.h"
+#include "obj_enemy.h"
+#include "obj_player.h"
+#include "obj_star.h"
 #include "util_font.h"
-#include "util_graphics.h"
 #include "util_input.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_str.h"
 #include "util_timer.h"
 #include "util_vm.h"
-#include "obj_enemy.h"
-#include "obj_player.h"
-#include "obj_star.h"
 
 typedef struct {
     ZStateCallback* init;
@@ -116,7 +115,6 @@ void z_loop_setup(void)
     g_state = Z_STATE_INVALID;
     g_lastState = Z_STATE_INVALID;
 
-    z_platform_setup();
     z_input_reset();
     z_screen_reset();
     z_font_setup();
@@ -133,7 +131,6 @@ void z_loop_setup(void)
 
 void z_loop_tick(void)
 {
-    z_platform_tick();
     z_timer_tick();
 
     if(g_states[g_state].tick) {
@@ -146,8 +143,6 @@ void z_loop_draw(void)
     if(g_states[g_state].draw) {
         g_states[g_state].draw();
     }
-
-    z_platform_draw();
 }
 
 int8_t z_loop_getLastState(void)

@@ -16,16 +16,15 @@
 */
 
 #include "platform.h"
-#include "loop.h"
+#include "loop_swipe.h"
+
 #include "loop_title.h"
-#include "util_fix.h"
-#include "util_graphics.h"
-#include "util_hud.h"
-#include "util_pool.h"
-#include "util_screen.h"
 #include "obj_bulletp.h"
 #include "obj_player.h"
 #include "obj_star.h"
+#include "util_hud.h"
+#include "util_pool.h"
+#include "util_screen.h"
 
 static const uint8_t Z_SLIDE_CLOSE_INC = 2;
 static const uint8_t Z_SLIDE_OPEN_INC = 1;

@@ -16,9 +16,8 @@
 */
 
 #include "platform.h"
-#include "loop.h"
-#include "util_graphics.h"
-#include "util_screen.h"
+#include "loop_intro.h"
+
 #include "util_timer.h"
 
 static uint8_t g_stage;

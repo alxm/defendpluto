@@ -15,6 +15,8 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 Z_EXTERN_C_START
 
 typedef enum {

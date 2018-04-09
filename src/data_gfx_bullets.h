@@ -21,7 +21,7 @@ PROGMEM static const uint8_t z_data_gfx_bullets_buffer[] = {
     0x07,0x03,0x07,0x07,0x00,0x03,0x07,0x06,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_bullets_frames = 8;
 

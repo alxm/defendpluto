@@ -17,8 +17,7 @@
 
 #include "platform.h"
 #include "util_font.h"
-#include "util_graphics.h"
-#include "util_screen.h"
+
 #include "util_str.h"
 
 typedef enum {

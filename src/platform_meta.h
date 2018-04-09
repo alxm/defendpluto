@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,9 +15,26 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include <Arduino.h>
 
-#include "loop.h"
+#ifdef __cplusplus
+#include <Gamebuino-Meta.h>
+#endif
 
-extern ZStateCallback z_loop_pause_tick;
-extern ZStateCallback z_loop_pause_draw;
+Z_EXTERN_C_START
+
+typedef uint16_t ZPixel;
+
+#include "util_graphics.h"
+
+#define Z_SCREEN_W 80
+#define Z_SCREEN_H 64
+
+#define z_sprite_load(Index, Id)                      \
+    z_platform__loadSprite(Index,                     \
+                           z_data_gfx_##Id##_buffer,  \
+                           z_data_gfx_##Id##_frames);
+
+extern void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer, uint8_t NumFrames);
+
+Z_EXTERN_C_END

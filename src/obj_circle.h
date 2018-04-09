@@ -15,6 +15,11 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
+#include "util_fix.h"
+#include "util_pool.h"
+
 typedef struct {
     ZPoolObject poolObject;
     ZFix x, y;

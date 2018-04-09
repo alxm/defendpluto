@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,6 +14,8 @@
     You should have received a copy of the GNU General Public License
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#pragma once
 
 typedef int16_t ZFix;
 typedef int32_t ZFixBig;

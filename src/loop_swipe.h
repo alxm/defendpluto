@@ -15,6 +15,10 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
+#include "loop.h"
+
 extern ZStateCallback z_loop_swipe_hide_init;
 extern ZStateCallback z_loop_swipe_show_init;
 extern ZStateCallback z_loop_swipe_hide_tick;

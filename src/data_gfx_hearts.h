@@ -21,7 +21,7 @@ PROGMEM static const uint8_t z_data_gfx_hearts_buffer[] = {
     0x1e,0x0c,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_hearts_frames = 2;
 

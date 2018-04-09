@@ -15,13 +15,7 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#if Z_PLATFORM_ARDUBOY
-    static const int16_t Z_SCREEN_W = 128;
-    static const int16_t Z_SCREEN_H = 64;
-#else
-    static const int16_t Z_SCREEN_W = 80;
-    static const int16_t Z_SCREEN_H = 64;
-#endif
+#pragma once
 
 typedef struct {
     uint8_t xShake : 4;

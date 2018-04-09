@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,9 +15,16 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include <a2x.h>
 
-#include "loop.h"
+typedef APixel ZPixel;
 
-extern ZStateCallback z_loop_pause_tick;
-extern ZStateCallback z_loop_pause_draw;
+#include "util_graphics.h"
+
+#define Z_SCREEN_W 80
+#define Z_SCREEN_H 64
+
+#define z_sprite_load(Index, Id)                      \
+    z_platform__loadSprite(Index, "gfx/" #Id ".png");
+
+extern void z_platform__loadSprite(ZSpriteId Sprite, const char* Path);

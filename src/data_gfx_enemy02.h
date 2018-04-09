@@ -19,7 +19,7 @@ PROGMEM static const uint8_t z_data_gfx_enemy02_buffer[] = {
     0x78,0x1e,0x0e,0x3c,0x0e,0x1e,0x78,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_enemy02_frames = 1;
 

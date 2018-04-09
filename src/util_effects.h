@@ -15,6 +15,10 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
+#include "util_fix.h"
+
 typedef enum {
     Z_LIGHT_INVALID = -1,
     Z_LIGHT_EXPLOSION,

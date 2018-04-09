@@ -16,13 +16,11 @@
 */
 
 #include "platform.h"
-#include "util_fix.h"
-#include "util_graphics.h"
-#include "util_pool.h"
+#include "obj_star.h"
+
+#include "obj_player.h"
 #include "util_random.h"
 #include "util_screen.h"
-#include "obj_player.h"
-#include "obj_star.h"
 
 static const int16_t Z_STAR_BORDER_RATIO = 8;
 static const int16_t Z_STAR_SPEED_MIN = Z_FIX_ONE / 8;

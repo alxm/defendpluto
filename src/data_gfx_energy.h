@@ -19,7 +19,7 @@ PROGMEM static const uint8_t z_data_gfx_energy_buffer[] = {
     0x88,0xdc,0xfe,0x77,0x22,0x00,0x01,0x00,0x00,0x00,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_energy_frames = 1;
 

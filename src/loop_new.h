@@ -15,4 +15,8 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
+#include "loop.h"
+
 extern ZStateCallback z_loop_new_init;

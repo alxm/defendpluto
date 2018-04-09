@@ -1,2 +1,3 @@
 #define FOLDER_NAME "DefendPluto"
 #define DISPLAY_MODE DISPLAY_MODE_RGB565
+#define SOUND_CHANNELS 2

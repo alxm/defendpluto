@@ -25,7 +25,7 @@ PROGMEM static const uint8_t z_data_gfx_alxm_buffer[] = {
     0x1f,0x1f,0x1f,0x1f,0x1f,0x1f,0x1f,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_alxm_frames = 1;
 

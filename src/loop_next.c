@@ -16,16 +16,15 @@
 */
 
 #include "platform.h"
-#include "loop.h"
-#include "util_fix.h"
+#include "loop_next.h"
+
+#include "obj_player.h"
+#include "obj_star.h"
 #include "util_font.h"
-#include "util_graphics.h"
 #include "util_input.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_str.h"
-#include "obj_player.h"
-#include "obj_star.h"
 
 void z_loop_next_init(void)
 {

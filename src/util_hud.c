@@ -16,12 +16,11 @@
 */
 
 #include "platform.h"
-#include "util_fix.h"
-#include "util_font.h"
-#include "util_graphics.h"
-#include "util_screen.h"
-#include "util_timer.h"
+#include "util_hud.h"
+
 #include "obj_player.h"
+#include "util_font.h"
+#include "util_timer.h"
 
 void z_hud_reset(void)
 {

@@ -129,7 +129,7 @@ PROGMEM static const uint8_t z_data_gfx_font_alphanum_outline_buffer[] = {
     0x01,0x00,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_font_alphanum_outline_frames = 63;
 

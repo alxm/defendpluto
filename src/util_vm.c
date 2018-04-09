@@ -16,16 +16,14 @@
 */
 
 #include "platform.h"
-#include "loop.h"
-#include "util_fix.h"
-#include "util_fps.h"
-#include "util_graphics.h"
-#include "util_pool.h"
-#include "util_screen.h"
 #include "util_vm.h"
+
+#include "data_levels.h"
+#include "loop.h"
 #include "obj_enemy.h"
 #include "obj_player.h"
-#include "data_levels.h"
+#include "util_fps.h"
+#include "util_pool.h"
 
 typedef enum {
     Z_OP_INVALID = -1,

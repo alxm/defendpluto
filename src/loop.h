@@ -15,6 +15,8 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 Z_EXTERN_C_START
 
 typedef enum {
@@ -37,6 +39,7 @@ typedef enum {
 typedef void (ZStateCallback)(void);
 
 extern void z_loop_setup(void);
+
 extern void z_loop_tick(void);
 extern void z_loop_draw(void);
 

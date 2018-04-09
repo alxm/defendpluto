@@ -194,7 +194,7 @@ PROGMEM static const uint8_t z_data_gfx_{name}_buffer[] = {{
     // Mask frames{arduboyMaskBytes}
 }};
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 """
 
     if PaletteName == ImageName:

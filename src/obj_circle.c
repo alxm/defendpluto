@@ -16,12 +16,10 @@
 */
 
 #include "platform.h"
-#include "util_fix.h"
-#include "util_effects.h"
-#include "util_graphics.h"
-#include "util_pool.h"
-#include "util_screen.h"
 #include "obj_circle.h"
+
+#include "util_effects.h"
+#include "util_screen.h"
 
 static const uint8_t Z_CIRCLE_RADIUS_MAX = 4;
 

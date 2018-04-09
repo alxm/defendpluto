@@ -16,17 +16,8 @@
 */
 
 #include "platform.h"
-#include "loop.h"
-#include "util_fix.h"
-#include "util_effects.h"
-#include "util_graphics.h"
-#include "util_hud.h"
-#include "util_input.h"
-#include "util_pool.h"
-#include "util_random.h"
-#include "util_screen.h"
-#include "util_timer.h"
-#include "util_vm.h"
+#include "loop_died.h"
+
 #include "obj_bullete.h"
 #include "obj_bulletp.h"
 #include "obj_circle.h"
@@ -34,6 +25,14 @@
 #include "obj_particle.h"
 #include "obj_player.h"
 #include "obj_star.h"
+#include "util_effects.h"
+#include "util_hud.h"
+#include "util_input.h"
+#include "util_pool.h"
+#include "util_random.h"
+#include "util_screen.h"
+#include "util_timer.h"
+#include "util_vm.h"
 
 void z_loop_died_init(void)
 {

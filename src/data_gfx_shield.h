@@ -19,7 +19,7 @@ PROGMEM static const uint8_t z_data_gfx_shield_buffer[] = {
     0x1f,0x3f,0x7f,0xff,0x7f,0x3f,0x1f,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_shield_frames = 1;
 

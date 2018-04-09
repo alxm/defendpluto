@@ -16,15 +16,12 @@
 */
 
 #include "platform.h"
-#include "util_fix.h"
+#include "obj_bulletp.h"
+
+#include "obj_player.h"
 #include "util_collision.h"
 #include "util_fps.h"
-#include "util_graphics.h"
-#include "util_pool.h"
 #include "util_screen.h"
-#include "obj_bulletp.h"
-#include "obj_enemy.h"
-#include "obj_player.h"
 
 void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y)
 {

@@ -17,14 +17,14 @@
 
 Z_EXTERN_C_START
 
-static const uint8_t Z_FPS_RATE = 30;
+#define Z_FPS 30
 
 extern uint16_t z_fps_getCounter(void);
 extern bool z_fps_isNthFrame(uint8_t N);
 
 static inline uint8_t z_fps_dsToTicks(uint8_t Ds)
 {
-    return u8(Z_FPS_RATE * Ds / 10);
+    return u8(Z_FPS * Ds / 10);
 }
 
 Z_EXTERN_C_END

@@ -16,13 +16,13 @@
 */
 
 #include "platform.h"
-#include "loop.h"
-#include "util_fix.h"
+#include "loop_new.h"
+
+#include "obj_player.h"
 #include "util_hud.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_vm.h"
-#include "obj_player.h"
 
 void z_loop_new_init(void)
 {

@@ -17,22 +17,19 @@
 
 #include "platform.h"
 
-#if Z_PLATFORM_ARDUBOY
-#include <Arduboy2.h>
-#include <Sprites.h>
-#include "util_font.h"
-#include "util_fps.h"
-#include "util_graphics.h"
-#include "util_input.h"
 #include "data_gfx_palette.h"
+#include "loop.h"
+#include "util_fps.h"
+#include "util_input.h"
 
+#if Z_PLATFORM_ARDUBOY
 typedef struct {
     const uint8_t* image;
     const uint8_t* mask;
     uint8_t numFrames;
 } ZSprite;
 
-extern Arduboy2Base g_arduboy;
+static Arduboy2Base g_arduboy;
 
 #define buttonFields(Prefix)   \
     bool Prefix##Pressed : 1;  \
@@ -49,22 +46,28 @@ static struct {
 
 static ZSprite g_sprites[Z_SPRITE_NUM];
 
-void z_platform_setup(void)
+void setup(void)
 {
-    #if Z_DEBUG_STATS
-        extern uint8_t _end;
+    g_arduboy.begin();
+    g_arduboy.setFrameRate(Z_FPS);
 
-        uint16_t x;
-        uint8_t here;
-
-        for(x = u16(&_end); x < u16(&here); x++) {
-            *(uint8_t*)x = 0x55;
-        }
-    #endif
+    z_loop_setup();
 }
 
-void z_platform_tick(void)
+void loop(void)
 {
+    #if Z_DEBUG_STATS
+        #define Z_NEXT_FRAME nextFrameDEV
+    #else
+        #define Z_NEXT_FRAME nextFrame
+    #endif
+
+    if(!g_arduboy.Z_NEXT_FRAME()) {
+        return;
+    }
+
+    g_arduboy.pollButtons();
+
     #define pollButton(Prefix, Code)                \
     {                                               \
         bool pressed = g_arduboy.pressed(Code);     \
@@ -84,10 +87,10 @@ void z_platform_tick(void)
     pollButton(right, RIGHT_BUTTON);
     pollButton(a, A_BUTTON);
     pollButton(b, B_BUTTON);
-}
 
-void z_platform_draw(void)
-{
+    z_loop_tick();
+    z_loop_draw();
+
     #if Z_DEBUG_STATS
         extern uint8_t _end;
 
@@ -102,19 +105,11 @@ void z_platform_draw(void)
         z_font_int(g_arduboy.cpuLoad(), 1, 48, Z_FONT_FACE_LCD, Z_FONT_ALIGN_L);
         z_font_int(unusedBytes, 1, 56, Z_FONT_FACE_LCD, Z_FONT_ALIGN_L);
     #endif
+
+    g_arduboy.display();
 }
 
-uint16_t z_fps_getCounter(void)
-{
-    return g_arduboy.frameCount;
-}
-
-bool z_fps_isNthFrame(uint8_t N)
-{
-    return g_arduboy.everyXFrames(N);
-}
-
-bool z_button_pressed(uint8_t Button)
+bool z_button_pressed(ZButtonId Button)
 {
     #define buttonCase(Id, Prefix)            \
         case Id:                              \
@@ -135,7 +130,7 @@ bool z_button_pressed(uint8_t Button)
     #undef buttonCase
 }
 
-void z_button_release(uint8_t Button)
+void z_button_release(ZButtonId Button)
 {
     #define buttonCase(Id, Prefix)             \
         case Id:                               \
@@ -153,31 +148,6 @@ void z_button_release(uint8_t Button)
     }
 
     #undef buttonCase
-}
-
-static inline uint8_t getColor(uint8_t Color)
-{
-    return Color < Z_COLORS_WHITE_START ? BLACK : WHITE;
-}
-
-void z_draw_fill(uint8_t Color)
-{
-    g_arduboy.fillScreen(getColor(Color));
-}
-
-void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
-{
-    g_arduboy.fillRect(X, Y, u8(W), u8(H), getColor(Color));
-}
-
-void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
-{
-    g_arduboy.drawPixel(X, Y, getColor(Color));
-}
-
-void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
-{
-    g_arduboy.drawCircle(X, Y, u8(Radius), getColor(Color));
 }
 
 void z_platform__loadSprite(uint8_t Sprite, const uint8_t* Buffer, uint8_t NumFrames)
@@ -214,5 +184,40 @@ int16_t z_sprite_getHeight(uint8_t Sprite)
 uint8_t z_sprite_getNumFrames(uint8_t Sprite)
 {
     return g_sprites[Sprite].numFrames;
+}
+
+static inline uint8_t getColor(uint8_t Color)
+{
+    return Color < Z_COLORS_WHITE_START ? BLACK : WHITE;
+}
+
+void z_draw_fill(uint8_t Color)
+{
+    g_arduboy.fillScreen(getColor(Color));
+}
+
+void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
+{
+    g_arduboy.fillRect(X, Y, u8(W), u8(H), getColor(Color));
+}
+
+void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
+{
+    g_arduboy.drawPixel(X, Y, getColor(Color));
+}
+
+void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
+{
+    g_arduboy.drawCircle(X, Y, u8(Radius), getColor(Color));
+}
+
+uint16_t z_fps_getCounter(void)
+{
+    return g_arduboy.frameCount;
+}
+
+bool z_fps_isNthFrame(uint8_t N)
+{
+    return g_arduboy.everyXFrames(N);
 }
 #endif // Z_PLATFORM_ARDUBOY

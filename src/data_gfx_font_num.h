@@ -23,7 +23,7 @@ PROGMEM static const uint8_t z_data_gfx_font_num_buffer[] = {
     0x00,0x01,0x01,0x36,0x36,0x49,0x49,0x36,0x06,0x49,0x49,0x36,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_font_num_frames = 11;
 

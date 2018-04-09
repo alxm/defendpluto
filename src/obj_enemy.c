@@ -16,18 +16,15 @@
 */
 
 #include "platform.h"
-#include "util_fix.h"
+#include "obj_enemy.h"
+
+#include "obj_bullete.h"
+#include "obj_player.h"
 #include "util_collision.h"
 #include "util_effects.h"
 #include "util_fps.h"
-#include "util_graphics.h"
-#include "util_pool.h"
 #include "util_screen.h"
 #include "util_timer.h"
-#include "obj_bullete.h"
-#include "obj_circle.h"
-#include "obj_enemy.h"
-#include "obj_player.h"
 
 ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 

@@ -57,7 +57,7 @@ PROGMEM static const uint8_t z_data_gfx_font_alphanum_yellow_buffer[] = {
     0x00,0x9c,0xa0,0x60,0x3c,0x00,0x64,0x54,0x54,0x4c,0x00,
 };
 
-#elif Z_PLATFORM_GAMEBUINOMETA
+#elif Z_PLATFORM_META
 
 static const uint8_t z_data_gfx_font_alphanum_yellow_frames = 63;
 

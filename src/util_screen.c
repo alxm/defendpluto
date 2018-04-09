@@ -16,10 +16,11 @@
 */
 
 #include "platform.h"
+#include "util_screen.h"
+
 #include "util_font.h"
 #include "util_fps.h"
 #include "util_random.h"
-#include "util_screen.h"
 #include "util_str.h"
 
 ZScreen z_screen;
