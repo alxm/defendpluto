@@ -1,6 +1,6 @@
 # Defend Pluto
 
-*Defend Pluto* is a vertical space shooter for the Gamebuino META. This is the first beta release with only a few levels. The full game is a work in progress and will run on multiple platforms.
+*Defend Pluto* is a vertical space shooter for the Gamebuino META. This is Beta 1 with 5 levels, more coming up.
 
 ## Install
 

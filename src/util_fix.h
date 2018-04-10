@@ -45,7 +45,7 @@ typedef enum {
     Z_ANGLE_270 = (Z_ANGLES_NUM * 6 / 8),
     Z_ANGLE_292 = (Z_ANGLE_270 + Z_ANGLE_022),
     Z_ANGLE_315 = (Z_ANGLES_NUM * 7 / 8),
-    Z_ANGLE_327 = (Z_ANGLE_315 + Z_ANGLE_022)
+    Z_ANGLE_337 = (Z_ANGLE_315 + Z_ANGLE_022)
 } ZAngle;
 
 extern const ZFix z_fix__sin[Z_ANGLES_NUM];

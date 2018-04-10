@@ -193,7 +193,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
                         enemy->flyState = 2;
                     }
 
-                    enemy->angle = Z_ANGLE_327;
+                    enemy->angle = Z_ANGLE_337;
                 } break;
 
                 case 1: {
@@ -202,7 +202,7 @@ bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
                         enemy->flyState = 2;
                     }
 
-                    enemy->angle = Z_ANGLE_327;
+                    enemy->angle = Z_ANGLE_337;
                 } break;
 
                 case 2: {
