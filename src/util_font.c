@@ -74,23 +74,23 @@ static int16_t drawChar(char Char, int16_t X, int16_t Y, uint8_t Flags, uint8_t 
 {
     char frame = 0;
 
-    if(Char >= 48 && Char < 58) {
+    if(Char >= '0' && Char <= '9') {
         if(Flags & Z_FONT_FLAG_NUMERIC) {
             // numbers
-            frame = (char)(1 + Char - 48);
+            frame = (char)(1 + Char - '0');
         }
-    } else if(Char >= 65 && Char < 91) {
+    } else if(Char >= 'A' && Char <= 'Z') {
         if(Flags & Z_FONT_FLAG_ALPHA_U) {
             // uppercase
-            frame = (char)(1 + 10 + Char - 65);
+            frame = (char)(1 + 10 + Char - 'A');
         }
-    } else if(Char >= 97 && Char < 123) {
+    } else if(Char >= 'a' && Char <= 'z') {
         if(Flags & Z_FONT_FLAG_ALPHA_L) {
             // lowercase
-            frame = (char)(1 + 10 + 26 + Char - 97);
+            frame = (char)(1 + 10 + 26 + Char - 'a');
         } else if(Flags & Z_FONT_FLAG_ALPHA_U) {
             // fallback to uppercase
-            frame = (char)(1 + 10 + Char - 97);
+            frame = (char)(1 + 10 + Char - 'a');
         }
     }
 
