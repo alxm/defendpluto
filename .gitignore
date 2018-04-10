@@ -1,5 +1,5 @@
 /bin/
 /obj/
-/src/a2x_gen/
-*.bin
+a2x_gen/
 /sketchsize
+/assets/sfx

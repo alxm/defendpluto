@@ -1,5 +1,5 @@
 #!/bin/sh
-geany -i src/* make/* levels/* gfx/*.py dev.sh README.md sketchsize &
-arduino src/src.ino &
-gimp -n gfx/*.png &
+geany -i DefendPluto/* make/* assets/levels/* assets/gfx/*.py dev.sh README.md &
+arduino DefendPluto/DefendPluto.ino &
+gimp -n assets/gfx/*.png &
 cd make
