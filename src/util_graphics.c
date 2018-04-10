@@ -26,11 +26,11 @@
 #include "data_gfx_enemy01.h"
 #include "data_gfx_enemy02.h"
 #include "data_gfx_energy.h"
-#include "data_gfx_font_num.h"
-#include "data_gfx_font_alphanum.h"
-#include "data_gfx_font_alphanum_yellow.h"
-#include "data_gfx_font_alphanum_outline.h"
-#include "data_gfx_font_alphanum_outline_yellow.h"
+#include "data_gfx_font_red.h"
+#include "data_gfx_font_red_lcd.h"
+#include "data_gfx_font_red_outline.h"
+#include "data_gfx_font_yellow.h"
+#include "data_gfx_font_yellow_outline.h"
 #include "data_gfx_hearts.h"
 #include "data_gfx_icon_creds.h"
 #include "data_gfx_icon_level.h"
@@ -47,11 +47,11 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_ENEMY01, enemy01);
     z_sprite_load(Z_SPRITE_ENEMY02, enemy02);
 
-    z_sprite_load(Z_SPRITE_FONT_NUM, font_num);
-    z_sprite_load(Z_SPRITE_FONT_ALPHANUM, font_alphanum);
-    z_sprite_load(Z_SPRITE_FONT_ALPHANUM_YELLOW, font_alphanum_yellow);
-    z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE, font_alphanum_outline);
-    z_sprite_load(Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW, font_alphanum_outline_yellow);
+    z_sprite_load(Z_SPRITE_FONT_RED, font_red);
+    z_sprite_load(Z_SPRITE_FONT_RED_LCD, font_red_lcd);
+    z_sprite_load(Z_SPRITE_FONT_RED_OUTLINE, font_red_outline);
+    z_sprite_load(Z_SPRITE_FONT_YELLOW, font_yellow);
+    z_sprite_load(Z_SPRITE_FONT_YELLOW_OUTLINE, font_yellow_outline);
 
     z_sprite_load(Z_SPRITE_ICON_CREDS, icon_creds);
     z_sprite_load(Z_SPRITE_ICON_LEVEL, icon_level);

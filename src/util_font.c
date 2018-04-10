@@ -42,29 +42,29 @@ static void loadFont(uint8_t Index, uint8_t Sprite, uint8_t Flags)
 void z_font_setup(void)
 {
     loadFont(Z_FONT_FACE_LCD,
-             Z_SPRITE_FONT_NUM,
+             Z_SPRITE_FONT_RED_LCD,
              Z_FONT_FLAG_NUMERIC);
 
     loadFont(Z_FONT_FACE_RED,
-             Z_SPRITE_FONT_ALPHANUM,
+             Z_SPRITE_FONT_RED,
              Z_FONT_FLAG_NUMERIC
            | Z_FONT_FLAG_ALPHA_U
            | Z_FONT_FLAG_ALPHA_L);
 
     loadFont(Z_FONT_FACE_REDO,
-             Z_SPRITE_FONT_ALPHANUM_OUTLINE,
+             Z_SPRITE_FONT_RED_OUTLINE,
              Z_FONT_FLAG_NUMERIC
            | Z_FONT_FLAG_ALPHA_U
            | Z_FONT_FLAG_ALPHA_L);
 
     loadFont(Z_FONT_FACE_YELLOW,
-             Z_SPRITE_FONT_ALPHANUM_YELLOW,
+             Z_SPRITE_FONT_YELLOW,
              Z_FONT_FLAG_NUMERIC
            | Z_FONT_FLAG_ALPHA_U
            | Z_FONT_FLAG_ALPHA_L);
 
     loadFont(Z_FONT_FACE_YELLOWO,
-             Z_SPRITE_FONT_ALPHANUM_OUTLINE_YELLOW,
+             Z_SPRITE_FONT_YELLOW_OUTLINE,
              Z_FONT_FLAG_NUMERIC
            | Z_FONT_FLAG_ALPHA_U
            | Z_FONT_FLAG_ALPHA_L);
