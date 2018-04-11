@@ -84,6 +84,7 @@ void loop(void)
     z_loop_draw();
 
     #if Z_DEBUG_STATS
+        gb.display.setColor(WHITE);
         gb.display.setCursor(2, 2);
         gb.display.print(gb.getCpuLoad(), DEC);
         gb.display.setCursor(2, 8);
