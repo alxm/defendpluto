@@ -19,7 +19,6 @@
 #include "obj_particle.h"
 
 #include "util_fps.h"
-#include "util_random.h"
 #include "util_screen.h"
 
 void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)

@@ -18,8 +18,8 @@
 #include "platform.h"
 #include "util_screen.h"
 
+#include "util_fix.h"
 #include "util_fps.h"
-#include "util_random.h"
 
 ZScreen z_screen;
 static uint8_t g_shakeFrames;

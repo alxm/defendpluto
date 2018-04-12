@@ -19,7 +19,6 @@
 #include "obj_star.h"
 
 #include "obj_player.h"
-#include "util_random.h"
 #include "util_screen.h"
 
 #define Z_STAR_BORDER_RATIO (8)

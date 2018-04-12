@@ -179,10 +179,10 @@ void z_player_tick(bool CheckInput)
         z_player.dy = i16(z_player.dy + Z_PLAYER_SPEED_ACCEL);
     } else {
         if(z_player.dy < 0) {
-            z_player.dy = z_int16_min(i16(z_player.dy + Z_PLAYER_SPEED_DECEL),
+            z_player.dy = z_min_int16(i16(z_player.dy + Z_PLAYER_SPEED_DECEL),
                                       0);
         } else if(z_player.dy > 0) {
-            z_player.dy = z_int16_max(i16(z_player.dy - Z_PLAYER_SPEED_DECEL),
+            z_player.dy = z_max_int16(i16(z_player.dy - Z_PLAYER_SPEED_DECEL),
                                       0);
         }
     }
@@ -195,22 +195,22 @@ void z_player_tick(bool CheckInput)
         z_player.dx = i16(z_player.dx + Z_PLAYER_SPEED_ACCEL);
     } else {
         if(z_player.dx < 0) {
-            z_player.dx = z_int16_min(i16(z_player.dx + Z_PLAYER_SPEED_DECEL),
+            z_player.dx = z_min_int16(i16(z_player.dx + Z_PLAYER_SPEED_DECEL),
                                       0);
         } else if(z_player.dx > 0) {
-            z_player.dx = z_int16_max(i16(z_player.dx - Z_PLAYER_SPEED_DECEL),
+            z_player.dx = z_max_int16(i16(z_player.dx - Z_PLAYER_SPEED_DECEL),
                                       0);
         }
     }
 
-    z_player.dx = z_int16_clamp(z_player.dx, i16(-maxSpeed), maxSpeed);
-    z_player.dy = z_int16_clamp(z_player.dy, i16(-maxSpeed), maxSpeed);
+    z_player.dx = z_clamp_int16(z_player.dx, i16(-maxSpeed), maxSpeed);
+    z_player.dy = z_clamp_int16(z_player.dy, i16(-maxSpeed), maxSpeed);
 
-    z_player.x = z_fix_clamp(zf(z_player.x + z_player.dx),
+    z_player.x = z_clamp_fix(zf(z_player.x + z_player.dx),
                              0,
                              z_fix_itofix(i16(Z_SCREEN_W - 1)));
 
-    z_player.y = z_fix_clamp(zf(z_player.y + z_player.dy),
+    z_player.y = z_clamp_fix(zf(z_player.y + z_player.dy),
                              0,
                              z_fix_itofix(i16(Z_SCREEN_H - 1)));
 

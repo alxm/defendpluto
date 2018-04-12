@@ -50,8 +50,8 @@ PROGMEM const ZFix z_fix__sin[Z_ANGLES_NUM] = {
 
 uint8_t z_fix_atan(ZFix X1, ZFix Y1, ZFix X2, ZFix Y2)
 {
-    const ZFix dx = z_fix_abs(zf(X2 - X1));
-    const ZFix dy = z_fix_abs(zf(Y2 - Y1));
+    const ZFix dx = z_abs_fix(zf(X2 - X1));
+    const ZFix dy = z_abs_fix(zf(Y2 - Y1));
 
     if(dx == dy) {
         if(X2 >= X1) {
@@ -81,7 +81,7 @@ uint8_t z_fix_atan(ZFix X1, ZFix Y1, ZFix X2, ZFix Y2)
         }
     }
 
-    const ZFix ratio = z_fix_div(z_fix_min(dx, dy), z_fix_max(dx, dy));
+    const ZFix ratio = z_fix_div(z_min_fix(dx, dy), z_max_fix(dx, dy));
     const uint8_t cachedAngle = z_pgm_readU8(g_atanAngles + ratio);
 
     if(dy < dx) {

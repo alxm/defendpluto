@@ -83,27 +83,47 @@ static inline ZFix z_fix_cos(uint8_t Angle)
         z_fix__sin + Z_ANGLE_WRAP(Angle + Z_ANGLES_NUM / 4));
 }
 
-#define Z_GEN_MINMAX(Type, Name)                                    \
-    static inline Type z_##Name##_abs(Type X)                       \
-    {                                                               \
-        return X < 0 ? (Type)-X : X;                                \
-    }                                                               \
-                                                                    \
-    static inline Type z_##Name##_min(Type X, Type Y)               \
-    {                                                               \
-        return X < Y ? X : Y;                                       \
-    }                                                               \
-                                                                    \
-    static inline Type z_##Name##_max(Type X, Type Y)               \
-    {                                                               \
-        return X > Y ? X : Y;                                       \
-    }                                                               \
-                                                                    \
-    static inline Type z_##Name##_clamp(Type X, Type Min, Type Max) \
-    {                                                               \
-        return X < Min ? Min : (X > Max ? Max : X);                 \
+#define Z_GEN_MIN(Type, Name)                       \
+    static inline Type z_min_##Name(Type X, Type Y) \
+    {                                               \
+        return X < Y ? X : Y;                       \
     }
 
-Z_GEN_MINMAX(int8_t, int8)
-Z_GEN_MINMAX(int16_t, int16)
-Z_GEN_MINMAX(ZFix, fix)
+#define Z_GEN_MAX(Type, Name)                       \
+    static inline Type z_max_##Name(Type X, Type Y) \
+    {                                               \
+        return X > Y ? X : Y;                       \
+    }
+
+#define Z_GEN_ABS(Type, Name)               \
+    static inline Type z_abs_##Name(Type X) \
+    {                                       \
+        return X < 0 ? (Type)-X : X;        \
+    }
+
+#define Z_GEN_CLA(Type, Name)                                     \
+    static inline Type z_clamp_##Name(Type X, Type Min, Type Max) \
+    {                                                             \
+        return X < Min ? Min : (X > Max ? Max : X);               \
+    }
+
+#define Z_GEN_RND(Type, Name)                    \
+    static inline Type z_random_##Name(Type Max) \
+    {                                            \
+        return (Type)(rand() % Max);             \
+    }
+
+Z_GEN_MIN(int16_t, int16)
+Z_GEN_MIN(ZFix, fix)
+
+Z_GEN_MAX(int16_t, int16)
+Z_GEN_MAX(ZFix, fix)
+
+Z_GEN_ABS(ZFix, fix)
+
+Z_GEN_CLA(int16_t, int16)
+Z_GEN_CLA(ZFix, fix)
+
+Z_GEN_RND(int8_t, int8)
+Z_GEN_RND(uint8_t, uint8)
+Z_GEN_RND(int16_t, int16)
