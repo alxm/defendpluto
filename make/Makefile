@@ -1,5 +1,4 @@
 A_APP_NAME = defendpluto
-
 A_DIR_GFX = assets/gfx
 #A_DIR_SFX = assets/sfx
 A_DIR_SRC = ../DefendPluto
