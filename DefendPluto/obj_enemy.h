@@ -20,7 +20,7 @@
 #include "util_fix.h"
 #include "util_pool.h"
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_ENEMY_INVALID = -1,
     Z_ENEMY_ASTEROID,
     Z_ENEMY_SHIP0,
@@ -30,7 +30,7 @@ typedef enum {
     Z_ENEMY_NUM
 } ZEnemyId;
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_FLY_INVALID = -1,
     Z_FLY_STILL,
     Z_FLY_DOWN,
@@ -43,7 +43,7 @@ typedef enum {
     Z_FLY_NUM
 } ZFlyId;
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_ATTACK_INVALID = -1,
     Z_ATTACK_NONE,
     Z_ATTACK_FRONT,

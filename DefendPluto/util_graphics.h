@@ -19,7 +19,7 @@
 
 Z_EXTERN_C_START
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_COLOR_INVALID = -1,
     Z_COLOR_ALXM_BG,
     Z_COLOR_BLUE,
@@ -36,9 +36,9 @@ typedef enum {
     Z_COLOR_ALXM_R1,
     Z_COLOR_ALXM_R2,
     Z_COLOR_NUM
-} ZColor;
+} ZColorId;
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_BIT_RESTING = 0,
     Z_BIT_FORWARD = (1 << 0),
     Z_BIT_BACK    = (1 << 1),
@@ -46,7 +46,7 @@ typedef enum {
     Z_BIT_RIGHT   = (1 << 3),
 } ZFrameBits;
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     // Enemies
     Z_SPRITE_ASTEROID,
     Z_SPRITE_ENEMY00,
@@ -86,17 +86,17 @@ extern void z_lights_put(int16_t X, int16_t Y, uint8_t Color);
 
 extern ZPixel z_sprite_getTransparentColor(void);
 extern ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame);
-extern void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame);
-extern void z_sprite_blitCentered(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame);
-extern int16_t z_sprite_getWidth(uint8_t Sprite);
-extern int16_t z_sprite_getHeight(uint8_t Sprite);
-extern uint8_t z_sprite_getNumFrames(uint8_t Sprite);
+extern void z_sprite_blit(ZSpriteId Sprite, int16_t X, int16_t Y, uint8_t Frame);
+extern void z_sprite_blitCentered(ZSpriteId Sprite, int16_t X, int16_t Y, uint8_t Frame);
+extern int16_t z_sprite_getWidth(ZSpriteId Sprite);
+extern int16_t z_sprite_getHeight(ZSpriteId Sprite);
+extern uint8_t z_sprite_getNumFrames(ZSpriteId Sprite);
 
-extern void z_draw_fill(uint8_t Color);
-extern void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color);
-extern void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color);
-extern void z_draw_hline(int16_t X1, int16_t X2, int16_t Y, uint8_t Color);
-extern void z_draw_vline(int16_t X, int16_t Y1, int16_t Y2, uint8_t Color);
-extern void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color);
+extern void z_draw_fill(ZColorId Color);
+extern void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, ZColorId Color);
+extern void z_draw_pixel(int16_t X, int16_t Y, ZColorId Color);
+extern void z_draw_hline(int16_t X1, int16_t X2, int16_t Y, ZColorId Color);
+extern void z_draw_vline(int16_t X, int16_t Y1, int16_t Y2, ZColorId Color);
+extern void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId Color);
 
 Z_EXTERN_C_END

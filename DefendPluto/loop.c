@@ -108,7 +108,7 @@ static ZState g_states[Z_STATE_NUM] = {
     },
 };
 
-static int8_t g_state, g_lastState;
+static ZStateId g_state, g_lastState;
 
 void z_loop_setup(void)
 {
@@ -145,12 +145,12 @@ void z_loop_draw(void)
     }
 }
 
-int8_t z_loop_getLastState(void)
+ZStateId z_loop_getLastState(void)
 {
     return g_lastState;
 }
 
-void z_loop_setState(int8_t State)
+void z_loop_setState(ZStateId State)
 {
     g_lastState = g_state;
     g_state = State;

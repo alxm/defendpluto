@@ -19,7 +19,7 @@
 
 Z_EXTERN_C_START
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_FONT_FACE_INVALID = -1,
     Z_FONT_FACE_LCD,
     Z_FONT_FACE_RED,
@@ -27,9 +27,9 @@ typedef enum {
     Z_FONT_FACE_YELLOW,
     Z_FONT_FACE_YELLOWO,
     Z_FONT_FACE_NUM
-} ZFontFace;
+} ZFontId;
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_FONT_ALIGN_INVALID = -1,
     Z_FONT_ALIGN_L,
     Z_FONT_ALIGN_C,
@@ -37,10 +37,12 @@ typedef enum {
     Z_FONT_ALIGN_NUM
 } ZFontAlign;
 
+#include "util_str.h"
+
 extern void z_font_setup(void);
 
-extern void z_font_text(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font, uint8_t Align);
-extern void z_font_textWrap(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font);
-extern void z_font_int(int16_t Number, int16_t X, int16_t Y, uint8_t Font, uint8_t Align);
+extern void z_font_text(ZStringId StringId, int16_t X, int16_t Y, ZFontId Font, ZFontAlign Align);
+extern void z_font_textWrap(ZStringId StringId, int16_t X, int16_t Y, ZFontId Font);
+extern void z_font_int(int16_t Number, int16_t X, int16_t Y, ZFontId Font, ZFontAlign Align);
 
 Z_EXTERN_C_END

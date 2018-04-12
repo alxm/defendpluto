@@ -17,7 +17,7 @@
 
 #pragma once
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_POOL_INVALID = -1,
     Z_POOL_STAR,
     Z_POOL_BULLETE,
@@ -26,7 +26,7 @@ typedef enum {
     Z_POOL_CIRCLE,
     Z_POOL_PARTICLE,
     Z_POOL_NUM
-} ZPoolType;
+} ZPoolId;
 
 #define Z_POOL_NUM_BULLETE 16
 #define Z_POOL_NUM_BULLETP 4
@@ -47,9 +47,9 @@ typedef void ZPoolDrawCallback(ZPoolObject*);
 extern void z_pool_setup(void);
 extern void z_pool_reset(void);
 
-extern void* z_pool_alloc(uint8_t Pool);
-extern void z_pool_clear(uint8_t Pool);
-extern bool z_pool_noActive(uint8_t Pool);
+extern void* z_pool_alloc(ZPoolId Pool);
+extern void z_pool_clear(ZPoolId Pool);
+extern bool z_pool_noActive(ZPoolId Pool);
 
-extern void z_pool_tick(uint8_t Pool, ZPoolTickCallback* Callback, void* Context);
-extern void z_pool_draw(uint8_t Pool, void (*Callback)(ZPoolObject*));
+extern void z_pool_tick(ZPoolId Pool, ZPoolTickCallback* Callback, void* Context);
+extern void z_pool_draw(ZPoolId Pool, void (*Callback)(ZPoolObject*));

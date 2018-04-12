@@ -19,7 +19,7 @@
 
 Z_EXTERN_C_START
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_STATE_INVALID = -1,
     Z_STATE_DIED,
     Z_STATE_INTRO,
@@ -43,7 +43,7 @@ extern void z_loop_setup(void);
 extern void z_loop_tick(void);
 extern void z_loop_draw(void);
 
-extern int8_t z_loop_getLastState(void);
-extern void z_loop_setState(int8_t State);
+extern ZStateId z_loop_getLastState(void);
+extern void z_loop_setState(ZStateId State);
 
 Z_EXTERN_C_END

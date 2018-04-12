@@ -72,7 +72,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_VERSION_BETA, version_beta);
 }
 
-void z_sprite_blitCentered(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
+void z_sprite_blitCentered(ZSpriteId Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
     z_sprite_blit(Sprite,
                   i16(X - z_sprite_getWidth(Sprite) / 2),
@@ -80,12 +80,12 @@ void z_sprite_blitCentered(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
                   Frame);
 }
 
-void z_draw_hline(int16_t X1, int16_t X2, int16_t Y, uint8_t Color)
+void z_draw_hline(int16_t X1, int16_t X2, int16_t Y, ZColorId Color)
 {
     z_draw_rectangle(X1, Y, i16(X2 - X1 + 1), 1, Color);
 }
 
-void z_draw_vline(int16_t X, int16_t Y1, int16_t Y2, uint8_t Color)
+void z_draw_vline(int16_t X, int16_t Y1, int16_t Y2, ZColorId Color)
 {
     z_draw_rectangle(X, Y1, 1, i16(Y2 - Y1 + 1), Color);
 }

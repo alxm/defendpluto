@@ -28,7 +28,7 @@ static const int8_t Z_PLAYER_H_NORMAL = 4;
 static const int8_t Z_PLAYER_W_SHIELD = 16;
 static const int8_t Z_PLAYER_H_SHIELD = 16;
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_POINTS_INVALID = -1,
     Z_POINTS_ENEMY_HIT = 10,
     Z_POINTS_ENEMY_DESTROYED = 50,

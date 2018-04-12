@@ -154,7 +154,7 @@ void z_button_release(ZButtonId Button)
     #undef buttonCase
 }
 
-void z_platform__loadSprite(uint8_t Sprite, const uint8_t* Buffer, uint8_t NumFrames)
+void z_platform__loadSprite(ZSpriteId Sprite, const uint8_t* Buffer, uint8_t NumFrames)
 {
     g_sprites[Sprite].image = Buffer;
     g_sprites[Sprite].mask = Buffer
@@ -165,7 +165,7 @@ void z_platform__loadSprite(uint8_t Sprite, const uint8_t* Buffer, uint8_t NumFr
     g_sprites[Sprite].numFrames = NumFrames;
 }
 
-void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
+void z_sprite_blit(ZSpriteId Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
     Sprites::drawExternalMask(X,
                               Y,
@@ -175,42 +175,42 @@ void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
                               Frame);
 }
 
-int16_t z_sprite_getWidth(uint8_t Sprite)
+int16_t z_sprite_getWidth(ZSpriteId Sprite)
 {
     return pgm_read_byte(g_sprites[Sprite].image);
 }
 
-int16_t z_sprite_getHeight(uint8_t Sprite)
+int16_t z_sprite_getHeight(ZSpriteId Sprite)
 {
     return pgm_read_byte(g_sprites[Sprite].image + 1);
 }
 
-uint8_t z_sprite_getNumFrames(uint8_t Sprite)
+uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
 {
     return g_sprites[Sprite].numFrames;
 }
 
-static inline uint8_t getColor(uint8_t Color)
+static inline uint8_t getColor(ZColorId Color)
 {
     return Color < Z_COLORS_WHITE_START ? BLACK : WHITE;
 }
 
-void z_draw_fill(uint8_t Color)
+void z_draw_fill(ZColorId Color)
 {
     g_arduboy.fillScreen(getColor(Color));
 }
 
-void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
+void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, ZColorId Color)
 {
     g_arduboy.fillRect(X, Y, u8(W), u8(H), getColor(Color));
 }
 
-void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
+void z_draw_pixel(int16_t X, int16_t Y, ZColorId Color)
 {
     g_arduboy.drawPixel(X, Y, getColor(Color));
 }
 
-void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
+void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId Color)
 {
     g_arduboy.drawCircle(X, Y, u8(Radius), getColor(Color));
 }

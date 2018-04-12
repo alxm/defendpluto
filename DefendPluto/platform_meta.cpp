@@ -131,46 +131,46 @@ ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame)
     return g_sprites[Sprite].image._buffer;
 }
 
-void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
+void z_sprite_blit(ZSpriteId Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
     g_sprites[Sprite].image.setFrame(Frame);
     gb.display.drawImage(X, Y, g_sprites[Sprite].image);
 }
 
-int16_t z_sprite_getWidth(uint8_t Sprite)
+int16_t z_sprite_getWidth(ZSpriteId Sprite)
 {
     return g_sprites[Sprite].image.width();
 }
 
-int16_t z_sprite_getHeight(uint8_t Sprite)
+int16_t z_sprite_getHeight(ZSpriteId Sprite)
 {
     return g_sprites[Sprite].image.height();
 }
 
-uint8_t z_sprite_getNumFrames(uint8_t Sprite)
+uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
 {
     return g_sprites[Sprite].numFrames;
 }
 
-void z_draw_fill(uint8_t Color)
+void z_draw_fill(ZColorId Color)
 {
     gb.display.setColor(g_colors[Color]);
     gb.display.fill();
 }
 
-void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
+void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, ZColorId Color)
 {
     gb.display.setColor(g_colors[Color]);
     gb.display.fillRect(X, Y, W, H);
 }
 
-void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
+void z_draw_pixel(int16_t X, int16_t Y, ZColorId Color)
 {
     gb.display.setColor(g_colors[Color]);
     gb.display.drawPixel(X, Y);
 }
 
-void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
+void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId Color)
 {
     gb.display.setColor(g_colors[Color]);
     gb.display.drawCircle(X, Y, Radius);

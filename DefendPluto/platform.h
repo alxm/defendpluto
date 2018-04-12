@@ -28,7 +28,7 @@
 #endif
 
 #define Z_DEBUG_GENERATE_LUT 0
-#define Z_DEBUG_STATS 0
+#define Z_DEBUG_STATS 1
 #define Z_DEBUG_INVINCIBLE 0
 #define Z_DEBUG_INFINITE_ENERGY 0
 
@@ -45,6 +45,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <limits.h>
+
+#define Z_ENUM_PACK
 
 #if Z_PLATFORM_A2X
     #include "platform_a2x.h"

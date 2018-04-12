@@ -32,7 +32,7 @@ void z_timer_tick(void)
 {
     uint8_t now = u8(z_fps_getCounter());
 
-    for(uint8_t t = 0; t < Z_TIMER_NUM; t++) {
+    for(ZTimerId t = 0; t < Z_TIMER_NUM; t++) {
         ZTimer* timer = &g_timers[t];
 
         if(u8(now - timer->base) >= timer->period) {
@@ -44,7 +44,7 @@ void z_timer_tick(void)
     }
 }
 
-void z_timer_start(uint8_t Timer, uint8_t Ds)
+void z_timer_start(ZTimerId Timer, uint8_t Ds)
 {
     ZTimer* timer = &g_timers[Timer];
 
@@ -53,7 +53,7 @@ void z_timer_start(uint8_t Timer, uint8_t Ds)
     timer->expired = false;
 }
 
-bool z_timer_expired(uint8_t Timer)
+bool z_timer_expired(ZTimerId Timer)
 {
     return g_timers[Timer].expired;
 }

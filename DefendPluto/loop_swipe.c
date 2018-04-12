@@ -78,6 +78,9 @@ void z_loop_swipe_hide_tick(void)
             case Z_STATE_WIN: {
                 z_loop_setState(Z_STATE_TITLE);
             } break;
+
+            default:
+                break;
         }
     }
 }
@@ -118,6 +121,9 @@ void z_loop_swipe_draw(void)
             z_player_draw();
             z_hud_draw();
         } break;
+
+        default:
+            break;
     }
 
     z_draw_rectangle(0, 0, Z_SCREEN_W, g_height, Z_COLOR_BLUE);

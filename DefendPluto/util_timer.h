@@ -17,7 +17,7 @@
 
 #pragma once
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_TIMER_INVALID = -1,
     Z_TIMER_ENEMY_FRAME,
     Z_TIMER_HUD_HEARTS,
@@ -33,5 +33,5 @@ typedef enum {
 
 extern void z_timer_tick(void);
 
-extern void z_timer_start(uint8_t Timer, uint8_t Ds);
-extern bool z_timer_expired(uint8_t Timer);
+extern void z_timer_start(ZTimerId Timer, uint8_t Ds);
+extern bool z_timer_expired(ZTimerId Timer);

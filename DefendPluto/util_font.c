@@ -20,20 +20,20 @@
 
 #include "util_str.h"
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_FONT_FLAG_NUMERIC = 0x1,
     Z_FONT_FLAG_ALPHA_L = 0x2,
     Z_FONT_FLAG_ALPHA_U = 0x4,
 } ZFontFlag;
 
 typedef struct {
-    uint8_t sprites;
-    uint8_t flags;
+    ZSpriteId sprites;
+    ZFontFlag flags;
 } ZFont;
 
 ZFont g_fonts[Z_FONT_FACE_NUM];
 
-static void loadFont(uint8_t Index, uint8_t Sprite, uint8_t Flags)
+static void loadFont(ZFontId Index, ZSpriteId Sprite, ZFontFlag Flags)
 {
     g_fonts[Index].sprites = Sprite;
     g_fonts[Index].flags = Flags;
@@ -70,7 +70,7 @@ void z_font_setup(void)
            | Z_FONT_FLAG_ALPHA_L);
 }
 
-static int16_t drawChar(char Char, int16_t X, int16_t Y, uint8_t Flags, uint8_t Sprite, int16_t CharWidth)
+static int16_t drawChar(char Char, int16_t X, int16_t Y, ZFontFlag Flags, ZSpriteId Sprite, int16_t CharWidth)
 {
     char frame = 0;
 
@@ -99,7 +99,7 @@ static int16_t drawChar(char Char, int16_t X, int16_t Y, uint8_t Flags, uint8_t 
     return i16(X + CharWidth + 1);
 }
 
-void z_font_text(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font, uint8_t Align)
+void z_font_text(ZStringId StringId, int16_t X, int16_t Y, ZFontId Font, ZFontAlign Align)
 {
     uint8_t flags = g_fonts[Font].flags;
     uint8_t sprite = g_fonts[Font].sprites;
@@ -116,6 +116,9 @@ void z_font_text(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font, uint8_t A
             int16_t w = i16(z_strings[StringId].len * (charWidth + 1) - 1);
             X = i16(X - w);
         } break;
+
+        default:
+            break;
     }
 
     for(char c = z_pgm_readChar(s); c != '\0'; c = z_pgm_readChar(++s)) {
@@ -123,7 +126,7 @@ void z_font_text(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font, uint8_t A
     }
 }
 
-void z_font_textWrap(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
+void z_font_textWrap(ZStringId StringId, int16_t X, int16_t Y, ZFontId Font)
 {
     uint8_t flags = g_fonts[Font].flags;
     uint8_t sprite = g_fonts[Font].sprites;
@@ -167,7 +170,7 @@ void z_font_textWrap(uint8_t StringId, int16_t X, int16_t Y, uint8_t Font)
     }
 }
 
-void z_font_int(int16_t Number, int16_t X, int16_t Y, uint8_t Font, uint8_t Align)
+void z_font_int(int16_t Number, int16_t X, int16_t Y, ZFontId Font, ZFontAlign Align)
 {
     const int8_t bufferSize = 6;
     char buffer[bufferSize];
@@ -199,6 +202,9 @@ void z_font_int(int16_t Number, int16_t X, int16_t Y, uint8_t Font, uint8_t Alig
             int16_t w = i16((bufferSize - 1 - index) * (charWidth + 1) - 1);
             X = i16(X - w);
         } break;
+
+        default:
+            break;
     }
 
     for(char c = *text; c != '\0'; c = *++text) {

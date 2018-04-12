@@ -53,7 +53,7 @@ A_STATE(run)
 
         ASprite* pal = a_sprite_newFromFile("assets/gfx/palette.png");
 
-        for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
+        for(ZColorId c = 0; c < Z_COLOR_NUM; c++) {
             g_colors[c] = a_sprite_getPixel(pal, 1 + c, 1);
         }
 
@@ -162,7 +162,7 @@ ZPixel z_sprite_getTransparentColor(void)
     return a_sprite_getColorKey();
 }
 
-static ASprite* getCurrentSprite(uint8_t Sprite, uint8_t Frame)
+static ASprite* getCurrentSprite(ZSpriteId Sprite, uint8_t Frame)
 {
     return a_spriteframes_getByIndex(g_sprites[Sprite], Frame);
 }
@@ -172,45 +172,45 @@ ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame)
     return a_sprite_getPixels(getCurrentSprite(Sprite, Frame));
 }
 
-void z_sprite_blit(uint8_t Sprite, int16_t X, int16_t Y, uint8_t Frame)
+void z_sprite_blit(ZSpriteId Sprite, int16_t X, int16_t Y, uint8_t Frame)
 {
     a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
 }
 
-int16_t z_sprite_getWidth(uint8_t Sprite)
+int16_t z_sprite_getWidth(ZSpriteId Sprite)
 {
     return i16(a_sprite_getWidth(getCurrentSprite(Sprite, 0)));
 }
 
-int16_t z_sprite_getHeight(uint8_t Sprite)
+int16_t z_sprite_getHeight(ZSpriteId Sprite)
 {
     return i16(a_sprite_getHeight(getCurrentSprite(Sprite, 0)));
 }
 
-uint8_t z_sprite_getNumFrames(uint8_t Sprite)
+uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
 {
     return u8(a_spriteframes_getNum(g_sprites[Sprite]));
 }
 
-void z_draw_fill(uint8_t Color)
+void z_draw_fill(ZColorId Color)
 {
     a_pixel_setPixel(g_colors[Color]);
     a_draw_fill();
 }
 
-void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, uint8_t Color)
+void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, ZColorId Color)
 {
     a_pixel_setPixel(g_colors[Color]);
     a_draw_rectangle(X, Y, W, H);
 }
 
-void z_draw_pixel(int16_t X, int16_t Y, uint8_t Color)
+void z_draw_pixel(int16_t X, int16_t Y, ZColorId Color)
 {
     a_pixel_setPixel(g_colors[Color]);
     a_draw_pixel(X, Y);
 }
 
-void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, uint8_t Color)
+void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId Color)
 {
     a_pixel_push();
 

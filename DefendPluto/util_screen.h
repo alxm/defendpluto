@@ -22,6 +22,8 @@ typedef struct {
     uint8_t yShake : 4;
 } ZScreen;
 
+#include "util_font.h"
+
 extern ZScreen z_screen;
 
 extern void z_screen_reset(void);
@@ -39,4 +41,4 @@ static inline int8_t z_screen_getYShake(void)
     return i8(-1 + z_screen.yShake);
 }
 
-extern void z_screen_drawPressA(int16_t X, int16_t Y, uint8_t Font, uint8_t Align);
+extern void z_screen_drawPressA(int16_t X, int16_t Y, ZFontId Font, ZFontAlign Align);

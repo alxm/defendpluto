@@ -24,6 +24,9 @@
 
 Z_EXTERN_C_START
 
+#undef Z_ENUM_PACK
+#define Z_ENUM_PACK __attribute__((packed))
+
 typedef uint8_t ZPixel;
 typedef uint8_t ZPoolOffset;
 
@@ -37,7 +40,7 @@ typedef uint8_t ZPoolOffset;
                            z_data_gfx_##Id##_buffer,  \
                            z_data_gfx_##Id##_frames);
 
-extern void z_platform__loadSprite(uint8_t Sprite, const uint8_t* Buffer, uint8_t NumFrames);
+extern void z_platform__loadSprite(ZSpriteId Sprite, const uint8_t* Buffer, uint8_t NumFrames);
 
 static inline char z_pgm_readChar(const char* Address)
 {

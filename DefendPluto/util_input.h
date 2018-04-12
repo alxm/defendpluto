@@ -19,7 +19,7 @@
 
 Z_EXTERN_C_START
 
-typedef enum {
+typedef enum Z_PACK_ENUM {
     Z_BUTTON_INVALID = -1,
     Z_BUTTON_UP,
     Z_BUTTON_DOWN,

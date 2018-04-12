@@ -40,7 +40,7 @@ typedef enum {
     Z_OP_SPAWN,
     Z_OP_DONE,
     Z_OP_NUM
-} ZOpType;
+} ZOpId;
 
 typedef bool (ZOpCallback)(uint8_t Flags);
 

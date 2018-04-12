@@ -17,7 +17,7 @@
 
 #pragma once
 
-typedef enum {
+typedef enum Z_ENUM_PACK {
     Z_STR_INVALID = -1,
     Z_STR_PAUSE,
     Z_STR_PRESS_A,
