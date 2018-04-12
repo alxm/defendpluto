@@ -19,6 +19,7 @@
 
 #include "data_gfx_palette.h"
 #include "loop.h"
+#include "util_font.h"
 #include "util_fps.h"
 #include "util_input.h"
 
@@ -102,8 +103,8 @@ void loop(void)
             unusedBytes++;
         }
 
-        z_font_int(g_arduboy.cpuLoad(), 1, 48, Z_FONT_FACE_LCD, Z_FONT_ALIGN_L);
-        z_font_int(unusedBytes, 1, 56, Z_FONT_FACE_LCD, Z_FONT_ALIGN_L);
+        z_font_int(g_arduboy.cpuLoad(), 2, 2, Z_FONT_FACE_LCD, Z_FONT_ALIGN_L);
+        z_font_int(unusedBytes, 2, 10, Z_FONT_FACE_LCD, Z_FONT_ALIGN_L);
     #endif
 
     g_arduboy.display();
@@ -145,6 +146,9 @@ void z_button_release(ZButtonId Button)
         buttonCase(Z_BUTTON_RIGHT, right)
         buttonCase(Z_BUTTON_A, a)
         buttonCase(Z_BUTTON_B, b)
+
+        default:
+            break;
     }
 
     #undef buttonCase
