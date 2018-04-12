@@ -141,6 +141,7 @@ void z_loop_tick(void)
         }
     }
 
+    z_screen_tick();
     z_timer_tick();
 
     if(g_states[g_state].tick) {

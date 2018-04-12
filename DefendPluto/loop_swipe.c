@@ -43,7 +43,6 @@ void z_loop_swipe_show_init(void)
 
 static void sharedTick(void)
 {
-    z_screen_tick();
     z_hud_tick();
     z_player_tick(g_height < Z_SCREEN_H / 3);
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);

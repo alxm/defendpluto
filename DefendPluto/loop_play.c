@@ -33,7 +33,6 @@
 
 void z_loop_play_tick(void)
 {
-    z_screen_tick();
     z_vm_tick();
     z_hud_tick();
     z_player_tick(true);
