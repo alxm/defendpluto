@@ -25,6 +25,6 @@ typedef APixel ZPixel;
 #define Z_SCREEN_H 64
 
 #define z_sprite_load(Index, Id)                      \
-    z_platform__loadSprite(Index, "gfx/" #Id ".png");
+    z_platform__loadSprite(Index, "assets/gfx/" #Id ".png");
 
 extern void z_platform__loadSprite(ZSpriteId Sprite, const char* Path);

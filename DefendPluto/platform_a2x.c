@@ -51,7 +51,7 @@ A_STATE(run)
         g_buttons[Z_BUTTON_B] = a_button_new("key.x gamepad.b.b");
         g_buttons[Z_BUTTON_MENU] = a_button_new("key.enter gamepad.b.start");
 
-        ASprite* pal = a_sprite_newFromFile("gfx/palette.png");
+        ASprite* pal = a_sprite_newFromFile("assets/gfx/palette.png");
 
         for(ZColor c = 0; c < Z_COLOR_NUM; c++) {
             g_colors[c] = a_sprite_getPixel(pal, 1 + c, 1);
