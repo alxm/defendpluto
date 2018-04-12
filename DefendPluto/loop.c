@@ -108,12 +108,13 @@ static ZState g_states[Z_STATE_NUM] = {
     },
 };
 
-static ZStateId g_state, g_lastState;
+static ZStateId g_state, g_lastState, g_nextState;
 
 void z_loop_setup(void)
 {
     g_state = Z_STATE_INVALID;
     g_lastState = Z_STATE_INVALID;
+    g_nextState = Z_STATE_INVALID;
 
     z_input_reset();
     z_screen_reset();
@@ -131,6 +132,15 @@ void z_loop_setup(void)
 
 void z_loop_tick(void)
 {
+    if(g_nextState != Z_STATE_INVALID) {
+        g_state = g_nextState;
+        g_nextState = Z_STATE_INVALID;
+
+        if(g_states[g_state].init) {
+            g_states[g_state].init();
+        }
+    }
+
     z_timer_tick();
 
     if(g_states[g_state].tick) {
@@ -153,9 +163,5 @@ ZStateId z_loop_getLastState(void)
 void z_loop_setState(ZStateId State)
 {
     g_lastState = g_state;
-    g_state = State;
-
-    if(g_states[g_state].init) {
-        g_states[g_state].init();
-    }
+    g_nextState = State;
 }
