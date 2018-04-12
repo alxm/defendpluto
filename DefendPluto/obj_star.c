@@ -22,28 +22,28 @@
 #include "util_random.h"
 #include "util_screen.h"
 
-static const int16_t Z_STAR_BORDER_RATIO = 8;
-static const int16_t Z_STAR_SPEED_MIN = Z_FIX_ONE / 8;
-static const int16_t Z_STAR_SPEED_MAX = Z_FIX_ONE - Z_FIX_ONE / 8;
-static const uint8_t Z_STAR_MULT_MIN = 4;
-static const uint8_t Z_STAR_MULT_MAX = 8;
+#define Z_STAR_BORDER_RATIO (8)
+#define Z_STAR_SPEED_MIN    (Z_FIX_ONE / 8)
+#define Z_STAR_SPEED_MAX    (Z_FIX_ONE - Z_FIX_ONE / 8)
+#define Z_STAR_MULT_MIN     (4)
+#define Z_STAR_MULT_MAX     (8)
 
 static void z_star_init(ZStar* Star, int16_t Y)
 {
     Star->x = z_fix_itofix(
         i16(Z_SCREEN_W / Z_STAR_BORDER_RATIO
                 + z_random_int8(
-                    i8(Z_SCREEN_W - 2 * Z_SCREEN_W / Z_STAR_BORDER_RATIO))));
+                    Z_SCREEN_W - 2 * Z_SCREEN_W / Z_STAR_BORDER_RATIO)));
 
     Star->y = Y;
     Star->superSpeed = z_random_uint8(Z_POOL_NUM_STAR / 2) == 0;
 
     if(Star->superSpeed) {
         Star->speed = u7(Z_STAR_MULT_MIN
-                + z_random_uint8(u8(Z_STAR_MULT_MAX - Z_STAR_MULT_MIN)));
+                + z_random_uint8(Z_STAR_MULT_MAX - Z_STAR_MULT_MIN));
     } else {
         Star->speed = u7(Z_STAR_SPEED_MIN
-                + z_random_int16(i16(Z_STAR_SPEED_MAX - Z_STAR_SPEED_MIN)));
+                + z_random_int16(Z_STAR_SPEED_MAX - Z_STAR_SPEED_MIN));
     }
 }
 
@@ -81,7 +81,7 @@ void z_star_draw(ZPoolObject* Star)
     int16_t x = i16(z_fix_fixtoi(star->x) + z_screen_getXShake());
     int16_t y = i16(z_fix_fixtoi(star->y) + z_screen_getYShake());
     int16_t centerOffset = i16(z_fix_fixtoi(z_player.x) - Z_SCREEN_W / 2);
-    uint8_t avgSpeed = u8((Z_STAR_SPEED_MIN + Z_STAR_SPEED_MAX) / 2);
+    uint8_t avgSpeed = (Z_STAR_SPEED_MIN + Z_STAR_SPEED_MAX) / 2;
 
     x = i16(x
         - (Z_SCREEN_W / Z_STAR_BORDER_RATIO * star->speed / Z_STAR_SPEED_MAX)

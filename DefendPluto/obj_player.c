@@ -25,19 +25,19 @@
 #include "util_screen.h"
 #include "util_timer.h"
 
-static const uint8_t Z_PLAYER_SHOOT_EVERY_DS = 3;
-static const uint8_t Z_PLAYER_SHOOT_SHIFT_DS = 1;
+#define Z_PLAYER_SHOOT_EVERY_DS        (3)
+#define Z_PLAYER_SHOOT_SHIFT_DS        (1)
 
-static const int16_t Z_PLAYER_SPEED_MAX = Z_FIX_ONE * 3 / 4;
-static const int16_t Z_PLAYER_SPEED_ACCEL = Z_FIX_ONE / 8;
-static const int16_t Z_PLAYER_SPEED_DECEL = Z_FIX_ONE / 16;
+#define Z_PLAYER_SPEED_MAX             (Z_FIX_ONE * 3 / 4)
+#define Z_PLAYER_SPEED_ACCEL           (Z_FIX_ONE / 8)
+#define Z_PLAYER_SPEED_DECEL           (Z_FIX_ONE / 16)
 
-static const uint8_t Z_PLAYER_SHIELD_REGEN_EVERY_DS = 20;
+#define Z_PLAYER_SHIELD_REGEN_EVERY_DS (20)
 
-static const uint8_t Z_PLAYER_ENERGY_USE_SHOOTING = 1;
-static const uint8_t Z_PLAYER_ENERGY_REGEN_EVERY_DS = 10;
+#define Z_PLAYER_ENERGY_USE_SHOOTING   (1)
+#define Z_PLAYER_ENERGY_REGEN_EVERY_DS (10)
 
-static const uint8_t Z_PLAYER_INVINCIBLE_TIMER_DS = 20;
+#define Z_PLAYER_INVINCIBLE_TIMER_DS   (20)
 
 ZPlayer z_player;
 
@@ -73,7 +73,7 @@ static void boostEnergy(uint8_t Boost)
     if(Z_PLAYER_MAX_ENERGY - z_player.energy > Boost) {
         z_player.energy = u4(z_player.energy + Boost);
     } else {
-        z_player.energy = u4(Z_PLAYER_MAX_ENERGY);
+        z_player.energy = Z_PLAYER_MAX_ENERGY;
     }
 }
 
@@ -99,16 +99,16 @@ static void boostShield(uint8_t Boost)
     if(Z_PLAYER_MAX_SHIELD - z_player.shield > Boost) {
         z_player.shield = u4(z_player.shield + Boost);
     } else {
-        z_player.shield = u4(Z_PLAYER_MAX_SHIELD);
+        z_player.shield = Z_PLAYER_MAX_SHIELD;
     }
 }
 
 void z_player_init(void)
 {
     z_player.frame = 0;
-    z_player.energy = u4(Z_PLAYER_MAX_ENERGY);
-    z_player.shield = u4(Z_PLAYER_MAX_SHIELD);
-    z_player.health = i4(Z_PLAYER_MAX_HEALTH);
+    z_player.energy = Z_PLAYER_MAX_ENERGY;
+    z_player.shield = Z_PLAYER_MAX_SHIELD;
+    z_player.health = Z_PLAYER_MAX_HEALTH;
     z_player.lastShotCounter = 0;
     z_player.shootShift = 0;
     z_player.jetFlicker = false;
@@ -288,7 +288,8 @@ void z_player_takeDamage(uint8_t Damage)
         if(--z_player.health >= 0) {
             boostShield(Z_PLAYER_MAX_SHIELD);
             z_player.invincible = true;
-            z_timer_start(Z_TIMER_PLAYER_INVINCIBLE, Z_PLAYER_INVINCIBLE_TIMER_DS);
+            z_timer_start(Z_TIMER_PLAYER_INVINCIBLE,
+                          Z_PLAYER_INVINCIBLE_TIMER_DS);
         }
     }
 }

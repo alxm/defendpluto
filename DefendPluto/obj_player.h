@@ -19,14 +19,14 @@
 
 #include "util_fix.h"
 
-static const int8_t Z_PLAYER_MAX_HEALTH = 3;
-static const uint8_t Z_PLAYER_MAX_SHIELD = 15;
-static const uint8_t Z_PLAYER_MAX_ENERGY = 15;
+#define Z_PLAYER_MAX_HEALTH (3)
+#define Z_PLAYER_MAX_SHIELD (15)
+#define Z_PLAYER_MAX_ENERGY (15)
 
-static const int8_t Z_PLAYER_W_NORMAL = 10;
-static const int8_t Z_PLAYER_H_NORMAL = 4;
-static const int8_t Z_PLAYER_W_SHIELD = 16;
-static const int8_t Z_PLAYER_H_SHIELD = 16;
+#define Z_PLAYER_W_NORMAL   (10)
+#define Z_PLAYER_H_NORMAL   (4)
+#define Z_PLAYER_W_SHIELD   (16)
+#define Z_PLAYER_H_SHIELD   (16)
 
 typedef enum Z_ENUM_PACK {
     Z_POINTS_INVALID = -1,

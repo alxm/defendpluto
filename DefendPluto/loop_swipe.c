@@ -26,8 +26,8 @@
 #include "util_pool.h"
 #include "util_screen.h"
 
-static const uint8_t Z_SLIDE_CLOSE_INC = 2;
-static const uint8_t Z_SLIDE_OPEN_INC = 1;
+#define Z_SLIDE_CLOSE_INC (2)
+#define Z_SLIDE_OPEN_INC  (1)
 
 static uint8_t g_height;
 
