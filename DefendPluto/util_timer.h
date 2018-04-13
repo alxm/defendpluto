@@ -34,4 +34,5 @@ typedef enum Z_ENUM_PACK {
 extern void z_timer_tick(void);
 
 extern void z_timer_start(ZTimerId Timer, uint8_t Ds);
+extern void z_timer_stop(ZTimerId Timer);
 extern bool z_timer_expired(ZTimerId Timer);

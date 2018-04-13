@@ -35,11 +35,13 @@ void z_timer_tick(void)
     for(ZTimerId t = 0; t < Z_TIMER_NUM; t++) {
         ZTimer* timer = &g_timers[t];
 
-        if(u8(now - timer->base) >= timer->period) {
+        if(timer->period == 0) {
+            continue;
+        } else if(u8(now - timer->base) < timer->period) {
+            timer->expired = false;
+        } else {
             timer->base = now;
             timer->expired = true;
-        } else {
-            timer->expired = false;
         }
     }
 }
@@ -50,6 +52,14 @@ void z_timer_start(ZTimerId Timer, uint8_t Ds)
 
     timer->base = u8(z_fps_getCounter());
     timer->period = u7(z_fps_dsToTicks(Ds));
+    timer->expired = false;
+}
+
+void z_timer_stop(ZTimerId Timer)
+{
+    ZTimer* timer = &g_timers[Timer];
+
+    timer->period = 0;
     timer->expired = false;
 }
 
