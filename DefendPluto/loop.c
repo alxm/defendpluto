@@ -46,62 +46,62 @@ typedef struct {
 } ZState;
 
 static ZState g_states[Z_STATE_NUM] = {
-    {
+    [Z_STATE_DIED] = {
         z_loop_died_init,
         z_loop_died_tick,
         z_loop_died_draw
     },
-    {
+    [Z_STATE_INTRO] = {
         z_loop_intro_init,
         z_loop_intro_tick,
         z_loop_intro_draw
     },
-    {
+    [Z_STATE_NEW] = {
         z_loop_new_init,
         NULL,
         NULL
     },
-    {
+    [Z_STATE_NEXT] = {
         z_loop_next_init,
         z_loop_next_tick,
         z_loop_next_draw
     },
-    {
+    [Z_STATE_OVER] = {
         NULL,
         z_loop_over_tick,
         z_loop_over_draw
     },
-    {
+    [Z_STATE_PAUSE] = {
         NULL,
         z_loop_pause_tick,
         z_loop_pause_draw
     },
-    {
+    [Z_STATE_PLAY] = {
         NULL,
         z_loop_play_tick,
         z_loop_play_draw
     },
-    {
+    [Z_STATE_SWIPE_HIDE] = {
         z_loop_swipe_hide_init,
         z_loop_swipe_hide_tick,
         z_loop_swipe_draw
     },
-    {
+    [Z_STATE_SWIPE_INTRO] = {
         z_loop_swipe_show_init,
         z_loop_swipe_intro_tick,
         z_loop_swipe_intro_draw
     },
-    {
+    [Z_STATE_SWIPE_SHOW] = {
         z_loop_swipe_show_init,
         z_loop_swipe_show_tick,
         z_loop_swipe_draw
     },
-    {
+    [Z_STATE_TITLE] = {
         z_loop_title_init,
         z_loop_title_tick,
         z_loop_title_draw
     },
-    {
+    [Z_STATE_WIN] = {
         z_loop_win_init,
         z_loop_win_tick,
         z_loop_win_draw

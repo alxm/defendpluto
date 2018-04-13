@@ -55,7 +55,7 @@ void z_loop_swipe_hide_tick(void)
 
     g_height = u8(g_height + Z_SLIDE_CLOSE_INC);
 
-    if(g_height > Z_SCREEN_H / 2) {
+    if(g_height >= Z_SCREEN_H / 2) {
         switch(z_loop_getLastState()) {
             case Z_STATE_TITLE: {
                 z_loop_setState(Z_STATE_NEW);
@@ -88,7 +88,7 @@ void z_loop_swipe_intro_tick(void)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
-    if(g_height < Z_SLIDE_OPEN_INC) {
+    if(g_height == 0) {
         z_loop_setState(Z_STATE_TITLE);
     } else {
         g_height = u8(g_height - Z_SLIDE_OPEN_INC);
@@ -99,7 +99,7 @@ void z_loop_swipe_show_tick(void)
 {
     sharedTick();
 
-    if(g_height < Z_SLIDE_OPEN_INC) {
+    if(g_height == 0) {
         z_loop_setState(Z_STATE_PLAY);
     } else {
         g_height = u8(g_height - Z_SLIDE_OPEN_INC);
