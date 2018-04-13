@@ -82,7 +82,7 @@ extern ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 extern void z_enemy_setup(void);
 
 extern void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t FlyId, uint8_t AttackId);
-extern ZPoolTickCallback z_enemy_tick;
-extern ZPoolDrawCallback z_enemy_draw;
+extern ZPoolTick z_enemy_tick;
+extern ZPoolDraw z_enemy_draw;
 
 extern void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage);

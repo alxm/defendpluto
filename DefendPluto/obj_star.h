@@ -29,5 +29,5 @@ typedef struct {
 
 extern void z_star_setup(void);
 
-extern ZPoolTickCallback z_star_tick;
-extern ZPoolDrawCallback z_star_draw;
+extern ZPoolTick z_star_tick;
+extern ZPoolDraw z_star_draw;

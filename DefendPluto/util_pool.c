@@ -163,7 +163,7 @@ bool z_pool_noActive(ZPoolId Pool)
     return g_pools[Pool]->activeList == Z_OFFSET_NULL;
 }
 
-void z_pool_tick(ZPoolId Pool, ZPoolTickCallback* Callback, void* Context)
+void z_pool_tick(ZPoolId Pool, ZPoolTick* Callback, void* Context)
 {
     ZPoolHeader* pool = g_pools[Pool];
     ZPoolObjHeader* lastObj = NULL;
@@ -180,7 +180,7 @@ void z_pool_tick(ZPoolId Pool, ZPoolTickCallback* Callback, void* Context)
     }
 }
 
-void z_pool_draw(ZPoolId Pool, ZPoolDrawCallback* Callback)
+void z_pool_draw(ZPoolId Pool, ZPoolDraw* Callback)
 {
     ZPoolHeader* pool = g_pools[Pool];
 

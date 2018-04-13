@@ -27,5 +27,5 @@ typedef struct {
 } ZCircle;
 
 extern void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y);
-extern ZPoolTickCallback z_circle_tick;
-extern ZPoolDrawCallback z_circle_draw;
+extern ZPoolTick z_circle_tick;
+extern ZPoolDraw z_circle_draw;
