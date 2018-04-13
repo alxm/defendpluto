@@ -19,6 +19,7 @@
 
 typedef enum Z_ENUM_PACK {
     Z_TIMER_INVALID = -1,
+    Z_TIMER_VM,
     Z_TIMER_ENEMY_FRAME,
     Z_TIMER_HUD_HEARTS,
     Z_TIMER_HUD_SCORE,
@@ -35,4 +36,5 @@ extern void z_timer_tick(void);
 
 extern void z_timer_start(ZTimerId Timer, uint8_t Ds);
 extern void z_timer_stop(ZTimerId Timer);
+extern bool z_timer_running(ZTimerId Timer);
 extern bool z_timer_expired(ZTimerId Timer);

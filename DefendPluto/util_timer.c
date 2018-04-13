@@ -63,6 +63,11 @@ void z_timer_stop(ZTimerId Timer)
     timer->expired = false;
 }
 
+bool z_timer_running(ZTimerId Timer)
+{
+    return g_timers[Timer].period != 0;
+}
+
 bool z_timer_expired(ZTimerId Timer)
 {
     return g_timers[Timer].expired;
