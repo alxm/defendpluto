@@ -60,7 +60,7 @@ Z_EXTERN_C_START
 
 #if !Z_PLATFORM_ARDUBOY
     #define PROGMEM
-    typedef size_t ZPoolOffset;
+    typedef size_t ZPoolObjOffset;
 
     static inline char z_pgm_readChar(const char* Address)
     {
@@ -99,7 +99,7 @@ Z_EXTERN_C_START
 #define u16(X) (uint16_t)(X)
 
 #define zf(X) (ZFix)(X)
-#define zpo(X) (ZPoolOffset)(X)
+#define zpo(X) (ZPoolObjOffset)(X)
 
 #define Z_UNUSED(X) (X = X)
 #define Z_ARRAY_LEN(A) (sizeof(A) / sizeof(A[0]))

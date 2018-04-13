@@ -30,7 +30,7 @@ void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraS
     Bullet->damage = u3(Damage);
 }
 
-bool z_bullete_tick(ZPoolObject* Bullet, void* Context)
+bool z_bullete_tick(ZPoolObjHeader* Bullet, void* Context)
 {
     Z_UNUSED(Context);
 
@@ -52,7 +52,7 @@ bool z_bullete_tick(ZPoolObject* Bullet, void* Context)
     return !z_collision_checkPlayer(bullet->x, bullet->y, 2, 3, bullet->damage);
 }
 
-void z_bullete_draw(ZPoolObject* Bullet)
+void z_bullete_draw(ZPoolObjHeader* Bullet)
 {
     ZBulletE* bullet = (ZBulletE*)Bullet;
     uint8_t angle = Z_U4_TO_ANGLE(bullet->angle);

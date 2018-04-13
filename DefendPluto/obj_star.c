@@ -54,7 +54,7 @@ void z_star_setup(void)
     }
 }
 
-bool z_star_tick(ZPoolObject* Star, void* Context)
+bool z_star_tick(ZPoolObjHeader* Star, void* Context)
 {
     Z_UNUSED(Context);
 
@@ -73,7 +73,7 @@ bool z_star_tick(ZPoolObject* Star, void* Context)
     return true;
 }
 
-void z_star_draw(ZPoolObject* Star)
+void z_star_draw(ZPoolObjHeader* Star)
 {
     ZStar* star = (ZStar*)Star;
 

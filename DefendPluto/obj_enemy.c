@@ -81,7 +81,7 @@ static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
     }
 }
 
-bool z_enemy_tick(ZPoolObject* Enemy, void* Context)
+bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
 {
     Z_UNUSED(Context);
 
@@ -307,7 +307,7 @@ static void drawJets(uint8_t EnemyId, int16_t X, int16_t Y)
     }
 }
 
-void z_enemy_draw(ZPoolObject* Enemy)
+void z_enemy_draw(ZPoolObjHeader* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
     int16_t x = z_fix_fixtoi(enemy->x);

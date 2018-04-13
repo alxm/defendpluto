@@ -30,7 +30,7 @@ void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y)
     Bullet->damage = z_player.damage;
 }
 
-bool z_bulletp_tick(ZPoolObject* Bullet, void* Context)
+bool z_bulletp_tick(ZPoolObjHeader* Bullet, void* Context)
 {
     Z_UNUSED(Context);
 
@@ -49,7 +49,7 @@ bool z_bulletp_tick(ZPoolObject* Bullet, void* Context)
                                         bullet->damage);
 }
 
-void z_bulletp_draw(ZPoolObject* Bullet)
+void z_bulletp_draw(ZPoolObjHeader* Bullet)
 {
     ZBulletP* bullet = (ZBulletP*)Bullet;
 

@@ -30,7 +30,7 @@ void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)
     Particle->ticks = 0;
 }
 
-bool z_particle_tick(ZPoolObject* Particle, void* Context)
+bool z_particle_tick(ZPoolObjHeader* Particle, void* Context)
 {
     Z_UNUSED(Context);
 
@@ -42,7 +42,7 @@ bool z_particle_tick(ZPoolObject* Particle, void* Context)
         || (particle->ticks < Z_FPS && z_random_int8(4) != 0);
 }
 
-void z_particle_draw(ZPoolObject* Particle)
+void z_particle_draw(ZPoolObjHeader* Particle)
 {
     ZParticle* particle = (ZParticle*)Particle;
 

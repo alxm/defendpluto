@@ -30,7 +30,7 @@ void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y)
     Circle->radius = 0;
 }
 
-bool z_circle_tick(ZPoolObject* Circle, void* Context)
+bool z_circle_tick(ZPoolObjHeader* Circle, void* Context)
 {
     Z_UNUSED(Context);
 
@@ -39,7 +39,7 @@ bool z_circle_tick(ZPoolObject* Circle, void* Context)
     return circle->radius++ < Z_CIRCLE_RADIUS_MAX;
 }
 
-void z_circle_draw(ZPoolObject* Circle)
+void z_circle_draw(ZPoolObjHeader* Circle)
 {
     ZCircle* circle = (ZCircle*)Circle;
     int16_t x = i16(z_fix_fixtoi(circle->x) + z_screen_getXShake());

@@ -52,7 +52,7 @@ typedef enum Z_ENUM_PACK {
 } ZAttackId;
 
 typedef struct {
-    ZPoolObject poolObject;
+    ZPoolObjHeader poolObject;
     ZFix x, y;
     uint8_t angle : 7;
     bool jetFlicker : 1;

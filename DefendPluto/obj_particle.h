@@ -21,7 +21,7 @@
 #include "util_pool.h"
 
 typedef struct {
-    ZPoolObject poolObject;
+    ZPoolObjHeader poolObject;
     ZFix x, y;
     uint8_t angle : 7;
     uint8_t splitNum : 2;

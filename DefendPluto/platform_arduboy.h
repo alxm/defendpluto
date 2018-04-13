@@ -28,7 +28,7 @@ Z_EXTERN_C_START
 #define Z_ENUM_PACK __attribute__((packed))
 
 typedef uint8_t ZPixel;
-typedef uint8_t ZPoolOffset;
+typedef uint8_t ZPoolObjOffset;
 
 #include "util_graphics.h"
 

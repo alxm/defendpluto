@@ -24,18 +24,17 @@
 #include "obj_particle.h"
 #include "obj_star.h"
 
-static const ZPoolOffset Z_OFFSET_NULL = (ZPoolOffset)-1;
+static const ZPoolObjOffset Z_OFFSET_NULL = (ZPoolObjOffset)-1;
 
-struct ZPool {
-    ZPoolOffset freeList;
-    ZPoolOffset activeList;
-    ZPoolObject pool[];
-};
+typedef struct ZPoolHeader {
+    ZPoolObjOffset freeList;
+    ZPoolObjOffset activeList;
+} ZPoolHeader;
 
-#define DECLARE_POOL(ObjectType, NumObjects)                              \
-    union {                                                               \
-        ZPool generic;                                                    \
-        uint8_t private[sizeof(ZPool) + NumObjects * sizeof(ObjectType)]; \
+#define DECLARE_POOL(ObjectType, NumObjects)           \
+    struct {                                           \
+        ZPoolHeader header;                            \
+        uint8_t data[NumObjects * sizeof(ObjectType)]; \
     }
 
 static DECLARE_POOL(ZStar, Z_POOL_NUM_STAR) g_starPool;
@@ -45,32 +44,32 @@ static DECLARE_POOL(ZEnemy, Z_POOL_NUM_ENEMY) g_enemyPool;
 static DECLARE_POOL(ZCircle, Z_POOL_NUM_CIRCLE) g_circlePool;
 static DECLARE_POOL(ZParticle, Z_POOL_NUM_PARTICLE) g_particlePool;
 
-static ZPool* g_pools[Z_POOL_NUM] = {
-    &g_starPool.generic,
-    &g_bulletEPool.generic,
-    &g_bulletPPool.generic,
-    &g_enemyPool.generic,
-    &g_circlePool.generic,
-    &g_particlePool.generic,
+static ZPoolHeader* g_pools[Z_POOL_NUM] = {
+    &g_starPool.header,
+    &g_bulletEPool.header,
+    &g_bulletPPool.header,
+    &g_enemyPool.header,
+    &g_circlePool.header,
+    &g_particlePool.header,
 };
 
-static inline ZPoolObject* objectFromOffset(ZPool* Pool, ZPoolOffset Offset)
+static inline ZPoolObjHeader* objectFromOffset(ZPoolHeader* Pool, ZPoolObjOffset Offset)
 {
-    return (ZPoolObject*)(void*)((uint8_t*)Pool->pool + Offset);
+    return (ZPoolObjHeader*)((uint8_t*)(Pool + 1) + Offset);
 }
 
-static inline ZPoolOffset offsetFromObject(ZPool* Pool, ZPoolObject* Object)
+static inline ZPoolObjOffset offsetFromObject(ZPoolHeader* Pool, ZPoolObjHeader* Object)
 {
-    return zpo((uint8_t*)Object - (uint8_t*)Pool->pool);
+    return zpo((uint8_t*)Object - (uint8_t*)(Pool + 1));
 }
 
 static void initPool(ZPoolId Pool, uint8_t ObjectSize, uint8_t NumObjects)
 {
-    ZPool* pool = g_pools[Pool];
-    ZPoolObject* current = &pool->pool[0];
+    ZPoolHeader* pool = g_pools[Pool];
+    ZPoolObjHeader* current = (ZPoolObjHeader*)(pool + 1);
 
     while(NumObjects-- > 1) {
-        ZPoolObject* next = (void*)((uint8_t*)current + ObjectSize);
+        ZPoolObjHeader* next = (void*)((uint8_t*)current + ObjectSize);
 
         current->nextOffset = offsetFromObject(pool, next);
         current = next;
@@ -102,18 +101,18 @@ void z_pool_reset(void)
 
 void* z_pool_alloc(ZPoolId Pool)
 {
-    ZPool* pool = g_pools[Pool];
+    ZPoolHeader* pool = g_pools[Pool];
 
     if(pool->freeList == Z_OFFSET_NULL) {
         #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
             static uint32_t fails[Z_POOL_NUM];
             static const char* names[Z_POOL_NUM] = {
-                "Z_POOL_STAR",
-                "Z_POOL_BULLETE",
-                "Z_POOL_BULLETP",
-                "Z_POOL_ENEMY",
-                "Z_POOL_CIRCLE",
-                "Z_POOL_PARTICLE",
+                [Z_POOL_STAR] = "Z_POOL_STAR",
+                [Z_POOL_BULLETE] = "Z_POOL_BULLETE",
+                [Z_POOL_BULLETP] = "Z_POOL_BULLETP",
+                [Z_POOL_ENEMY] = "Z_POOL_ENEMY",
+                [Z_POOL_CIRCLE] = "Z_POOL_CIRCLE",
+                [Z_POOL_PARTICLE] = "Z_POOL_PARTICLE",
             };
 
             printf("Can't allocate from %s (%d)\n", names[Pool], ++fails[Pool]);
@@ -121,8 +120,8 @@ void* z_pool_alloc(ZPoolId Pool)
         return NULL;
     }
 
-    ZPoolOffset objectOffset = pool->freeList;
-    ZPoolObject* object = objectFromOffset(pool, objectOffset);
+    ZPoolObjOffset objectOffset = pool->freeList;
+    ZPoolObjHeader* object = objectFromOffset(pool, objectOffset);
 
     pool->freeList = object->nextOffset;
     object->nextOffset = pool->activeList;
@@ -131,11 +130,11 @@ void* z_pool_alloc(ZPoolId Pool)
     return object;
 }
 
-static ZPoolOffset z_pool_release(ZPool* Pool, void* Object, ZPoolOffset ObjectOffset, void* LastObject)
+static ZPoolObjOffset releaseObject(ZPoolHeader* Pool, void* Object, ZPoolObjOffset ObjectOffset, void* LastObject)
 {
-    ZPoolObject* object = Object;
-    ZPoolObject* lastObject = LastObject;
-    ZPoolOffset nextObjectOffset = object->nextOffset;
+    ZPoolObjHeader* object = Object;
+    ZPoolObjHeader* lastObject = LastObject;
+    ZPoolObjOffset nextObjectOffset = object->nextOffset;
 
     if(lastObject == NULL) {
         Pool->activeList = nextObjectOffset;
@@ -151,11 +150,11 @@ static ZPoolOffset z_pool_release(ZPool* Pool, void* Object, ZPoolOffset ObjectO
 
 void z_pool_clear(ZPoolId Pool)
 {
-    ZPool* pool = g_pools[Pool];
+    ZPoolHeader* pool = g_pools[Pool];
 
-    for(ZPoolOffset offset = pool->activeList; offset != Z_OFFSET_NULL; ) {
-        ZPoolObject* obj = objectFromOffset(pool, offset);
-        offset = z_pool_release(pool, obj, offset, NULL);
+    for(ZPoolObjOffset offset = pool->activeList; offset != Z_OFFSET_NULL; ) {
+        ZPoolObjHeader* obj = objectFromOffset(pool, offset);
+        offset = releaseObject(pool, obj, offset, NULL);
     }
 }
 
@@ -166,27 +165,27 @@ bool z_pool_noActive(ZPoolId Pool)
 
 void z_pool_tick(ZPoolId Pool, ZPoolTickCallback* Callback, void* Context)
 {
-    ZPool* pool = g_pools[Pool];
-    ZPoolObject* lastObj = NULL;
+    ZPoolHeader* pool = g_pools[Pool];
+    ZPoolObjHeader* lastObj = NULL;
 
-    for(ZPoolOffset offset = pool->activeList; offset != Z_OFFSET_NULL; ) {
-        ZPoolObject* obj = objectFromOffset(pool, offset);
+    for(ZPoolObjOffset offset = pool->activeList; offset != Z_OFFSET_NULL; ) {
+        ZPoolObjHeader* obj = objectFromOffset(pool, offset);
 
         if(Callback(obj, Context)) {
             lastObj = obj;
             offset = obj->nextOffset;
         } else {
-            offset = z_pool_release(pool, obj, offset, lastObj);
+            offset = releaseObject(pool, obj, offset, lastObj);
         }
     }
 }
 
-void z_pool_draw(ZPoolId Pool, void (*Callback)(ZPoolObject*))
+void z_pool_draw(ZPoolId Pool, ZPoolDrawCallback* Callback)
 {
-    ZPool* pool = g_pools[Pool];
+    ZPoolHeader* pool = g_pools[Pool];
 
-    for(ZPoolOffset offset = pool->activeList; offset != Z_OFFSET_NULL; ) {
-        ZPoolObject* obj = objectFromOffset(pool, offset);
+    for(ZPoolObjOffset offset = pool->activeList; offset != Z_OFFSET_NULL; ) {
+        ZPoolObjHeader* obj = objectFromOffset(pool, offset);
 
         Callback(obj);
         offset = obj->nextOffset;

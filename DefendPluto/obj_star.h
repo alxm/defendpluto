@@ -21,7 +21,7 @@
 #include "util_pool.h"
 
 typedef struct {
-    ZPoolObject poolObject;
+    ZPoolObjHeader poolObject;
     ZFix x, y;
     bool superSpeed : 1;
     uint8_t speed : 7;

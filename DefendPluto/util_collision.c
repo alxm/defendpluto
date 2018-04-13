@@ -42,7 +42,7 @@ static bool boxAndBox(int16_t X1, int16_t Y1, int8_t W1, int8_t H1, int16_t X2, 
     return !(Y1 >= Y2 + H2 || Y2 >= Y1 + H1 || X1 >= X2 + W2 || X2 >= X1 + W1);
 }
 
-static bool enemyShipCollision(ZPoolObject* Enemy, void* Context)
+static bool enemyShipCollision(ZPoolObjHeader* Enemy, void* Context)
 {
     ZCollisionContext* context = Context;
 
