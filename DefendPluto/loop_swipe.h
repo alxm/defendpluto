@@ -19,10 +19,10 @@
 
 #include "loop.h"
 
-extern ZStateCallback z_loop_swipe_hide_init;
-extern ZStateCallback z_loop_swipe_show_init;
-extern ZStateCallback z_loop_swipe_hide_tick;
-extern ZStateCallback z_loop_swipe_intro_tick;
-extern ZStateCallback z_loop_swipe_show_tick;
-extern ZStateCallback z_loop_swipe_draw;
-extern ZStateCallback z_loop_swipe_intro_draw;
+extern ZStateInit z_loop_swipe_hide_init;
+extern ZStateInit z_loop_swipe_show_init;
+extern ZStateTick z_loop_swipe_hide_tick;
+extern ZStateTick z_loop_swipe_intro_tick;
+extern ZStateTick z_loop_swipe_show_tick;
+extern ZStateDraw z_loop_swipe_draw;
+extern ZStateDraw z_loop_swipe_intro_draw;

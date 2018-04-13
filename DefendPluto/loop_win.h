@@ -19,6 +19,6 @@
 
 #include "loop.h"
 
-extern ZStateCallback z_loop_win_init;
-extern ZStateCallback z_loop_win_tick;
-extern ZStateCallback z_loop_win_draw;
+extern ZStateInit z_loop_win_init;
+extern ZStateTick z_loop_win_tick;
+extern ZStateDraw z_loop_win_draw;

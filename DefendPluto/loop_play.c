@@ -31,8 +31,10 @@
 #include "util_screen.h"
 #include "util_vm.h"
 
-void z_loop_play_tick(void)
+void z_loop_play_tick(bool Active)
 {
+    Z_UNUSED(Active);
+
     z_vm_tick();
     z_hud_tick();
     z_player_tick(true);

@@ -19,4 +19,4 @@
 
 #include "loop.h"
 
-extern ZStateCallback z_loop_new_init;
+extern ZStateInit z_loop_new_init;

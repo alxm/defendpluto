@@ -32,8 +32,10 @@ void z_loop_win_init(void)
     g_state = 0;
 }
 
-void z_loop_win_tick(void)
+void z_loop_win_tick(bool Active)
 {
+    Z_UNUSED(Active);
+
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
     if(z_button_pressedOnce(Z_BUTTON_A)) {

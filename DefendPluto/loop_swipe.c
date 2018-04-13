@@ -49,8 +49,10 @@ static void sharedTick(void)
     z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);
 }
 
-void z_loop_swipe_hide_tick(void)
+void z_loop_swipe_hide_tick(bool Active)
 {
+    Z_UNUSED(Active);
+
     sharedTick();
 
     g_height = u8(g_height + Z_SLIDE_CLOSE_INC);
@@ -84,8 +86,10 @@ void z_loop_swipe_hide_tick(void)
     }
 }
 
-void z_loop_swipe_intro_tick(void)
+void z_loop_swipe_intro_tick(bool Active)
 {
+    Z_UNUSED(Active);
+
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
     if(g_height == 0) {
@@ -95,8 +99,10 @@ void z_loop_swipe_intro_tick(void)
     }
 }
 
-void z_loop_swipe_show_tick(void)
+void z_loop_swipe_show_tick(bool Active)
 {
+    Z_UNUSED(Active);
+
     sharedTick();
 
     if(g_height == 0) {

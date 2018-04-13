@@ -36,7 +36,9 @@ typedef enum Z_ENUM_PACK {
     Z_STATE_NUM
 } ZStateId;
 
-typedef void (ZStateCallback)(void);
+typedef void (ZStateInit)(void);
+typedef void (ZStateTick)(bool Active);
+typedef void (ZStateDraw)(void);
 
 extern void z_loop_setup(void);
 

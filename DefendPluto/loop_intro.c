@@ -34,8 +34,10 @@ void z_loop_intro_init(void)
     z_timer_start(Z_TIMER_G1, 1);
 }
 
-void z_loop_intro_tick(void)
+void z_loop_intro_tick(bool Active)
 {
+    Z_UNUSED(Active);
+
     if(z_timer_expired(Z_TIMER_G1)) {
         switch(g_stage) {
             case 0: {

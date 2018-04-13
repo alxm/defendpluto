@@ -19,5 +19,5 @@
 
 #include "loop.h"
 
-extern ZStateCallback z_loop_pause_tick;
-extern ZStateCallback z_loop_pause_draw;
+extern ZStateTick z_loop_pause_tick;
+extern ZStateDraw z_loop_pause_draw;

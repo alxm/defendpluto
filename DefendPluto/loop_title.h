@@ -19,8 +19,8 @@
 
 #include "loop.h"
 
-extern ZStateCallback z_loop_title_init;
-extern ZStateCallback z_loop_title_tick;
-extern ZStateCallback z_loop_title_draw;
+extern ZStateInit z_loop_title_init;
+extern ZStateTick z_loop_title_tick;
+extern ZStateDraw z_loop_title_draw;
 
 extern void z_loop_title_drawTitleScreen(void);

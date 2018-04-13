@@ -40,9 +40,9 @@
 #include "util_vm.h"
 
 typedef struct {
-    ZStateCallback* init;
-    ZStateCallback* tick;
-    ZStateCallback* draw;
+    ZStateInit* init;
+    ZStateTick* tick;
+    ZStateDraw* draw;
 } ZState;
 
 static ZState g_states[Z_STATE_NUM] = {
@@ -145,7 +145,7 @@ void z_loop_tick(void)
     z_timer_tick();
 
     if(g_states[g_state].tick) {
-        g_states[g_state].tick();
+        g_states[g_state].tick(true);
     }
 }
 

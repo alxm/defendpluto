@@ -39,8 +39,10 @@ void z_loop_died_init(void)
     z_timer_start(Z_TIMER_G2, 1);
 }
 
-void z_loop_died_tick(void)
+void z_loop_died_tick(bool Active)
 {
+    Z_UNUSED(Active);
+
     z_vm_tick();
     z_hud_tick();
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
