@@ -33,11 +33,12 @@
 
 void z_loop_play_tick(bool Active)
 {
-    Z_UNUSED(Active);
+    if(Active) {
+        z_vm_tick();
+    }
 
-    z_vm_tick();
     z_hud_tick();
-    z_player_tick(true);
+    z_player_tick(Active);
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
     z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL);
     z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);

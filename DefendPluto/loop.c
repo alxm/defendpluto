@@ -25,7 +25,6 @@
 #include "loop_over.h"
 #include "loop_pause.h"
 #include "loop_play.h"
-#include "loop_swipe.h"
 #include "loop_title.h"
 #include "loop_win.h"
 #include "obj_enemy.h"
@@ -81,21 +80,6 @@ static ZState g_states[Z_STATE_NUM] = {
         z_loop_play_tick,
         z_loop_play_draw
     },
-    [Z_STATE_SWIPE_HIDE] = {
-        z_loop_swipe_hide_init,
-        z_loop_swipe_hide_tick,
-        z_loop_swipe_draw
-    },
-    [Z_STATE_SWIPE_INTRO] = {
-        z_loop_swipe_show_init,
-        z_loop_swipe_intro_tick,
-        z_loop_swipe_intro_draw
-    },
-    [Z_STATE_SWIPE_SHOW] = {
-        z_loop_swipe_show_init,
-        z_loop_swipe_show_tick,
-        z_loop_swipe_draw
-    },
     [Z_STATE_TITLE] = {
         z_loop_title_init,
         z_loop_title_tick,
@@ -108,13 +92,80 @@ static ZState g_states[Z_STATE_NUM] = {
     },
 };
 
-static ZStateId g_state, g_lastState, g_nextState;
+static struct {
+    ZStateId current;
+    ZStateId next;
+} g_state;
+
+static struct {
+    ZSwipeId swipeOut;
+    ZSwipeId swipeIn;
+    uint8_t height;
+} g_swipe;
+
+typedef void (ZSwipeInit)(void);
+typedef bool (ZSwipeTick)(void);
+typedef void (ZSwipeDraw)(void);
+
+#define Z_SLIDE_CLOSE_INC (2)
+#define Z_SLIDE_OPEN_INC  (1)
+
+static void swipeHideInit(void)
+{
+    g_swipe.height = 0;
+}
+
+static bool swipeHideTick(void)
+{
+    g_swipe.height = u8(g_swipe.height + Z_SLIDE_CLOSE_INC);
+
+    return g_swipe.height > Z_SCREEN_H / 2;
+}
+
+static void swipeShowInit(void)
+{
+    g_swipe.height = Z_SCREEN_H / 2;
+}
+
+static bool swipeShowTick(void)
+{
+    g_swipe.height = u8(g_swipe.height - Z_SLIDE_OPEN_INC);
+
+    return g_swipe.height == 0;
+}
+
+static void swipeDraw(void)
+{
+    z_draw_rectangle(0, 0, Z_SCREEN_W, g_swipe.height, Z_COLOR_BLUE);
+    z_draw_hline(0, Z_SCREEN_W - 1, i16(g_swipe.height - 1), Z_COLOR_YELLOW);
+
+    z_draw_hline(0,
+                 Z_SCREEN_W - 1,
+                 i16(Z_SCREEN_H - g_swipe.height),
+                 Z_COLOR_YELLOW);
+    z_draw_rectangle(0,
+                     i16(Z_SCREEN_H - g_swipe.height + 1),
+                     Z_SCREEN_W,
+                     g_swipe.height,
+                     Z_COLOR_BLUE);
+}
+
+static struct {
+    ZSwipeInit* init;
+    ZSwipeTick* tick;
+    ZSwipeDraw* draw;
+} g_swipeCallbacks[Z_SWIPE_NUM] = {
+    [Z_SWIPE_HIDE] = {swipeHideInit, swipeHideTick, swipeDraw},
+    [Z_SWIPE_SHOW] = {swipeShowInit, swipeShowTick, swipeDraw},
+};
 
 void z_loop_setup(void)
 {
-    g_state = Z_STATE_INVALID;
-    g_lastState = Z_STATE_INVALID;
-    g_nextState = Z_STATE_INVALID;
+    g_state.current = Z_STATE_INVALID;
+    g_state.next = Z_STATE_INVALID;
+
+    g_swipe.swipeOut = Z_SWIPE_INVALID;
+    g_swipe.swipeIn = Z_SWIPE_INVALID;
 
     z_input_reset();
     z_screen_reset();
@@ -132,37 +183,69 @@ void z_loop_setup(void)
 
 void z_loop_tick(void)
 {
-    if(g_nextState != Z_STATE_INVALID) {
-        g_state = g_nextState;
-        g_nextState = Z_STATE_INVALID;
+    if(g_state.next != Z_STATE_INVALID) {
+        if(g_swipe.swipeOut != Z_SWIPE_INVALID) {
+            if(g_swipeCallbacks[g_swipe.swipeOut].tick()) {
+                g_swipe.swipeOut = Z_SWIPE_INVALID;
+            }
+        }
 
-        if(g_states[g_state].init) {
-            g_states[g_state].init();
+        if(g_swipe.swipeOut == Z_SWIPE_INVALID) {
+            g_state.current = g_state.next;
+            g_state.next = Z_STATE_INVALID;
+
+            if(g_states[g_state.current].init) {
+                g_states[g_state.current].init();
+            }
+
+            if(g_swipe.swipeIn != Z_SWIPE_INVALID) {
+                g_swipeCallbacks[g_swipe.swipeIn].init();
+            }
+        }
+    }
+
+    if(g_state.next == Z_STATE_INVALID && g_swipe.swipeIn != Z_SWIPE_INVALID) {
+        if(g_swipeCallbacks[g_swipe.swipeIn].tick()) {
+            g_swipe.swipeIn = Z_SWIPE_INVALID;
         }
     }
 
     z_screen_tick();
     z_timer_tick();
 
-    if(g_states[g_state].tick) {
-        g_states[g_state].tick(true);
+    if(g_states[g_state.current].tick) {
+        g_states[g_state.current].tick(g_state.next == Z_STATE_INVALID);
     }
 }
 
 void z_loop_draw(void)
 {
-    if(g_states[g_state].draw) {
-        g_states[g_state].draw();
+    if(g_states[g_state.current].draw) {
+        g_states[g_state.current].draw();
+    }
+
+    if(g_swipe.swipeOut != Z_SWIPE_INVALID) {
+        g_swipeCallbacks[g_swipe.swipeOut].draw();
+    } else if(g_swipe.swipeIn != Z_SWIPE_INVALID
+        && g_state.next == Z_STATE_INVALID) {
+
+        g_swipeCallbacks[g_swipe.swipeIn].draw();
     }
 }
 
-ZStateId z_loop_getLastState(void)
+void z_loop_setState(ZStateId NewState)
 {
-    return g_lastState;
+    g_state.next = NewState;
 }
 
-void z_loop_setState(ZStateId State)
+void z_loop_setStateEx(ZSwipeId SwipeOut, ZStateId NewState, ZSwipeId SwipeIn)
 {
-    g_lastState = g_state;
-    g_nextState = State;
+    z_loop_setState(NewState);
+
+    g_swipe.swipeOut = SwipeOut;
+    g_swipe.swipeIn = SwipeIn;
+
+    if(SwipeOut != Z_SWIPE_INVALID) {
+        g_swipeCallbacks[SwipeOut].init();
+    }
 }

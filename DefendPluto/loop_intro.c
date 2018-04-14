@@ -36,8 +36,6 @@ void z_loop_intro_init(void)
 
 void z_loop_intro_tick(bool Active)
 {
-    Z_UNUSED(Active);
-
     if(z_timer_expired(Z_TIMER_G1)) {
         switch(g_stage) {
             case 0: {
@@ -54,8 +52,10 @@ void z_loop_intro_tick(bool Active)
             } break;
 
             case 2: {
-                if(++g_height > z_sprite_getHeight(Z_SPRITE_ALXM)) {
-                    z_loop_setState(Z_STATE_SWIPE_INTRO);
+                if(Active && ++g_height > z_sprite_getHeight(Z_SPRITE_ALXM)) {
+                    z_loop_setStateEx(Z_SWIPE_HIDE,
+                                      Z_STATE_TITLE,
+                                      Z_SWIPE_SHOW);
                 }
             } break;
         }

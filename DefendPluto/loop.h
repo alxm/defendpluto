@@ -28,13 +28,17 @@ typedef enum Z_ENUM_PACK {
     Z_STATE_OVER,
     Z_STATE_PAUSE,
     Z_STATE_PLAY,
-    Z_STATE_SWIPE_HIDE,
-    Z_STATE_SWIPE_INTRO,
-    Z_STATE_SWIPE_SHOW,
     Z_STATE_TITLE,
     Z_STATE_WIN,
     Z_STATE_NUM
 } ZStateId;
+
+typedef enum Z_ENUM_PACK {
+    Z_SWIPE_INVALID = -1,
+    Z_SWIPE_HIDE,
+    Z_SWIPE_SHOW,
+    Z_SWIPE_NUM
+} ZSwipeId;
 
 typedef void (ZStateInit)(void);
 typedef void (ZStateTick)(bool Active);
@@ -45,7 +49,7 @@ extern void z_loop_setup(void);
 extern void z_loop_tick(void);
 extern void z_loop_draw(void);
 
-extern ZStateId z_loop_getLastState(void);
-extern void z_loop_setState(ZStateId State);
+extern void z_loop_setState(ZStateId NewState);
+extern void z_loop_setStateEx(ZSwipeId SwipeOut, ZStateId NewState, ZSwipeId SwipeIn);
 
 Z_EXTERN_C_END

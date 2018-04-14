@@ -41,8 +41,6 @@ void z_loop_died_init(void)
 
 void z_loop_died_tick(bool Active)
 {
-    Z_UNUSED(Active);
-
     z_vm_tick();
     z_hud_tick();
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
@@ -52,9 +50,9 @@ void z_loop_died_tick(bool Active)
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick, NULL);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
 
-    if(z_timer_expired(Z_TIMER_G1)) {
+    if(Active && z_timer_expired(Z_TIMER_G1)) {
         z_button_release(Z_BUTTON_A);
-        z_loop_setState(Z_STATE_SWIPE_HIDE);
+        z_loop_setStateEx(Z_SWIPE_HIDE, Z_STATE_OVER, Z_SWIPE_SHOW);
     }
 
     if(z_timer_expired(Z_TIMER_G2)) {

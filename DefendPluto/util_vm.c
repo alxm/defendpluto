@@ -137,7 +137,7 @@ static bool op_over(uint8_t Flags)
      * over
      */
     z_player.level = 0;
-    z_loop_setState(Z_STATE_SWIPE_HIDE);
+    z_loop_setStateEx(Z_SWIPE_HIDE, Z_STATE_WIN, Z_SWIPE_SHOW);
 
     return false;
 }
@@ -364,7 +364,7 @@ static bool op_done(uint8_t Flags)
         z_timer_start(Z_TIMER_VM, 12);
     } else if(z_timer_expired(Z_TIMER_VM)) {
         z_timer_stop(Z_TIMER_VM);
-        z_loop_setState(Z_STATE_SWIPE_HIDE);
+        z_loop_setStateEx(Z_SWIPE_HIDE, Z_STATE_NEXT, Z_SWIPE_SHOW);
     }
 
     return !z_timer_running(Z_TIMER_VM);

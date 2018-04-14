@@ -33,16 +33,14 @@ void z_loop_title_init(void)
 
 void z_loop_title_tick(bool Active)
 {
-    Z_UNUSED(Active);
-
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
-    if(z_button_pressedOnce(Z_BUTTON_A)) {
-        z_loop_setState(Z_STATE_SWIPE_HIDE);
+    if(Active && z_button_pressedOnce(Z_BUTTON_A)) {
+        z_loop_setStateEx(Z_SWIPE_HIDE, Z_STATE_NEW, Z_SWIPE_INVALID);
     }
 }
 
-void z_loop_title_drawTitleScreen(void)
+void z_loop_title_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
@@ -53,10 +51,6 @@ void z_loop_title_drawTitleScreen(void)
     #endif
 
     z_sprite_blit(Z_SPRITE_VERSION_BETA, 74, 1, 0);
-}
 
-void z_loop_title_draw(void)
-{
-    z_loop_title_drawTitleScreen();
     z_screen_drawPressA(Z_SCREEN_W / 2, 50, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
 }
