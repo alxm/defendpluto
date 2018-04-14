@@ -24,6 +24,7 @@
 #include "obj_player.h"
 #include "util_fps.h"
 #include "util_pool.h"
+#include "util_timer.h"
 
 typedef enum {
     Z_OP_INVALID = -1,
@@ -59,7 +60,6 @@ static struct {
         uint8_t counter;
         uint8_t counterMax;
     } loopStack[Z_LEVELS_NESTED_LOOPS_MAX];
-    uint8_t waitCounter;
     int8_t vars[Z_LEVELS_VARS_NUM];
 } g_vm;
 
@@ -281,18 +281,15 @@ static bool op_wait(uint8_t Flags)
      * wait       25
      */
     if(nothingHappening()) {
-        g_vm.waitCounter = 0;
-        return true;
+        z_timer_stop(Z_TIMER_VM);
+    } else if(!z_timer_running(Z_TIMER_VM)) {
+        z_timer_start(Z_TIMER_VM, vm_readArgU8(Flags, 0, 0));
+    } else if(z_timer_expired(Z_TIMER_VM)) {
+        z_timer_stop(Z_TIMER_VM);
     }
 
-    if(g_vm.waitCounter > 0) {
-        return --g_vm.waitCounter == 0;
-    }
+    return !z_timer_running(Z_TIMER_VM);
 
-    uint8_t ds = vm_readArgU8(Flags, 0, 0);
-    g_vm.waitCounter = z_fps_dsToTicks(ds);
-
-    return ds == 0;
 }
 
 static bool op_clear(uint8_t Flags)
@@ -359,15 +356,18 @@ static bool op_done(uint8_t Flags)
      * done
      * done
      */
-    if(!nothingHappening()) {
-        return false;
-    } else if(g_vm.waitCounter == 0) {
-        g_vm.waitCounter = z_fps_dsToTicks(12);
-    } else if(--g_vm.waitCounter == 1) {
+    if(!z_timer_running(Z_TIMER_VM)) {
+        if(!nothingHappening()) {
+            return false;
+        }
+
+        z_timer_start(Z_TIMER_VM, 12);
+    } else if(z_timer_expired(Z_TIMER_VM)) {
+        z_timer_stop(Z_TIMER_VM);
         z_loop_setState(Z_STATE_SWIPE_HIDE);
     }
 
-    return g_vm.waitCounter == 0;
+    return !z_timer_running(Z_TIMER_VM);
 }
 
 static void setOp(uint8_t Index, ZOpCallback* Function, uint8_t ArgBytes)
@@ -396,7 +396,6 @@ void z_vm_setup(void)
 void z_vm_reset(void)
 {
     g_vm.pc = 0;
-    g_vm.waitCounter = 0;
     g_vm.loopIndex = Z_LEVELS_NESTED_LOOPS_MAX;
 
     for(uint8_t v = Z_LEVELS_VARS_NUM; v--; ) {
