@@ -121,7 +121,7 @@ void z_state_setup(void)
     z_star_setup();
     z_player_resetPosition();
 
-    z_state_setState(Z_STATE_INTRO);
+    z_state_set(Z_STATE_INTRO);
 }
 
 void z_state_tick(void)
@@ -176,14 +176,14 @@ void z_state_draw(void)
     }
 }
 
-void z_state_setState(ZStateId NewState)
+void z_state_set(ZStateId NewState)
 {
     g_state.next = NewState;
 }
 
-void z_state_setStateEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn)
+void z_state_setEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn)
 {
-    z_state_setState(NewState);
+    z_state_set(NewState);
 
     g_swipe.swipeOut = SwipeOut;
     g_swipe.swipeIn = SwipeIn;

@@ -47,11 +47,11 @@ void z_state_play_tick(bool Active)
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
 
     if(z_player.health < 0) {
-        z_state_setState(Z_STATE_DIED);
+        z_state_set(Z_STATE_DIED);
     }
 
     if(z_button_pressedOnce(Z_BUTTON_MENU)) {
-        z_state_setState(Z_STATE_PAUSE);
+        z_state_set(Z_STATE_PAUSE);
     }
 }
 

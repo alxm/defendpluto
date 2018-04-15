@@ -44,7 +44,7 @@ extern void z_state_setup(void);
 extern void z_state_tick(void);
 extern void z_state_draw(void);
 
-extern void z_state_setState(ZStateId NewState);
-extern void z_state_setStateEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn);
+extern void z_state_set(ZStateId NewState);
+extern void z_state_setEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn);
 
 Z_EXTERN_C_END
