@@ -20,7 +20,7 @@
 
 #include "util_timer.h"
 
-#define Z_LOGO_WAIT_DS (12)
+#define Z_LOGO_WAIT_DS (8)
 
 static uint8_t g_stage;
 static int16_t g_height;

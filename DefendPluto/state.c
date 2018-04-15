@@ -108,7 +108,7 @@ typedef bool (ZSwipeTick)(void);
 typedef void (ZSwipeDraw)(void);
 
 #define Z_SLIDE_CLOSE_INC (2)
-#define Z_SLIDE_OPEN_INC  (1)
+#define Z_SLIDE_OPEN_INC  (2)
 
 static void swipeHideInit(void)
 {
