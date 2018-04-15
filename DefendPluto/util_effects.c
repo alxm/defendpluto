@@ -49,8 +49,8 @@ void z_effect_light(ZFix X, ZFix Y, ZLightId LightId)
         int16_t x = z_fix_fixtoi(X);
         int16_t y = z_fix_fixtoi(Y);
 
-        x = i16(2 * z_clamp_int16(x, 0, i16(Z_SCREEN_W - 1)) / Z_SCREEN_W);
-        y = i16(4 * z_clamp_int16(y, 0, i16(Z_SCREEN_H - 1)) / Z_SCREEN_H);
+        x = i16(2 * z_clamp_int16(x, 0, Z_SCREEN_W - 1) / Z_SCREEN_W);
+        y = i16(4 * z_clamp_int16(y, 0, Z_SCREEN_H - 1) / Z_SCREEN_H);
 
         uint8_t color;
 

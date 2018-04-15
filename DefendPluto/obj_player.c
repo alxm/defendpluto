@@ -208,11 +208,11 @@ void z_player_tick(bool CheckInput)
 
     z_player.x = z_clamp_fix(zf(z_player.x + z_player.dx),
                              0,
-                             z_fix_itofix(i16(Z_SCREEN_W - 1)));
+                             z_fix_itofix(Z_SCREEN_W - 1));
 
     z_player.y = z_clamp_fix(zf(z_player.y + z_player.dy),
                              0,
-                             z_fix_itofix(i16(Z_SCREEN_H - 1)));
+                             z_fix_itofix(Z_SCREEN_H - 1));
 
     z_player.jetFlicker = !z_player.jetFlicker;
 
