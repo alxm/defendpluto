@@ -53,8 +53,8 @@ void z_loop_intro_tick(bool Active)
 
             case 2: {
                 if(Active && ++g_height > z_sprite_getHeight(Z_SPRITE_ALXM)) {
-                    z_loop_setStateEx(Z_SWIPE_HIDE,
-                                      Z_STATE_TITLE,
+                    z_loop_setStateEx(Z_STATE_TITLE,
+                                      Z_SWIPE_HIDE,
                                       Z_SWIPE_SHOW);
                 }
             } break;

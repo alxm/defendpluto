@@ -238,7 +238,7 @@ void z_loop_setState(ZStateId NewState)
     g_state.next = NewState;
 }
 
-void z_loop_setStateEx(ZSwipeId SwipeOut, ZStateId NewState, ZSwipeId SwipeIn)
+void z_loop_setStateEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn)
 {
     z_loop_setState(NewState);
 

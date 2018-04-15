@@ -32,5 +32,5 @@ void z_loop_new_init(void)
     z_player_init();
     z_hud_reset();
 
-    z_loop_setStateEx(Z_SWIPE_INVALID, Z_STATE_PLAY, Z_SWIPE_SHOW);
+    z_loop_setStateEx(Z_STATE_PLAY, Z_SWIPE_INVALID, Z_SWIPE_SHOW);
 }

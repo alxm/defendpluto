@@ -36,7 +36,7 @@ void z_loop_title_tick(bool Active)
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
     if(Active && z_button_pressedOnce(Z_BUTTON_A)) {
-        z_loop_setStateEx(Z_SWIPE_HIDE, Z_STATE_NEW, Z_SWIPE_INVALID);
+        z_loop_setStateEx(Z_STATE_NEW, Z_SWIPE_HIDE, Z_SWIPE_INVALID);
     }
 }
 

@@ -50,6 +50,6 @@ extern void z_loop_tick(void);
 extern void z_loop_draw(void);
 
 extern void z_loop_setState(ZStateId NewState);
-extern void z_loop_setStateEx(ZSwipeId SwipeOut, ZStateId NewState, ZSwipeId SwipeIn);
+extern void z_loop_setStateEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn);
 
 Z_EXTERN_C_END

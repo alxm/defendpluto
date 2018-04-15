@@ -52,7 +52,7 @@ void z_loop_died_tick(bool Active)
 
     if(Active && z_timer_expired(Z_TIMER_G1)) {
         z_button_release(Z_BUTTON_A);
-        z_loop_setStateEx(Z_SWIPE_HIDE, Z_STATE_OVER, Z_SWIPE_SHOW);
+        z_loop_setStateEx(Z_STATE_OVER, Z_SWIPE_HIDE, Z_SWIPE_SHOW);
     }
 
     if(z_timer_expired(Z_TIMER_G2)) {
