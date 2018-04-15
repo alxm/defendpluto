@@ -16,17 +16,17 @@
 */
 
 #include "platform.h"
-#include "loop.h"
+#include "state.h"
 
-#include "loop_died.h"
-#include "loop_intro.h"
-#include "loop_new.h"
-#include "loop_next.h"
-#include "loop_over.h"
-#include "loop_pause.h"
-#include "loop_play.h"
-#include "loop_title.h"
-#include "loop_win.h"
+#include "state_died.h"
+#include "state_intro.h"
+#include "state_new.h"
+#include "state_next.h"
+#include "state_over.h"
+#include "state_pause.h"
+#include "state_play.h"
+#include "state_title.h"
+#include "state_win.h"
 #include "obj_enemy.h"
 #include "obj_player.h"
 #include "obj_star.h"
@@ -46,49 +46,49 @@ typedef struct {
 
 static ZState g_states[Z_STATE_NUM] = {
     [Z_STATE_DIED] = {
-        z_loop_died_init,
-        z_loop_died_tick,
-        z_loop_died_draw
+        z_state_died_init,
+        z_state_died_tick,
+        z_state_died_draw
     },
     [Z_STATE_INTRO] = {
-        z_loop_intro_init,
-        z_loop_intro_tick,
-        z_loop_intro_draw
+        z_state_intro_init,
+        z_state_intro_tick,
+        z_state_intro_draw
     },
     [Z_STATE_NEW] = {
-        z_loop_new_init,
+        z_state_new_init,
         NULL,
         NULL
     },
     [Z_STATE_NEXT] = {
-        z_loop_next_init,
-        z_loop_next_tick,
-        z_loop_next_draw
+        z_state_next_init,
+        z_state_next_tick,
+        z_state_next_draw
     },
     [Z_STATE_OVER] = {
         NULL,
-        z_loop_over_tick,
-        z_loop_over_draw
+        z_state_over_tick,
+        z_state_over_draw
     },
     [Z_STATE_PAUSE] = {
         NULL,
-        z_loop_pause_tick,
-        z_loop_pause_draw
+        z_state_pause_tick,
+        z_state_pause_draw
     },
     [Z_STATE_PLAY] = {
         NULL,
-        z_loop_play_tick,
-        z_loop_play_draw
+        z_state_play_tick,
+        z_state_play_draw
     },
     [Z_STATE_TITLE] = {
-        z_loop_title_init,
-        z_loop_title_tick,
-        z_loop_title_draw
+        z_state_title_init,
+        z_state_title_tick,
+        z_state_title_draw
     },
     [Z_STATE_WIN] = {
-        z_loop_win_init,
-        z_loop_win_tick,
-        z_loop_win_draw
+        z_state_win_init,
+        z_state_win_tick,
+        z_state_win_draw
     },
 };
 
@@ -159,7 +159,7 @@ static struct {
     [Z_SWIPE_SHOW] = {swipeShowInit, swipeShowTick, swipeDraw},
 };
 
-void z_loop_setup(void)
+void z_state_setup(void)
 {
     g_state.current = Z_STATE_INVALID;
     g_state.next = Z_STATE_INVALID;
@@ -178,10 +178,10 @@ void z_loop_setup(void)
     z_star_setup();
     z_player_resetPosition();
 
-    z_loop_setState(Z_STATE_INTRO);
+    z_state_setState(Z_STATE_INTRO);
 }
 
-void z_loop_tick(void)
+void z_state_tick(void)
 {
     if(g_state.next != Z_STATE_INVALID) {
         if(g_swipe.swipeOut != Z_SWIPE_INVALID) {
@@ -218,7 +218,7 @@ void z_loop_tick(void)
     }
 }
 
-void z_loop_draw(void)
+void z_state_draw(void)
 {
     if(g_states[g_state.current].draw) {
         g_states[g_state.current].draw();
@@ -233,14 +233,14 @@ void z_loop_draw(void)
     }
 }
 
-void z_loop_setState(ZStateId NewState)
+void z_state_setState(ZStateId NewState)
 {
     g_state.next = NewState;
 }
 
-void z_loop_setStateEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn)
+void z_state_setStateEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn)
 {
-    z_loop_setState(NewState);
+    z_state_setState(NewState);
 
     g_swipe.swipeOut = SwipeOut;
     g_swipe.swipeIn = SwipeIn;

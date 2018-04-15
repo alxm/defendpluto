@@ -18,7 +18,7 @@
 #include "platform.h"
 
 #include "data_gfx_palette.h"
-#include "loop.h"
+#include "state.h"
 #include "util_fps.h"
 #include "util_input.h"
 
@@ -59,7 +59,7 @@ void setup(void)
                 Z_GAMEBUINO_IMAGE_HEADER_LEN + 1 * palWidth + 1 + c];
     }
 
-    z_loop_setup();
+    z_state_setup();
 }
 
 void loop(void)
@@ -80,8 +80,8 @@ void loop(void)
         }
     }
 
-    z_loop_tick();
-    z_loop_draw();
+    z_state_tick();
+    z_state_draw();
 
     #if Z_DEBUG_STATS
         gb.display.setColor(WHITE);

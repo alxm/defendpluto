@@ -16,7 +16,7 @@
 */
 
 #include "platform.h"
-#include "loop_title.h"
+#include "state_title.h"
 
 #include "obj_player.h"
 #include "obj_star.h"
@@ -25,22 +25,22 @@
 #include "util_pool.h"
 #include "util_screen.h"
 
-void z_loop_title_init(void)
+void z_state_title_init(void)
 {
     z_player_resetPosition();
     z_button_release(Z_BUTTON_A);
 }
 
-void z_loop_title_tick(bool Active)
+void z_state_title_tick(bool Active)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
     if(Active && z_button_pressedOnce(Z_BUTTON_A)) {
-        z_loop_setStateEx(Z_STATE_NEW, Z_SWIPE_HIDE, Z_SWIPE_INVALID);
+        z_state_setStateEx(Z_STATE_NEW, Z_SWIPE_HIDE, Z_SWIPE_INVALID);
     }
 }
 
-void z_loop_title_draw(void)
+void z_state_title_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);

@@ -18,7 +18,7 @@
 #include "platform.h"
 
 #include "data_gfx_palette.h"
-#include "loop.h"
+#include "state.h"
 #include "util_font.h"
 #include "util_fps.h"
 #include "util_input.h"
@@ -52,7 +52,7 @@ void setup(void)
     g_arduboy.begin();
     g_arduboy.setFrameRate(Z_FPS);
 
-    z_loop_setup();
+    z_state_setup();
 }
 
 void loop(void)
@@ -89,8 +89,8 @@ void loop(void)
     pollButton(a, A_BUTTON);
     pollButton(b, B_BUTTON);
 
-    z_loop_tick();
-    z_loop_draw();
+    z_state_tick();
+    z_state_draw();
 
     #if Z_DEBUG_STATS
         extern uint8_t _end;

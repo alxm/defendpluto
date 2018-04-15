@@ -16,9 +16,8 @@
 */
 
 #include "platform.h"
-#include "loop_next.h"
+#include "state_win.h"
 
-#include "obj_player.h"
 #include "obj_star.h"
 #include "util_font.h"
 #include "util_input.h"
@@ -26,40 +25,35 @@
 #include "util_screen.h"
 #include "util_str.h"
 
-void z_loop_next_init(void)
+static uint8_t g_state;
+
+void z_state_win_init(void)
 {
-    z_player_resetPosition();
-    z_pool_clear(Z_POOL_BULLETP);
-    z_button_release(Z_BUTTON_A);
+    g_state = 0;
 }
 
-void z_loop_next_tick(bool Active)
+void z_state_win_tick(bool Active)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
     if(Active && z_button_pressedOnce(Z_BUTTON_A)) {
-        z_loop_setStateEx(Z_STATE_PLAY, Z_SWIPE_HIDE, Z_SWIPE_SHOW);
-        z_player.level++;
+        if(g_state++ > 0) {
+            z_state_setStateEx(Z_STATE_TITLE, Z_SWIPE_HIDE, Z_SWIPE_SHOW);
+        }
     }
 }
 
-void z_loop_next_draw(void)
+void z_state_win_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
-    z_sprite_blitCentered(Z_SPRITE_DEFENDPLUTO, Z_SCREEN_W / 2, 12, 0);
 
-    z_font_text(Z_STR_LEVEL_CLEARED_1,
-                Z_SCREEN_W / 2,
-                23,
-                Z_FONT_FACE_YELLOWO,
-                Z_FONT_ALIGN_C);
+    z_font_textWrap(g_state == 0
+                        ? Z_STR_WIN
+                        : Z_STR_THANKS,
+                    4,
+                    4,
+                    Z_FONT_FACE_YELLOW);
 
-    z_font_text(Z_STR_LEVEL_CLEARED_2,
-                Z_SCREEN_W / 2,
-                32,
-                Z_FONT_FACE_YELLOWO,
-                Z_FONT_ALIGN_C);
-
-    z_screen_drawPressA(Z_SCREEN_W / 2, 48, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
+    z_screen_drawPressA(4, 52, Z_FONT_FACE_REDO, Z_FONT_ALIGN_L);
 }

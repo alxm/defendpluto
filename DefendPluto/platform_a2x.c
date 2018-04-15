@@ -17,7 +17,7 @@
 
 #include "platform.h"
 
-#include "loop.h"
+#include "state.h"
 #include "util_fps.h"
 #include "util_input.h"
 
@@ -59,17 +59,17 @@ A_STATE(run)
 
         a_sprite_free(pal);
 
-        z_loop_setup();
+        z_state_setup();
     }
 
     A_STATE_TICK
     {
-        z_loop_tick();
+        z_state_tick();
     }
 
     A_STATE_DRAW
     {
-        z_loop_draw();
+        z_state_draw();
     }
 }
 

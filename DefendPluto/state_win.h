@@ -15,22 +15,10 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
-#include "loop_new.h"
+#pragma once
 
-#include "obj_player.h"
-#include "util_hud.h"
-#include "util_pool.h"
-#include "util_screen.h"
-#include "util_vm.h"
+#include "state.h"
 
-void z_loop_new_init(void)
-{
-    z_screen_reset();
-    z_pool_reset();
-    z_vm_reset();
-    z_player_init();
-    z_hud_reset();
-
-    z_loop_setStateEx(Z_STATE_PLAY, Z_SWIPE_INVALID, Z_SWIPE_SHOW);
-}
+extern ZStateInit z_state_win_init;
+extern ZStateTick z_state_win_tick;
+extern ZStateDraw z_state_win_draw;

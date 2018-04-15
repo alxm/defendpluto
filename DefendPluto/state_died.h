@@ -17,7 +17,8 @@
 
 #pragma once
 
-#include "loop.h"
+#include "state.h"
 
-extern ZStateTick z_loop_play_tick;
-extern ZStateDraw z_loop_play_draw;
+extern ZStateInit z_state_died_init;
+extern ZStateTick z_state_died_tick;
+extern ZStateDraw z_state_died_draw;

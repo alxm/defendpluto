@@ -16,7 +16,7 @@
 */
 
 #include "platform.h"
-#include "loop_intro.h"
+#include "state_intro.h"
 
 #include "util_timer.h"
 
@@ -25,7 +25,7 @@
 static uint8_t g_stage;
 static int16_t g_height;
 
-void z_loop_intro_init(void)
+void z_state_intro_init(void)
 {
     g_stage = 0;
     g_height = z_sprite_getHeight(Z_SPRITE_ALXM);
@@ -34,7 +34,7 @@ void z_loop_intro_init(void)
     z_timer_start(Z_TIMER_G1, 1);
 }
 
-void z_loop_intro_tick(bool Active)
+void z_state_intro_tick(bool Active)
 {
     if(z_timer_expired(Z_TIMER_G1)) {
         switch(g_stage) {
@@ -53,7 +53,7 @@ void z_loop_intro_tick(bool Active)
 
             case 2: {
                 if(Active && ++g_height > z_sprite_getHeight(Z_SPRITE_ALXM)) {
-                    z_loop_setStateEx(Z_STATE_TITLE,
+                    z_state_setStateEx(Z_STATE_TITLE,
                                       Z_SWIPE_HIDE,
                                       Z_SWIPE_SHOW);
                 }
@@ -62,7 +62,7 @@ void z_loop_intro_tick(bool Active)
     }
 }
 
-void z_loop_intro_draw(void)
+void z_state_intro_draw(void)
 {
     int16_t spriteW = z_sprite_getWidth(Z_SPRITE_ALXM);
     int16_t spriteH = z_sprite_getHeight(Z_SPRITE_ALXM);

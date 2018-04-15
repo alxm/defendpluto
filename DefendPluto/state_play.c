@@ -16,7 +16,7 @@
 */
 
 #include "platform.h"
-#include "loop_died.h"
+#include "state_play.h"
 
 #include "obj_bullete.h"
 #include "obj_bulletp.h"
@@ -25,24 +25,20 @@
 #include "obj_particle.h"
 #include "obj_player.h"
 #include "obj_star.h"
-#include "util_effects.h"
 #include "util_hud.h"
 #include "util_input.h"
 #include "util_pool.h"
 #include "util_screen.h"
-#include "util_timer.h"
 #include "util_vm.h"
 
-void z_loop_died_init(void)
+void z_state_play_tick(bool Active)
 {
-    z_timer_start(Z_TIMER_G1, 20);
-    z_timer_start(Z_TIMER_G2, 1);
-}
+    if(Active) {
+        z_vm_tick();
+    }
 
-void z_loop_died_tick(bool Active)
-{
-    z_vm_tick();
     z_hud_tick();
+    z_player_tick(Active);
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
     z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL);
     z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);
@@ -50,25 +46,16 @@ void z_loop_died_tick(bool Active)
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick, NULL);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
 
-    if(Active && z_timer_expired(Z_TIMER_G1)) {
-        z_button_release(Z_BUTTON_A);
-        z_loop_setStateEx(Z_STATE_OVER, Z_SWIPE_HIDE, Z_SWIPE_SHOW);
+    if(z_player.health < 0) {
+        z_state_setState(Z_STATE_DIED);
     }
 
-    if(z_timer_expired(Z_TIMER_G2)) {
-        z_screen_shake(2);
-
-        if(z_random_uint8(4) == 0) {
-            z_effect_circles(
-                zf(z_player.x + Z_FIX_ONE * (-1 + z_random_int8(3))),
-                zf(z_player.y + Z_FIX_ONE * (-1 + z_random_int8(3))));
-        } else {
-            z_effect_particles(z_player.x, z_player.y, 1);
-        }
+    if(z_button_pressedOnce(Z_BUTTON_MENU)) {
+        z_state_setState(Z_STATE_PAUSE);
     }
 }
 
-void z_loop_died_draw(void)
+void z_state_play_draw(void)
 {
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
@@ -77,5 +64,6 @@ void z_loop_died_draw(void)
     z_pool_draw(Z_POOL_ENEMY, z_enemy_draw);
     z_pool_draw(Z_POOL_CIRCLE, z_circle_draw);
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
+    z_player_draw();
     z_hud_draw();
 }

@@ -15,10 +15,29 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "platform.h"
+#include "state_over.h"
 
-#include "loop.h"
+#include "obj_star.h"
+#include "util_font.h"
+#include "util_input.h"
+#include "util_pool.h"
+#include "util_screen.h"
+#include "util_str.h"
 
-extern ZStateInit z_loop_title_init;
-extern ZStateTick z_loop_title_tick;
-extern ZStateDraw z_loop_title_draw;
+void z_state_over_tick(bool Active)
+{
+    z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
+
+    if(Active && z_button_pressedOnce(Z_BUTTON_A)) {
+        z_state_setStateEx(Z_STATE_TITLE, Z_SWIPE_HIDE, Z_SWIPE_SHOW);
+    }
+}
+
+void z_state_over_draw(void)
+{
+    z_draw_fill(Z_COLOR_BLUE);
+    z_pool_draw(Z_POOL_STAR, z_star_draw);
+    z_font_textWrap(Z_STR_END, 4, 4, Z_FONT_FACE_RED);
+    z_screen_drawPressA(4, 52, Z_FONT_FACE_YELLOWO, Z_FONT_ALIGN_L);
+}
