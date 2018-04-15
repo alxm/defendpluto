@@ -1,5 +1,5 @@
 /*
-    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,34 +17,13 @@
 
 #pragma once
 
-#include "util_swipe.h"
-
-Z_EXTERN_C_START
-
 typedef enum Z_ENUM_PACK {
-    Z_STATE_INVALID = -1,
-    Z_STATE_DIED,
-    Z_STATE_INTRO,
-    Z_STATE_NEW,
-    Z_STATE_NEXT,
-    Z_STATE_OVER,
-    Z_STATE_PAUSE,
-    Z_STATE_PLAY,
-    Z_STATE_TITLE,
-    Z_STATE_WIN,
-    Z_STATE_NUM
-} ZStateId;
+    Z_SWIPE_INVALID = -1,
+    Z_SWIPE_HIDE,
+    Z_SWIPE_SHOW,
+    Z_SWIPE_NUM
+} ZSwipeId;
 
-typedef void (ZStateInit)(void);
-typedef void (ZStateTick)(bool Active);
-typedef void (ZStateDraw)(void);
-
-extern void z_state_setup(void);
-
-extern void z_state_tick(void);
-extern void z_state_draw(void);
-
-extern void z_state_setState(ZStateId NewState);
-extern void z_state_setStateEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn);
-
-Z_EXTERN_C_END
+extern void z_swipe_init(ZSwipeId Swipe);
+extern bool z_swipe_tick(ZSwipeId Swipe);
+extern void z_swipe_draw(ZSwipeId Swipe);
