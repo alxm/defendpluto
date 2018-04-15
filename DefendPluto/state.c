@@ -100,7 +100,7 @@ static struct {
 static struct {
     ZSwipeId swipeOut;
     ZSwipeId swipeIn;
-    uint8_t height;
+    uint8_t counter;
 } g_swipe;
 
 typedef void (ZSwipeInit)(void);
@@ -112,42 +112,37 @@ typedef void (ZSwipeDraw)(void);
 
 static void swipeHideInit(void)
 {
-    g_swipe.height = 0;
+    g_swipe.counter = 0;
 }
 
 static bool swipeHideTick(void)
 {
-    g_swipe.height = u8(g_swipe.height + Z_SLIDE_CLOSE_INC);
+    g_swipe.counter = u8(g_swipe.counter + Z_SLIDE_CLOSE_INC);
 
-    return g_swipe.height > Z_SCREEN_H / 2;
+    return g_swipe.counter == Z_ANGLE_090;
 }
 
 static void swipeShowInit(void)
 {
-    g_swipe.height = Z_SCREEN_H / 2;
+    g_swipe.counter = Z_ANGLE_090;
 }
 
 static bool swipeShowTick(void)
 {
-    g_swipe.height = u8(g_swipe.height - Z_SLIDE_OPEN_INC);
+    g_swipe.counter = u8(g_swipe.counter - Z_SLIDE_OPEN_INC);
 
-    return g_swipe.height == 0;
+    return g_swipe.counter == 0;
 }
 
 static void swipeDraw(void)
 {
-    z_draw_rectangle(0, 0, Z_SCREEN_W, g_swipe.height, Z_COLOR_BLUE);
-    z_draw_hline(0, Z_SCREEN_W - 1, i16(g_swipe.height - 1), Z_COLOR_YELLOW);
+    int16_t h = z_fix_fixtoi(zf(z_fix_sin(g_swipe.counter) * (Z_SCREEN_H / 2)));
 
-    z_draw_hline(0,
-                 Z_SCREEN_W - 1,
-                 i16(Z_SCREEN_H - g_swipe.height),
-                 Z_COLOR_YELLOW);
-    z_draw_rectangle(0,
-                     i16(Z_SCREEN_H - g_swipe.height + 1),
-                     Z_SCREEN_W,
-                     g_swipe.height,
-                     Z_COLOR_BLUE);
+    z_draw_rectangle(0, 0, Z_SCREEN_W, h, Z_COLOR_BLUE);
+    z_draw_hline(0, Z_SCREEN_W - 1, h, Z_COLOR_YELLOW);
+
+    z_draw_hline(0, Z_SCREEN_W - 1, i16(Z_SCREEN_H - 1 - h), Z_COLOR_YELLOW);
+    z_draw_rectangle(0, i16(Z_SCREEN_H - h), Z_SCREEN_W, h, Z_COLOR_BLUE);
 }
 
 static struct {
