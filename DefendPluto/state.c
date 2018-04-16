@@ -126,35 +126,20 @@ void z_state_setup(void)
 
 void z_state_tick(void)
 {
-    if(g_state.next != Z_STATE_INVALID) {
-        if(g_swipe.swipeOut != Z_SWIPE_INVALID) {
-            if(z_swipe_tick(g_swipe.swipeOut)) {
-                g_swipe.swipeOut = Z_SWIPE_INVALID;
-            }
-        }
-
-        if(g_swipe.swipeOut == Z_SWIPE_INVALID) {
-            g_state.current = g_state.next;
-            g_state.next = Z_STATE_INVALID;
-
-            if(g_states[g_state.current].init) {
-                g_states[g_state.current].init();
-            }
-
-            if(g_swipe.swipeIn != Z_SWIPE_INVALID) {
-                z_swipe_init(g_swipe.swipeIn);
-            }
-        }
-    }
-
-    if(g_state.next == Z_STATE_INVALID && g_swipe.swipeIn != Z_SWIPE_INVALID) {
-        if(z_swipe_tick(g_swipe.swipeIn)) {
-            g_swipe.swipeIn = Z_SWIPE_INVALID;
-        }
-    }
-
     z_screen_tick();
     z_timer_tick();
+    z_swipe_tick();
+
+    if(g_state.next != Z_STATE_INVALID && g_swipe.swipeOut == Z_SWIPE_INVALID) {
+        g_state.current = g_state.next;
+        g_state.next = Z_STATE_INVALID;
+
+        if(g_states[g_state.current].init) {
+            g_states[g_state.current].init();
+        }
+
+        z_swipe_init(&g_swipe.swipeIn);
+    }
 
     if(g_states[g_state.current].tick) {
         g_states[g_state.current].tick(g_state.next == Z_STATE_INVALID);
@@ -167,13 +152,7 @@ void z_state_draw(void)
         g_states[g_state.current].draw();
     }
 
-    if(g_swipe.swipeOut != Z_SWIPE_INVALID) {
-        z_swipe_draw(g_swipe.swipeOut);
-    } else if(g_swipe.swipeIn != Z_SWIPE_INVALID
-        && g_state.next == Z_STATE_INVALID) {
-
-        z_swipe_draw(g_swipe.swipeIn);
-    }
+    z_swipe_draw();
 }
 
 void z_state_set(ZStateId NewState)
@@ -188,7 +167,5 @@ void z_state_setEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn)
     g_swipe.swipeOut = SwipeOut;
     g_swipe.swipeIn = SwipeIn;
 
-    if(SwipeOut != Z_SWIPE_INVALID) {
-        z_swipe_init(SwipeOut);
-    }
+    z_swipe_init(&g_swipe.swipeOut);
 }

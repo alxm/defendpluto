@@ -28,6 +28,7 @@ typedef void (ZSwipeDraw)(void);
 #define Z_SLIDE_OPEN_INC  (2)
 
 static uint8_t g_counter;
+static ZSwipeId* g_swipePtr;
 
 static void swipeHideInit(void)
 {
@@ -57,11 +58,15 @@ static void swipeDraw(void)
 {
     int16_t h = z_fix_fixtoi(zf(z_fix_sin(g_counter) * (Z_SCREEN_H / 2)));
 
-    z_draw_rectangle(0, 0, Z_SCREEN_W, h, Z_COLOR_BLUE);
-    z_draw_hline(0, Z_SCREEN_W - 1, h, Z_COLOR_YELLOW);
+    if(h > 0) {
+        int16_t rH = i16(h - 1);
 
-    z_draw_hline(0, Z_SCREEN_W - 1, i16(Z_SCREEN_H - 1 - h), Z_COLOR_YELLOW);
-    z_draw_rectangle(0, i16(Z_SCREEN_H - h), Z_SCREEN_W, h, Z_COLOR_BLUE);
+        z_draw_rectangle(0, 0, Z_SCREEN_W, rH, Z_COLOR_BLUE);
+        z_draw_hline(0, Z_SCREEN_W - 1, rH, Z_COLOR_YELLOW);
+
+        z_draw_hline(0, Z_SCREEN_W - 1, i16(Z_SCREEN_H - h), Z_COLOR_YELLOW);
+        z_draw_rectangle(0, i16(Z_SCREEN_H - rH), Z_SCREEN_W, rH, Z_COLOR_BLUE);
+    }
 }
 
 static const struct {
@@ -73,17 +78,28 @@ static const struct {
     [Z_SWIPE_SHOW] = {swipeShowInit, swipeShowTick, swipeDraw},
 };
 
-void z_swipe_init(ZSwipeId Swipe)
+void z_swipe_init(ZSwipeId* Swipe)
 {
-    g_callbacks[Swipe].init();
+    g_swipePtr = Swipe;
+
+    if(*g_swipePtr != Z_SWIPE_INVALID) {
+        g_callbacks[*g_swipePtr].init();
+    }
 }
 
-bool z_swipe_tick(ZSwipeId Swipe)
+void z_swipe_tick(void)
 {
-    return g_callbacks[Swipe].tick();
+    if(g_swipePtr != NULL && *g_swipePtr != Z_SWIPE_INVALID) {
+        if(g_callbacks[*g_swipePtr].tick()) {
+            *g_swipePtr = Z_SWIPE_INVALID;
+            g_swipePtr = NULL;
+        }
+    }
 }
 
-void z_swipe_draw(ZSwipeId Swipe)
+void z_swipe_draw(void)
 {
-    g_callbacks[Swipe].draw();
+    if(g_swipePtr != NULL && *g_swipePtr != Z_SWIPE_INVALID) {
+        g_callbacks[*g_swipePtr].draw();
+    }
 }
