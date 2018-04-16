@@ -46,8 +46,8 @@ void z_effect_circles(ZFix X, ZFix Y)
 void z_effect_light(ZFix X, ZFix Y, ZLightId LightId)
 {
     #if Z_PLATFORM_GAMEBUINOMETA
-        int16_t x = z_fix_fixtoi(X);
-        int16_t y = z_fix_fixtoi(Y);
+        int16_t x = z_fix_toInt(X);
+        int16_t y = z_fix_toInt(Y);
 
         x = i16(2 * z_clamp_int16(x, 0, Z_SCREEN_W - 1) / Z_SCREEN_W);
         y = i16(4 * z_clamp_int16(y, 0, Z_SCREEN_H - 1) / Z_SCREEN_H);

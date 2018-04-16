@@ -36,7 +36,7 @@ bool z_bulletp_tick(ZPoolObjHeader* Bullet, void* Context)
 
     ZBulletP* bullet = (ZBulletP*)Bullet;
 
-    bullet->y = zf(bullet->y - z_fix_itofix(2));
+    bullet->y = zf(bullet->y - z_fix_fromInt(2));
 
     if(bullet->y < 0) {
         return false;
@@ -53,8 +53,8 @@ void z_bulletp_draw(ZPoolObjHeader* Bullet)
 {
     ZBulletP* bullet = (ZBulletP*)Bullet;
 
-    int16_t x = z_fix_fixtoi(bullet->x);
-    int16_t y = z_fix_fixtoi(bullet->y);
+    int16_t x = z_fix_toInt(bullet->x);
+    int16_t y = z_fix_toInt(bullet->y);
 
     z_draw_rectangle(i16(x - 1 + z_screen_getXShake()),
                      i16(y - 2 + z_screen_getYShake()),

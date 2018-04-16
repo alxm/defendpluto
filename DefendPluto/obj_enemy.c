@@ -52,8 +52,8 @@ void z_enemy_setup(void)
 
 void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t FlyId, uint8_t AttackId)
 {
-    Enemy->x = z_fix_itofix(X);
-    Enemy->y = z_fix_itofix(Y);
+    Enemy->x = z_fix_fromInt(X);
+    Enemy->y = z_fix_fromInt(Y);
     Enemy->angle = Z_ANGLE_270;
     Enemy->jetFlicker = false;
     Enemy->frame = 0;
@@ -73,7 +73,7 @@ static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
 
     if(b) {
         z_bullete_init(b,
-                       zf(Enemy->x + z_fix_itofix(z_screen_getXShake())),
+                       zf(Enemy->x + z_fix_fromInt(z_screen_getXShake())),
                        Enemy->y,
                        Angle,
                        ExtraSpeed,
@@ -100,8 +100,8 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
             if(enemy->flyCounter-- == 0) {
                 enemy->flyCounter = z_fps_dsToTicks(5);
 
-                int16_t eX = z_fix_fixtoi(enemy->x);
-                int16_t pX = z_fix_fixtoi(z_player.x);
+                int16_t eX = z_fix_toInt(enemy->x);
+                int16_t pX = z_fix_toInt(z_player.x);
 
                 if(eX < pX) {
                     enemy->angle = Z_ANGLE_292;
@@ -135,7 +135,7 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
         case Z_FLY_CIRCLE_REL: {
             switch(enemy->flyState) {
                 case 0: {
-                    if(z_fix_fixtoi(enemy->y) > Z_SCREEN_H / 2) {
+                    if(z_fix_toInt(enemy->y) > Z_SCREEN_H / 2) {
                         enemy->flyState = 1;
                     }
                 } break;
@@ -171,7 +171,7 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
         case Z_FLY_SQUARE_REL: {
             switch(enemy->flyState) {
                 case 0: {
-                    if(z_fix_fixtoi(enemy->y) > Z_SCREEN_H / 2) {
+                    if(z_fix_toInt(enemy->y) > Z_SCREEN_H / 2) {
                         enemy->flyState = 1;
                     }
                 } break;
@@ -260,7 +260,7 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
     }
 
     return enemy->health > 0
-        && z_fix_fixtoi(enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_SCREEN_H;
+        && z_fix_toInt(enemy->y) - z_sprite_getHeight(sprite) / 2 < Z_SCREEN_H;
 }
 
 static void drawJets(uint8_t EnemyId, int16_t X, int16_t Y)
@@ -310,8 +310,8 @@ static void drawJets(uint8_t EnemyId, int16_t X, int16_t Y)
 void z_enemy_draw(ZPoolObjHeader* Enemy)
 {
     ZEnemy* enemy = (ZEnemy*)Enemy;
-    int16_t x = z_fix_fixtoi(enemy->x);
-    int16_t y = z_fix_fixtoi(enemy->y);
+    int16_t x = z_fix_toInt(enemy->x);
+    int16_t y = z_fix_toInt(enemy->y);
 
     if(enemy->jetFlicker) {
         drawJets(enemy->typeId, x, y);

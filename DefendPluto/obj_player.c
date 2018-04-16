@@ -143,7 +143,7 @@ void z_player_tick(bool CheckInput)
             if(b) {
                 z_bulletp_init(b,
                                zf(z_player.x
-                                    + z_fix_itofix(z_screen_getXShake())),
+                                    + z_fix_fromInt(z_screen_getXShake())),
                                z_player.y);
 
                 z_player.shootShift = 1;
@@ -208,11 +208,11 @@ void z_player_tick(bool CheckInput)
 
     z_player.x = z_clamp_fix(zf(z_player.x + z_player.dx),
                              0,
-                             z_fix_itofix(Z_SCREEN_W - 1));
+                             z_fix_fromInt(Z_SCREEN_W - 1));
 
     z_player.y = z_clamp_fix(zf(z_player.y + z_player.dy),
                              0,
-                             z_fix_itofix(Z_SCREEN_H - 1));
+                             z_fix_fromInt(Z_SCREEN_H - 1));
 
     z_player.jetFlicker = !z_player.jetFlicker;
 
@@ -231,8 +231,8 @@ void z_player_draw(void)
         return;
     }
 
-    int16_t x = z_fix_fixtoi(z_player.x);
-    int16_t y = i16(z_fix_fixtoi(z_player.y) + z_player.shootShift);
+    int16_t x = z_fix_toInt(z_player.x);
+    int16_t y = i16(z_fix_toInt(z_player.y) + z_player.shootShift);
 
     if(z_player.jetFlicker) {
         int16_t jy = i16(y + 2 + z_screen_getYShake());
@@ -259,9 +259,9 @@ void z_player_draw(void)
 
     if(z_player.invincible) {
         if(z_player.jetFlicker) {
-            z_draw_circle(x, z_fix_fixtoi(z_player.y), 9, Z_COLOR_RED);
+            z_draw_circle(x, z_fix_toInt(z_player.y), 9, Z_COLOR_RED);
         } else {
-            z_draw_circle(x, z_fix_fixtoi(z_player.y), 9, Z_COLOR_GRAY);
+            z_draw_circle(x, z_fix_toInt(z_player.y), 9, Z_COLOR_GRAY);
         }
     }
 
@@ -274,8 +274,8 @@ void z_player_resetPosition(void)
 {
     z_player.dx = 0;
     z_player.dy = 0;
-    z_player.x = z_fix_itofix(Z_SCREEN_W / 2);
-    z_player.y = z_fix_itofix(Z_SCREEN_H / 2);
+    z_player.x = z_fix_fromInt(Z_SCREEN_W / 2);
+    z_player.y = z_fix_fromInt(Z_SCREEN_H / 2);
 }
 
 void z_player_takeDamage(uint8_t Damage)

@@ -56,7 +56,7 @@ static bool swipeShowTick(void)
 
 static void swipeDraw(void)
 {
-    int16_t h = z_fix_fixtoi(zf(z_fix_sin(g_counter) * (Z_SCREEN_H / 2)));
+    int16_t h = z_fix_toInt(zf(z_fix_sin(g_counter) * (Z_SCREEN_H / 2)));
 
     if(h > 0) {
         int16_t rH = i16(h - 1);

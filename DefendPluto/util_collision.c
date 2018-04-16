@@ -56,8 +56,8 @@ static bool enemyShipCollision(ZPoolObjHeader* Enemy, void* Context)
                  context->y,
                  context->w,
                  context->h,
-                 z_fix_fixtoi(enemy->x),
-                 z_fix_fixtoi(enemy->y),
+                 z_fix_toInt(enemy->x),
+                 z_fix_toInt(enemy->y),
                  z_enemy_data[enemy->typeId].w,
                  z_enemy_data[enemy->typeId].h)) {
 
@@ -78,7 +78,7 @@ static bool enemyShipCollision(ZPoolObjHeader* Enemy, void* Context)
 bool z_collision_checkEnemyShips(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
 {
     ZCollisionContext context = {
-        z_fix_fixtoi(X), z_fix_fixtoi(Y), W, H, u3(Damage), false
+        z_fix_toInt(X), z_fix_toInt(Y), W, H, u3(Damage), false
     };
 
     z_pool_tick(Z_POOL_ENEMY, enemyShipCollision, &context);
@@ -96,12 +96,12 @@ bool z_collision_checkPlayer(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
         playerH = Z_PLAYER_H_SHIELD;
     }
 
-    bool hit = boxAndBox(z_fix_fixtoi(X),
-                         z_fix_fixtoi(Y),
+    bool hit = boxAndBox(z_fix_toInt(X),
+                         z_fix_toInt(Y),
                          W,
                          H,
-                         z_fix_fixtoi(z_player.x),
-                         z_fix_fixtoi(z_player.y),
+                         z_fix_toInt(z_player.x),
+                         z_fix_toInt(z_player.y),
                          playerW,
                          playerH);
 

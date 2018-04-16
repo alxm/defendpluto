@@ -55,10 +55,10 @@ void z_particle_draw(ZPoolObjHeader* Particle)
 
     for(uint8_t i = 0; i < splitNum; i++) {
         int16_t x = i16(
-            z_fix_fixtoi(zf(particle->x + z_fix_cos(angle) * particle->ticks))
+            z_fix_toInt(zf(particle->x + z_fix_cos(angle) * particle->ticks))
                 + z_screen_getXShake());
         int16_t y = i16(
-            z_fix_fixtoi(zf(particle->y - z_fix_sin(angle) * particle->ticks))
+            z_fix_toInt(zf(particle->y - z_fix_sin(angle) * particle->ticks))
                 + z_screen_getYShake());
 
         z_draw_pixel(x,

@@ -52,12 +52,12 @@ extern const ZFix z_fix__sin[Z_ANGLES_NUM];
 
 extern uint8_t z_fix_atan(ZFix X1, ZFix Y1, ZFix X2, ZFix Y2);
 
-static inline ZFix z_fix_itofix(int16_t X)
+static inline ZFix z_fix_fromInt(int16_t X)
 {
     return zf(X << Z_FIX_BIT_PRECISION);
 }
 
-static inline int16_t z_fix_fixtoi(ZFix X)
+static inline int16_t z_fix_toInt(ZFix X)
 {
     return i16(X >> Z_FIX_BIT_PRECISION);
 }
