@@ -53,7 +53,7 @@ void z_state_intro_tick(bool Active)
 
             case 2: {
                 if(Active && ++g_height > z_sprite_getHeight(Z_SPRITE_ALXM)) {
-                    z_state_setEx(Z_STATE_TITLE, Z_SWIPE_HIDE, Z_SWIPE_SHOW);
+                    z_state_set(Z_STATE_TITLE, true);
                 }
             } break;
         }

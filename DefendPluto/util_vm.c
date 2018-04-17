@@ -139,7 +139,7 @@ static bool op_over(uint8_t Flags)
      * over
      */
     z_player.level = 0;
-    z_state_setEx(Z_STATE_WIN, Z_SWIPE_HIDE, Z_SWIPE_SHOW);
+    z_state_set(Z_STATE_WIN, true);
 
     return false;
 }
@@ -359,14 +359,14 @@ static bool op_done(uint8_t Flags)
      * done
      */
     if(!z_timer_running(Z_TIMER_VM)) {
-        if(!nothingHappening()) {
+        if(nothingHappening()) {
+            z_timer_start(Z_TIMER_VM, Z_DONE_LINGER_DS);
+        } else {
             return false;
         }
-
-        z_timer_start(Z_TIMER_VM, Z_DONE_LINGER_DS);
     } else if(z_timer_expired(Z_TIMER_VM)) {
         z_timer_stop(Z_TIMER_VM);
-        z_state_setEx(Z_STATE_NEXT, Z_SWIPE_HIDE, Z_SWIPE_SHOW);
+        z_state_set(Z_STATE_NEXT, true);
     }
 
     return !z_timer_running(Z_TIMER_VM);

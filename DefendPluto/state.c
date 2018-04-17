@@ -42,53 +42,73 @@ typedef struct {
     ZStateInit* init;
     ZStateTick* tick;
     ZStateDraw* draw;
+    ZSwipeId intro;
+    ZSwipeId outro;
 } ZState;
 
-static ZState g_states[Z_STATE_NUM] = {
+static const ZState g_states[Z_STATE_NUM] = {
     [Z_STATE_DIED] = {
         z_state_died_init,
         z_state_died_tick,
-        z_state_died_draw
+        z_state_died_draw,
+        Z_SWIPE_INVALID,
+        Z_SWIPE_HIDE,
     },
     [Z_STATE_INTRO] = {
         z_state_intro_init,
         z_state_intro_tick,
-        z_state_intro_draw
+        z_state_intro_draw,
+        Z_SWIPE_INVALID,
+        Z_SWIPE_HIDE,
     },
     [Z_STATE_NEW] = {
         z_state_new_init,
         NULL,
-        NULL
+        NULL,
+        Z_SWIPE_INVALID,
+        Z_SWIPE_INVALID,
     },
     [Z_STATE_NEXT] = {
         z_state_next_init,
         z_state_next_tick,
-        z_state_next_draw
+        z_state_next_draw,
+        Z_SWIPE_SHOW,
+        Z_SWIPE_HIDE,
     },
     [Z_STATE_OVER] = {
         NULL,
         z_state_over_tick,
-        z_state_over_draw
+        z_state_over_draw,
+        Z_SWIPE_SHOW,
+        Z_SWIPE_HIDE,
     },
     [Z_STATE_PAUSE] = {
         NULL,
         z_state_pause_tick,
-        z_state_pause_draw
+        z_state_pause_draw,
+        Z_SWIPE_INVALID,
+        Z_SWIPE_INVALID,
     },
     [Z_STATE_PLAY] = {
         NULL,
         z_state_play_tick,
-        z_state_play_draw
+        z_state_play_draw,
+        Z_SWIPE_SHOW,
+        Z_SWIPE_HIDE,
     },
     [Z_STATE_TITLE] = {
         z_state_title_init,
         z_state_title_tick,
-        z_state_title_draw
+        z_state_title_draw,
+        Z_SWIPE_SHOW,
+        Z_SWIPE_HIDE,
     },
     [Z_STATE_WIN] = {
         z_state_win_init,
         z_state_win_tick,
-        z_state_win_draw
+        z_state_win_draw,
+        Z_SWIPE_SHOW,
+        Z_SWIPE_HIDE,
     },
 };
 
@@ -121,7 +141,7 @@ void z_state_setup(void)
     z_star_setup();
     z_player_resetPosition();
 
-    z_state_set(Z_STATE_INTRO);
+    z_state_set(Z_STATE_INTRO, false);
 }
 
 void z_state_tick(void)
@@ -155,17 +175,14 @@ void z_state_draw(void)
     z_swipe_draw();
 }
 
-void z_state_set(ZStateId NewState)
+void z_state_set(ZStateId NewState, bool Transition)
 {
     g_state.next = NewState;
-}
 
-void z_state_setEx(ZStateId NewState, ZSwipeId SwipeOut, ZSwipeId SwipeIn)
-{
-    z_state_set(NewState);
+    if(Transition) {
+        g_swipe.swipeOut = g_states[g_state.current].outro;
+        g_swipe.swipeIn = g_states[g_state.next].intro;
 
-    g_swipe.swipeOut = SwipeOut;
-    g_swipe.swipeIn = SwipeIn;
-
-    z_swipe_init(&g_swipe.swipeOut);
+        z_swipe_init(&g_swipe.swipeOut);
+    }
 }

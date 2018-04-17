@@ -38,7 +38,7 @@ void z_state_win_tick(bool Active)
 
     if(Active && z_button_pressedOnce(Z_BUTTON_A)) {
         if(g_state++ > 0) {
-            z_state_setEx(Z_STATE_TITLE, Z_SWIPE_HIDE, Z_SWIPE_SHOW);
+            z_state_set(Z_STATE_TITLE, true);
         }
     }
 }
