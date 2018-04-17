@@ -33,7 +33,7 @@ typedef enum Z_ENUM_PACK {
 #define Z_POOL_NUM_CIRCLE 2
 #define Z_POOL_NUM_ENEMY 16
 #define Z_POOL_NUM_PARTICLE 6
-#define Z_POOL_NUM_STAR 16
+#define Z_POOL_NUM_STAR 32
 
 typedef struct {
     ZPoolObjOffset nextOffset;
