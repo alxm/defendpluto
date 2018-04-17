@@ -63,7 +63,7 @@ void z_state_died_tick(bool Active)
                 zf(z_player.x + Z_FIX_ONE * (-1 + z_random_int8(3))),
                 zf(z_player.y + Z_FIX_ONE * (-1 + z_random_int8(3))));
         } else {
-            z_effect_particles(z_player.x, z_player.y, 1);
+            z_effect_particles(z_player.x, z_player.y, 2);
         }
     }
 }
