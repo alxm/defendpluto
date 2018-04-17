@@ -148,7 +148,7 @@ void z_player_tick(bool CheckInput)
 
                 z_player.shootShift = 1;
                 z_player.lastShotCounter = u5(
-                    z_fps_dsToTicks(Z_PLAYER_SHOOT_EVERY_DS));
+                    z_timer_dsToTicks(Z_PLAYER_SHOOT_EVERY_DS));
 
                 useEnergy(Z_PLAYER_ENERGY_USE_SHOOTING);
                 z_timer_start(Z_TIMER_PLAYER_SHOOT, Z_PLAYER_SHOOT_SHIFT_DS);

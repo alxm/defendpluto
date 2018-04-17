@@ -19,7 +19,7 @@
 #include "util_screen.h"
 
 #include "util_fix.h"
-#include "util_fps.h"
+#include "util_timer.h"
 
 ZScreen z_screen;
 static uint8_t g_shakeFrames;
@@ -46,7 +46,7 @@ void z_screen_tick(void)
 
 void z_screen_shake(uint8_t Ds)
 {
-    g_shakeFrames = z_fps_dsToTicks(Ds);
+    g_shakeFrames = z_timer_dsToTicks(Ds);
 }
 
 void z_screen_drawPressA(int16_t X, int16_t Y, ZFontId Font, ZFontAlign Align)

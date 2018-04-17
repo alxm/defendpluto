@@ -22,7 +22,6 @@
 #include "state.h"
 #include "obj_enemy.h"
 #include "obj_player.h"
-#include "util_fps.h"
 #include "util_pool.h"
 #include "util_timer.h"
 

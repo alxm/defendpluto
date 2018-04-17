@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "util_str.h"
+
 Z_EXTERN_C_START
 
 typedef enum Z_ENUM_PACK {
@@ -36,8 +38,6 @@ typedef enum Z_ENUM_PACK {
     Z_FONT_ALIGN_R,
     Z_FONT_ALIGN_NUM
 } ZFontAlign;
-
-#include "util_str.h"
 
 extern void z_font_setup(void);
 

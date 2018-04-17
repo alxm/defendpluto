@@ -17,12 +17,12 @@
 
 #pragma once
 
+#include "util_font.h"
+
 typedef struct {
     uint8_t xShake : 4;
     uint8_t yShake : 4;
 } ZScreen;
-
-#include "util_font.h"
 
 extern ZScreen z_screen;
 

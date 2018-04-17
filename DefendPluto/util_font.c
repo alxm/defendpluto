@@ -18,8 +18,6 @@
 #include "platform.h"
 #include "util_font.h"
 
-#include "util_str.h"
-
 typedef enum Z_ENUM_PACK {
     Z_FONT_FLAG_NUMERIC = 0x1,
     Z_FONT_FLAG_ALPHA_L = 0x2,

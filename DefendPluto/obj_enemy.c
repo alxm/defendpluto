@@ -22,7 +22,6 @@
 #include "obj_player.h"
 #include "util_collision.h"
 #include "util_effects.h"
-#include "util_fps.h"
 #include "util_screen.h"
 #include "util_timer.h"
 
@@ -98,7 +97,7 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
 
         case Z_FLY_FOLLOW: {
             if(enemy->flyCounter-- == 0) {
-                enemy->flyCounter = z_fps_dsToTicks(5);
+                enemy->flyCounter = z_timer_dsToTicks(5);
 
                 int16_t eX = z_fix_toInt(enemy->x);
                 int16_t pX = z_fix_toInt(z_player.x);
@@ -228,7 +227,7 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
 
     if(enemy->y >= 0 && enemy->attackCounter-- == 0) {
         enemy->attackCounter =
-            z_fps_dsToTicks(z_enemy_data[enemy->typeId].attackPeriodDs);
+            z_timer_dsToTicks(z_enemy_data[enemy->typeId].attackPeriodDs);
 
         switch(enemy->attackId) {
             case Z_ATTACK_FRONT: {

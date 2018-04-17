@@ -18,8 +18,6 @@
 #include "platform.h"
 #include "util_timer.h"
 
-#include "util_fps.h"
-
 typedef struct {
     uint8_t base;
     uint8_t period : 7;
@@ -51,7 +49,7 @@ void z_timer_start(ZTimerId Timer, uint8_t Ds)
     ZTimer* timer = &g_timers[Timer];
 
     timer->base = u8(z_fps_getCounter());
-    timer->period = u7(z_fps_dsToTicks(Ds));
+    timer->period = u7(z_timer_dsToTicks(Ds));
     timer->expired = false;
 }
 

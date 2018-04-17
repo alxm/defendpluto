@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "util_fps.h"
+
 typedef enum Z_ENUM_PACK {
     Z_TIMER_INVALID = -1,
     Z_TIMER_VM,
@@ -38,3 +40,8 @@ extern void z_timer_start(ZTimerId Timer, uint8_t Ds);
 extern void z_timer_stop(ZTimerId Timer);
 extern bool z_timer_running(ZTimerId Timer);
 extern bool z_timer_expired(ZTimerId Timer);
+
+static inline uint8_t z_timer_dsToTicks(uint8_t Ds)
+{
+    return u8(Z_FPS * Ds / 10);
+}
