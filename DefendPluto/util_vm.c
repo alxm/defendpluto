@@ -361,15 +361,14 @@ static bool op_done(uint8_t Flags)
     if(!z_timer_running(Z_TIMER_VM)) {
         if(nothingHappening()) {
             z_timer_start(Z_TIMER_VM, Z_DONE_LINGER_DS);
-        } else {
-            return false;
         }
     } else if(z_timer_expired(Z_TIMER_VM)) {
         z_timer_stop(Z_TIMER_VM);
         z_state_set(Z_STATE_NEXT, true);
+        g_vm.pc = u16(g_vm.pc + g_ops[Z_OP_DONE].bytes);
     }
 
-    return !z_timer_running(Z_TIMER_VM);
+    return false;
 }
 
 static void setOp(uint8_t Index, ZOpCallback* Function, uint8_t ArgBytes)
