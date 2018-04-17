@@ -80,6 +80,8 @@ void loop(void)
         }
     }
 
+    gb.lights.clear();
+
     z_state_tick();
     z_state_draw();
 
