@@ -141,7 +141,11 @@ void z_state_setup(void)
     z_star_setup();
     z_player_resetPosition();
 
-    z_state_set(Z_STATE_INTRO, false);
+    #if Z_DEBUG_STATS
+        z_state_set(Z_STATE_TITLE, false);
+    #else
+        z_state_set(Z_STATE_INTRO, false);
+    #endif
 }
 
 void z_state_tick(void)
