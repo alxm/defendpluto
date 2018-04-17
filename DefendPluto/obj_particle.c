@@ -63,7 +63,7 @@ void z_particle_draw(ZPoolObjHeader* Particle)
 
         z_draw_pixel(x,
                      y,
-                     z_fps_isNthFrame(4) ? Z_COLOR_RED : Z_COLOR_YELLOW);
+                     z_fps_getCounter() & 2 ? Z_COLOR_RED : Z_COLOR_YELLOW);
 
         angle = Z_ANGLE_WRAP(angle + incs[i]);
     }
