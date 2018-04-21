@@ -26,6 +26,7 @@ Z_EXTERN_C_START
 typedef uint16_t ZPixel;
 
 #include "util_graphics.h"
+#include "util_sound.h"
 
 #define Z_SCREEN_W 80
 #define Z_SCREEN_H 64
@@ -35,6 +36,12 @@ typedef uint16_t ZPixel;
                            z_data_gfx_##Id##_buffer,  \
                            z_data_gfx_##Id##_frames);
 
+#define z_sfx_load(Index, Id)                     \
+    z_platform__loadSfx(Index,                    \
+                        z_data_sfx_##Id##_buffer, \
+                        z_data_sfx_##Id##_size);
+
 extern void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer, uint8_t NumFrames);
+extern void z_platform__loadSfx(ZSfxId Sfx, const uint8_t* Buffer, uint32_t Size);
 
 Z_EXTERN_C_END

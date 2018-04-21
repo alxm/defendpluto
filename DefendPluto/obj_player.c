@@ -152,6 +152,8 @@ void z_player_tick(bool CheckInput)
 
                 useEnergy(Z_PLAYER_ENERGY_USE_SHOOTING);
                 z_timer_start(Z_TIMER_PLAYER_SHOOT, Z_PLAYER_SHOOT_SHIFT_DS);
+
+                z_sfx_play(Z_SFX_PLAYER_SHOOT);
             } else {
                 z_player.lastShotCounter = 0;
             }

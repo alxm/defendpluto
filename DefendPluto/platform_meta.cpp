@@ -34,8 +34,14 @@ typedef struct {
     uint8_t numFrames;
 } ZSprite;
 
+typedef struct {
+    const uint8_t* buffer;
+    uint32_t size;
+} ZSfx;
+
 static ZButton g_buttons[Z_BUTTON_NUM];
 static ZSprite g_sprites[Z_SPRITE_NUM];
+static ZSfx g_sfx[Z_SFX_NUM];
 static Color g_colors[Z_COLOR_NUM];
 
 void setup(void)
@@ -186,5 +192,16 @@ uint16_t z_fps_getCounter(void)
 bool z_fps_isNthFrame(uint8_t N)
 {
     return (gb.frameCount % N) == 0;
+}
+
+void z_platform__loadSfx(ZSfxId Sfx, const uint8_t* Buffer, uint32_t Size)
+{
+    g_sfx[Sfx].buffer = Buffer;
+    g_sfx[Sfx].size = Size;
+}
+
+void z_sfx_play(ZSfxId Sfx)
+{
+    gb.sound.play(g_sfx[Sfx].buffer, g_sfx[Sfx].size);
 }
 #endif // Z_PLATFORM_META

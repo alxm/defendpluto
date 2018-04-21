@@ -134,6 +134,7 @@ void z_state_setup(void)
     z_screen_reset();
     z_font_setup();
     z_graphics_setup();
+    z_sound_setup();
     z_str_setup();
     z_pool_setup();
     z_vm_setup();

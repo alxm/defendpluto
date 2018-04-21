@@ -24,6 +24,7 @@
 #if Z_PLATFORM_A2X
 static AInputButton* g_buttons[Z_BUTTON_NUM];
 static ASpriteFrames* g_sprites[Z_SPRITE_NUM];
+static ASound* g_sfx[Z_SFX_NUM];
 static ZPixel g_colors[Z_COLOR_NUM];
 
 A_SETUP
@@ -229,5 +230,15 @@ uint16_t z_fps_getCounter(void)
 bool z_fps_isNthFrame(uint8_t N)
 {
     return a_fps_isNthFrame(N);
+}
+
+void z_platform__loadSfx(ZSfxId Sfx, const char* Path)
+{
+    g_sfx[Sfx] = a_sfx_new(Path);
+}
+
+void z_sfx_play(ZSfxId Sfx)
+{
+    a_sfx_play(g_sfx[Sfx]);
 }
 #endif // Z_PLATFORM_A2X

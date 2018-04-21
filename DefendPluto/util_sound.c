@@ -1,5 +1,5 @@
 /*
-    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,21 +15,12 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <a2x.h>
-
-typedef APixel ZPixel;
-
-#include "util_graphics.h"
+#include "platform.h"
 #include "util_sound.h"
 
-#define Z_SCREEN_W 80
-#define Z_SCREEN_H 64
+#include "data_sfx_player_shoot.h"
 
-#define z_sprite_load(Index, Id) \
-    z_platform__loadSprite(Index, "assets/gfx/" #Id ".png");
-
-#define z_sfx_load(Index, Id) \
-    z_platform__loadSfx(Index, "assets/sfx/" #Id ".wav");
-
-extern void z_platform__loadSprite(ZSpriteId Sprite, const char* Path);
-extern void z_platform__loadSfx(ZSfxId Sfx, const char* Path);
+void z_sound_setup(void)
+{
+    z_sfx_load(Z_SFX_PLAYER_SHOOT, player_shoot);
+}
