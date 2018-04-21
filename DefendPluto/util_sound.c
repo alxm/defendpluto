@@ -18,13 +18,13 @@
 #include "platform.h"
 #include "util_sound.h"
 
-#include "data_sfx_enemy_die.h"
-#include "data_sfx_enemy_hurt.h"
-#include "data_sfx_enemy_shoot.h"
-#include "data_sfx_player_die.h"
-#include "data_sfx_player_hurt.h"
-#include "data_sfx_player_shoot.h"
-#include "data_sfx_shield_deploy.h"
+#include "generated/data_sfx_enemy_die.h"
+#include "generated/data_sfx_enemy_hurt.h"
+#include "generated/data_sfx_enemy_shoot.h"
+#include "generated/data_sfx_player_die.h"
+#include "generated/data_sfx_player_hurt.h"
+#include "generated/data_sfx_player_shoot.h"
+#include "generated/data_sfx_shield_deploy.h"
 
 void z_sound_setup(void)
 {

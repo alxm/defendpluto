@@ -17,7 +17,7 @@
 
 #include "platform.h"
 
-#include "data_gfx_palette.h"
+#include "generated/data_gfx_palette.h"
 #include "state.h"
 #include "util_fps.h"
 #include "util_input.h"

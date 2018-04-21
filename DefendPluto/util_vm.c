@@ -18,7 +18,7 @@
 #include "platform.h"
 #include "util_vm.h"
 
-#include "data_levels.h"
+#include "generated/data_levels.h"
 #include "state.h"
 #include "obj_enemy.h"
 #include "obj_player.h"

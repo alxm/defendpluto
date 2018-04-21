@@ -5,15 +5,15 @@ A_DIR_SRC = ../DefendPluto
 
 Z_LEVELS_COMPILER = ../assets/levels/compile.py
 Z_LEVELS_TXT = ../assets/levels/data.txt
-Z_LEVELS_H = $(A_DIR_SRC)/data_levels.h
+Z_LEVELS_H = $(A_DIR_SRC)/generated/data_levels.h
 
 Z_GFX_COMPILER = ../$(A_DIR_GFX)/ArduboyImage.py
 Z_GFX_PNG_FILES = $(notdir $(wildcard ../$(A_DIR_GFX)/*.png))
-Z_GFX_H_FILES = $(addprefix $(A_DIR_SRC)/data_gfx_, $(Z_GFX_PNG_FILES:.png=.h))
+Z_GFX_H_FILES = $(addprefix $(A_DIR_SRC)/generated/data_gfx_, $(Z_GFX_PNG_FILES:.png=.h))
 
 Z_SFX_COMPILER = ../$(A_DIR_SFX)/compile.py
 Z_SFX_WAV_FILES = $(notdir $(wildcard ../$(A_DIR_SFX)/*.wav))
-Z_SFX_H_FILES = $(addprefix $(A_DIR_SRC)/data_sfx_, $(Z_SFX_WAV_FILES:.wav=.h))
+Z_SFX_H_FILES = $(addprefix $(A_DIR_SRC)/generated/data_sfx_, $(Z_SFX_WAV_FILES:.wav=.h))
 
 A_RULES_CLEAN = genclean
 
@@ -31,10 +31,10 @@ $(A_DIR_OBJ_PLATFORM)/util_sound.c.o : $(Z_SFX_H_FILES)
 $(Z_LEVELS_H): $(Z_LEVELS_TXT) $(Z_LEVELS_COMPILER)
 	python3 $(Z_LEVELS_COMPILER) $< > $@
 
-$(A_DIR_SRC)/data_gfx_%.h: ../$(A_DIR_GFX)/%.png $(Z_GFX_COMPILER)
+$(A_DIR_SRC)/generated/data_gfx_%.h: ../$(A_DIR_GFX)/%.png $(Z_GFX_COMPILER)
 	python3 $(Z_GFX_COMPILER) ../$(A_DIR_GFX)/palette.png $< $(patsubst %.png, %, $(notdir $<)) > $@
 
-$(A_DIR_SRC)/data_sfx_%.h: ../$(A_DIR_SFX)/%.wav $(Z_SFX_COMPILER)
+$(A_DIR_SRC)/generated/data_sfx_%.h: ../$(A_DIR_SFX)/%.wav $(Z_SFX_COMPILER)
 	python3 $(Z_SFX_COMPILER) $< $(patsubst %.wav, %, $(notdir $<)) > $@
 
 genclean:
