@@ -286,13 +286,15 @@ void z_player_takeDamage(uint8_t Damage)
         return;
     }
 
-    if(!useShield(Damage)) {
-        if(--z_player.health >= 0) {
-            boostShield(Z_PLAYER_MAX_SHIELD);
-            z_player.invincible = true;
-            z_timer_start(Z_TIMER_PLAYER_INVINCIBLE,
-                          Z_PLAYER_INVINCIBLE_TIMER_DS);
-        }
+    if(useShield(Damage)) {
+        z_sfx_play(Z_SFX_PLAYER_HURT);
+    } else if(z_player.health-- == 0) {
+        z_sfx_play(Z_SFX_PLAYER_DIE);
+    } else {
+        z_sfx_play(Z_SFX_SHIELD_DEPLOY);
+        boostShield(Z_PLAYER_MAX_SHIELD);
+        z_timer_start(Z_TIMER_PLAYER_INVINCIBLE, Z_PLAYER_INVINCIBLE_TIMER_DS);
+        z_player.invincible = true;
     }
 }
 

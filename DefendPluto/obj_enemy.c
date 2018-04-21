@@ -77,6 +77,8 @@ static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
                        Angle,
                        ExtraSpeed,
                        z_enemy_data[Enemy->typeId].damage);
+
+        z_sfx_play(Z_SFX_ENEMY_SHOOT);
     }
 }
 
@@ -326,8 +328,10 @@ void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage)
 {
     if(Enemy->health > Damage) {
         Enemy->health = u2(Enemy->health - Damage);
+        z_sfx_play(Z_SFX_ENEMY_HURT);
     } else {
         Enemy->health = 0;
+        z_sfx_play(Z_SFX_ENEMY_DIE);
         z_effect_circles(Enemy->x, Enemy->y);
         z_screen_shake(3);
     }
