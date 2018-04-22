@@ -7,7 +7,7 @@ Z_LEVELS_COMPILER = ../assets/levels/compile.py
 Z_LEVELS_TXT = ../assets/levels/data.txt
 Z_LEVELS_H = $(A_DIR_SRC)/generated/data_levels.h
 
-Z_GFX_COMPILER = ../$(A_DIR_GFX)/ArduboyImage.py
+Z_GFX_COMPILER = ../$(A_DIR_GFX)/compile.py
 Z_GFX_PNG_FILES = $(notdir $(wildcard ../$(A_DIR_GFX)/*.png))
 Z_GFX_H_FILES = $(addprefix $(A_DIR_SRC)/generated/data_gfx_, $(Z_GFX_PNG_FILES:.png=.h))
 
