@@ -24,6 +24,7 @@
 #include "generated/data_sfx_player_die.h"
 #include "generated/data_sfx_player_hurt.h"
 #include "generated/data_sfx_player_shoot.h"
+#include "generated/data_sfx_pressed_a.h"
 #include "generated/data_sfx_shield_deploy.h"
 #include "generated/data_sfx_title_screen.h"
 
@@ -35,6 +36,7 @@ void z_sound_setup(void)
     z_sfx_load(Z_SFX_PLAYER_DIE, player_die);
     z_sfx_load(Z_SFX_PLAYER_HURT, player_hurt);
     z_sfx_load(Z_SFX_PLAYER_SHOOT, player_shoot);
+    z_sfx_load(Z_SFX_PRESSED_A, pressed_a);
     z_sfx_load(Z_SFX_SHIELD_DEPLOY, shield_deploy);
     z_sfx_load(Z_SFX_TITLE_SCREEN, title_screen);
 }
