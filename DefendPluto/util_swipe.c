@@ -73,9 +73,10 @@ static const struct {
     ZSwipeInit* init;
     ZSwipeTick* tick;
     ZSwipeDraw* draw;
+    ZSfxId sfx;
 } g_callbacks[Z_SWIPE_NUM] = {
-    [Z_SWIPE_HIDE] = {swipeHideInit, swipeHideTick, swipeDraw},
-    [Z_SWIPE_SHOW] = {swipeShowInit, swipeShowTick, swipeDraw},
+    [Z_SWIPE_HIDE] = {swipeHideInit, swipeHideTick, swipeDraw, Z_SFX_SWIPE_HIDE},
+    [Z_SWIPE_SHOW] = {swipeShowInit, swipeShowTick, swipeDraw, Z_SFX_SWIPE_SHOW},
 };
 
 void z_swipe_init(ZSwipeId* Swipe)
@@ -84,6 +85,10 @@ void z_swipe_init(ZSwipeId* Swipe)
 
     if(*g_swipePtr != Z_SWIPE_INVALID) {
         g_callbacks[*g_swipePtr].init();
+
+        if(g_callbacks[*g_swipePtr].sfx != Z_SFX_INVALID) {
+            z_sfx_play(g_callbacks[*g_swipePtr].sfx);
+        }
     }
 }
 
