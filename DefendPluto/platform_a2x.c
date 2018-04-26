@@ -34,6 +34,7 @@ A_SETUP
     a_settings_set("app.author", "alxm");
     a_settings_set("app.output.on", "yes");
     a_settings_set("app.output.verbose", "yes");
+    a_settings_set("video.color.border", "0x111523");
     a_settings_set("video.width", A_STRINGIFY(Z_SCREEN_W));
     a_settings_set("video.height", A_STRINGIFY(Z_SCREEN_H));
     a_settings_set("fps.tick", A_STRINGIFY(Z_FPS));
