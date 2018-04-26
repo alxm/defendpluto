@@ -21,6 +21,9 @@
 #include "generated/data_sfx_enemy_die.h"
 #include "generated/data_sfx_enemy_hurt.h"
 #include "generated/data_sfx_enemy_shoot.h"
+#include "generated/data_sfx_level_complete.h"
+#include "generated/data_sfx_level_lost.h"
+#include "generated/data_sfx_level_won.h"
 #include "generated/data_sfx_player_die.h"
 #include "generated/data_sfx_player_hurt.h"
 #include "generated/data_sfx_player_shoot.h"
@@ -35,6 +38,9 @@ void z_sound_setup(void)
     z_sfx_load(Z_SFX_ENEMY_DIE, enemy_die);
     z_sfx_load(Z_SFX_ENEMY_HURT, enemy_hurt);
     z_sfx_load(Z_SFX_ENEMY_SHOOT, enemy_shoot);
+    z_sfx_load(Z_SFX_LEVEL_COMPLETE, level_complete);
+    z_sfx_load(Z_SFX_LEVEL_LOST, level_lost);
+    z_sfx_load(Z_SFX_LEVEL_WON, level_won);
     z_sfx_load(Z_SFX_PLAYER_DIE, player_die);
     z_sfx_load(Z_SFX_PLAYER_HURT, player_hurt);
     z_sfx_load(Z_SFX_PLAYER_SHOOT, player_shoot);

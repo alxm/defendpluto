@@ -31,6 +31,7 @@ void z_state_next_init(void)
     z_player_resetPosition();
     z_pool_clear(Z_POOL_BULLETP);
     z_button_release(Z_BUTTON_A);
+    z_sfx_play(Z_SFX_LEVEL_COMPLETE);
 }
 
 void z_state_next_tick(bool Active)

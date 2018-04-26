@@ -76,7 +76,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         Z_SWIPE_HIDE,
     },
     [Z_STATE_OVER] = {
-        NULL,
+        z_state_over_init,
         z_state_over_tick,
         z_state_over_draw,
         Z_SWIPE_SHOW,

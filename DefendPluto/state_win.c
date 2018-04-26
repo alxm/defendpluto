@@ -30,6 +30,7 @@ static uint8_t g_state;
 void z_state_win_init(void)
 {
     g_state = 0;
+    z_sfx_play(Z_SFX_LEVEL_WON);
 }
 
 void z_state_win_tick(bool Active)
