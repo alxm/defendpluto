@@ -19,5 +19,6 @@
 
 #include "state.h"
 
+extern ZStateInit z_state_pause_init;
 extern ZStateTick z_state_pause_tick;
 extern ZStateDraw z_state_pause_draw;

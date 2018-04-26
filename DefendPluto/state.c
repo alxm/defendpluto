@@ -83,7 +83,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         Z_SWIPE_HIDE,
     },
     [Z_STATE_PAUSE] = {
-        NULL,
+        z_state_pause_init,
         z_state_pause_tick,
         z_state_pause_draw,
         Z_SWIPE_INVALID,

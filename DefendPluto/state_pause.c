@@ -25,6 +25,11 @@
 #include "util_pool.h"
 #include "util_str.h"
 
+void z_state_pause_init(void)
+{
+    z_sfx_play(Z_SFX_PAUSE);
+}
+
 void z_state_pause_tick(bool Active)
 {
     Z_UNUSED(Active);
@@ -33,6 +38,7 @@ void z_state_pause_tick(bool Active)
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
     if(z_button_pressedOnce(Z_BUTTON_MENU)) {
+        z_sfx_play(Z_SFX_RESUME);
         z_state_set(Z_STATE_PLAY, false);
     }
 }
