@@ -1,8 +1,6 @@
-A_APP_NAME = defendpluto.html
-A_DIR_GFX = assets/gfx
-#A_DIR_SFX = assets/sfx
-A_DIR_SRC = ../DefendPluto
-A_EMBED_MEDIA = true
+A_APP_NAME := defendpluto.html
+A_DIR_SRC := DefendPluto
+A_EMBED_MEDIA := true
 
 #
 # You can set A2X_PATH to a hard-coded value

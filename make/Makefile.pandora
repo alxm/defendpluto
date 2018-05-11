@@ -1,10 +1,8 @@
-A_APP_NAME = defendpluto.pnd.bin
-A_DIR_GFX = assets/gfx
-#A_DIR_SFX = assets/sfx
-A_DIR_SRC = ../DefendPluto
-A_PND_DIR = ../bin/pnd
-A_PND_NAME = defendpluto.pnd
-A_EMBED_MEDIA = true
+A_APP_NAME := defendpluto.pnd.bin
+A_DIR_SRC := DefendPluto
+A_PND_DIR := ../bin/pnd
+A_PND_NAME := defendpluto.pnd
+A_EMBED_MEDIA := true
 
 #
 # You can set A2X_PATH to a hard-coded value

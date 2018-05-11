@@ -24,7 +24,7 @@
 #if Z_PLATFORM_A2X
 static AInputButton* g_buttons[Z_BUTTON_NUM];
 static ASpriteFrames* g_sprites[Z_SPRITE_NUM];
-static ASound* g_sfx[Z_SFX_NUM];
+static ASfx * g_sfx[Z_SFX_NUM];
 static ZPixel g_colors[Z_COLOR_NUM];
 
 A_SETUP
@@ -240,6 +240,6 @@ void z_platform__loadSfx(ZSfxId Sfx, const char* Path)
 
 void z_sfx_play(ZSfxId Sfx)
 {
-    a_sfx_play(g_sfx[Sfx]);
+    a_sfx_play(g_sfx[Sfx], A_SFX_RESTART);
 }
 #endif // Z_PLATFORM_A2X
