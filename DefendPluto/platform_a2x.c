@@ -74,6 +74,21 @@ A_STATE(run)
     {
         z_state_draw();
     }
+
+    A_STATE_FREE
+    {
+        for(ZButtonId b = 0; b < Z_BUTTON_NUM; b++) {
+            a_button_free(g_buttons[b]);
+        }
+
+        for(ZSpriteId s = 0; s < Z_SPRITE_NUM; s++) {
+            a_spriteframes_free(g_sprites[s], true);
+        }
+
+        for(ZSfxId s = 0; s < Z_SFX_NUM; s++) {
+            a_sfx_free(g_sfx[s]);
+        }
+    }
 }
 
 A_MAIN
