@@ -23,6 +23,19 @@
 
 #define Z_CIRCLE_RADIUS_MAX (4)
 
+struct ZCircle {
+    ZPoolObjHeader poolObject;
+    ZFix x, y;
+    uint8_t radius;
+};
+
+Z_POOL_DECLARE(ZCircle, 2, g_pool);
+
+void z_circle_setup(void)
+{
+    z_pool_register(Z_POOL_CIRCLE, g_pool);
+}
+
 void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y)
 {
     Circle->x = X;

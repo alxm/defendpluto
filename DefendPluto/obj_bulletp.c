@@ -23,6 +23,19 @@
 #include "util_fps.h"
 #include "util_screen.h"
 
+struct ZBulletP {
+    ZPoolObjHeader poolObject;
+    ZFix x, y;
+    uint8_t damage : 3;
+};
+
+Z_POOL_DECLARE(ZBulletP, 4, g_pool);
+
+void z_bulletp_setup(void)
+{
+    z_pool_register(Z_POOL_BULLETP, g_pool);
+}
+
 void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y)
 {
     Bullet->x = X;

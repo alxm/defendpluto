@@ -20,11 +20,9 @@
 #include "util_fix.h"
 #include "util_pool.h"
 
-typedef struct {
-    ZPoolObjHeader poolObject;
-    ZFix x, y;
-    uint8_t radius;
-} ZCircle;
+typedef struct ZCircle ZCircle;
+
+extern void z_circle_setup(void);
 
 extern void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y);
 extern ZPoolTick z_circle_tick;

@@ -28,22 +28,34 @@ typedef enum Z_ENUM_PACK {
     Z_POOL_NUM
 } ZPoolId;
 
-#define Z_POOL_NUM_BULLETE 16
-#define Z_POOL_NUM_BULLETP 4
-#define Z_POOL_NUM_CIRCLE 2
-#define Z_POOL_NUM_ENEMY 16
-#define Z_POOL_NUM_PARTICLE 24
-#define Z_POOL_NUM_STAR 32
-
 typedef struct {
     ZPoolObjOffset nextOffset;
 } ZPoolObjHeader;
 
+typedef struct ZPoolHeader {
+    ZPoolObjOffset freeList;
+    ZPoolObjOffset activeList;
+    const ZPoolObjOffset capacity;
+    const ZPoolObjOffset objSize;
+} ZPoolHeader;
+
+#define Z_POOL_DECLARE(ObjectType, NumObjects, VarName)              \
+    static struct {                                                  \
+        ZPoolHeader header;                                          \
+        uint8_t data[NumObjects * sizeof(ObjectType)];               \
+    } z_pool__##ObjectType = {                                       \
+        .header = {                                                  \
+            .capacity = NumObjects,                                  \
+            .objSize = sizeof(ObjectType)                            \
+        }                                                            \
+    };                                                               \
+    static ZPoolHeader* const VarName = &z_pool__##ObjectType.header
+
 typedef bool ZPoolTick(ZPoolObjHeader*, void*);
 typedef void ZPoolDraw(ZPoolObjHeader*);
 
-extern void z_pool_setup(void);
-extern void z_pool_reset(void);
+extern void z_pool_register(ZPoolId Id, ZPoolHeader* Pool);
+extern void z_pool_reset(ZPoolId Pool);
 
 extern void* z_pool_alloc(ZPoolId Pool);
 extern void z_pool_clear(ZPoolId Pool);

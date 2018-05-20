@@ -20,13 +20,9 @@
 #include "util_fix.h"
 #include "util_pool.h"
 
-typedef struct {
-    ZPoolObjHeader poolObject;
-    ZFix x, y;
-    uint8_t angle : 7;
-    uint8_t splitNum : 2;
-    uint8_t ticks : 7;
-} ZParticle;
+typedef struct ZParticle ZParticle;
+
+extern void z_particle_setup(void);
 
 extern void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y);
 extern ZPoolTick z_particle_tick;

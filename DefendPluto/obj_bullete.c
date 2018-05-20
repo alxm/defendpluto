@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,6 +20,21 @@
 
 #include "obj_player.h"
 #include "util_collision.h"
+
+struct ZBulletE {
+    ZPoolObjHeader poolObject;
+    ZFix x, y;
+    uint8_t angle : 4;
+    uint8_t speed : 1;
+    uint8_t damage : 3;
+};
+
+Z_POOL_DECLARE(ZBulletE, 16, g_pool);
+
+void z_bullete_setup(void)
+{
+    z_pool_register(Z_POOL_BULLETE, g_pool);
+}
 
 void z_bullete_init(ZBulletE* Bullet, ZFix X, ZFix Y, uint8_t Angle, bool ExtraSpeed, uint8_t Damage)
 {

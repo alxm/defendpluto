@@ -27,7 +27,11 @@
 #include "state_play.h"
 #include "state_title.h"
 #include "state_win.h"
+#include "obj_bullete.h"
+#include "obj_bulletp.h"
+#include "obj_circle.h"
 #include "obj_enemy.h"
+#include "obj_particle.h"
 #include "obj_player.h"
 #include "obj_star.h"
 #include "util_font.h"
@@ -130,15 +134,19 @@ void z_state_setup(void)
     g_swipe.swipeOut = Z_SWIPE_INVALID;
     g_swipe.swipeIn = Z_SWIPE_INVALID;
 
-    z_input_reset();
-    z_screen_reset();
     z_font_setup();
     z_graphics_setup();
+    z_input_reset();
+    z_screen_reset();
     z_sound_setup();
     z_str_setup();
-    z_pool_setup();
     z_vm_setup();
+
+    z_bullete_setup();
+    z_bulletp_setup();
+    z_circle_setup();
     z_enemy_setup();
+    z_particle_setup();
     z_star_setup();
     z_player_resetPosition();
 

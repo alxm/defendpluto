@@ -21,6 +21,21 @@
 #include "util_fps.h"
 #include "util_screen.h"
 
+struct ZParticle {
+    ZPoolObjHeader poolObject;
+    ZFix x, y;
+    uint8_t angle : 7;
+    uint8_t splitNum : 2;
+    uint8_t ticks : 7;
+};
+
+Z_POOL_DECLARE(ZParticle, 24, g_pool);
+
+void z_particle_setup(void)
+{
+    z_pool_register(Z_POOL_PARTICLE, g_pool);
+}
+
 void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)
 {
     Particle->x = X;

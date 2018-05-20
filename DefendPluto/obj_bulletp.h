@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,11 +20,9 @@
 #include "util_fix.h"
 #include "util_pool.h"
 
-typedef struct {
-    ZPoolObjHeader poolObject;
-    ZFix x, y;
-    uint8_t damage : 3;
-} ZBulletP;
+typedef struct ZBulletP ZBulletP;
+
+extern void z_bulletp_setup(void);
 
 extern void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y);
 extern ZPoolTick z_bulletp_tick;

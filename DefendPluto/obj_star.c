@@ -19,13 +19,24 @@
 #include "obj_star.h"
 
 #include "obj_player.h"
+#include "util_pool.h"
 #include "util_screen.h"
 
+#define Z_STAR_NUM          (32)
 #define Z_STAR_BORDER_RATIO (8)
 #define Z_STAR_SPEED_MIN    (Z_FIX_ONE / 8)
 #define Z_STAR_SPEED_MAX    (Z_FIX_ONE - Z_FIX_ONE / 8)
 #define Z_STAR_MULT_MIN     (4)
 #define Z_STAR_MULT_MAX     (8)
+
+typedef struct {
+    ZPoolObjHeader poolObject;
+    ZFix x, y;
+    bool superSpeed : 1;
+    uint8_t speed : 7;
+} ZStar;
+
+Z_POOL_DECLARE(ZStar, Z_STAR_NUM, g_pool);
 
 static void z_star_init(ZStar* Star, int16_t Y)
 {
@@ -35,7 +46,7 @@ static void z_star_init(ZStar* Star, int16_t Y)
                     Z_SCREEN_W - 2 * Z_SCREEN_W / Z_STAR_BORDER_RATIO)));
 
     Star->y = Y;
-    Star->superSpeed = z_random_uint8(Z_POOL_NUM_STAR / 2) == 0;
+    Star->superSpeed = z_random_uint8(Z_STAR_NUM / 2) == 0;
 
     if(Star->superSpeed) {
         Star->speed = u7(Z_STAR_MULT_MIN
@@ -48,7 +59,9 @@ static void z_star_init(ZStar* Star, int16_t Y)
 
 void z_star_setup(void)
 {
-    for(int8_t i = Z_POOL_NUM_STAR; i--; ) {
+    z_pool_register(Z_POOL_STAR, g_pool);
+
+    for(int8_t i = Z_STAR_NUM; i--; ) {
         ZStar* star = z_pool_alloc(Z_POOL_STAR);
         z_star_init(star, z_fix_fromInt(z_random_int16(Z_SCREEN_H)));
     }

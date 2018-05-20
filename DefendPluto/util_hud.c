@@ -27,11 +27,11 @@ static bool g_blinkHearts;
 
 void z_hud_reset(void)
 {
-    z_timer_start(Z_TIMER_HUD_HEARTS, 3);
-    z_timer_start(Z_TIMER_HUD_SCORE, 1);
-
     g_score = 0;
     g_blinkHearts = false;
+
+    z_timer_start(Z_TIMER_HUD_HEARTS, 3);
+    z_timer_start(Z_TIMER_HUD_SCORE, 1);
 }
 
 void z_hud_tick(void)

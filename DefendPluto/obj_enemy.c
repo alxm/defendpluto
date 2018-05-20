@@ -25,6 +25,8 @@
 #include "util_screen.h"
 #include "util_timer.h"
 
+Z_POOL_DECLARE(ZEnemy, 16, g_pool);
+
 ZEnemyData z_enemy_data[Z_ENEMY_NUM];
 
 static void enemy(uint8_t Index, uint8_t Sprite, uint8_t Width, uint8_t Height, uint8_t Health, uint8_t Damage, uint8_t SpeedShift, uint8_t AttackDs)
@@ -40,6 +42,8 @@ static void enemy(uint8_t Index, uint8_t Sprite, uint8_t Width, uint8_t Height, 
 
 void z_enemy_setup(void)
 {
+    z_pool_register(Z_POOL_ENEMY, g_pool);
+
     enemy(Z_ENEMY_ASTEROID, Z_SPRITE_ASTEROID, 8, 8, 3, 0, 1, 0);
     enemy(Z_ENEMY_SHIP0,    Z_SPRITE_ENEMY00,  7, 5, 1, 2, 1, 20);
     enemy(Z_ENEMY_SHIP1,    Z_SPRITE_ENEMY01,  7, 5, 1, 4, 0, 15);

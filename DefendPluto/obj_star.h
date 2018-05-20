@@ -20,13 +20,6 @@
 #include "util_fix.h"
 #include "util_pool.h"
 
-typedef struct {
-    ZPoolObjHeader poolObject;
-    ZFix x, y;
-    bool superSpeed : 1;
-    uint8_t speed : 7;
-} ZStar;
-
 extern void z_star_setup(void);
 
 extern ZPoolTick z_star_tick;

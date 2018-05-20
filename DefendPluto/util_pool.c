@@ -24,34 +24,8 @@
 #include "obj_particle.h"
 #include "obj_star.h"
 
+static ZPoolHeader* g_pools[Z_POOL_NUM];
 static const ZPoolObjOffset Z_OFFSET_NULL = (ZPoolObjOffset)-1;
-
-typedef struct ZPoolHeader {
-    ZPoolObjOffset freeList;
-    ZPoolObjOffset activeList;
-} ZPoolHeader;
-
-#define DECLARE_POOL(ObjectType, NumObjects)           \
-    struct {                                           \
-        ZPoolHeader header;                            \
-        uint8_t data[NumObjects * sizeof(ObjectType)]; \
-    }
-
-static DECLARE_POOL(ZStar, Z_POOL_NUM_STAR) g_starPool;
-static DECLARE_POOL(ZBulletE, Z_POOL_NUM_BULLETE) g_bulletEPool;
-static DECLARE_POOL(ZBulletP, Z_POOL_NUM_BULLETP) g_bulletPPool;
-static DECLARE_POOL(ZEnemy, Z_POOL_NUM_ENEMY) g_enemyPool;
-static DECLARE_POOL(ZCircle, Z_POOL_NUM_CIRCLE) g_circlePool;
-static DECLARE_POOL(ZParticle, Z_POOL_NUM_PARTICLE) g_particlePool;
-
-static ZPoolHeader* g_pools[Z_POOL_NUM] = {
-    &g_starPool.header,
-    &g_bulletEPool.header,
-    &g_bulletPPool.header,
-    &g_enemyPool.header,
-    &g_circlePool.header,
-    &g_particlePool.header,
-};
 
 static inline ZPoolObjHeader* objectFromOffset(ZPoolHeader* Pool, ZPoolObjOffset Offset)
 {
@@ -63,13 +37,20 @@ static inline ZPoolObjOffset offsetFromObject(ZPoolHeader* Pool, ZPoolObjHeader*
     return zpo((uint8_t*)Object - (uint8_t*)(Pool + 1));
 }
 
-static void initPool(ZPoolId Pool, uint8_t ObjectSize, uint8_t NumObjects)
+void z_pool_register(ZPoolId Id, ZPoolHeader* Pool)
+{
+    g_pools[Id] = Pool;
+    z_pool_reset(Id);
+}
+
+void z_pool_reset(ZPoolId Pool)
 {
     ZPoolHeader* pool = g_pools[Pool];
     ZPoolObjHeader* current = (ZPoolObjHeader*)(pool + 1);
+    ZPoolObjOffset numObjects = pool->capacity;
 
-    while(NumObjects-- > 1) {
-        ZPoolObjHeader* next = (void*)((uint8_t*)current + ObjectSize);
+    while(numObjects-- > 1) {
+        ZPoolObjHeader* next = (void*)((uint8_t*)current + pool->objSize);
 
         current->nextOffset = offsetFromObject(pool, next);
         current = next;
@@ -78,25 +59,6 @@ static void initPool(ZPoolId Pool, uint8_t ObjectSize, uint8_t NumObjects)
     current->nextOffset = Z_OFFSET_NULL;
     pool->freeList = 0;
     pool->activeList = Z_OFFSET_NULL;
-}
-
-void z_pool_setup(void)
-{
-    initPool(Z_POOL_STAR, sizeof(ZStar), Z_POOL_NUM_STAR);
-    initPool(Z_POOL_BULLETE, sizeof(ZBulletE), Z_POOL_NUM_BULLETE);
-    initPool(Z_POOL_BULLETP, sizeof(ZBulletP), Z_POOL_NUM_BULLETP);
-    initPool(Z_POOL_ENEMY, sizeof(ZEnemy), Z_POOL_NUM_ENEMY);
-    initPool(Z_POOL_CIRCLE, sizeof(ZCircle), Z_POOL_NUM_CIRCLE);
-    initPool(Z_POOL_PARTICLE, sizeof(ZParticle), Z_POOL_NUM_PARTICLE);
-}
-
-void z_pool_reset(void)
-{
-    initPool(Z_POOL_BULLETE, sizeof(ZBulletE), Z_POOL_NUM_BULLETE);
-    initPool(Z_POOL_BULLETP, sizeof(ZBulletP), Z_POOL_NUM_BULLETP);
-    initPool(Z_POOL_ENEMY, sizeof(ZEnemy), Z_POOL_NUM_ENEMY);
-    initPool(Z_POOL_CIRCLE, sizeof(ZCircle), Z_POOL_NUM_CIRCLE);
-    initPool(Z_POOL_PARTICLE, sizeof(ZParticle), Z_POOL_NUM_PARTICLE);
 }
 
 void* z_pool_alloc(ZPoolId Pool)

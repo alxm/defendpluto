@@ -27,10 +27,15 @@
 void z_state_new_init(void)
 {
     z_screen_reset();
-    z_pool_reset();
+    z_hud_reset();
     z_vm_reset();
     z_player_init();
-    z_hud_reset();
+
+    z_pool_reset(Z_POOL_BULLETE);
+    z_pool_reset(Z_POOL_BULLETP);
+    z_pool_reset(Z_POOL_CIRCLE);
+    z_pool_reset(Z_POOL_ENEMY);
+    z_pool_reset(Z_POOL_PARTICLE);
 
     z_state_set(Z_STATE_PLAY, true);
 }
