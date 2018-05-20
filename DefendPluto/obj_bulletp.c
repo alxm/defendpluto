@@ -18,8 +18,8 @@
 #include "platform.h"
 #include "obj_bulletp.h"
 
+#include "obj_enemy.h"
 #include "obj_player.h"
-#include "util_collision.h"
 #include "util_fps.h"
 #include "util_screen.h"
 
@@ -36,11 +36,11 @@ void z_bulletp_setup(void)
     z_pool_register(Z_POOL_BULLETP, g_pool);
 }
 
-void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y)
+void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y, uint8_t Damage)
 {
     Bullet->x = X;
     Bullet->y = Y;
-    Bullet->damage = u3(z_player_getDamage());
+    Bullet->damage = u3(Damage);
 }
 
 bool z_bulletp_tick(ZPoolObjHeader* Bullet, void* Context)
@@ -55,11 +55,11 @@ bool z_bulletp_tick(ZPoolObjHeader* Bullet, void* Context)
         return false;
     }
 
-    return !z_collision_checkEnemyShips(bullet->x,
-                                        bullet->y,
-                                        2,
-                                        4,
-                                        bullet->damage);
+    return !z_enemy_checkCollisions(bullet->x,
+                                    bullet->y,
+                                    2,
+                                    4,
+                                    bullet->damage);
 }
 
 void z_bulletp_draw(ZPoolObjHeader* Bullet)

@@ -51,33 +51,7 @@ typedef enum Z_ENUM_PACK {
     Z_ATTACK_NUM
 } ZAttackId;
 
-typedef struct {
-    ZPoolObjHeader poolObject;
-    ZFix x, y;
-    uint8_t angle : 7;
-    bool jetFlicker : 1;
-    uint8_t frame : 4;
-    uint8_t typeId : 4;
-    uint8_t flyId : 4;
-    uint8_t attackId : 4;
-    uint8_t flyCounter;
-    uint8_t attackCounter;
-    uint8_t flyState : 4;
-    uint8_t attackState : 4;
-    uint8_t health : 2;
-} ZEnemy;
-
-typedef struct {
-    uint8_t w : 4;
-    uint8_t h : 4;
-    uint8_t health : 2;
-    uint8_t damage : 3;
-    uint8_t speedShift : 3;
-    uint8_t attackPeriodDs : 5;
-    uint8_t sprite : 3;
-} ZEnemyData;
-
-extern ZEnemyData z_enemy_data[Z_ENEMY_NUM];
+typedef struct ZEnemy ZEnemy;
 
 extern void z_enemy_setup(void);
 
@@ -85,4 +59,6 @@ extern void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, ui
 extern ZPoolTick z_enemy_tick;
 extern ZPoolDraw z_enemy_draw;
 
+extern void z_enemy_getSize(ZEnemyId Enemy, int16_t* Width, int16_t* Height);
 extern void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage);
+extern bool z_enemy_checkCollisions(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage);

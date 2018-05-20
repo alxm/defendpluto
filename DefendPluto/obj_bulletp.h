@@ -24,6 +24,6 @@ typedef struct ZBulletP ZBulletP;
 
 extern void z_bulletp_setup(void);
 
-extern void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y);
+extern void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y, uint8_t Damage);
 extern ZPoolTick z_bulletp_tick;
 extern ZPoolDraw z_bulletp_draw;

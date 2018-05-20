@@ -51,5 +51,5 @@ extern uint8_t z_player_getEnergy(void);
 extern uint8_t z_player_getShield(void);
 extern int8_t z_player_getHealth(void);
 extern void z_player_getCoords(ZFix* X, ZFix* Y);
-extern bool z_player_getInvincible(void);
-extern uint8_t z_player_getDamage(void);
+
+extern bool z_player_checkCollision(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage);

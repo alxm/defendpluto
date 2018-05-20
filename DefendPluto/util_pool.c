@@ -17,12 +17,6 @@
 
 #include "platform.h"
 #include "util_pool.h"
-#include "obj_bullete.h"
-#include "obj_bulletp.h"
-#include "obj_circle.h"
-#include "obj_enemy.h"
-#include "obj_particle.h"
-#include "obj_star.h"
 
 static ZPoolHeader* g_pools[Z_POOL_NUM];
 static const ZPoolObjOffset Z_OFFSET_NULL = (ZPoolObjOffset)-1;

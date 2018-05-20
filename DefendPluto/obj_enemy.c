@@ -25,19 +25,45 @@
 #include "util_screen.h"
 #include "util_timer.h"
 
+struct ZEnemy {
+    ZPoolObjHeader poolObject;
+    ZFix x, y;
+    uint8_t angle : 7;
+    bool jetFlicker : 1;
+    uint8_t frame : 4;
+    uint8_t typeId : 4;
+    uint8_t flyId : 4;
+    uint8_t attackId : 4;
+    uint8_t flyCounter;
+    uint8_t attackCounter;
+    uint8_t flyState : 4;
+    uint8_t attackState : 4;
+    uint8_t health : 2;
+};
+
+typedef struct {
+    uint8_t w : 4;
+    uint8_t h : 4;
+    uint8_t health : 2;
+    uint8_t damage : 3;
+    uint8_t speedShift : 3;
+    uint8_t attackPeriodDs : 5;
+    uint8_t sprite : 3;
+} ZEnemyData;
+
 Z_POOL_DECLARE(ZEnemy, 16, g_pool);
 
-ZEnemyData z_enemy_data[Z_ENEMY_NUM];
+ZEnemyData g_data[Z_ENEMY_NUM];
 
 static void enemy(uint8_t Index, uint8_t Sprite, uint8_t Width, uint8_t Height, uint8_t Health, uint8_t Damage, uint8_t SpeedShift, uint8_t AttackDs)
 {
-    z_enemy_data[Index].w = u4(Width);
-    z_enemy_data[Index].h = u4(Height);
-    z_enemy_data[Index].health = u2(Health);
-    z_enemy_data[Index].damage = u3(Damage);
-    z_enemy_data[Index].speedShift = u3(SpeedShift);
-    z_enemy_data[Index].attackPeriodDs = u5(AttackDs);
-    z_enemy_data[Index].sprite = u3(Sprite);
+    g_data[Index].w = u4(Width);
+    g_data[Index].h = u4(Height);
+    g_data[Index].health = u2(Health);
+    g_data[Index].damage = u3(Damage);
+    g_data[Index].speedShift = u3(SpeedShift);
+    g_data[Index].attackPeriodDs = u5(AttackDs);
+    g_data[Index].sprite = u3(Sprite);
 }
 
 void z_enemy_setup(void)
@@ -64,10 +90,10 @@ void z_enemy_init(ZEnemy* Enemy, int16_t X, int16_t Y, uint8_t TypeId, uint8_t F
     Enemy->flyId = u4(FlyId);
     Enemy->attackId = u4(AttackId);
     Enemy->flyCounter = 0;
-    Enemy->attackCounter = z_enemy_data[TypeId].attackPeriodDs;
+    Enemy->attackCounter = g_data[TypeId].attackPeriodDs;
     Enemy->flyState = 0;
     Enemy->attackState = 0;
-    Enemy->health = z_enemy_data[TypeId].health;
+    Enemy->health = g_data[TypeId].health;
 }
 
 static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
@@ -80,7 +106,7 @@ static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
                        Enemy->y,
                        Angle,
                        ExtraSpeed,
-                       z_enemy_data[Enemy->typeId].damage);
+                       g_data[Enemy->typeId].damage);
 
         z_sfx_play(Z_SFX_ENEMY_SHOOT);
     }
@@ -93,7 +119,7 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
     ZEnemy* enemy = (ZEnemy*)Enemy;
 
     uint8_t type = enemy->typeId;
-    uint8_t sprite = z_enemy_data[type].sprite;
+    uint8_t sprite = g_data[type].sprite;
     bool move = true;
 
     switch(enemy->flyId) {
@@ -228,7 +254,7 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
     if(move) {
         ZFix cos = z_fix_cos(enemy->angle);
         ZFix sin = z_fix_sin(enemy->angle);
-        ZFix speed = z_enemy_data[type].speedShift;
+        ZFix speed = g_data[type].speedShift;
 
         enemy->x = zf(enemy->x + (cos >> speed));
         enemy->y = zf(enemy->y - (sin >> speed));
@@ -236,7 +262,7 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
 
     if(enemy->y >= 0 && enemy->attackCounter-- == 0) {
         enemy->attackCounter =
-            z_timer_dsToTicks(z_enemy_data[enemy->typeId].attackPeriodDs);
+            z_timer_dsToTicks(g_data[enemy->typeId].attackPeriodDs);
 
         switch(enemy->attackId) {
             case Z_ATTACK_FRONT: {
@@ -260,10 +286,10 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
 
     enemy->jetFlicker = !enemy->jetFlicker;
 
-    if(z_collision_checkPlayer(enemy->x,
+    if(z_player_checkCollision(enemy->x,
                                enemy->y,
-                               z_enemy_data[type].w,
-                               z_enemy_data[type].h,
+                               g_data[type].w,
+                               g_data[type].h,
                                Z_PLAYER_MAX_SHIELD)) {
 
         z_enemy_takeDamage(enemy, UINT8_MAX);
@@ -328,7 +354,7 @@ void z_enemy_draw(ZPoolObjHeader* Enemy)
         drawJets(enemy->typeId, x, y);
     }
 
-    z_sprite_blitCentered(z_enemy_data[enemy->typeId].sprite,
+    z_sprite_blitCentered(g_data[enemy->typeId].sprite,
                           i16(x + z_screen_getXShake()),
                           i16(y + z_screen_getYShake()),
                           enemy->frame);
@@ -345,4 +371,61 @@ void z_enemy_takeDamage(ZEnemy* Enemy, uint8_t Damage)
         z_effect_circles(Enemy->x, Enemy->y);
         z_screen_shake(3);
     }
+}
+
+void z_enemy_getSize(ZEnemyId Enemy, int16_t* Width, int16_t* Height)
+{
+    *Width = z_sprite_getWidth(g_data[Enemy].sprite);
+    *Height = z_sprite_getHeight(g_data[Enemy].sprite);
+}
+
+typedef struct {
+    int16_t x, y;
+    int8_t w, h;
+    uint8_t damage : 3;
+    bool hit : 1;
+} ZCollisionContext;
+
+static bool enemyShipCollision(ZPoolObjHeader* Enemy, void* Context)
+{
+    ZCollisionContext* context = Context;
+
+    if(context->hit) {
+        return true;
+    }
+
+    ZEnemy* enemy = (ZEnemy*)Enemy;
+
+    if(z_collision_boxAndBox(context->x,
+                             context->y,
+                             context->w,
+                             context->h,
+                             z_fix_toInt(enemy->x),
+                             z_fix_toInt(enemy->y),
+                             g_data[enemy->typeId].w,
+                             g_data[enemy->typeId].h)) {
+
+        context->hit = true;
+        z_effect_particles(enemy->x, enemy->y, 4);
+        z_enemy_takeDamage(enemy, context->damage);
+
+        if(enemy->health > 0) {
+            z_player_scorePoints(Z_POINTS_ENEMY_HIT);
+        } else {
+            z_player_scorePoints(Z_POINTS_ENEMY_DESTROYED);
+        }
+    }
+
+    return enemy->health > 0;
+}
+
+bool z_enemy_checkCollisions(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
+{
+    ZCollisionContext context = {
+        z_fix_toInt(X), z_fix_toInt(Y), W, H, u3(Damage), false
+    };
+
+    z_pool_tick(Z_POOL_ENEMY, enemyShipCollision, &context);
+
+    return context.hit;
 }

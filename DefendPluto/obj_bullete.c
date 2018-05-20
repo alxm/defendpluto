@@ -19,7 +19,6 @@
 #include "obj_bullete.h"
 
 #include "obj_player.h"
-#include "util_collision.h"
 
 struct ZBulletE {
     ZPoolObjHeader poolObject;
@@ -64,7 +63,7 @@ bool z_bullete_tick(ZPoolObjHeader* Bullet, void* Context)
         return false;
     }
 
-    return !z_collision_checkPlayer(bullet->x, bullet->y, 2, 3, bullet->damage);
+    return !z_player_checkCollision(bullet->x, bullet->y, 2, 3, bullet->damage);
 }
 
 void z_bullete_draw(ZPoolObjHeader* Bullet)

@@ -19,6 +19,7 @@
 #include "obj_player.h"
 
 #include "obj_bulletp.h"
+#include "util_collision.h"
 #include "util_fps.h"
 #include "util_effects.h"
 #include "util_input.h"
@@ -159,7 +160,8 @@ void z_player_tick(bool CheckInput)
                 z_bulletp_init(b,
                                zf(g_player.x
                                     + z_fix_fromInt(z_screen_getXShake())),
-                               g_player.y);
+                               g_player.y,
+                               g_player.damage);
 
                 g_player.shootShift = 1;
                 g_player.lastShotCounter = u5(
@@ -354,12 +356,30 @@ void z_player_getCoords(ZFix* X, ZFix* Y)
     *Y = g_player.y;
 }
 
-bool z_player_getInvincible(void)
+bool z_player_checkCollision(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
 {
-    return g_player.invincible;
-}
+    int8_t playerW = Z_PLAYER_W_NORMAL;
+    int8_t playerH = Z_PLAYER_H_NORMAL;
 
-uint8_t z_player_getDamage(void)
-{
-    return g_player.damage;
+    if(g_player.invincible) {
+        playerW = Z_PLAYER_W_SHIELD;
+        playerH = Z_PLAYER_H_SHIELD;
+    }
+
+    bool hit = z_collision_boxAndBox(z_fix_toInt(X),
+                                     z_fix_toInt(Y),
+                                     W,
+                                     H,
+                                     z_fix_toInt(g_player.x),
+                                     z_fix_toInt(g_player.y),
+                                     playerW,
+                                     playerH);
+
+    if(hit) {
+        z_player_takeDamage(Damage);
+        z_screen_shake(1);
+        z_effect_particles(X, Y, 4);
+    }
+
+    return hit;
 }

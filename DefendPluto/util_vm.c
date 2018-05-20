@@ -324,8 +324,8 @@ static bool op_spawn(uint8_t Flags)
         return false;
     }
 
-    int16_t spriteWidth = z_sprite_getWidth(z_enemy_data[type_id].sprite);
-    int16_t spriteHeight = z_sprite_getHeight(z_enemy_data[type_id].sprite);
+    int16_t spriteWidth, spriteHeight;
+    z_enemy_getSize(type_id, &spriteWidth, &spriteHeight);
 
     if(x < 0) {
         x = i16(x * spriteWidth + spriteWidth / 2);
