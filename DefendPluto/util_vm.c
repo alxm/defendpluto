@@ -137,7 +137,7 @@ static bool op_over(uint8_t Flags)
      * over
      * over
      */
-    z_player.level = 0;
+    z_player_setLevel(0);
     z_state_set(Z_STATE_WIN, true);
 
     return false;

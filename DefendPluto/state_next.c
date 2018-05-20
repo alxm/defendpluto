@@ -41,7 +41,7 @@ void z_state_next_tick(bool Active)
     if(Active && z_button_pressedOnce(Z_BUTTON_A)) {
         z_sfx_play(Z_SFX_PRESSED_A);
         z_state_set(Z_STATE_PLAY, true);
-        z_player.level++;
+        z_player_setLevel(u8(z_player_getLevel() + 1));
     }
 }
 

@@ -77,9 +77,12 @@ void z_star_draw(ZPoolObjHeader* Star)
 {
     ZStar* star = (ZStar*)Star;
 
+    ZFix playerX, playerY;
+    z_player_getCoords(&playerX, &playerY);
+
     int16_t x = i16(z_fix_toInt(star->x) + z_screen_getXShake());
     int16_t y = i16(z_fix_toInt(star->y) + z_screen_getYShake());
-    int16_t centerOffset = i16(z_fix_toInt(z_player.x) - Z_SCREEN_W / 2);
+    int16_t centerOffset = i16(z_fix_toInt(playerX) - Z_SCREEN_W / 2);
     uint8_t avgSpeed = (Z_STAR_SPEED_MIN + Z_STAR_SPEED_MAX) / 2;
 
     x = i16(x

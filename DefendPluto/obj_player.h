@@ -36,26 +36,6 @@ typedef enum Z_ENUM_PACK {
     Z_POINTS_NUM
 } ZScorePoints;
 
-typedef struct {
-    ZFix x, y;
-    int16_t dx, dy;
-    uint8_t frame : 4;
-    uint8_t energy : 4;
-    uint8_t shield : 4;
-    int8_t health : 4;
-    uint8_t lastShotCounter : 5;
-    bool heartsBlink : 1;
-    uint8_t shootShift : 1;
-    bool jetFlicker : 1;
-    uint8_t damage : 3;
-    bool invincible : 1;
-    uint16_t score;
-    uint16_t scoreShow;
-    uint8_t level;
-} ZPlayer;
-
-extern ZPlayer z_player;
-
 extern void z_player_init(void);
 extern void z_player_tick(bool CheckInput);
 extern void z_player_draw(void);
@@ -63,3 +43,13 @@ extern void z_player_draw(void);
 extern void z_player_resetPosition(void);
 extern void z_player_takeDamage(uint8_t Damage);
 extern void z_player_scorePoints(uint8_t Points);
+
+extern uint8_t z_player_getLevel(void);
+extern void z_player_setLevel(uint8_t Level);
+extern uint16_t z_player_getScore(void);
+extern uint8_t z_player_getEnergy(void);
+extern uint8_t z_player_getShield(void);
+extern int8_t z_player_getHealth(void);
+extern void z_player_getCoords(ZFix* X, ZFix* Y);
+extern bool z_player_getInvincible(void);
+extern uint8_t z_player_getDamage(void);

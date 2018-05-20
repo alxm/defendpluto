@@ -39,7 +39,23 @@
 
 #define Z_PLAYER_INVINCIBLE_TIMER_DS   (20)
 
-ZPlayer z_player;
+typedef struct ZPlayer {
+    ZFix x, y;
+    int16_t dx, dy;
+    uint8_t frame : 4;
+    uint8_t energy : 4;
+    uint8_t shield : 4;
+    int8_t health : 4;
+    uint8_t lastShotCounter : 5;
+    uint8_t shootShift : 1;
+    bool jetFlicker : 1;
+    bool invincible : 1;
+    uint8_t damage : 3;
+    uint16_t score;
+    uint8_t level;
+} ZPlayer;
+
+static ZPlayer g_player;
 
 static bool hasEnergy(uint8_t Amount)
 {
@@ -47,18 +63,18 @@ static bool hasEnergy(uint8_t Amount)
         Z_UNUSED(Amount);
         return true;
     #else
-        return z_player.energy >= Amount;
+        return g_player.energy >= Amount;
     #endif
 }
 
 static bool useEnergy(uint8_t Amount)
 {
-    bool enough = z_player.energy >= Amount;
+    bool enough = g_player.energy >= Amount;
 
     if(enough) {
-        z_player.energy = u4(z_player.energy - Amount);
+        g_player.energy = u4(g_player.energy - Amount);
     } else {
-        z_player.energy = 0;
+        g_player.energy = 0;
     }
 
     #if Z_DEBUG_INFINITE_ENERGY
@@ -70,21 +86,21 @@ static bool useEnergy(uint8_t Amount)
 
 static void boostEnergy(uint8_t Boost)
 {
-    if(Z_PLAYER_MAX_ENERGY - z_player.energy > Boost) {
-        z_player.energy = u4(z_player.energy + Boost);
+    if(Z_PLAYER_MAX_ENERGY - g_player.energy > Boost) {
+        g_player.energy = u4(g_player.energy + Boost);
     } else {
-        z_player.energy = Z_PLAYER_MAX_ENERGY;
+        g_player.energy = Z_PLAYER_MAX_ENERGY;
     }
 }
 
 static bool useShield(uint8_t Damage)
 {
-    bool protected = z_player.shield >= Damage;
+    bool protected = g_player.shield >= Damage;
 
     if(protected) {
-        z_player.shield = u4(z_player.shield - Damage);
+        g_player.shield = u4(g_player.shield - Damage);
     } else {
-        z_player.shield = 0;
+        g_player.shield = 0;
     }
 
     #if Z_DEBUG_INVINCIBLE
@@ -96,27 +112,26 @@ static bool useShield(uint8_t Damage)
 
 static void boostShield(uint8_t Boost)
 {
-    if(Z_PLAYER_MAX_SHIELD - z_player.shield > Boost) {
-        z_player.shield = u4(z_player.shield + Boost);
+    if(Z_PLAYER_MAX_SHIELD - g_player.shield > Boost) {
+        g_player.shield = u4(g_player.shield + Boost);
     } else {
-        z_player.shield = Z_PLAYER_MAX_SHIELD;
+        g_player.shield = Z_PLAYER_MAX_SHIELD;
     }
 }
 
 void z_player_init(void)
 {
-    z_player.frame = 0;
-    z_player.energy = Z_PLAYER_MAX_ENERGY;
-    z_player.shield = Z_PLAYER_MAX_SHIELD;
-    z_player.health = Z_PLAYER_MAX_HEALTH;
-    z_player.lastShotCounter = 0;
-    z_player.shootShift = 0;
-    z_player.jetFlicker = false;
-    z_player.damage = 1;
-    z_player.invincible = false;
-    z_player.score = 0;
-    z_player.scoreShow = 0;
-    z_player.level = 1;
+    g_player.frame = 0;
+    g_player.energy = Z_PLAYER_MAX_ENERGY;
+    g_player.shield = Z_PLAYER_MAX_SHIELD;
+    g_player.health = Z_PLAYER_MAX_HEALTH;
+    g_player.lastShotCounter = 0;
+    g_player.shootShift = 0;
+    g_player.jetFlicker = false;
+    g_player.damage = 1;
+    g_player.invincible = false;
+    g_player.score = 0;
+    g_player.level = 1;
 
     z_player_resetPosition();
 
@@ -126,7 +141,7 @@ void z_player_init(void)
 
 void z_player_tick(bool CheckInput)
 {
-    if(z_player.health < 0) {
+    if(g_player.health < 0) {
         return;
     }
 
@@ -137,17 +152,17 @@ void z_player_tick(bool CheckInput)
 
         maxSpeed = Z_PLAYER_SPEED_MAX / 2;
 
-        if(z_player.lastShotCounter-- == 0) {
+        if(g_player.lastShotCounter-- == 0) {
             ZBulletP* b = z_pool_alloc(Z_POOL_BULLETP);
 
             if(b) {
                 z_bulletp_init(b,
-                               zf(z_player.x
+                               zf(g_player.x
                                     + z_fix_fromInt(z_screen_getXShake())),
-                               z_player.y);
+                               g_player.y);
 
-                z_player.shootShift = 1;
-                z_player.lastShotCounter = u5(
+                g_player.shootShift = 1;
+                g_player.lastShotCounter = u5(
                     z_timer_dsToTicks(Z_PLAYER_SHOOT_EVERY_DS));
 
                 useEnergy(Z_PLAYER_ENERGY_USE_SHOOTING);
@@ -155,91 +170,91 @@ void z_player_tick(bool CheckInput)
 
                 z_sfx_play(Z_SFX_PLAYER_SHOOT);
             } else {
-                z_player.lastShotCounter = 0;
+                g_player.lastShotCounter = 0;
             }
         }
     } else {
-        z_player.shootShift = 0;
-        z_player.lastShotCounter = 0;
+        g_player.shootShift = 0;
+        g_player.lastShotCounter = 0;
 
         if(z_timer_expired(Z_TIMER_PLAYER_REGEN_ENERGY)) {
             boostEnergy(1);
         }
     }
 
-    if(z_player.shootShift && z_timer_expired(Z_TIMER_PLAYER_SHOOT)) {
-        z_player.shootShift = 0;
+    if(g_player.shootShift && z_timer_expired(Z_TIMER_PLAYER_SHOOT)) {
+        g_player.shootShift = 0;
     }
 
-    z_player.frame = Z_BIT_RESTING;
+    g_player.frame = Z_BIT_RESTING;
 
     if(CheckInput && z_button_pressed(Z_BUTTON_UP)) {
-        z_player.frame |= Z_BIT_FORWARD;
-        z_player.dy = i16(z_player.dy - Z_PLAYER_SPEED_ACCEL);
+        g_player.frame |= Z_BIT_FORWARD;
+        g_player.dy = i16(g_player.dy - Z_PLAYER_SPEED_ACCEL);
     } else if(CheckInput && z_button_pressed(Z_BUTTON_DOWN)) {
-        z_player.frame |= Z_BIT_BACK;
-        z_player.dy = i16(z_player.dy + Z_PLAYER_SPEED_ACCEL);
+        g_player.frame |= Z_BIT_BACK;
+        g_player.dy = i16(g_player.dy + Z_PLAYER_SPEED_ACCEL);
     } else {
-        if(z_player.dy < 0) {
-            z_player.dy = z_min_int16(i16(z_player.dy + Z_PLAYER_SPEED_DECEL),
+        if(g_player.dy < 0) {
+            g_player.dy = z_min_int16(i16(g_player.dy + Z_PLAYER_SPEED_DECEL),
                                       0);
-        } else if(z_player.dy > 0) {
-            z_player.dy = z_max_int16(i16(z_player.dy - Z_PLAYER_SPEED_DECEL),
+        } else if(g_player.dy > 0) {
+            g_player.dy = z_max_int16(i16(g_player.dy - Z_PLAYER_SPEED_DECEL),
                                       0);
         }
     }
 
     if(CheckInput && z_button_pressed(Z_BUTTON_LEFT)) {
-        z_player.frame |= Z_BIT_LEFT;
-        z_player.dx = i16(z_player.dx - Z_PLAYER_SPEED_ACCEL);
+        g_player.frame |= Z_BIT_LEFT;
+        g_player.dx = i16(g_player.dx - Z_PLAYER_SPEED_ACCEL);
     } else if(CheckInput && z_button_pressed(Z_BUTTON_RIGHT)) {
-        z_player.frame |= Z_BIT_RIGHT;
-        z_player.dx = i16(z_player.dx + Z_PLAYER_SPEED_ACCEL);
+        g_player.frame |= Z_BIT_RIGHT;
+        g_player.dx = i16(g_player.dx + Z_PLAYER_SPEED_ACCEL);
     } else {
-        if(z_player.dx < 0) {
-            z_player.dx = z_min_int16(i16(z_player.dx + Z_PLAYER_SPEED_DECEL),
+        if(g_player.dx < 0) {
+            g_player.dx = z_min_int16(i16(g_player.dx + Z_PLAYER_SPEED_DECEL),
                                       0);
-        } else if(z_player.dx > 0) {
-            z_player.dx = z_max_int16(i16(z_player.dx - Z_PLAYER_SPEED_DECEL),
+        } else if(g_player.dx > 0) {
+            g_player.dx = z_max_int16(i16(g_player.dx - Z_PLAYER_SPEED_DECEL),
                                       0);
         }
     }
 
-    z_player.dx = z_clamp_int16(z_player.dx, i16(-maxSpeed), maxSpeed);
-    z_player.dy = z_clamp_int16(z_player.dy, i16(-maxSpeed), maxSpeed);
+    g_player.dx = z_clamp_int16(g_player.dx, i16(-maxSpeed), maxSpeed);
+    g_player.dy = z_clamp_int16(g_player.dy, i16(-maxSpeed), maxSpeed);
 
-    z_player.x = z_clamp_fix(zf(z_player.x + z_player.dx),
+    g_player.x = z_clamp_fix(zf(g_player.x + g_player.dx),
                              0,
                              z_fix_fromInt(Z_SCREEN_W - 1));
 
-    z_player.y = z_clamp_fix(zf(z_player.y + z_player.dy),
+    g_player.y = z_clamp_fix(zf(g_player.y + g_player.dy),
                              0,
                              z_fix_fromInt(Z_SCREEN_H - 1));
 
-    z_player.jetFlicker = !z_player.jetFlicker;
+    g_player.jetFlicker = !g_player.jetFlicker;
 
     if(z_timer_expired(Z_TIMER_PLAYER_REGEN_SHIELD)) {
         boostShield(1);
     }
 
-    if(z_player.invincible && z_timer_expired(Z_TIMER_PLAYER_INVINCIBLE)) {
-        z_player.invincible = false;
+    if(g_player.invincible && z_timer_expired(Z_TIMER_PLAYER_INVINCIBLE)) {
+        g_player.invincible = false;
     }
 }
 
 void z_player_draw(void)
 {
-    if(z_player.health < 0) {
+    if(g_player.health < 0) {
         return;
     }
 
-    int16_t x = z_fix_toInt(z_player.x);
-    int16_t y = i16(z_fix_toInt(z_player.y) + z_player.shootShift);
+    int16_t x = z_fix_toInt(g_player.x);
+    int16_t y = i16(z_fix_toInt(g_player.y) + g_player.shootShift);
 
-    if(z_player.jetFlicker) {
+    if(g_player.jetFlicker) {
         int16_t jy = i16(y + 2 + z_screen_getYShake());
 
-        if(z_player.frame & Z_BIT_BACK) {
+        if(g_player.frame & Z_BIT_BACK) {
             jy = i16(y - 1 + z_screen_getYShake());
         }
 
@@ -248,57 +263,103 @@ void z_player_draw(void)
     }
 
     int16_t fx = i16(1
-                     - !!(z_player.frame & Z_BIT_LEFT)
-                     + !!(z_player.frame & Z_BIT_RIGHT));
+                     - !!(g_player.frame & Z_BIT_LEFT)
+                     + !!(g_player.frame & Z_BIT_RIGHT));
     int16_t fy = i16(1
-                     - !!(z_player.frame & Z_BIT_FORWARD)
-                     + !!(z_player.frame & Z_BIT_BACK));
+                     - !!(g_player.frame & Z_BIT_FORWARD)
+                     + !!(g_player.frame & Z_BIT_BACK));
 
     z_sprite_blitCentered(Z_SPRITE_PLAYER,
                           i16(x + z_screen_getXShake()),
                           i16(y + z_screen_getYShake()),
                           u8(fy * 3 + fx));
 
-    if(z_player.invincible) {
-        if(z_player.jetFlicker) {
-            z_draw_circle(x, z_fix_toInt(z_player.y), 9, Z_COLOR_RED);
+    if(g_player.invincible) {
+        if(g_player.jetFlicker) {
+            z_draw_circle(x, z_fix_toInt(g_player.y), 9, Z_COLOR_RED);
         } else {
-            z_draw_circle(x, z_fix_toInt(z_player.y), 9, Z_COLOR_GRAY);
+            z_draw_circle(x, z_fix_toInt(g_player.y), 9, Z_COLOR_GRAY);
         }
     }
 
-    if(z_player.shootShift) {
-        z_effect_light(z_player.x, z_player.y, Z_LIGHT_PLAYER_SHOOTING);
+    if(g_player.shootShift) {
+        z_effect_light(g_player.x, g_player.y, Z_LIGHT_PLAYER_SHOOTING);
     }
 }
 
 void z_player_resetPosition(void)
 {
-    z_player.dx = 0;
-    z_player.dy = 0;
-    z_player.x = z_fix_fromInt(Z_SCREEN_W / 2);
-    z_player.y = z_fix_fromInt(Z_SCREEN_H / 2);
+    g_player.dx = 0;
+    g_player.dy = 0;
+    g_player.x = z_fix_fromInt(Z_SCREEN_W / 2);
+    g_player.y = z_fix_fromInt(Z_SCREEN_H / 2);
 }
 
 void z_player_takeDamage(uint8_t Damage)
 {
-    if(z_player.health < 0 || z_player.invincible) {
+    if(g_player.health < 0 || g_player.invincible) {
         return;
     }
 
     if(useShield(Damage)) {
         z_sfx_play(Z_SFX_PLAYER_HURT);
-    } else if(z_player.health-- == 0) {
+    } else if(g_player.health-- == 0) {
         z_sfx_play(Z_SFX_PLAYER_DIE);
     } else {
         z_sfx_play(Z_SFX_SHIELD_DEPLOY);
         boostShield(Z_PLAYER_MAX_SHIELD);
         z_timer_start(Z_TIMER_PLAYER_INVINCIBLE, Z_PLAYER_INVINCIBLE_TIMER_DS);
-        z_player.invincible = true;
+        g_player.invincible = true;
     }
 }
 
 void z_player_scorePoints(uint8_t Points)
 {
-    z_player.score = u16(z_player.score + Points);
+    g_player.score = u16(g_player.score + Points);
+}
+
+uint8_t z_player_getLevel(void)
+{
+    return g_player.level;
+}
+
+void z_player_setLevel(uint8_t Level)
+{
+    g_player.level = Level;
+}
+
+uint16_t z_player_getScore(void)
+{
+    return g_player.score;
+}
+
+uint8_t z_player_getEnergy(void)
+{
+    return g_player.energy;
+}
+
+uint8_t z_player_getShield(void)
+{
+    return g_player.shield;
+}
+
+int8_t z_player_getHealth(void)
+{
+    return g_player.health;
+}
+
+void z_player_getCoords(ZFix* X, ZFix* Y)
+{
+    *X = g_player.x;
+    *Y = g_player.y;
+}
+
+bool z_player_getInvincible(void)
+{
+    return g_player.invincible;
+}
+
+uint8_t z_player_getDamage(void)
+{
+    return g_player.damage;
 }

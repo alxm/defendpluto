@@ -22,25 +22,29 @@
 #include "util_font.h"
 #include "util_timer.h"
 
+static uint16_t g_score;
+static bool g_blinkHearts;
+
 void z_hud_reset(void)
 {
     z_timer_start(Z_TIMER_HUD_HEARTS, 3);
     z_timer_start(Z_TIMER_HUD_SCORE, 1);
+
+    g_score = 0;
+    g_blinkHearts = false;
 }
 
 void z_hud_tick(void)
 {
-    if(z_player.health <= 0) {
-        if(z_timer_expired(Z_TIMER_HUD_HEARTS)) {
-            z_player.heartsBlink ^= 1;
-        }
+    if(z_player_getHealth() <= 0 && z_timer_expired(Z_TIMER_HUD_HEARTS)) {
+        g_blinkHearts = !g_blinkHearts;
     }
 
     if(z_timer_expired(Z_TIMER_HUD_SCORE)) {
-        if(z_player.scoreShow < z_player.score) {
-            z_player.scoreShow =
-                u16(z_player.scoreShow
-                    + (z_player.score - z_player.scoreShow) / 2 + 1);
+        uint16_t score = z_player_getScore();
+
+        if(g_score < score) {
+            g_score = u16(g_score + (score - g_score) / 2 + 1);
         }
     }
 }
@@ -48,9 +52,8 @@ void z_hud_tick(void)
 static void drawHearts(int16_t X, int16_t Y)
 {
     for(int8_t i = 0; i < Z_PLAYER_MAX_HEALTH; i++) {
-        uint8_t heartFrame = z_player.health > 0
-                             ? z_player.health > i
-                             : z_player.heartsBlink;
+        int8_t health = z_player_getHealth();
+        uint8_t heartFrame = health > 0 ? health > i : g_blinkHearts;
 
         z_sprite_blit(Z_SPRITE_HEARTS, i16(X + i * 8), Y, heartFrame);
     }
@@ -84,13 +87,13 @@ static void drawBar(int16_t X, int16_t Y, uint8_t Value, uint8_t Max)
 static void drawShield(int16_t X, int16_t Y)
 {
     z_sprite_blit(Z_SPRITE_SHIELD, X, Y, 0);
-    drawBar(i16(X + 6), i16(Y + 1), z_player.shield, Z_PLAYER_MAX_SHIELD);
+    drawBar(i16(X + 6), i16(Y + 1), z_player_getShield(), Z_PLAYER_MAX_SHIELD);
 }
 
 static void drawEnergy(int16_t X, int16_t Y)
 {
     z_sprite_blit(Z_SPRITE_ENERGY, X, Y, 0);
-    drawBar(i16(X + 4), i16(Y + 2), z_player.energy, Z_PLAYER_MAX_ENERGY);
+    drawBar(i16(X + 4), i16(Y + 2), z_player_getEnergy(), Z_PLAYER_MAX_ENERGY);
 }
 
 static void drawLevel(int16_t X, int16_t Y)
@@ -99,7 +102,7 @@ static void drawLevel(int16_t X, int16_t Y)
 
     z_sprite_blit(Z_SPRITE_ICON_LEVEL, x, i16(Y + 1), 0);
 
-    z_font_int(z_player.level,
+    z_font_int(z_player_getLevel(),
                i16(x - 1),
                Y,
                Z_FONT_FACE_LCD,
@@ -112,7 +115,7 @@ static void drawScore(int16_t X, int16_t Y)
 
     z_sprite_blit(Z_SPRITE_ICON_CREDS, x, i16(Y + 1), 0);
 
-    z_font_int(i16(z_player.scoreShow),
+    z_font_int(i16(g_score),
                i16(x - 1),
                Y,
                Z_FONT_FACE_LCD,

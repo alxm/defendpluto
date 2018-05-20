@@ -56,14 +56,17 @@ void z_state_died_tick(bool Active)
     }
 
     if(z_timer_expired(Z_TIMER_G2)) {
+        ZFix playerX, playerY;
+        z_player_getCoords(&playerX, &playerY);
+
         z_screen_shake(2);
 
         if(z_random_uint8(4) == 0) {
             z_effect_circles(
-                zf(z_player.x + Z_FIX_ONE * (-1 + z_random_int8(3))),
-                zf(z_player.y + Z_FIX_ONE * (-1 + z_random_int8(3))));
+                zf(playerX + Z_FIX_ONE * (-1 + z_random_int8(3))),
+                zf(playerY + Z_FIX_ONE * (-1 + z_random_int8(3))));
         } else {
-            z_effect_particles(z_player.x, z_player.y, 2);
+            z_effect_particles(playerX, playerY, 2);
         }
     }
 }

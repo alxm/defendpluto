@@ -27,7 +27,7 @@ void z_bulletp_init(ZBulletP* Bullet, ZFix X, ZFix Y)
 {
     Bullet->x = X;
     Bullet->y = Y;
-    Bullet->damage = z_player.damage;
+    Bullet->damage = u3(z_player_getDamage());
 }
 
 bool z_bulletp_tick(ZPoolObjHeader* Bullet, void* Context)

@@ -88,10 +88,13 @@ bool z_collision_checkEnemyShips(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Dam
 
 bool z_collision_checkPlayer(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
 {
+    ZFix playerX, playerY;
+    z_player_getCoords(&playerX, &playerY);
+
     int8_t playerW = Z_PLAYER_W_NORMAL;
     int8_t playerH = Z_PLAYER_H_NORMAL;
 
-    if(z_player.invincible) {
+    if(z_player_getInvincible()) {
         playerW = Z_PLAYER_W_SHIELD;
         playerH = Z_PLAYER_H_SHIELD;
     }
@@ -100,8 +103,8 @@ bool z_collision_checkPlayer(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
                          z_fix_toInt(Y),
                          W,
                          H,
-                         z_fix_toInt(z_player.x),
-                         z_fix_toInt(z_player.y),
+                         z_fix_toInt(playerX),
+                         z_fix_toInt(playerY),
                          playerW,
                          playerH);
 

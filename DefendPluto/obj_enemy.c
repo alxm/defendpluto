@@ -101,8 +101,11 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
             if(enemy->flyCounter-- == 0) {
                 enemy->flyCounter = z_timer_dsToTicks(5);
 
+                ZFix playerX, playerY;
+                z_player_getCoords(&playerX, &playerY);
+
                 int16_t eX = z_fix_toInt(enemy->x);
-                int16_t pX = z_fix_toInt(z_player.x);
+                int16_t pX = z_fix_toInt(playerX);
 
                 if(eX < pX) {
                     enemy->angle = Z_ANGLE_292;
@@ -237,8 +240,11 @@ bool z_enemy_tick(ZPoolObjHeader* Enemy, void* Context)
             } break;
 
             case Z_ATTACK_TARGET: {
+                ZFix playerX, playerY;
+                z_player_getCoords(&playerX, &playerY);
+
                 shoot(enemy,
-                      z_fix_atan(enemy->x, enemy->y, z_player.x, z_player.y),
+                      z_fix_atan(enemy->x, enemy->y, playerX, playerY),
                       false);
             } break;
         }
