@@ -37,14 +37,14 @@ void z_state_play_tick(bool Active)
         z_vm_tick();
     }
 
-    z_hud_tick();
     z_player_tick(Active);
+    z_pool_tick(Z_POOL_ENEMY, z_enemy_tick, NULL); // check player collision
+    z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL); // check player collision
+    z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL); // check enemy collision
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
-    z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL);
-    z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);
-    z_pool_tick(Z_POOL_ENEMY, z_enemy_tick, NULL);
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick, NULL);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
+    z_hud_tick();
 
     if(z_player_getHealth() < 0) {
         z_state_set(Z_STATE_DIED, false);

@@ -34,8 +34,8 @@ void z_state_pause_tick(bool Active)
 {
     Z_UNUSED(Active);
 
-    z_hud_tick();
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
+    z_hud_tick();
 
     if(z_button_pressedOnce(Z_BUTTON_MENU)) {
         z_sfx_play(Z_SFX_RESUME);

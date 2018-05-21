@@ -42,13 +42,13 @@ void z_state_died_init(void)
 void z_state_died_tick(bool Active)
 {
     z_vm_tick();
-    z_hud_tick();
-    z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
+    z_pool_tick(Z_POOL_ENEMY, z_enemy_tick, NULL);
     z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL);
     z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);
-    z_pool_tick(Z_POOL_ENEMY, z_enemy_tick, NULL);
+    z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
     z_pool_tick(Z_POOL_CIRCLE, z_circle_tick, NULL);
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
+    z_hud_tick();
 
     if(Active && z_timer_expired(Z_TIMER_G1)) {
         z_button_release(Z_BUTTON_A);
