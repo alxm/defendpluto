@@ -91,11 +91,11 @@ extern int16_t z_sprite_getWidth(ZSpriteId Sprite);
 extern int16_t z_sprite_getHeight(ZSpriteId Sprite);
 extern uint8_t z_sprite_getNumFrames(ZSpriteId Sprite);
 
-extern void z_draw_fill(ZColorId Color);
-extern void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, ZColorId Color);
-extern void z_draw_pixel(int16_t X, int16_t Y, ZColorId Color);
-extern void z_draw_hline(int16_t X1, int16_t X2, int16_t Y, ZColorId Color);
-extern void z_draw_vline(int16_t X, int16_t Y1, int16_t Y2, ZColorId Color);
-extern void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId Color);
+extern void z_draw_fill(ZColorId ColorId);
+extern void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, ZColorId ColorId);
+extern void z_draw_pixel(int16_t X, int16_t Y, ZColorId ColorId);
+extern void z_draw_hline(int16_t X1, int16_t X2, int16_t Y, ZColorId ColorId);
+extern void z_draw_vline(int16_t X, int16_t Y1, int16_t Y2, ZColorId ColorId);
+extern void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId ColorId);
 
 Z_EXTERN_C_END

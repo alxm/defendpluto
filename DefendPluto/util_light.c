@@ -34,12 +34,12 @@ static struct {
     uint8_t counter;
 } g_light;
 
-static void z_light_fill(ZColorId Color, int Intensity)
+static void z_light_fill(ZColorId ColorId, int Intensity)
 {
     #if Z_PLATFORM_META
-        z_platform_meta_fillLights(Color, Intensity);
+        z_platform_meta_fillLights(ColorId, Intensity);
     #else
-        Z_UNUSED(Color);
+        Z_UNUSED(ColorId);
         Z_UNUSED(Intensity);
     #endif
 }

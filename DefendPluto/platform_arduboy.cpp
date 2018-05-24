@@ -190,29 +190,29 @@ uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
     return g_sprites[Sprite].numFrames;
 }
 
-static inline uint8_t getColor(ZColorId Color)
+static inline uint8_t getColor(ZColorId ColorId)
 {
-    return Color < Z_COLORS_WHITE_START ? BLACK : WHITE;
+    return ColorId < Z_COLORS_WHITE_START ? BLACK : WHITE;
 }
 
-void z_draw_fill(ZColorId Color)
+void z_draw_fill(ZColorId ColorId)
 {
-    g_arduboy.fillScreen(getColor(Color));
+    g_arduboy.fillScreen(getColor(ColorId));
 }
 
-void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, ZColorId Color)
+void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, ZColorId ColorId)
 {
-    g_arduboy.fillRect(X, Y, u8(W), u8(H), getColor(Color));
+    g_arduboy.fillRect(X, Y, u8(W), u8(H), getColor(ColorId));
 }
 
-void z_draw_pixel(int16_t X, int16_t Y, ZColorId Color)
+void z_draw_pixel(int16_t X, int16_t Y, ZColorId ColorId)
 {
-    g_arduboy.drawPixel(X, Y, getColor(Color));
+    g_arduboy.drawPixel(X, Y, getColor(ColorId));
 }
 
-void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId Color)
+void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId ColorId)
 {
-    g_arduboy.drawCircle(X, Y, u8(Radius), getColor(Color));
+    g_arduboy.drawCircle(X, Y, u8(Radius), getColor(ColorId));
 }
 
 uint16_t z_fps_getCounter(void)
