@@ -22,29 +22,39 @@
 #include "util_font.h"
 #include "util_timer.h"
 
-static uint16_t g_score;
-static bool g_blinkHearts;
+static struct {
+    uint16_t score;
+    bool fillHearts;
+} g_hud;
 
 void z_hud_reset(void)
 {
-    g_score = 0;
-    g_blinkHearts = false;
+    g_hud.score = 0;
+    g_hud.fillHearts = false;
 
-    z_timer_start(Z_TIMER_HUD_HEARTS, 3);
+    z_timer_stop(Z_TIMER_HUD_HEARTS);
     z_timer_start(Z_TIMER_HUD_SCORE, 1);
 }
 
 void z_hud_tick(void)
 {
-    if(z_player_getHealth() <= 0 && z_timer_expired(Z_TIMER_HUD_HEARTS)) {
-        g_blinkHearts = !g_blinkHearts;
+    if(z_player_getHealth() <= 0) {
+        if(!z_timer_running(Z_TIMER_HUD_HEARTS)) {
+            z_timer_start(Z_TIMER_HUD_HEARTS, 3);
+            g_hud.fillHearts = true;
+        } else if(z_timer_expired(Z_TIMER_HUD_HEARTS)) {
+            g_hud.fillHearts = !g_hud.fillHearts;
+        }
+    } else {
+        z_timer_stop(Z_TIMER_HUD_HEARTS);
+        g_hud.fillHearts = false;
     }
 
     if(z_timer_expired(Z_TIMER_HUD_SCORE)) {
         uint16_t score = z_player_getScore();
 
-        if(g_score < score) {
-            g_score = u16(g_score + (score - g_score) / 2 + 1);
+        if(g_hud.score < score) {
+            g_hud.score = u16(g_hud.score + (score - g_hud.score) / 2 + 1);
         }
     }
 }
@@ -53,7 +63,7 @@ static void drawHearts(int16_t X, int16_t Y)
 {
     for(int8_t i = 0; i < Z_PLAYER_MAX_HEALTH; i++) {
         int8_t health = z_player_getHealth();
-        uint8_t heartFrame = health > 0 ? health > i : g_blinkHearts;
+        uint8_t heartFrame = g_hud.fillHearts || health > i;
 
         z_sprite_blit(Z_SPRITE_HEARTS, i16(X + i * 8), Y, heartFrame);
     }
@@ -115,7 +125,7 @@ static void drawScore(int16_t X, int16_t Y)
 
     z_sprite_blit(Z_SPRITE_ICON_CREDS, x, i16(Y + 1), 0);
 
-    z_font_int(i16(g_score),
+    z_font_int(i16(g_hud.score),
                i16(x - 1),
                Y,
                Z_FONT_FACE_LCD,

@@ -26,9 +26,10 @@
 
 void z_state_new_init(void)
 {
-    z_screen_reset();
     z_hud_reset();
+    z_screen_reset();
     z_vm_reset();
+
     z_player_init();
 
     z_pool_reset(Z_POOL_BULLETE);

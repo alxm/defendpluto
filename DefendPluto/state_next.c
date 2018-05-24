@@ -21,6 +21,7 @@
 #include "obj_player.h"
 #include "obj_star.h"
 #include "util_font.h"
+#include "util_hud.h"
 #include "util_input.h"
 #include "util_pool.h"
 #include "util_screen.h"
@@ -28,8 +29,12 @@
 
 void z_state_next_init(void)
 {
+    z_hud_reset();
+    z_screen_reset();
+
     z_player_resetPosition();
     z_pool_clear(Z_POOL_BULLETP);
+
     z_button_release(Z_BUTTON_A);
     z_sfx_play(Z_SFX_LEVEL_COMPLETE);
 }
