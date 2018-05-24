@@ -20,6 +20,7 @@
 
 #include "obj_player.h"
 #include "util_hud.h"
+#include "util_light.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_vm.h"
@@ -27,6 +28,7 @@
 void z_state_new_init(void)
 {
     z_hud_reset();
+    z_light_reset();
     z_screen_reset();
     z_vm_reset();
 

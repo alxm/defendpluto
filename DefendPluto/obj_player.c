@@ -23,6 +23,7 @@
 #include "util_fps.h"
 #include "util_effects.h"
 #include "util_input.h"
+#include "util_light.h"
 #include "util_screen.h"
 #include "util_timer.h"
 
@@ -175,6 +176,7 @@ void z_player_tick(bool CheckInput)
                     z_timer_restart(Z_TIMER_PLAYER_REGEN_ENERGY);
 
                     z_sfx_play(Z_SFX_PLAYER_SHOOT);
+                    z_light_start(Z_LIGHT_PLAYER_SHOOTING);
                 } else {
                     g_player.lastShotCounter = 0;
                 }
@@ -288,10 +290,6 @@ void z_player_draw(void)
         } else {
             z_draw_circle(x, z_fix_toInt(g_player.y), 9, Z_COLOR_GRAY);
         }
-    }
-
-    if(g_player.shootShift) {
-        z_effect_light(g_player.x, g_player.y, Z_LIGHT_PLAYER_SHOOTING);
     }
 }
 

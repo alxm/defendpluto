@@ -15,30 +15,16 @@
     along with Defend Pluto.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
-#include "util_effects.h"
+#pragma once
 
-#include "obj_circle.h"
-#include "obj_particle.h"
+typedef enum Z_ENUM_PACK {
+    Z_LIGHT_INVALID = -1,
+    Z_LIGHT_EXPLOSION,
+    Z_LIGHT_PLAYER_SHOOTING,
+    Z_LIGHT_NUM
+} ZLightId;
 
-void z_effect_particles(ZFix X, ZFix Y, uint8_t Num)
-{
-    while(Num--) {
-        ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
+extern void z_light_reset(void);
+extern void z_light_tick(void);
 
-        if(p == NULL) {
-            return;
-        }
-
-        z_particle_init(p, X, Y);
-    }
-}
-
-void z_effect_circles(ZFix X, ZFix Y)
-{
-    ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
-
-    if(c) {
-        z_circle_init(c, X, Y);
-    }
-}
+extern void z_light_start(ZLightId Light);

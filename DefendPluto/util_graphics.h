@@ -82,7 +82,6 @@ typedef enum Z_ENUM_PACK {
 extern void z_graphics_setup(void);
 
 extern ZPixel* z_screen_getPixels(void);
-extern void z_lights_put(int16_t X, int16_t Y, uint8_t Color);
 
 extern ZPixel z_sprite_getTransparentColor(void);
 extern ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame);

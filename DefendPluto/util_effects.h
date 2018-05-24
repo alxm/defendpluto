@@ -19,13 +19,5 @@
 
 #include "util_fix.h"
 
-typedef enum Z_ENUM_PACK {
-    Z_LIGHT_INVALID = -1,
-    Z_LIGHT_EXPLOSION,
-    Z_LIGHT_PLAYER_SHOOTING,
-    Z_LIGHT_NUM
-} ZLightId;
-
 extern void z_effect_particles(ZFix X, ZFix Y, uint8_t Num);
 extern void z_effect_circles(ZFix X, ZFix Y);
-extern void z_effect_light(ZFix X, ZFix Y, ZLightId LightId);

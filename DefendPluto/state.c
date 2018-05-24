@@ -36,6 +36,7 @@
 #include "obj_star.h"
 #include "util_font.h"
 #include "util_input.h"
+#include "util_light.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_str.h"
@@ -137,6 +138,7 @@ void z_state_setup(void)
     z_font_setup();
     z_graphics_setup();
     z_input_reset();
+    z_light_reset();
     z_screen_reset();
     z_sound_setup();
     z_str_setup();
@@ -160,8 +162,9 @@ void z_state_setup(void)
 void z_state_tick(void)
 {
     z_screen_tick();
-    z_timer_tick();
     z_swipe_tick();
+    z_timer_tick();
+    z_light_tick();
 
     if(g_state.next != Z_STATE_INVALID && g_swipe.swipeOut == Z_SWIPE_INVALID) {
         g_state.current = g_state.next;

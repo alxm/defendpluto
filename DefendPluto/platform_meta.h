@@ -44,4 +44,7 @@ typedef uint16_t ZPixel;
 extern void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer, uint8_t NumFrames);
 extern void z_platform__loadSfx(ZSfxId Sfx, const uint8_t* Buffer, uint32_t Size);
 
+extern void z_platform_meta_fillLights(ZColorId Color, int Intensity);
+extern void z_platform_meta_drawLights(ZColorId Color, int Intensity, int16_t X, int16_t Y);
+
 Z_EXTERN_C_END

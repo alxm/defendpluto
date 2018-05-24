@@ -18,7 +18,7 @@
 #include "platform.h"
 #include "obj_circle.h"
 
-#include "util_effects.h"
+#include "util_light.h"
 #include "util_screen.h"
 
 #define Z_CIRCLE_RADIUS_MAX (4)
@@ -41,6 +41,8 @@ void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y)
     Circle->x = X;
     Circle->y = Y;
     Circle->radius = 0;
+
+    z_light_start(Z_LIGHT_EXPLOSION);
 }
 
 bool z_circle_tick(ZPoolObjHeader* Circle, void* Context)
@@ -60,6 +62,4 @@ void z_circle_draw(ZPoolObjHeader* Circle)
 
     z_draw_circle(x, y, circle->radius, Z_COLOR_RED);
     z_draw_circle(x, y, u8(circle->radius * 2), Z_COLOR_RED);
-
-    z_effect_light(circle->x, circle->y, Z_LIGHT_EXPLOSION);
 }
