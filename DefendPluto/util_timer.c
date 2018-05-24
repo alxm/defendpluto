@@ -61,6 +61,14 @@ void z_timer_stop(ZTimerId Timer)
     timer->expired = false;
 }
 
+void z_timer_restart(ZTimerId Timer)
+{
+    ZTimer* timer = &g_timers[Timer];
+
+    timer->base = u8(z_fps_getCounter());
+    timer->expired = false;
+}
+
 bool z_timer_running(ZTimerId Timer)
 {
     return g_timers[Timer].period != 0;
