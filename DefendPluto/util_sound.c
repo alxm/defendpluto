@@ -21,7 +21,6 @@
 #if !Z_PLATFORM_ARDUBOY
 #include "generated/data_sfx_enemy_die.h"
 #include "generated/data_sfx_enemy_hurt.h"
-#include "generated/data_sfx_enemy_shoot.h"
 #include "generated/data_sfx_level_complete.h"
 #include "generated/data_sfx_level_lost.h"
 #include "generated/data_sfx_level_won.h"
@@ -40,7 +39,6 @@ void z_sound_setup(void)
 {
     z_sfx_load(Z_SFX_ENEMY_DIE, enemy_die);
     z_sfx_load(Z_SFX_ENEMY_HURT, enemy_hurt);
-    z_sfx_load(Z_SFX_ENEMY_SHOOT, enemy_shoot);
     z_sfx_load(Z_SFX_LEVEL_COMPLETE, level_complete);
     z_sfx_load(Z_SFX_LEVEL_LOST, level_lost);
     z_sfx_load(Z_SFX_LEVEL_WON, level_won);

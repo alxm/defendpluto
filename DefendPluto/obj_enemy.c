@@ -107,8 +107,6 @@ static void shoot(ZEnemy* Enemy, uint8_t Angle, bool ExtraSpeed)
                        Angle,
                        ExtraSpeed,
                        g_data[Enemy->typeId].damage);
-
-        z_sfx_play(Z_SFX_ENEMY_SHOOT);
     }
 }
 
