@@ -27,12 +27,12 @@
 #include "util_screen.h"
 #include "util_timer.h"
 
-#define Z_PLAYER_SHOOT_EVERY_DS        (3)
-#define Z_PLAYER_SHOOT_SHIFT_DS        (1)
-
 #define Z_PLAYER_SPEED_MAX             (Z_FIX_ONE * 3 / 4)
 #define Z_PLAYER_SPEED_ACCEL           (Z_FIX_ONE / 8)
 #define Z_PLAYER_SPEED_DECEL           (Z_FIX_ONE / 16)
+
+#define Z_PLAYER_SHOOT_DELAY_DS        (3)
+#define Z_PLAYER_SHOOT_KICK_DS         (1)
 
 #define Z_PLAYER_SHIELD_REGEN_EVERY_DS (20)
 
@@ -48,10 +48,7 @@ typedef struct ZPlayer {
     uint8_t energy : 4;
     uint8_t shield : 4;
     int8_t health : 4;
-    uint8_t lastShotCounter : 5;
-    uint8_t shootShift : 1;
     bool jetFlicker : 1;
-    bool invincible : 1;
     uint8_t damage : 3;
     uint16_t score;
     uint8_t level;
@@ -127,11 +124,8 @@ void z_player_init(void)
     g_player.energy = Z_PLAYER_MAX_ENERGY;
     g_player.shield = Z_PLAYER_MAX_SHIELD;
     g_player.health = Z_PLAYER_MAX_HEALTH;
-    g_player.lastShotCounter = 0;
-    g_player.shootShift = 0;
     g_player.jetFlicker = false;
     g_player.damage = 1;
-    g_player.invincible = false;
     g_player.score = 0;
     g_player.level = 1;
 
@@ -139,7 +133,9 @@ void z_player_init(void)
 
     z_timer_start(Z_TIMER_PLAYER_REGEN_ENERGY, Z_PLAYER_ENERGY_REGEN_EVERY_DS);
     z_timer_start(Z_TIMER_PLAYER_REGEN_SHIELD, Z_PLAYER_SHIELD_REGEN_EVERY_DS);
-    z_timer_stop(Z_TIMER_PLAYER_SHOOT);
+    z_timer_stop(Z_TIMER_PLAYER_INVINCIBLE);
+    z_timer_stop(Z_TIMER_PLAYER_SHOOT_DELAY);
+    z_timer_stop(Z_TIMER_PLAYER_SHOOT_KICK);
 }
 
 void z_player_tick(bool CheckInput)
@@ -155,7 +151,9 @@ void z_player_tick(bool CheckInput)
             z_timer_restart(Z_TIMER_PLAYER_REGEN_ENERGY);
             maxSpeed = Z_PLAYER_SPEED_MAX / 2;
 
-            if(g_player.lastShotCounter-- == 0) {
+            if(!z_timer_running(Z_TIMER_PLAYER_SHOOT_DELAY)
+                || z_timer_expired(Z_TIMER_PLAYER_SHOOT_DELAY)) {
+
                 ZBulletP* b = z_pool_alloc(Z_POOL_BULLETP);
 
                 if(b) {
@@ -165,12 +163,11 @@ void z_player_tick(bool CheckInput)
                                    g_player.y,
                                    g_player.damage);
 
-                    g_player.shootShift = 1;
-                    z_timer_start(Z_TIMER_PLAYER_SHOOT,
-                                  Z_PLAYER_SHOOT_SHIFT_DS);
+                    z_timer_start(Z_TIMER_PLAYER_SHOOT_DELAY,
+                                  Z_PLAYER_SHOOT_DELAY_DS);
 
-                    g_player.lastShotCounter = u5(
-                        z_timer_dsToTicks(Z_PLAYER_SHOOT_EVERY_DS));
+                    z_timer_start(Z_TIMER_PLAYER_SHOOT_KICK,
+                                  Z_PLAYER_SHOOT_KICK_DS);
 
                     useEnergy(Z_PLAYER_ENERGY_USE_SHOOTING);
                     z_timer_restart(Z_TIMER_PLAYER_REGEN_ENERGY);
@@ -178,22 +175,20 @@ void z_player_tick(bool CheckInput)
                     z_sfx_play(Z_SFX_PLAYER_SHOOT);
                     z_light_start(Z_LIGHT_PLAYER_SHOOTING);
                 } else {
-                    g_player.lastShotCounter = 0;
+                    z_timer_stop(Z_TIMER_PLAYER_SHOOT_DELAY);
                 }
             }
         }
     } else {
-        g_player.shootShift = 0;
-        g_player.lastShotCounter = 0;
+        z_timer_stop(Z_TIMER_PLAYER_SHOOT_DELAY);
 
         if(z_timer_expired(Z_TIMER_PLAYER_REGEN_ENERGY)) {
             boostEnergy(1);
         }
     }
 
-    if(z_timer_expired(Z_TIMER_PLAYER_SHOOT)) {
-        z_timer_stop(Z_TIMER_PLAYER_SHOOT);
-        g_player.shootShift = 0;
+    if(z_timer_expired(Z_TIMER_PLAYER_SHOOT_KICK)) {
+        z_timer_stop(Z_TIMER_PLAYER_SHOOT_KICK);
     }
 
     g_player.frame = Z_BIT_RESTING;
@@ -247,8 +242,8 @@ void z_player_tick(bool CheckInput)
         boostShield(1);
     }
 
-    if(g_player.invincible && z_timer_expired(Z_TIMER_PLAYER_INVINCIBLE)) {
-        g_player.invincible = false;
+    if(z_timer_expired(Z_TIMER_PLAYER_INVINCIBLE)) {
+        z_timer_stop(Z_TIMER_PLAYER_INVINCIBLE);
     }
 }
 
@@ -259,7 +254,8 @@ void z_player_draw(void)
     }
 
     int16_t x = z_fix_toInt(g_player.x);
-    int16_t y = i16(z_fix_toInt(g_player.y) + g_player.shootShift);
+    int16_t y = i16(z_fix_toInt(g_player.y)
+                        + z_timer_running(Z_TIMER_PLAYER_SHOOT_KICK));
 
     if(g_player.jetFlicker) {
         int16_t jy = i16(y + 2 + z_screen_getYShake());
@@ -284,7 +280,7 @@ void z_player_draw(void)
                           i16(y + z_screen_getYShake()),
                           u8(fy * 3 + fx));
 
-    if(g_player.invincible) {
+    if(z_timer_running(Z_TIMER_PLAYER_INVINCIBLE)) {
         if(g_player.jetFlicker) {
             z_draw_circle(x, z_fix_toInt(g_player.y), 9, Z_COLOR_RED);
         } else {
@@ -303,7 +299,7 @@ void z_player_resetPosition(void)
 
 void z_player_takeDamage(uint8_t Damage)
 {
-    if(g_player.health < 0 || g_player.invincible) {
+    if(g_player.health < 0 || z_timer_running(Z_TIMER_PLAYER_INVINCIBLE)) {
         return;
     }
 
@@ -315,7 +311,6 @@ void z_player_takeDamage(uint8_t Damage)
         z_sfx_play(Z_SFX_SHIELD_DEPLOY);
         boostShield(Z_PLAYER_MAX_SHIELD);
         z_timer_start(Z_TIMER_PLAYER_INVINCIBLE, Z_PLAYER_INVINCIBLE_TIMER_DS);
-        g_player.invincible = true;
     }
 }
 
@@ -365,7 +360,7 @@ bool z_player_checkCollision(ZFix X, ZFix Y, int8_t W, int8_t H, uint8_t Damage)
     int8_t playerW = Z_PLAYER_W_NORMAL;
     int8_t playerH = Z_PLAYER_H_NORMAL;
 
-    if(g_player.invincible) {
+    if(z_timer_running(Z_TIMER_PLAYER_INVINCIBLE)) {
         playerW = Z_PLAYER_W_SHIELD;
         playerH = Z_PLAYER_H_SHIELD;
     }
