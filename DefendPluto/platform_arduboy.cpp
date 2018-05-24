@@ -224,4 +224,9 @@ bool z_fps_isNthFrame(uint8_t N)
 {
     return g_arduboy.everyXFrames(N);
 }
+
+void z_sfx_play(ZSfxId Sfx)
+{
+    Z_UNUSED(Sfx);
+}
 #endif // Z_PLATFORM_ARDUBOY

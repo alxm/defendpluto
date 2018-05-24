@@ -31,6 +31,7 @@ typedef uint8_t ZPixel;
 typedef uint8_t ZPoolObjOffset;
 
 #include "util_graphics.h"
+#include "util_sound.h"
 
 #define Z_SCREEN_W 128
 #define Z_SCREEN_H 64

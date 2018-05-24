@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "util_sound.h"
 
+#if !Z_PLATFORM_ARDUBOY
 #include "generated/data_sfx_enemy_die.h"
 #include "generated/data_sfx_enemy_hurt.h"
 #include "generated/data_sfx_enemy_shoot.h"
@@ -54,3 +55,4 @@ void z_sound_setup(void)
     z_sfx_load(Z_SFX_SWIPE_SHOW, swipe_show);
     z_sfx_load(Z_SFX_TITLE_SCREEN, title_screen);
 }
+#endif // !Z_PLATFORM_ARDUBOY

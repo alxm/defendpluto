@@ -140,7 +140,9 @@ void z_state_setup(void)
     z_input_reset();
     z_light_reset();
     z_screen_reset();
-    z_sound_setup();
+    #if !Z_PLATFORM_ARDUBOY
+        z_sound_setup();
+    #endif
     z_str_setup();
     z_vm_setup();
 
