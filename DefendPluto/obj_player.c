@@ -138,6 +138,7 @@ void z_player_init(void)
 
     z_timer_start(Z_TIMER_PLAYER_REGEN_ENERGY, Z_PLAYER_ENERGY_REGEN_EVERY_DS);
     z_timer_start(Z_TIMER_PLAYER_REGEN_SHIELD, Z_PLAYER_SHIELD_REGEN_EVERY_DS);
+    z_timer_stop(Z_TIMER_PLAYER_SHOOT);
 }
 
 void z_player_tick(bool CheckInput)
@@ -148,31 +149,35 @@ void z_player_tick(bool CheckInput)
 
     int16_t maxSpeed = Z_PLAYER_SPEED_MAX;
 
-    if(CheckInput && z_button_pressed(Z_BUTTON_A)
-        && hasEnergy(Z_PLAYER_ENERGY_USE_SHOOTING)) {
+    if(CheckInput && z_button_pressed(Z_BUTTON_A)) {
+        if(hasEnergy(Z_PLAYER_ENERGY_USE_SHOOTING)) {
+            z_timer_restart(Z_TIMER_PLAYER_REGEN_ENERGY);
+            maxSpeed = Z_PLAYER_SPEED_MAX / 2;
 
-        maxSpeed = Z_PLAYER_SPEED_MAX / 2;
+            if(g_player.lastShotCounter-- == 0) {
+                ZBulletP* b = z_pool_alloc(Z_POOL_BULLETP);
 
-        if(g_player.lastShotCounter-- == 0) {
-            ZBulletP* b = z_pool_alloc(Z_POOL_BULLETP);
+                if(b) {
+                    z_bulletp_init(b,
+                                   zf(g_player.x
+                                        + z_fix_fromInt(z_screen_getXShake())),
+                                   g_player.y,
+                                   g_player.damage);
 
-            if(b) {
-                z_bulletp_init(b,
-                               zf(g_player.x
-                                    + z_fix_fromInt(z_screen_getXShake())),
-                               g_player.y,
-                               g_player.damage);
+                    g_player.shootShift = 1;
+                    z_timer_start(Z_TIMER_PLAYER_SHOOT,
+                                  Z_PLAYER_SHOOT_SHIFT_DS);
 
-                g_player.shootShift = 1;
-                g_player.lastShotCounter = u5(
-                    z_timer_dsToTicks(Z_PLAYER_SHOOT_EVERY_DS));
+                    g_player.lastShotCounter = u5(
+                        z_timer_dsToTicks(Z_PLAYER_SHOOT_EVERY_DS));
 
-                useEnergy(Z_PLAYER_ENERGY_USE_SHOOTING);
-                z_timer_start(Z_TIMER_PLAYER_SHOOT, Z_PLAYER_SHOOT_SHIFT_DS);
+                    useEnergy(Z_PLAYER_ENERGY_USE_SHOOTING);
+                    z_timer_restart(Z_TIMER_PLAYER_REGEN_ENERGY);
 
-                z_sfx_play(Z_SFX_PLAYER_SHOOT);
-            } else {
-                g_player.lastShotCounter = 0;
+                    z_sfx_play(Z_SFX_PLAYER_SHOOT);
+                } else {
+                    g_player.lastShotCounter = 0;
+                }
             }
         }
     } else {
@@ -184,7 +189,8 @@ void z_player_tick(bool CheckInput)
         }
     }
 
-    if(g_player.shootShift && z_timer_expired(Z_TIMER_PLAYER_SHOOT)) {
+    if(z_timer_expired(Z_TIMER_PLAYER_SHOOT)) {
+        z_timer_stop(Z_TIMER_PLAYER_SHOOT);
         g_player.shootShift = 0;
     }
 
