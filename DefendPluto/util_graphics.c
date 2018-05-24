@@ -38,7 +38,6 @@
 #include "generated/data_gfx_shield.h"
 #include "generated/data_gfx_title128.h"
 #include "generated/data_gfx_title80.h"
-#include "generated/data_gfx_version_beta.h"
 
 void z_graphics_setup(void)
 {
@@ -69,7 +68,6 @@ void z_graphics_setup(void)
     #else
         z_sprite_load(Z_SPRITE_TITLE, title80);
     #endif
-    z_sprite_load(Z_SPRITE_VERSION_BETA, version_beta);
 }
 
 void z_sprite_blitCentered(ZSpriteId Sprite, int16_t X, int16_t Y, uint8_t Frame)

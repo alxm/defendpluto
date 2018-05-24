@@ -52,7 +52,5 @@ void z_state_title_draw(void)
         z_draw_rectangle(0, 50, Z_SCREEN_W, 14, Z_COLOR_BLUE);
     #endif
 
-    z_sprite_blit(Z_SPRITE_VERSION_BETA, 74, 1, 0);
-
     z_screen_drawPressA(Z_SCREEN_W / 2, 50, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
 }
