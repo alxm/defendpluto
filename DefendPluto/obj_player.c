@@ -147,8 +147,9 @@ void z_player_tick(bool CheckInput)
     int16_t maxSpeed = Z_PLAYER_SPEED_MAX;
 
     if(CheckInput && z_button_pressed(Z_BUTTON_A)) {
+        z_timer_restart(Z_TIMER_PLAYER_REGEN_ENERGY);
+
         if(hasEnergy(Z_PLAYER_ENERGY_USE_SHOOTING)) {
-            z_timer_restart(Z_TIMER_PLAYER_REGEN_ENERGY);
             maxSpeed = Z_PLAYER_SPEED_MAX / 2;
 
             if(!z_timer_running(Z_TIMER_PLAYER_SHOOT_DELAY)
@@ -170,7 +171,6 @@ void z_player_tick(bool CheckInput)
                                   Z_PLAYER_SHOOT_KICK_DS);
 
                     useEnergy(Z_PLAYER_ENERGY_USE_SHOOTING);
-                    z_timer_restart(Z_TIMER_PLAYER_REGEN_ENERGY);
 
                     z_sfx_play(Z_SFX_PLAYER_SHOOT);
                     z_light_start(Z_LIGHT_PLAYER_SHOOTING);
