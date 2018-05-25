@@ -21,7 +21,7 @@
 #include "obj_player.h"
 #include "util_screen.h"
 
-#define Z_STAR_NUM          (32)
+#define Z_STAR_NUM          (64)
 #define Z_STAR_BORDER_RATIO (8)
 #define Z_STAR_SPEED_MIN    (Z_FIX_ONE / 8)
 #define Z_STAR_SPEED_MAX    (Z_FIX_ONE - Z_FIX_ONE / 8)
