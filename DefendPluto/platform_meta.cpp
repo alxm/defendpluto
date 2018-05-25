@@ -113,6 +113,8 @@ void loop(void)
         gb.display.print(gb.getCpuLoad(), DEC);
         gb.display.setCursor(2, 8);
         gb.display.print(gb.getFreeRam(), DEC);
+        gb.display.setCursor(2, 14);
+        gb.display.print(SOUND_CHANNELS, DEC);
     #endif
 }
 
