@@ -50,12 +50,13 @@ void z_state_died_tick(bool Active)
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
     z_hud_tick();
 
-    if(Active && z_timer_expired(Z_TIMER_G1)) {
-        z_button_release(Z_BUTTON_A);
-        z_state_set(Z_STATE_OVER, true);
+    if(!Active) {
+        return;
     }
 
-    if(z_timer_expired(Z_TIMER_G2)) {
+    if(z_timer_expired(Z_TIMER_G1)) {
+        z_state_set(Z_STATE_OVER, true);
+    } else if(z_timer_expired(Z_TIMER_G2)) {
         ZFix playerX, playerY;
         z_player_getCoords(&playerX, &playerY);
 

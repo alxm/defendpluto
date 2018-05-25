@@ -28,7 +28,6 @@
 void z_state_title_init(void)
 {
     z_player_resetPosition();
-    z_button_release(Z_BUTTON_A);
     z_sfx_play(Z_SFX_TITLE_SCREEN);
 }
 

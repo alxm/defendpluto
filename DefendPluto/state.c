@@ -137,7 +137,6 @@ void z_state_setup(void)
 
     z_font_setup();
     z_graphics_setup();
-    z_input_reset();
     z_light_reset();
     z_screen_reset();
     #if !Z_PLATFORM_ARDUBOY
@@ -177,6 +176,7 @@ void z_state_tick(void)
         }
 
         z_swipe_init(&g_swipe.swipeIn);
+        z_input_reset();
     }
 
     if(g_states[g_state.current].tick) {
