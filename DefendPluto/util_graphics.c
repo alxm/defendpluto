@@ -19,6 +19,7 @@
 #include "util_graphics.h"
 
 #include "generated/data_gfx_alxm.h"
+#include "generated/data_gfx_alxm_wing.h"
 #include "generated/data_gfx_asteroid.h"
 #include "generated/data_gfx_bullets.h"
 #include "generated/data_gfx_defendpluto.h"
@@ -61,6 +62,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_PLAYER, player);
 
     z_sprite_load(Z_SPRITE_ALXM, alxm);
+    z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
     z_sprite_load(Z_SPRITE_BULLETS, bullets);
     z_sprite_load(Z_SPRITE_DEFENDPLUTO, defendpluto);
     #if Z_PLATFORM_ARDUBOY

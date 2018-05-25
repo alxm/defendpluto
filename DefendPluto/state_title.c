@@ -48,9 +48,13 @@ void z_state_title_draw(void)
     z_pool_draw(Z_POOL_STAR, z_star_draw);
     z_sprite_blit(Z_SPRITE_TITLE, 0, 13, 0);
 
-    #if !Z_PLATFORM_ARDUBOY
-        z_draw_rectangle(0, 50, Z_SCREEN_W, 14, Z_COLOR_BLUE);
-    #endif
+    int y = 13 + z_sprite_getHeight(Z_SPRITE_TITLE);
+    z_draw_rectangle(0, i16(y), Z_SCREEN_W, i16(Z_SCREEN_H - y), Z_COLOR_BLUE);
 
-    z_screen_drawPressA(Z_SCREEN_W / 2, 50, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
+    z_sprite_blit(Z_SPRITE_ALXM_WING,
+                  i16(Z_SCREEN_W - 1 - z_sprite_getWidth(Z_SPRITE_ALXM_WING)),
+                  2,
+                  0);
+
+    z_screen_drawPressA(Z_SCREEN_W / 2, 49, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
 }

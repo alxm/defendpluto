@@ -72,6 +72,7 @@ typedef enum Z_ENUM_PACK {
 
     // Misc
     Z_SPRITE_ALXM,
+    Z_SPRITE_ALXM_WING,
     Z_SPRITE_BULLETS,
     Z_SPRITE_DEFENDPLUTO,
     Z_SPRITE_TITLE,
