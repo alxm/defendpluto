@@ -1,6 +1,6 @@
 A_APP_NAME := defendpluto
 A_DIR_SRC := DefendPluto
-A_RULES_CLEAN := genclean
+#A_RULES_CLEAN := genclean
 
 #
 # You can set A2X_PATH to a hard-coded value
