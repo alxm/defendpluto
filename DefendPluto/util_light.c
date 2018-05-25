@@ -30,49 +30,50 @@ static const struct {
 };
 
 static struct {
-    ZLightId id;
+    ZColorId bgColor;
+    ZLightId pulseId;
     uint8_t counter;
 } g_light;
 
-static void z_light_fill(ZColorId ColorId, int Intensity)
-{
-    #if Z_PLATFORM_META
-        z_platform_meta_fillLights(ColorId, Intensity);
-    #else
-        Z_UNUSED(ColorId);
-        Z_UNUSED(Intensity);
-    #endif
-}
-
 void z_light_reset(void)
 {
-    g_light.id = Z_LIGHT_INVALID;
+    g_light.bgColor = Z_COLOR_INVALID;
+    g_light.pulseId = Z_LIGHT_INVALID;
     g_light.counter = 0;
 }
 
 void z_light_tick(void)
 {
-    if(g_light.id == Z_LIGHT_INVALID) {
-        return;
+    ZColorId color = Z_COLOR_INVALID;
+    int alpha = 0;
+
+    if(g_light.pulseId != Z_LIGHT_INVALID) {
+        bool goingDown = g_light.counter >= Z_ANGLE_090;
+        uint8_t speed = g_patterns[g_light.pulseId].counterSpeed[goingDown];
+        g_light.counter = u8(g_light.counter + speed);
+
+        if(g_light.counter >= Z_ANGLE_180) {
+            g_light.pulseId = Z_LIGHT_INVALID;
+        } else {
+            color = g_patterns[g_light.pulseId].color;
+            alpha = z_fix_toInt(zf(z_fix_sin(g_light.counter) * 255));
+        }
     }
 
-    g_light.counter = u8(g_light.counter
-        + g_patterns[g_light.id].counterSpeed[g_light.counter >= Z_ANGLE_090]);
-
-    if(g_light.counter >= Z_ANGLE_180) {
-        z_light_reset();
-
-        #if Z_PLATFORM_META
-            z_platform_meta_fillLights(Z_COLOR_INVALID, 0);
-        #endif
-    } else {
-        z_light_fill(g_patterns[g_light.id].color,
-                     z_fix_toInt(zf(z_fix_sin(g_light.counter) * 255)));
-    }
+    #if Z_PLATFORM_META
+        z_platform_meta_fillLights(g_light.bgColor, color, alpha);
+    #else
+        Z_UNUSED(alpha);
+    #endif
 }
 
-void z_light_start(ZLightId Light)
+void z_light_setPulse(ZLightId Light)
 {
-    g_light.id = Light;
+    g_light.pulseId = Light;
     g_light.counter = 0;
+}
+
+void z_light_setBackground(ZColorId ColorId)
+{
+    g_light.bgColor = ColorId;
 }

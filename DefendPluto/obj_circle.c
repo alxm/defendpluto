@@ -42,7 +42,7 @@ void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y)
     Circle->y = Y;
     Circle->radius = 0;
 
-    z_light_start(Z_LIGHT_EXPLOSION);
+    z_light_setPulse(Z_LIGHT_EXPLOSION);
 }
 
 bool z_circle_tick(ZPoolObjHeader* Circle, void* Context)

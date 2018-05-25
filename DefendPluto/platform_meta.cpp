@@ -134,28 +134,44 @@ ZPixel* z_screen_getPixels(void)
     return gb.display._buffer;
 }
 
-static void prepLights(ZColorId ColorId, int Intensity)
+static void prepLights(ZColorId BgColorId, ZColorId ColorId, int Alpha)
 {
-    if(ColorId == Z_COLOR_INVALID) {
-        gb.lights.setColor(0);
-    } else {
-        ZPixel color = z_pixel_fromRGB((g_colors[ColorId].r * Intensity) >> 8,
-                                       (g_colors[ColorId].g * Intensity) >> 8,
-                                       (g_colors[ColorId].b * Intensity) >> 8);
+    ZPixel color = 0;
 
-        gb.lights.setColor((Color)color);
+    if(ColorId != Z_COLOR_INVALID) {
+        int r2 = g_colors[ColorId].r;
+        int g2 = g_colors[ColorId].g;
+        int b2 = g_colors[ColorId].b;
+
+        if(BgColorId != Z_COLOR_INVALID) {
+            int r1 = g_colors[BgColorId].r;
+            int g1 = g_colors[BgColorId].g;
+            int b1 = g_colors[BgColorId].b;
+
+            color = z_pixel_fromRGB(r1 + (((r2 - r1) * Alpha) >> 8),
+                                    g1 + (((g2 - g1) * Alpha) >> 8),
+                                    b1 + (((b2 - b1) * Alpha) >> 8));
+        } else {
+            color = z_pixel_fromRGB((r2 * Alpha) >> 8,
+                                    (g2 * Alpha) >> 8,
+                                    (b2 * Alpha) >> 8);
+        }
+    } else if(BgColorId != Z_COLOR_INVALID) {
+        color = (ZPixel)g_colors[BgColorId].color;
     }
+
+    gb.lights.setColor((Color)color);
 }
 
-void z_platform_meta_fillLights(ZColorId ColorId, int Intensity)
+void z_platform_meta_fillLights(ZColorId BgColorId, ZColorId ColorId, int Alpha)
 {
-    prepLights(ColorId, Intensity);
+    prepLights(BgColorId, ColorId, Alpha);
     gb.lights.fill();
 }
 
-void z_platform_meta_drawLights(ZColorId ColorId, int Intensity, int16_t X, int16_t Y)
+void z_platform_meta_drawLights(ZColorId ColorId, int Alpha, int16_t X, int16_t Y)
 {
-    prepLights(ColorId, Intensity);
+    prepLights(Z_COLOR_INVALID, ColorId, Alpha);
     gb.lights.drawPixel(X, Y);
 }
 

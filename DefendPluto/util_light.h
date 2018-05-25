@@ -27,4 +27,5 @@ typedef enum Z_ENUM_PACK {
 extern void z_light_reset(void);
 extern void z_light_tick(void);
 
-extern void z_light_start(ZLightId Light);
+extern void z_light_setPulse(ZLightId Light);
+extern void z_light_setBackground(ZColorId ColorId);

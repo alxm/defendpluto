@@ -173,7 +173,7 @@ void z_player_tick(bool CheckInput)
                     useEnergy(Z_PLAYER_ENERGY_USE_SHOOTING);
 
                     z_sfx_play(Z_SFX_PLAYER_SHOOT);
-                    z_light_start(Z_LIGHT_PLAYER_SHOOTING);
+                    z_light_setPulse(Z_LIGHT_PLAYER_SHOOTING);
                 } else {
                     z_timer_stop(Z_TIMER_PLAYER_SHOOT_DELAY);
                 }
@@ -244,6 +244,7 @@ void z_player_tick(bool CheckInput)
 
     if(z_timer_expired(Z_TIMER_PLAYER_INVINCIBLE)) {
         z_timer_stop(Z_TIMER_PLAYER_INVINCIBLE);
+        z_light_setBackground(Z_COLOR_INVALID);
     }
 }
 
@@ -311,6 +312,7 @@ void z_player_takeDamage(uint8_t Damage)
         z_sfx_play(Z_SFX_SHIELD_DEPLOY);
         boostShield(Z_PLAYER_MAX_SHIELD);
         z_timer_start(Z_TIMER_PLAYER_INVINCIBLE, Z_PLAYER_INVINCIBLE_TIMER_DS);
+        z_light_setBackground(Z_COLOR_BLUE);
     }
 }
 
