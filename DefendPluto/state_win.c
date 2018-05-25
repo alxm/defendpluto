@@ -37,7 +37,11 @@ void z_state_win_tick(bool Active)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
-    if(Active && z_button_pressedOnce(Z_BUTTON_A)) {
+    if(!Active) {
+        return;
+    }
+
+    if(z_button_pressedOnce(Z_BUTTON_A)) {
         if(g_state++ > 0) {
             z_sfx_play(Z_SFX_PRESSED_A);
             z_state_set(Z_STATE_TITLE, true);

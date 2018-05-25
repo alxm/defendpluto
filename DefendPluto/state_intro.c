@@ -36,6 +36,10 @@ void z_state_intro_init(void)
 
 void z_state_intro_tick(bool Active)
 {
+    if(!Active) {
+        return;
+    }
+
     if(z_timer_expired(Z_TIMER_G1)) {
         switch(g_stage) {
             case 0: {
@@ -52,7 +56,7 @@ void z_state_intro_tick(bool Active)
             } break;
 
             case 2: {
-                if(Active && ++g_height > z_sprite_getHeight(Z_SPRITE_ALXM)) {
+                if(++g_height > z_sprite_getHeight(Z_SPRITE_ALXM)) {
                     z_state_set(Z_STATE_TITLE, true);
                 }
             } break;

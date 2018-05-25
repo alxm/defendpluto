@@ -46,6 +46,10 @@ void z_state_play_tick(bool Active)
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
     z_hud_tick();
 
+    if(!Active) {
+        return;
+    }
+
     if(z_player_getHealth() < 0) {
         z_state_set(Z_STATE_DIED, false);
     } else if(z_button_pressedOnce(Z_BUTTON_MENU)) {
