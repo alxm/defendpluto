@@ -68,6 +68,8 @@ void z_state_died_tick(bool Active)
         } else {
             z_effect_particles(playerX, playerY, 2);
         }
+
+        z_sfx_play(Z_SFX_PLAYER_DIE);
     }
 }
 
