@@ -30,7 +30,7 @@ static ZPixel g_colors[Z_COLOR_NUM];
 A_SETUP
 {
     a_settings_set("app.title", "Defend Pluto");
-    a_settings_set("app.version", "Beta 1");
+    a_settings_set("app.version", "Beta 2");
     a_settings_set("app.author", "alxm");
     a_settings_set("app.output.on", "yes");
     a_settings_set("app.output.verbose", "yes");
