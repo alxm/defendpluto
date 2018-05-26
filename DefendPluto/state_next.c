@@ -27,6 +27,8 @@
 #include "util_screen.h"
 #include "util_str.h"
 
+static uint8_t g_level;
+
 void z_state_next_init(void)
 {
     z_hud_reset();
@@ -36,6 +38,8 @@ void z_state_next_init(void)
     z_pool_clear(Z_POOL_BULLETP);
 
     z_sfx_play(Z_SFX_LEVEL_COMPLETE);
+
+    g_level = z_player_getLevel();
 }
 
 void z_state_next_tick(bool Active)
@@ -49,7 +53,7 @@ void z_state_next_tick(bool Active)
     if(z_button_pressedOnce(Z_BUTTON_A)) {
         z_sfx_play(Z_SFX_PRESSED_A);
         z_state_set(Z_STATE_PLAY, true);
-        z_player_setLevel(u8(z_player_getLevel() + 1));
+        z_player_setLevel(u8(g_level + 1));
     }
 }
 
@@ -60,10 +64,16 @@ void z_state_next_draw(void)
     z_sprite_blitCentered(Z_SPRITE_DEFENDPLUTO, Z_SCREEN_W / 2, 12, 0);
 
     z_font_text(Z_STR_LEVEL_CLEARED_1,
-                Z_SCREEN_W / 2,
+                13,
                 23,
                 Z_FONT_FACE_YELLOWO,
-                Z_FONT_ALIGN_C);
+                Z_FONT_ALIGN_L);
+
+    z_font_int(g_level,
+               61,
+               23,
+               Z_FONT_FACE_YELLOWO,
+               Z_FONT_ALIGN_L);
 
     z_font_text(Z_STR_LEVEL_CLEARED_2,
                 Z_SCREEN_W / 2,
