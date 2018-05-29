@@ -93,7 +93,7 @@ void loop(void)
     }
 
     for(uint8_t b = 0; b < Z_BUTTON_NUM; b++) {
-        bool pressed = gb.buttons.repeat(g_buttons[b].index, 1);
+        bool pressed = gb.buttons.repeat(g_buttons[b].index, 0);
 
         if(g_buttons[b].released) {
             if(!pressed) {
