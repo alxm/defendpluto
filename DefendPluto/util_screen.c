@@ -19,6 +19,7 @@
 #include "util_screen.h"
 
 #include "util_fix.h"
+#include "util_input.h"
 #include "util_timer.h"
 
 ZScreen z_screen;
@@ -47,6 +48,17 @@ void z_screen_tick(void)
 void z_screen_shake(uint8_t Ds)
 {
     g_shakeFrames = z_timer_dsToTicks(Ds);
+}
+
+bool z_screen_tickPressA(void)
+{
+    bool pressed = z_button_pressedOnce(Z_BUTTON_A);
+
+    if(pressed) {
+        z_sfx_play(Z_SFX_PRESSED_A);
+    }
+
+    return pressed;
 }
 
 void z_screen_drawPressA(int16_t X, int16_t Y, ZFontId Font, ZFontAlign Align)

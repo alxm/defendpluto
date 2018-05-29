@@ -41,9 +41,8 @@ void z_state_win_tick(void)
         return;
     }
 
-    if(z_button_pressedOnce(Z_BUTTON_A)) {
+    if(z_screen_tickPressA()) {
         if(g_state++ > 0) {
-            z_sfx_play(Z_SFX_PRESSED_A);
             z_state_set(Z_STATE_TITLE, true);
         }
     }

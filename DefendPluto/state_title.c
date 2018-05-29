@@ -39,8 +39,7 @@ void z_state_title_tick(void)
         return;
     }
 
-    if(z_button_pressedOnce(Z_BUTTON_A)) {
-        z_sfx_play(Z_SFX_PRESSED_A);
+    if(z_screen_tickPressA()) {
         z_state_set(Z_STATE_NEW, true);
     }
 }
