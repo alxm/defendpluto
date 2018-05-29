@@ -47,6 +47,7 @@ typedef struct {
     ZStateInit* init;
     ZStateTick* tick;
     ZStateDraw* draw;
+    ZStateFree* free;
     ZSwipeId intro;
     ZSwipeId outro;
 } ZState;
@@ -56,6 +57,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_died_init,
         z_state_died_tick,
         z_state_died_draw,
+        z_state_died_free,
         Z_SWIPE_INVALID,
         Z_SWIPE_HIDE,
     },
@@ -63,11 +65,13 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_intro_init,
         z_state_intro_tick,
         z_state_intro_draw,
+        z_state_intro_free,
         Z_SWIPE_INVALID,
         Z_SWIPE_HIDE,
     },
     [Z_STATE_NEW] = {
         z_state_new_init,
+        NULL,
         NULL,
         NULL,
         Z_SWIPE_INVALID,
@@ -77,6 +81,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_next_init,
         z_state_next_tick,
         z_state_next_draw,
+        z_state_next_free,
         Z_SWIPE_SHOW,
         Z_SWIPE_HIDE,
     },
@@ -84,6 +89,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_over_init,
         z_state_over_tick,
         z_state_over_draw,
+        NULL,
         Z_SWIPE_SHOW,
         Z_SWIPE_HIDE,
     },
@@ -91,6 +97,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_pause_init,
         z_state_pause_tick,
         z_state_pause_draw,
+        NULL,
         Z_SWIPE_INVALID,
         Z_SWIPE_INVALID,
     },
@@ -98,6 +105,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         NULL,
         z_state_play_tick,
         z_state_play_draw,
+        z_state_play_free,
         Z_SWIPE_SHOW,
         Z_SWIPE_HIDE,
     },
@@ -105,6 +113,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_title_init,
         z_state_title_tick,
         z_state_title_draw,
+        NULL,
         Z_SWIPE_SHOW,
         Z_SWIPE_HIDE,
     },
@@ -112,6 +121,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_win_init,
         z_state_win_tick,
         z_state_win_draw,
+        NULL,
         Z_SWIPE_SHOW,
         Z_SWIPE_HIDE,
     },
@@ -168,6 +178,12 @@ void z_state_tick(void)
     z_light_tick();
 
     if(g_state.next != Z_STATE_INVALID && g_swipe.swipeOut == Z_SWIPE_INVALID) {
+        if(g_state.current != Z_STATE_INVALID
+            && g_states[g_state.current].free) {
+
+            g_states[g_state.current].free();
+        }
+
         g_state.current = g_state.next;
         g_state.next = Z_STATE_INVALID;
 

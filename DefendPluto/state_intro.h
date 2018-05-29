@@ -22,3 +22,4 @@
 extern ZStateInit z_state_intro_init;
 extern ZStateTick z_state_intro_tick;
 extern ZStateDraw z_state_intro_draw;
+extern ZStateFree z_state_intro_free;

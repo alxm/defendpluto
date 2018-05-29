@@ -38,6 +38,7 @@ typedef enum Z_ENUM_PACK {
 typedef void (ZStateInit)(void);
 typedef void (ZStateTick)(void);
 typedef void (ZStateDraw)(void);
+typedef void (ZStateFree)(void);
 
 extern void z_state_setup(void);
 

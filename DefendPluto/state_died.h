@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Alex Margarit <alex@alxm.org>
+    Copyright 2017, 2018 Alex Margarit <alex@alxm.org>
 
     Defend Pluto is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,3 +22,4 @@
 extern ZStateInit z_state_died_init;
 extern ZStateTick z_state_died_tick;
 extern ZStateDraw z_state_died_draw;
+extern ZStateFree z_state_died_free;

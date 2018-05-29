@@ -22,3 +22,4 @@
 extern ZStateInit z_state_next_init;
 extern ZStateTick z_state_next_tick;
 extern ZStateDraw z_state_next_draw;
+extern ZStateFree z_state_next_free;

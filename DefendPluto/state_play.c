@@ -48,7 +48,6 @@ void z_state_play_tick(void)
     z_hud_tick();
 
     if(z_state_changed()) {
-        z_light_setBackground(Z_COLOR_INVALID);
         return;
     }
 
@@ -70,4 +69,9 @@ void z_state_play_draw(void)
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
     z_player_draw();
     z_hud_draw();
+}
+
+void z_state_play_free(void)
+{
+    z_light_setBackground(Z_COLOR_INVALID);
 }

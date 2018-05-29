@@ -85,3 +85,9 @@ void z_state_died_draw(void)
     z_pool_draw(Z_POOL_PARTICLE, z_particle_draw);
     z_hud_draw();
 }
+
+void z_state_died_free(void)
+{
+    z_timer_stop(Z_TIMER_G1);
+    z_timer_stop(Z_TIMER_G2);
+}

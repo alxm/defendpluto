@@ -53,7 +53,7 @@ void z_state_intro_tick(void)
             } break;
 
             case 2: {
-                if(g_height <= z_sprite_getHeight(Z_SPRITE_ALXM)) {
+                if(g_height < z_sprite_getHeight(Z_SPRITE_ALXM)) {
                     g_height = i16(g_height + 2);
                 }
             } break;
@@ -85,4 +85,9 @@ void z_state_intro_draw(void)
                              Z_COLOR_ALXM_BG);
         } break;
     }
+}
+
+void z_state_intro_free(void)
+{
+    z_timer_stop(Z_TIMER_G1);
 }
