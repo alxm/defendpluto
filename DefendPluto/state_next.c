@@ -42,11 +42,11 @@ void z_state_next_init(void)
     g_level = z_player_getLevel();
 }
 
-void z_state_next_tick(bool Active)
+void z_state_next_tick(void)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
-    if(!Active) {
+    if(z_state_changed()) {
         return;
     }
 

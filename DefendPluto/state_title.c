@@ -31,11 +31,11 @@ void z_state_title_init(void)
     z_sfx_play(Z_SFX_TITLE_SCREEN);
 }
 
-void z_state_title_tick(bool Active)
+void z_state_title_tick(void)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
-    if(!Active) {
+    if(z_state_changed()) {
         return;
     }
 

@@ -30,10 +30,8 @@ void z_state_pause_init(void)
     z_sfx_play(Z_SFX_PAUSE);
 }
 
-void z_state_pause_tick(bool Active)
+void z_state_pause_tick(void)
 {
-    Z_UNUSED(Active);
-
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
     z_hud_tick();
 

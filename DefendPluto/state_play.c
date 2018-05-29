@@ -32,13 +32,13 @@
 #include "util_screen.h"
 #include "util_vm.h"
 
-void z_state_play_tick(bool Active)
+void z_state_play_tick(void)
 {
-    if(Active) {
+    if(!z_state_changed()) {
         z_vm_tick();
     }
 
-    z_player_tick(Active);
+    z_player_tick();
     z_pool_tick(Z_POOL_ENEMY, z_enemy_tick, NULL); // check player collision
     z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL); // check player collision
     z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL); // check enemy collision
@@ -47,7 +47,7 @@ void z_state_play_tick(bool Active)
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
     z_hud_tick();
 
-    if(!Active) {
+    if(z_state_changed()) {
         z_light_setBackground(Z_COLOR_INVALID);
         return;
     }

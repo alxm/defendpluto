@@ -180,7 +180,7 @@ void z_state_tick(void)
     }
 
     if(g_states[g_state.current].tick) {
-        g_states[g_state.current].tick(g_state.next == Z_STATE_INVALID);
+        g_states[g_state.current].tick();
     }
 }
 
@@ -203,4 +203,9 @@ void z_state_set(ZStateId NewState, bool Transition)
 
         z_swipe_init(&g_swipe.swipeOut);
     }
+}
+
+bool z_state_changed(void)
+{
+    return g_state.next != Z_STATE_INVALID;
 }

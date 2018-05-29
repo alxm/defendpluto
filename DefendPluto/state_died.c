@@ -39,7 +39,7 @@ void z_state_died_init(void)
     z_timer_start(Z_TIMER_G2, 1);
 }
 
-void z_state_died_tick(bool Active)
+void z_state_died_tick(void)
 {
     z_vm_tick();
     z_pool_tick(Z_POOL_ENEMY, z_enemy_tick, NULL);
@@ -50,7 +50,7 @@ void z_state_died_tick(bool Active)
     z_pool_tick(Z_POOL_PARTICLE, z_particle_tick, NULL);
     z_hud_tick();
 
-    if(!Active) {
+    if(z_state_changed()) {
         return;
     }
 

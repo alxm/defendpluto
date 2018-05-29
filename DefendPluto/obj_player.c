@@ -19,6 +19,7 @@
 #include "obj_player.h"
 
 #include "obj_bulletp.h"
+#include "state.h"
 #include "util_collision.h"
 #include "util_fps.h"
 #include "util_effects.h"
@@ -138,15 +139,16 @@ void z_player_init(void)
     z_timer_stop(Z_TIMER_PLAYER_SHOOT_KICK);
 }
 
-void z_player_tick(bool CheckInput)
+void z_player_tick(void)
 {
     if(g_player.health < 0) {
         return;
     }
 
+    const bool checkInput = !z_state_changed();
     int16_t maxSpeed = Z_PLAYER_SPEED_MAX;
 
-    if(CheckInput && z_button_pressed(Z_BUTTON_A)) {
+    if(checkInput && z_button_pressed(Z_BUTTON_A)) {
         z_timer_restart(Z_TIMER_PLAYER_REGEN_ENERGY);
 
         if(hasEnergy(Z_PLAYER_ENERGY_USE_SHOOTING)) {
@@ -193,10 +195,10 @@ void z_player_tick(bool CheckInput)
 
     g_player.frame = Z_BIT_RESTING;
 
-    if(CheckInput && z_button_pressed(Z_BUTTON_UP)) {
+    if(checkInput && z_button_pressed(Z_BUTTON_UP)) {
         g_player.frame |= Z_BIT_FORWARD;
         g_player.dy = i16(g_player.dy - Z_PLAYER_SPEED_ACCEL);
-    } else if(CheckInput && z_button_pressed(Z_BUTTON_DOWN)) {
+    } else if(checkInput && z_button_pressed(Z_BUTTON_DOWN)) {
         g_player.frame |= Z_BIT_BACK;
         g_player.dy = i16(g_player.dy + Z_PLAYER_SPEED_ACCEL);
     } else {
@@ -209,10 +211,10 @@ void z_player_tick(bool CheckInput)
         }
     }
 
-    if(CheckInput && z_button_pressed(Z_BUTTON_LEFT)) {
+    if(checkInput && z_button_pressed(Z_BUTTON_LEFT)) {
         g_player.frame |= Z_BIT_LEFT;
         g_player.dx = i16(g_player.dx - Z_PLAYER_SPEED_ACCEL);
-    } else if(CheckInput && z_button_pressed(Z_BUTTON_RIGHT)) {
+    } else if(checkInput && z_button_pressed(Z_BUTTON_RIGHT)) {
         g_player.frame |= Z_BIT_RIGHT;
         g_player.dx = i16(g_player.dx + Z_PLAYER_SPEED_ACCEL);
     } else {

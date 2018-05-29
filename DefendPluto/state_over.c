@@ -30,11 +30,11 @@ void z_state_over_init(void)
     z_sfx_play(Z_SFX_LEVEL_LOST);
 }
 
-void z_state_over_tick(bool Active)
+void z_state_over_tick(void)
 {
     z_pool_tick(Z_POOL_STAR, z_star_tick, NULL);
 
-    if(!Active) {
+    if(z_state_changed()) {
         return;
     }
 

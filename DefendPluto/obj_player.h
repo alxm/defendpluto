@@ -37,7 +37,7 @@ typedef enum Z_ENUM_PACK {
 } ZScorePoints;
 
 extern void z_player_init(void);
-extern void z_player_tick(bool CheckInput);
+extern void z_player_tick(void);
 extern void z_player_draw(void);
 
 extern void z_player_resetPosition(void);
