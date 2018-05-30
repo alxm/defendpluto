@@ -49,9 +49,7 @@ void z_state_play_tick(void)
 
     if(z_state_changed()) {
         return;
-    }
-
-    if(z_player_getHealth() < 0) {
+    } else if(z_player_getHealth() < 0) {
         z_state_set(Z_STATE_DIED, false);
     } else if(z_button_pressedOnce(Z_BUTTON_MENU)) {
         z_state_set(Z_STATE_PAUSE, false);

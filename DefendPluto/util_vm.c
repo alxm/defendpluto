@@ -389,8 +389,6 @@ void z_vm_setup(void)
     setOp(Z_OP_CLEAR, op_clear, 0);
     setOp(Z_OP_SPAWN, op_spawn, 4);
     setOp(Z_OP_DONE, op_done, 0);
-
-    z_vm_reset();
 }
 
 void z_vm_reset(void)
@@ -401,6 +399,8 @@ void z_vm_reset(void)
     for(uint8_t v = Z_LEVELS_VARS_NUM; v--; ) {
         g_vm.vars[v] = 0;
     }
+
+    z_timer_stop(Z_TIMER_VM);
 }
 
 void z_vm_tick(void)
