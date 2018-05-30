@@ -31,7 +31,6 @@
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_timer.h"
-#include "util_vm.h"
 
 void z_state_died_init(void)
 {
@@ -42,7 +41,6 @@ void z_state_died_init(void)
 
 void z_state_died_tick(void)
 {
-    z_vm_tick();
     z_pool_tick(Z_POOL_ENEMY, z_enemy_tick, NULL);
     z_pool_tick(Z_POOL_BULLETE, z_bullete_tick, NULL);
     z_pool_tick(Z_POOL_BULLETP, z_bulletp_tick, NULL);
