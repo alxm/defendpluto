@@ -211,6 +211,10 @@ void z_state_draw(void)
 
 void z_state_set(ZStateId NewState, bool Transition)
 {
+    if(g_state.next != Z_STATE_INVALID) {
+        return;
+    }
+
     g_state.next = NewState;
 
     if(Transition) {
