@@ -33,6 +33,7 @@ typedef enum Z_ENUM_PACK {
     Z_TIMER_PLAYER_SHOOT_KICK,
     Z_TIMER_G1,
     Z_TIMER_G2,
+    Z_TIMER_G3,
     Z_TIMER_NUM
 } ZTimerId;
 

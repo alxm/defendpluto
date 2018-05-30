@@ -37,6 +37,7 @@ void z_state_died_init(void)
 {
     z_timer_start(Z_TIMER_G1, 20);
     z_timer_start(Z_TIMER_G2, 1);
+    z_timer_start(Z_TIMER_G3, 2);
 }
 
 void z_state_died_tick(void)
@@ -60,7 +61,7 @@ void z_state_died_tick(void)
         ZFix playerX, playerY;
         z_player_getCoords(&playerX, &playerY);
 
-        z_screen_shake(2);
+        z_screen_shake(1);
 
         if(z_random_uint8(4) == 0) {
             z_effect_circles(
@@ -70,7 +71,9 @@ void z_state_died_tick(void)
             z_effect_particles(playerX, playerY, 2);
         }
 
-        z_sfx_play(Z_SFX_PLAYER_DIE);
+        if(z_timer_expired(Z_TIMER_G3)) {
+            z_sfx_play(Z_SFX_PLAYER_DIE);
+        }
     }
 }
 
