@@ -186,7 +186,7 @@ ZPixel z_sprite_getTransparentColor(void)
     return 0xf81f;
 }
 
-ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame)
+const ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame)
 {
     g_sprites[Sprite].image.setFrame(Frame);
     return g_sprites[Sprite].image._buffer;

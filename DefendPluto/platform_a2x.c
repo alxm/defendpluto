@@ -22,42 +22,65 @@
 #include "util_input.h"
 
 #if Z_PLATFORM_A2X
-static AInputButton* g_buttons[Z_BUTTON_NUM];
+static AButton* g_buttons[Z_BUTTON_NUM];
 static ASpriteFrames* g_sprites[Z_SPRITE_NUM];
-static ASfx * g_sfx[Z_SFX_NUM];
+static struct {
+    ASample* sample;
+    int channel;
+} g_sfx[Z_SFX_NUM];
 static ZPixel g_colors[Z_COLOR_NUM];
 
 A_SETUP
 {
-    a_settings_set("app.title", "Defend Pluto");
-    a_settings_set("app.version", "Beta 2");
-    a_settings_set("app.author", "alxm");
-    a_settings_set("app.output.on", "yes");
-    a_settings_set("app.output.verbose", "yes");
-    a_settings_set("video.color.border", "0x111523");
-    a_settings_set("video.width", A_STRINGIFY(Z_SCREEN_W));
-    a_settings_set("video.height", A_STRINGIFY(Z_SCREEN_H));
-    a_settings_set("sound.sfx.scale", "25");
-    a_settings_set("fps.tick", A_STRINGIFY(Z_FPS));
-    a_settings_set("fps.draw", A_STRINGIFY(Z_FPS));
+    a_settings_stringSet(A_SETTING_APP_TITLE, "Defend Pluto");
+    a_settings_stringSet(A_SETTING_APP_VERSION, "Beta 2");
+    a_settings_stringSet(A_SETTING_APP_AUTHOR, "alxm");
+    a_settings_boolSet(A_SETTING_OUTPUT_ON, true);
+    a_settings_boolSet(A_SETTING_OUTPUT_VERBOSE, true);
+    a_settings_colorSet(A_SETTING_COLOR_SCREEN_BORDER, 0x111523);
+    a_settings_intSet(A_SETTING_VIDEO_WIDTH, Z_SCREEN_W);
+    a_settings_intSet(A_SETTING_VIDEO_HEIGHT, Z_SCREEN_H);
+    a_settings_intSet(A_SETTING_SOUND_VOLUME_SCALE_SAMPLE, 25);
+    a_settings_intuSet(A_SETTING_FPS_TICK, Z_FPS);
+    a_settings_intuSet(A_SETTING_FPS_DRAW, Z_FPS);
 }
 
 A_STATE(run)
 {
     A_STATE_INIT
     {
-        g_buttons[Z_BUTTON_UP] = a_button_new("key.up gamepad.b.up");
-        g_buttons[Z_BUTTON_DOWN] = a_button_new("key.down gamepad.b.down");
-        g_buttons[Z_BUTTON_LEFT] = a_button_new("key.left gamepad.b.left");
-        g_buttons[Z_BUTTON_RIGHT] = a_button_new("key.right gamepad.b.right");
-        g_buttons[Z_BUTTON_A] = a_button_new("key.z gamepad.b.a");
-        g_buttons[Z_BUTTON_B] = a_button_new("key.x gamepad.b.b");
-        g_buttons[Z_BUTTON_MENU] = a_button_new("key.enter gamepad.b.start");
+        g_buttons[Z_BUTTON_UP] = a_button_new();
+        a_button_bind(g_buttons[Z_BUTTON_UP], A_KEY_UP);
+        a_button_bind(g_buttons[Z_BUTTON_UP], A_BUTTON_UP);
 
-        ASprite* pal = a_sprite_newFromFile("assets/gfx/palette.png");
+        g_buttons[Z_BUTTON_DOWN] = a_button_new();
+        a_button_bind(g_buttons[Z_BUTTON_DOWN], A_KEY_DOWN);
+        a_button_bind(g_buttons[Z_BUTTON_DOWN], A_BUTTON_DOWN);
+
+        g_buttons[Z_BUTTON_LEFT] = a_button_new();
+        a_button_bind(g_buttons[Z_BUTTON_LEFT], A_KEY_LEFT);
+        a_button_bind(g_buttons[Z_BUTTON_LEFT], A_BUTTON_LEFT);
+
+        g_buttons[Z_BUTTON_RIGHT] = a_button_new();
+        a_button_bind(g_buttons[Z_BUTTON_RIGHT], A_KEY_RIGHT);
+        a_button_bind(g_buttons[Z_BUTTON_RIGHT], A_BUTTON_RIGHT);
+
+        g_buttons[Z_BUTTON_A] = a_button_new();
+        a_button_bind(g_buttons[Z_BUTTON_A], A_KEY_Z);
+        a_button_bind(g_buttons[Z_BUTTON_A], A_BUTTON_A);
+
+        g_buttons[Z_BUTTON_B] = a_button_new();
+        a_button_bind(g_buttons[Z_BUTTON_B], A_KEY_X);
+        a_button_bind(g_buttons[Z_BUTTON_B], A_BUTTON_B);
+
+        g_buttons[Z_BUTTON_MENU] = a_button_new();
+        a_button_bind(g_buttons[Z_BUTTON_MENU], A_KEY_ENTER);
+        a_button_bind(g_buttons[Z_BUTTON_MENU], A_BUTTON_START);
+
+        ASprite* pal = a_sprite_newFromPng("assets/gfx/palette.png");
 
         for(ZColorId c = 0; c < Z_COLOR_NUM; c++) {
-            g_colors[c] = a_sprite_getPixel(pal, 1 + c, 1);
+            g_colors[c] = a_sprite_pixelsGetPixel(pal, 1 + c, 1);
         }
 
         a_sprite_free(pal);
@@ -86,7 +109,7 @@ A_STATE(run)
         }
 
         for(ZSfxId s = 0; s < Z_SFX_NUM; s++) {
-            a_sfx_free(g_sfx[s]);
+            a_sample_free(g_sfx[s].sample);
         }
     }
 }
@@ -150,34 +173,33 @@ A_MAIN
             printf("\n};\n");
         }
     #else
-        a_state_new("run", run, "", "");
-        a_state_push("run");
+        a_state_push(run, "Defend Pluto");
     #endif
 }
 
 bool z_button_pressed(ZButtonId Button)
 {
-    return a_button_getPressed(g_buttons[Button]);
+    return a_button_pressGet(g_buttons[Button]);
 }
 
 void z_button_release(ZButtonId Button)
 {
-    a_button_release(g_buttons[Button]);
+    a_button_pressClear(g_buttons[Button]);
 }
 
 ZPixel* z_screen_getPixels(void)
 {
-    return a_screen_getPixels();
+    return a_screen_pixelsGetBuffer();
 }
 
 void z_platform__loadSprite(ZSpriteId Sprite, const char* Path)
 {
-    g_sprites[Sprite] = a_spriteframes_newFromFile(Path, 0);
+    g_sprites[Sprite] = a_spriteframes_newFromPng(Path);
 }
 
 ZPixel z_sprite_getTransparentColor(void)
 {
-    return a_sprite_getColorKey();
+    return a_sprite_colorKeyGet();
 }
 
 static ASprite* getCurrentSprite(ZSpriteId Sprite, uint8_t Frame)
@@ -185,9 +207,9 @@ static ASprite* getCurrentSprite(ZSpriteId Sprite, uint8_t Frame)
     return a_spriteframes_getByIndex(g_sprites[Sprite], Frame);
 }
 
-ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame)
+const ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame)
 {
-    return a_sprite_getPixels(getCurrentSprite(Sprite, Frame));
+    return a_sprite_pixelsGetBuffer(getCurrentSprite(Sprite, Frame));
 }
 
 void z_sprite_blit(ZSpriteId Sprite, int16_t X, int16_t Y, uint8_t Frame)
@@ -197,34 +219,34 @@ void z_sprite_blit(ZSpriteId Sprite, int16_t X, int16_t Y, uint8_t Frame)
 
 int16_t z_sprite_getWidth(ZSpriteId Sprite)
 {
-    return i16(a_sprite_getWidth(getCurrentSprite(Sprite, 0)));
+    return i16(a_sprite_widthGet(getCurrentSprite(Sprite, 0)));
 }
 
 int16_t z_sprite_getHeight(ZSpriteId Sprite)
 {
-    return i16(a_sprite_getHeight(getCurrentSprite(Sprite, 0)));
+    return i16(a_sprite_heightGet(getCurrentSprite(Sprite, 0)));
 }
 
 uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
 {
-    return u8(a_spriteframes_getNum(g_sprites[Sprite]));
+    return u8(a_spriteframes_numGet(g_sprites[Sprite]));
 }
 
 void z_draw_fill(ZColorId ColorId)
 {
-    a_pixel_setPixel(g_colors[ColorId]);
+    a_pixel_colorSetPixel(g_colors[ColorId]);
     a_draw_fill();
 }
 
 void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, ZColorId ColorId)
 {
-    a_pixel_setPixel(g_colors[ColorId]);
+    a_pixel_colorSetPixel(g_colors[ColorId]);
     a_draw_rectangle(X, Y, W, H);
 }
 
 void z_draw_pixel(int16_t X, int16_t Y, ZColorId ColorId)
 {
-    a_pixel_setPixel(g_colors[ColorId]);
+    a_pixel_colorSetPixel(g_colors[ColorId]);
     a_draw_pixel(X, Y);
 }
 
@@ -232,8 +254,8 @@ void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId ColorId)
 {
     a_pixel_push();
 
-    a_pixel_setPixel(g_colors[ColorId]);
-    a_pixel_setFillDraw(false);
+    a_pixel_colorSetPixel(g_colors[ColorId]);
+    a_pixel_fillDrawSet(false);
     a_draw_circle(X, Y, Radius);
 
     a_pixel_pop();
@@ -241,21 +263,22 @@ void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId ColorId)
 
 uint16_t z_fps_getCounter(void)
 {
-    return u16(a_fps_getCounter());
+    return u16(a_fps_ticksGet());
 }
 
 bool z_fps_isNthFrame(uint8_t N)
 {
-    return a_fps_isNthFrame(N);
+    return a_fps_ticksNth(N);
 }
 
 void z_platform__loadSfx(ZSfxId Sfx, const char* Path)
 {
-    g_sfx[Sfx] = a_sfx_new(Path);
+    g_sfx[Sfx].sample = a_sample_new(Path);
+    g_sfx[Sfx].channel = a_channel_new();
 }
 
 void z_sfx_play(ZSfxId Sfx)
 {
-    a_sfx_play(g_sfx[Sfx], A_SFX_RESTART);
+    a_channel_play(g_sfx[Sfx].channel, g_sfx[Sfx].sample, A_CHANNEL_RESTART);
 }
 #endif // Z_PLATFORM_A2X
