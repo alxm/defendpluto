@@ -1,6 +1,6 @@
 A_CONFIG_APP_NAME := defendpluto
-A_DIR_SRC := DefendPluto
-#A_CONFIG_MAKE_CLEAN := genclean
+A_CONFIG_DIR_SRC := DefendPluto
+A_CONFIG_MAKE_CLEAN := genclean
 
 include $(A2X_PATH)/make/project/Makefile
 
