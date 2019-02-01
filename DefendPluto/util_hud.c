@@ -122,8 +122,7 @@ static void drawEnergy(int16_t X, int16_t Y)
     z_sprite_blit(Z_SPRITE_ENERGY, X, Y, 0);
 
     uint8_t value = g_hud.fillEnergy
-                    ? Z_PLAYER_MAX_ENERGY
-                    : z_player_getEnergy();
+                        ? Z_PLAYER_MAX_ENERGY : z_player_getEnergy();
 
     drawBar(i16(X + 4), i16(Y + 2), value, Z_PLAYER_MAX_ENERGY);
 }

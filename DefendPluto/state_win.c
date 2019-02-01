@@ -54,9 +54,7 @@ void z_state_win_draw(void)
     z_draw_fill(Z_COLOR_BLUE);
     z_pool_draw(Z_POOL_STAR, z_star_draw);
 
-    z_font_textWrap(g_state == 0
-                        ? Z_STR_WIN
-                        : Z_STR_THANKS,
+    z_font_textWrap(g_state == 0 ? Z_STR_WIN : Z_STR_THANKS,
                     4,
                     4,
                     Z_FONT_FACE_YELLOW);
