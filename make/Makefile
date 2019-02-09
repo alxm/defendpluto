@@ -1,11 +1,32 @@
-A_CONFIG_APP_NAME := defendpluto
+A_CONFIG_APP_AUTHOR := alxm
+A_CONFIG_APP_BIN := defendpluto
+A_CONFIG_APP_TITLE := DefendPluto
+
+A_CONFIG_APP_VERSION_MAJOR := 0
+A_CONFIG_APP_VERSION_MINOR := 2
+A_CONFIG_APP_VERSION_MICRO := 1
+
+A_CONFIG_COLOR_SCREEN_BORDER := 0x111523
+
 A_CONFIG_DIR_SRC := DefendPluto
+
+A_CONFIG_FPS_RATE_TICK := 30
+A_CONFIG_FPS_RATE_DRAW := 30
+
 A_CONFIG_MAKE_CLEAN := genclean
 
-include $(A2X_PATH)/make/project/Makefile
+A_CONFIG_OUTPUT_VERBOSE := 1
+
+A_CONFIG_SCREEN_WIDTH := 80
+A_CONFIG_SCREEN_HEIGHT := 64
+
+A_CONFIG_SOUND_VOLUME_SCALE_MUSIC := 50
+A_CONFIG_SOUND_VOLUME_SCALE_SAMPLE := 50
+
+include $(A2X_PATH)/make/dev
 
 Z_ROOT := ..
-Z_DIR_GEN := $(Z_ROOT)/$(A_DIR_SRC)/generated
+Z_DIR_GEN := $(Z_ROOT)/$(A_CONFIG_DIR_SRC)/generated
 Z_DIR_GFX := $(Z_ROOT)/assets/gfx
 Z_DIR_SFX := $(Z_ROOT)/assets/sfx
 
@@ -21,9 +42,9 @@ Z_SFX_COMPILER := $(Z_DIR_SFX)/compile.py
 Z_SFX_WAV_FILES := $(notdir $(wildcard $(Z_DIR_SFX)/*.wav))
 Z_SFX_H_FILES := $(addprefix $(Z_DIR_GEN)/data_sfx_, $(Z_SFX_WAV_FILES:.wav=.h))
 
-$(A_DIR_OBJ_PLATFORM)/util_vm.c.o : $(Z_LEVELS_H)
-$(A_DIR_OBJ_PLATFORM)/util_graphics.c.o : $(Z_GFX_H_FILES)
-$(A_DIR_OBJ_PLATFORM)/util_sound.c.o : $(Z_SFX_H_FILES)
+$(A_DIR_OBJ_APP)/util_vm.c.o : $(Z_LEVELS_H)
+$(A_DIR_OBJ_APP)/util_graphics.c.o : $(Z_GFX_H_FILES)
+$(A_DIR_OBJ_APP)/util_sound.c.o : $(Z_SFX_H_FILES)
 
 $(Z_LEVELS_H): $(Z_LEVELS_TXT) $(Z_LEVELS_COMPILER)
 	@ mkdir -p $(@D)

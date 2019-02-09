@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2018 Alex Margarit <alex@alxm.org>
+    Copyright 2017-2019 Alex Margarit <alex@alxm.org>
     This file is part of Defend Pluto, a video game.
 
     This program is free software: you can redistribute it and/or modify
@@ -30,21 +30,6 @@ static struct {
     int channel;
 } g_sfx[Z_SFX_NUM];
 static ZPixel g_colors[Z_COLOR_NUM];
-
-A_SETUP
-{
-    a_settings_stringSet(A_SETTING_APP_TITLE, "Defend Pluto");
-    a_settings_stringSet(A_SETTING_APP_VERSION, "Beta 2");
-    a_settings_stringSet(A_SETTING_APP_AUTHOR, "alxm");
-    a_settings_boolSet(A_SETTING_OUTPUT_ON, true);
-    a_settings_boolSet(A_SETTING_OUTPUT_VERBOSE, true);
-    a_settings_colorSet(A_SETTING_COLOR_SCREEN_BORDER, 0x111523);
-    a_settings_intSet(A_SETTING_VIDEO_WIDTH, Z_SCREEN_W);
-    a_settings_intSet(A_SETTING_VIDEO_HEIGHT, Z_SCREEN_H);
-    a_settings_intSet(A_SETTING_SOUND_VOLUME_SCALE_SAMPLE, 25);
-    a_settings_intuSet(A_SETTING_FPS_TICK, Z_FPS);
-    a_settings_intuSet(A_SETTING_FPS_DRAW, Z_FPS);
-}
 
 A_STATE(run)
 {
@@ -174,7 +159,9 @@ A_MAIN
             printf("\n};\n");
         }
     #else
-        a_state_push(run, "Defend Pluto");
+        a_state_init(1);
+        a_state_new(0, run, A_CONFIG_APP_TITLE);
+        a_state_push(0);
     #endif
 }
 
@@ -195,7 +182,7 @@ ZPixel* z_screen_getPixels(void)
 
 void z_platform__loadSprite(ZSpriteId Sprite, const char* Path)
 {
-    g_sprites[Sprite] = a_spriteframes_newFromPng(Path);
+    g_sprites[Sprite] = a_spriteframes_newFromPng(Path, 0, 0);
 }
 
 ZPixel z_sprite_getTransparentColor(void)
@@ -220,46 +207,46 @@ void z_sprite_blit(ZSpriteId Sprite, int16_t X, int16_t Y, uint8_t Frame)
 
 int16_t z_sprite_getWidth(ZSpriteId Sprite)
 {
-    return i16(a_sprite_widthGet(getCurrentSprite(Sprite, 0)));
+    return i16(a_sprite_sizeGetWidth(getCurrentSprite(Sprite, 0)));
 }
 
 int16_t z_sprite_getHeight(ZSpriteId Sprite)
 {
-    return i16(a_sprite_heightGet(getCurrentSprite(Sprite, 0)));
+    return i16(a_sprite_sizeGetHeight(getCurrentSprite(Sprite, 0)));
 }
 
 uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
 {
-    return u8(a_spriteframes_numGet(g_sprites[Sprite]));
+    return u8(a_spriteframes_framesNumGet(g_sprites[Sprite]));
 }
 
 void z_draw_fill(ZColorId ColorId)
 {
-    a_pixel_colorSetPixel(g_colors[ColorId]);
+    a_color_baseSetPixel(g_colors[ColorId]);
     a_draw_fill();
 }
 
 void z_draw_rectangle(int16_t X, int16_t Y, int16_t W, int16_t H, ZColorId ColorId)
 {
-    a_pixel_colorSetPixel(g_colors[ColorId]);
+    a_color_baseSetPixel(g_colors[ColorId]);
     a_draw_rectangle(X, Y, W, H);
 }
 
 void z_draw_pixel(int16_t X, int16_t Y, ZColorId ColorId)
 {
-    a_pixel_colorSetPixel(g_colors[ColorId]);
+    a_color_baseSetPixel(g_colors[ColorId]);
     a_draw_pixel(X, Y);
 }
 
 void z_draw_circle(int16_t X, int16_t Y, int16_t Radius, ZColorId ColorId)
 {
-    a_pixel_push();
+    a_color_push();
 
-    a_pixel_colorSetPixel(g_colors[ColorId]);
-    a_pixel_fillDrawSet(false);
+    a_color_baseSetPixel(g_colors[ColorId]);
+    a_color_fillDrawSet(false);
     a_draw_circle(X, Y, Radius);
 
-    a_pixel_pop();
+    a_color_pop();
 }
 
 uint16_t z_fps_getCounter(void)
