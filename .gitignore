@@ -1,4 +1,3 @@
-/bin/
-/obj/
-/sketchsize
-/assets/sfx/music
+/assets/sfx/music/
+/build/builds/
+/build/shared/screenshots/

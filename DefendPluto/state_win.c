@@ -59,5 +59,5 @@ void z_state_win_draw(void)
                     4,
                     Z_FONT_FACE_YELLOW);
 
-    z_screen_drawPressA(4, 52, Z_FONT_FACE_REDO, Z_FONT_ALIGN_L);
+    z_screen_drawPressA(4, 52, Z_FONT_FACE_RED, Z_FONT_ALIGN_L);
 }

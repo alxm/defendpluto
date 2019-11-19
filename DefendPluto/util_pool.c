@@ -24,7 +24,7 @@ static const ZPoolObjOffset Z_OFFSET_NULL = (ZPoolObjOffset)-1;
 
 static inline ZPoolObjHeader* objectFromOffset(ZPoolHeader* Pool, ZPoolObjOffset Offset)
 {
-    return (ZPoolObjHeader*)((uint8_t*)(Pool + 1) + Offset);
+    return (ZPoolObjHeader*)((uintptr_t)(uint8_t*)(Pool + 1) + Offset);
 }
 
 static inline ZPoolObjOffset offsetFromObject(ZPoolHeader* Pool, ZPoolObjHeader* Object)

@@ -53,6 +53,6 @@ void z_state_pause_draw(void)
     z_font_text(Z_STR_PAUSE,
                 Z_SCREEN_W / 2,
                 32,
-                Z_FONT_FACE_REDO,
+                Z_FONT_FACE_RED,
                 Z_FONT_ALIGN_C);
 }

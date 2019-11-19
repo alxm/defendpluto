@@ -16,16 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifdef A2X
-    #define Z_PLATFORM_A2X 1
-#endif
-
-#ifdef ARDUINO_AVR_LEONARDO
+#if defined(ARDUINO_AVR_LEONARDO)
     #define Z_PLATFORM_ARDUBOY 1
-#endif
-
-#ifdef ARDUINO_SAMD_ZERO
+#elif defined(ARDUINO_SAMD_ZERO)
     #define Z_PLATFORM_META 1
+#else
+    #define Z_PLATFORM_A2X 1
 #endif
 
 #define Z_DEBUG_GENERATE_LUT 0

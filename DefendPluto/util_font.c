@@ -100,8 +100,8 @@ static int16_t drawChar(char Char, int16_t X, int16_t Y, ZFontFlag Flags, ZSprit
 
 void z_font_text(ZStringId StringId, int16_t X, int16_t Y, ZFontId Font, ZFontAlign Align)
 {
-    uint8_t flags = g_fonts[Font].flags;
-    uint8_t sprite = g_fonts[Font].sprites;
+    uint8_t flags = (uint8_t)g_fonts[Font].flags;
+    uint8_t sprite = (uint8_t)g_fonts[Font].sprites;
     int16_t charWidth = z_sprite_getWidth(sprite);
     const char* s = z_strings[StringId].text;
 
@@ -127,8 +127,8 @@ void z_font_text(ZStringId StringId, int16_t X, int16_t Y, ZFontId Font, ZFontAl
 
 void z_font_textWrap(ZStringId StringId, int16_t X, int16_t Y, ZFontId Font)
 {
-    uint8_t flags = g_fonts[Font].flags;
-    uint8_t sprite = g_fonts[Font].sprites;
+    uint8_t flags = (uint8_t)g_fonts[Font].flags;
+    uint8_t sprite = (uint8_t)g_fonts[Font].sprites;
     int16_t charWidth = z_sprite_getWidth(sprite);
     int16_t charHeight = z_sprite_getHeight(sprite);
     const char* s = z_strings[StringId].text;
@@ -172,7 +172,7 @@ void z_font_textWrap(ZStringId StringId, int16_t X, int16_t Y, ZFontId Font)
 void z_font_int(int16_t Number, int16_t X, int16_t Y, ZFontId Font, ZFontAlign Align)
 {
     const int8_t bufferSize = 6;
-    char buffer[bufferSize];
+    char buffer[6];
     int8_t index = bufferSize;
 
     if(Number < 0) {
@@ -187,8 +187,8 @@ void z_font_int(int16_t Number, int16_t X, int16_t Y, ZFontId Font, ZFontAlign A
     } while(Number > 0);
 
     const char* text = buffer + index;
-    uint8_t flags = g_fonts[Font].flags;
-    uint8_t sprite = g_fonts[Font].sprites;
+    uint8_t flags = (uint8_t)g_fonts[Font].flags;
+    uint8_t sprite = (uint8_t)g_fonts[Font].sprites;
     int16_t charWidth = z_sprite_getWidth(sprite);
 
     switch(Align) {

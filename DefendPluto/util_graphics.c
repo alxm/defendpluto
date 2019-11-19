@@ -43,28 +43,28 @@
 
 void z_graphics_setup(void)
 {
-    z_sprite_load(Z_SPRITE_ASTEROID, asteroid);
+    z_sprite_load(Z_SPRITE_ASTEROID, asteroid_8x8);
     z_sprite_load(Z_SPRITE_ENEMY00, enemy00);
     z_sprite_load(Z_SPRITE_ENEMY01, enemy01);
     z_sprite_load(Z_SPRITE_ENEMY02, enemy02);
 
-    z_sprite_load(Z_SPRITE_FONT_RED, font_red);
-    z_sprite_load(Z_SPRITE_FONT_RED_LCD, font_red_lcd);
+    z_sprite_load(Z_SPRITE_FONT_RED, font_red_5x8);
+    z_sprite_load(Z_SPRITE_FONT_RED_LCD, font_red_lcd_4x7);
     z_sprite_load(Z_SPRITE_FONT_RED_OUTLINE, font_red_outline);
-    z_sprite_load(Z_SPRITE_FONT_YELLOW, font_yellow);
+    z_sprite_load(Z_SPRITE_FONT_YELLOW, font_yellow_5x8);
     z_sprite_load(Z_SPRITE_FONT_YELLOW_OUTLINE, font_yellow_outline);
 
     z_sprite_load(Z_SPRITE_ICON_CREDS, icon_creds);
     z_sprite_load(Z_SPRITE_ICON_LEVEL, icon_level);
     z_sprite_load(Z_SPRITE_ENERGY, energy);
-    z_sprite_load(Z_SPRITE_HEARTS, hearts);
+    z_sprite_load(Z_SPRITE_HEARTS, hearts_9x8);
     z_sprite_load(Z_SPRITE_SHIELD, shield);
 
-    z_sprite_load(Z_SPRITE_PLAYER, player);
+    z_sprite_load(Z_SPRITE_PLAYER, player_14x16);
 
     z_sprite_load(Z_SPRITE_ALXM, alxm);
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
-    z_sprite_load(Z_SPRITE_BULLETS, bullets);
+    z_sprite_load(Z_SPRITE_BULLETS, bullets_3x3);
     z_sprite_load(Z_SPRITE_DEFENDPLUTO, defendpluto);
     #if Z_PLATFORM_ARDUBOY
         z_sprite_load(Z_SPRITE_TITLE, title128);

@@ -61,22 +61,22 @@ void z_state_next_draw(void)
     z_font_text(Z_STR_LEVEL_CLEARED_1,
                 13,
                 23,
-                Z_FONT_FACE_YELLOWO,
+                Z_FONT_FACE_YELLOW,
                 Z_FONT_ALIGN_L);
 
     z_font_int(z_player_getLevel(),
                61,
                23,
-               Z_FONT_FACE_YELLOWO,
+               Z_FONT_FACE_YELLOW,
                Z_FONT_ALIGN_L);
 
     z_font_text(Z_STR_LEVEL_CLEARED_2,
                 Z_SCREEN_W / 2,
                 32,
-                Z_FONT_FACE_YELLOWO,
+                Z_FONT_FACE_YELLOW,
                 Z_FONT_ALIGN_C);
 
-    z_screen_drawPressA(Z_SCREEN_W / 2, 48, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
+    z_screen_drawPressA(Z_SCREEN_W / 2, 48, Z_FONT_FACE_RED, Z_FONT_ALIGN_C);
 }
 
 void z_state_next_free(void)

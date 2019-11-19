@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <a2x.h>
+#include <faur.h>
 
-typedef APixel ZPixel;
+typedef FColorPixel ZPixel;
 
 #include "util_graphics.h"
 #include "util_sound.h"

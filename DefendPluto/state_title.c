@@ -59,5 +59,5 @@ void z_state_title_draw(void)
                   2,
                   0);
 
-    z_screen_drawPressA(Z_SCREEN_W / 2, 49, Z_FONT_FACE_REDO, Z_FONT_ALIGN_C);
+    z_screen_drawPressA(Z_SCREEN_W / 2, 49, Z_FONT_FACE_RED, Z_FONT_ALIGN_C);
 }
