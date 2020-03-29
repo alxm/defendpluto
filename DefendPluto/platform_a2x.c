@@ -33,12 +33,6 @@ static FSprite* g_sprites[Z_SPRITE_NUM];
 static ZSfx g_sfx[Z_SFX_NUM];
 static FButton* g_buttons[Z_BUTTON_NUM];
 
-void f_init(void)
-{
-    f_init_app("Defend Pluto", "alxm", 0, 3, 0);
-    f_init_fps(Z_FPS, Z_FPS);
-}
-
 void f_main(void)
 {
     F_STATE_INIT
@@ -208,6 +202,7 @@ void z_platform__loadSfx(ZSfxId Sfx, const char* Path)
 
 void z_sfx_play(ZSfxId Sfx)
 {
-    f_channel_play(g_sfx[Sfx].channel, g_sfx[Sfx].sample, F_CHANNEL_PLAY_RESTART);
+    f_channel_playStart(
+        g_sfx[Sfx].channel, g_sfx[Sfx].sample, F_CHANNEL_PLAY_RESTART);
 }
 #endif // Z_PLATFORM_A2X
